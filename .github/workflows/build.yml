@@ -38,7 +38,7 @@
 #         chmod +x assets/dtk
 #         chmod +x assets/objdiff-cli
 #         chmod +x assets/wibo
-#         python configure.py --dtk assets/dtk --objdiff assets/objdiff-cli --version ${{ matrix.version }} \
+#         python configure.py --objdiff assets/objdiff-cli --version ${{ matrix.version }} \
 #             --binutils /binutils --compilers /compilers --wrapper assets/wibo
 #         ninja -v all_source progress build/${{ matrix.version }}/report.json
 
