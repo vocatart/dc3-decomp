@@ -1,5 +1,5 @@
 #include "BinStream.h"
-#include "os/Debug.h"
+// #include "os/Debug.h"
 
 #define BUF_SIZE 512
 
@@ -19,12 +19,12 @@ void BinStream::WriteEndian(const void *in, int size) {
 }
 
 bool BinStream::AddSharedInlined(const class FilePath &) {
-    MILO_FAIL("BinStream::AddSharedInlined is a PC only dev tool !!");
+    // MILO_FAIL("BinStream::AddSharedInlined is a PC only dev tool !!");
     return false;
 }
 
 BinStream &BinStream::operator<<(const char *str) {
-    MILO_ASSERT(str);
+    // MILO_ASSERT(str);
     int len = 0;
     const char *cc = str;
     while (*++cc)
@@ -38,7 +38,7 @@ BinStream &BinStream::operator<<(const char *str) {
 
 BinStream &BinStream::operator<<(const Symbol &sym) {
     int len;
-    MILO_ASSERT(len < BUF_SIZE);
+    // MILO_ASSERT(len < BUF_SIZE);
     return *this;
 }
 
@@ -62,7 +62,7 @@ BinStream &BinStream::operator>>(Symbol &sym) {
 BinStream &BinStream::operator>>(String &str) {
     int siz;
     *this >> siz;
-    str.Resize(siz);
+    str.resize(siz);
     Read(str.mStr, siz);
     return *this;
 }

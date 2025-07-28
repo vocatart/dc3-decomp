@@ -1,10 +1,10 @@
 #pragma once
+#include <xdk/win_types.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <xdk/win_types.h>
 
 typedef HANDLE HMMIO;
 typedef LPSTR HPSTR;

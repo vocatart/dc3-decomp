@@ -1,5 +1,5 @@
 #include "rndobj/SIVideo.h"
-#include "os/Debug.h"
+// #include "os/Debug.h"
 #include "utl/MemMgr.h"
 
 void SIVideo::Reset() {
@@ -41,8 +41,8 @@ void SIVideo::Load(BinStream &bs, bool load_data) {
     } else {
         uint x;
         bs >> x;
-        if (x > 1)
-            MILO_FAIL("Can't load new SIVideo.\n");
+        // if (x > 1)
+        //     MILO_FAIL("Can't load new SIVideo.\n");
         bs >> mMagic;
         bs >> mWidth;
         bs >> mHeight;

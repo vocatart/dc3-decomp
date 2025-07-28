@@ -1,5 +1,6 @@
 #pragma once
+#include "string.h"
 
 namespace std {
-	#include "string.h"
+	using ::memcpy;
 }

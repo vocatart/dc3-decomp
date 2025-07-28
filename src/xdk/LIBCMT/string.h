@@ -1,10 +1,10 @@
 #pragma once
+#include <types.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <types.h>
 
 u32 strlen(const char *);
 u32 strcmp(const char *, const char *);

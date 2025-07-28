@@ -10,7 +10,7 @@ MMRESULT mmioGetInfo(HMMIO hmmio, LPMMIOINFO pmmioinfo, UINT fuInfo) {
     if (pmmioinfo == nullptr) {
         return 11;
     }
-    memcpy(pmmioinfo, hmmio, 0x48); // should be sizeof(MMIOINFO) but fsr mine is 4 bytes
+    // memcpy(pmmioinfo, hmmio, 0x48); // should be sizeof(MMIOINFO) but fsr mine is 4 bytes
                                     // larger
     return 0;
 }
@@ -22,7 +22,7 @@ MMRESULT mmioSetInfo(HMMIO hmmio, LPCMMIOINFO pmmioinfo, UINT fuInfo) {
     if (pmmioinfo == nullptr) {
         return 11;
     }
-    memcpy(hmmio, pmmioinfo, 0x48); // should be sizeof(MMIOINFO) but fsr mine is 4 bytes
+    // memcpy(hmmio, pmmioinfo, 0x48); // should be sizeof(MMIOINFO) but fsr mine is 4 bytes
                                     // larger
     LPMMIOINFO new_info = (LPMMIOINFO)hmmio;
     if (new_info->pchEndRead < new_info->pchNext) {
