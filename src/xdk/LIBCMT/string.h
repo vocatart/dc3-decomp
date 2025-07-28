@@ -15,6 +15,7 @@ u32 strncpy(char *, const char *, u32);
 
 void *memcpy(void *dest, const void *src, u32 count);
 void memset(void *dest, u32 data, u32 count);
+void *memmove(void *dest, const void *src, size_t count);
 
 #ifdef __cplusplus
 }

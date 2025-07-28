@@ -2,5 +2,7 @@
 #include "string.h"
 
 namespace std {
+	using ::memmove;
 	using ::memcpy;
+	// using ::strcoll;
 }
