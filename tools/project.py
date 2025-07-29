@@ -706,6 +706,7 @@ def generate_build_ninja(
     msvc_cmd = f"{wrapper_cmd}{msvc} $cflags /showIncludes /Fo$out $in"
 
     n.comment("MSVC build")
+    n.variable("msvc_deps_prefix", "Note: including file:")
     n.rule(
         name="msvc",
         command=msvc_cmd,
