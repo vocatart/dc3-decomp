@@ -6,7 +6,8 @@
         "objects": {
             "App.cpp": "MISSING",
             "BudgetScreen.cpp": "MISSING",
-            "Main.cpp": "NonMatching"
+            "keygen_xbox.cpp": { "status": "NonMatching", "extra_cflags": [ "/Od" ] },
+            "Main.cpp": "Matching"
         }
     },
     "system": {

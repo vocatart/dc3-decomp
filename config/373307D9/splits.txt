@@ -39,6 +39,8 @@ keygen_xbox.cpp:
 	.rdata      start:0x82000BE0 end:0x82000D60
 	.pdata      start:0x822AF800 end:0x822AF868
 	.text       start:0x82330000 end:0x823309B0
+	.data       start:0x82F06280 end:0x82F06284
+	.data       start:0x82F5E180 end:0x82F5E184 rename:.bss
 
 App.cpp:
 	.rdata      start:0x82000D60 end:0x82001E58
