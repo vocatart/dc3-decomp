@@ -20,10 +20,12 @@ xapilibi/xam.cpp:
 	.text       start:0x82EE68D4 end:0x82EE6984 rename:.xidata
 	.text       start:0x82EE6A74 end:0x82EE6AD4 rename:.xidata
 	.idata      start:0x83190000 end:0x83190014 rename:.idata$2
+	.idata      start:0x8319003C end:0x83190050 rename:.idata$3
 
 xbdm/xbdm.cpp:
 	.rdata      start:0x82000880 end:0x820008A0 rename:.idata$5
 	.text       start:0x82EE59F4 end:0x82EE5A64 rename:.xidata
+	.idata      start:0x83190028 end:0x8319003C rename:.idata$2
 
 XBOXKRNL/xboxkrnl.cpp:
 	.rdata      start:0x820008A0 end:0x82000BE0 rename:.idata$5
@@ -9211,6 +9213,7 @@ binkxenon/binkasyncthread.cpp:
 	.rdata      start:0x82288850 end:0x822888E4
 	.pdata      start:0x823218C8 end:0x823218E0
 	BINK        start:0x82EE6C00 end:0x82EE7018
+	BINKBSS     start:0x82F00000 end:0x82F0000C
 
 binkxenon/binkread.cpp:
 	.rdata      start:0x822888E4 end:0x82288D68
@@ -12163,6 +12166,14 @@ binkxenon/fft.cpp:
 binkxenon/dct.cpp:
 	.pdata      start:0x82321C28 end:0x82321C40
 	BINK        start:0x82EF7008 end:0x82EF7A68
+
+binkxenon/bitplane.cpp:
+	.pdata      start:0x82321C40 end:0x82321C58
+	BINK        start:0x82EF7A68 end:0x82EF9200
+
+binkxenon/win32_rrthreads.cpp:
+	.pdata      start:0x82321C58 end:0x82321CD0
+	RADCODE     start:0x82EF9200 end:0x82EF9CF4
 
 xapilibi/fileiohooks.cpp:
 	.data       start:0x82F08418 end:0x82F0844C
