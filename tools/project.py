@@ -703,7 +703,7 @@ def generate_build_ninja(
 
     # MSVC
     msvc = compiler_path / "cl.exe"
-    msvc_cmd = f"{wrapper_cmd}{msvc} $cflags /Fo$out $in"
+    msvc_cmd = f"{wrapper_cmd}{msvc} $cflags /showIncludes /Fo$out $in"
 
     n.comment("MSVC build")
     n.rule(
@@ -711,7 +711,7 @@ def generate_build_ninja(
         command=msvc_cmd,
         description="MSVC $out",
         # depfile="$basefile.d",
-        # deps="gcc",
+        deps="msvc",
     )
     n.newline()
 
@@ -930,7 +930,7 @@ def generate_build_ninja(
             cflags_str = make_flags_str(all_cflags)
             used_compiler_versions.add(obj.options["mw_version"])
 
-            # Add MWCC build rule
+            # Add MSVC build rule
             lib_name = obj.options["lib"]
             build_rule = "msvc"
             build_implcit = mwcc_implicit
