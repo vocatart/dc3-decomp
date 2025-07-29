@@ -21,7 +21,7 @@ splits: config/373307D9/splits.txt
 # (optional) When enabled, function boundary analysis will be skipped.
 # Only valid _after_ initial analysis has been performed and
 # the symbols and splits files have been generated. 
-quick_analysis: true
+# quick_analysis: true
 
 # (optional) Whether to write disassembly to the split output directory.
 # While not used in the build process, the disassembly is useful
