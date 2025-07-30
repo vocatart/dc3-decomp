@@ -1826,8 +1826,7 @@ def generate_compile_commands(
 
             for flag in flags:
                 if flag.startswith("/I "):
-                    cflags.append("/I")
-                    cflags.append(flag.split("/I ")[1])
+                    cflags.extend(flag.split(' '))
                 else:
                     cflags.append(flag)
 
