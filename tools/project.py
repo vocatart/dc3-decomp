@@ -1825,18 +1825,24 @@ def generate_compile_commands(
                 return False
 
             for flag in flags:
-                # Ignore flags first
-                if should_ignore(flag):
-                    continue
-
-                # Then find replacements
-                if try_replace(flag):
-                    continue
-
-                # Pass flags through last
-                if should_passthrough(flag):
+                if flag.startswith("/I "):
+                    cflags.append("/I")
+                    cflags.append(flag.split("/I ")[1])
+                else:
                     cflags.append(flag)
-                    continue
+
+                # # Ignore flags first
+                # if should_ignore(flag):
+                #     continue
+
+                # # Then find replacements
+                # if try_replace(flag):
+                #     continue
+
+                # # Pass flags through last
+                # if should_passthrough(flag):
+                #     cflags.append(flag)
+                #     continue
 
         append_cflags(obj.options["cflags"])
         append_cflags(obj.options["extra_cflags"])
@@ -1848,14 +1854,10 @@ def generate_compile_commands(
             "file": obj.src_path,
             "output": obj.src_obj_path,
             "arguments": [
-                "clang",
-                "-nostdinc",
-                "-fno-builtin",
-                "--target=powerpc-eabi",
+                "cl.exe",
                 *cflags,
-                "-c",
                 obj.src_path,
-                "-o",
+                "/Fo",
                 obj.src_obj_path,
             ],
         }

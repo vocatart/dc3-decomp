@@ -32,5 +32,5 @@ cflags_includes = [
     # "-i src/system",
     # "-i src/band3",
     "/I src",
-    "/Isrc/system"
+    "/I src/system"
 ]
