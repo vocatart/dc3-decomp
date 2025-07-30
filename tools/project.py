@@ -1853,7 +1853,8 @@ def generate_compile_commands(
             "file": obj.src_path,
             "output": obj.src_obj_path,
             "arguments": [
-                "cl.exe",
+                "clang-cl.exe",
+                "--target=powerpc-eabi",
                 *cflags,
                 obj.src_path,
                 "/Fo",

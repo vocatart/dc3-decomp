@@ -1,10 +1,9 @@
 #pragma once
+#include <types.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <types.h>
 
 f64 abs(f64);
 f32 fabs(f32);

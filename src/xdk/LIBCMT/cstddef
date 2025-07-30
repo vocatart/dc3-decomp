@@ -1,5 +1,6 @@
 #pragma once
+#include "stddef.h"~
 
 namespace std {
-	#include "stddef.h"
+    using ::size_t;
 }

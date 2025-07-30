@@ -4,8 +4,6 @@
 extern "C" {
 #endif
 
-#include <types.h>
-
 int sprintf(char *out, const char *fmt, ...);
 
 #ifdef __cplusplus

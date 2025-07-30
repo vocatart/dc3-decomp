@@ -2,6 +2,7 @@
 #define UTL_MEMMGR_H
 #include <types.h>
 #include "utl/PoolAlloc.h"
+#include <cstddef>
 
 class MemDoTempAllocations {
 public:

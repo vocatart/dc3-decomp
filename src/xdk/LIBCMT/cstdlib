@@ -1,1 +1,8 @@
+#pragma once
 #include "stdlib.h"
+
+namespace std {
+	using ::size_t;
+    
+    using ::qsort;
+}
