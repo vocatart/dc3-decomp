@@ -1,15 +1,16 @@
 #include "Licenses.h"
 
 Licenses *Licenses::sFront = nullptr;
-uint Licenses::sInited = 0;
+int Licenses::sInited = 0;
 
 CDECL Licenses::Licenses(const char *cc, Licenses::Requirement req) {
     unk_0x4 = cc;
     unk_0x0 = req;
-    Licenses *next = nullptr;
-    if (sInited != 0xFEEDBACC) {
+    Licenses *next;
+    int magic = 0xFEEDBACC;
+    if (sInited != magic) {
+        sInited = magic;
         next = nullptr;
-        sInited = 0xFEEDBACC;
     } else {
         next = sFront;
     }

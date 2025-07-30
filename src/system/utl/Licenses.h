@@ -12,7 +12,7 @@ public:
 
 protected:
     static Licenses *sFront;
-    static uint sInited;
+    static int sInited;
 
 private:
     Requirement unk_0x0;
