@@ -4,13 +4,10 @@
 
 bool bufExceeded = false;
 
-char* NextBuf(){
-    return 0;
-}
+char *NextBuf() { return 0; }
 
-FormatString::FormatString() : mBuf(NextBuf()), mBufSize(0x1000), mFmtEnd(nullptr), mType(kNone) {
-    
-}
+FormatString::FormatString()
+    : mBuf(NextBuf()), mBufSize(0x1000), mFmtEnd(nullptr), mType(kNone) {}
 
 FormatString &FormatString::operator<<(int i) {
     if (mType != kInt)
@@ -21,7 +18,7 @@ FormatString &FormatString::operator<<(int i) {
     *mFmtEnd = '\0';
     int n = Hx_snprintf(mBuf + 0x1000 - mBufSize, mBufSize, mFmt, i);
     *mFmtEnd = tmp;
-    if(n < 0 && !bufExceeded){
+    if (n < 0 && !bufExceeded) {
         bufExceeded = true;
         MILO_WARN("MakeString() buffer size %d exceeded", 0x1000);
     }
@@ -37,9 +34,9 @@ const char *FormatString::Str() {
         );
     if (*mFmt != '\0') {
         MILO_ASSERT(mFmtEnd - mFmt < mBufSize, 0x16F);
-        char* p2 = mFmt;
-        char* p3 = mBuf + 0x1000 - mBufSize;
-        for(; *p2 != 0; p2++, p3++){
+        char *p2 = mFmt;
+        char *p3 = mBuf + 0x1000 - mBufSize;
+        for (; *p2 != 0; p2++, p3++) {
             *p3 = *p2;
         }
     }
@@ -64,6 +61,7 @@ FormatString &FormatString::operator<<(const char *cc) {
     return *this;
 }
 
-FormatString::FormatString(const char* str) : mBuf(NextBuf()), mBufSize(0x1000), mFmtEnd(nullptr), mType(kNone) {
+FormatString::FormatString(const char *str)
+    : mBuf(NextBuf()), mBufSize(0x1000), mFmtEnd(nullptr), mType(kNone) {
     InitializeWithFmt(str, true);
 }
