@@ -125,7 +125,7 @@ _STLP_IMPORT_DECLSPEC void _STLP_STDCALL OutputDebugStringA(const char* lpOutput
 #      pragma intrinsic(_InterlockedIncrement)
 #      pragma intrinsic(_InterlockedDecrement)
 #      pragma intrinsic(_InterlockedExchange)
-#      pragma intrinsic(_InterlockedExchangePointer)
+// #      pragma intrinsic(_InterlockedExchangePointer) // evil hack to suppress this warning
 #    endif
 } /* extern "C" */
 

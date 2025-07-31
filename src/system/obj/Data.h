@@ -44,7 +44,7 @@ enum DataType {
 
 /** A value which can be configured and accessed by scripts. */
 class DataNode {
-public:
+private:
     /** The possible data types that a DataNode can have. */
     union {
         const char *symbol;
@@ -58,6 +58,7 @@ public:
     /** The type of this DataNode. Used to verify which member of the union is currently
      * being stored. */
     DataType mType; // 0x4
+public:
 
     DataNode() {
         mValue.integer = 0;
@@ -246,7 +247,7 @@ public:
      * @param [in] s The TextStream to print to.
      * @param [in] compact If true, print any strings in a compact manner.
      */
-    void Print(TextStream &s, bool compact) const;
+    void Print(TextStream &s, bool compact, int) const;
     /** As the name would indicate, this goes unused. */
     bool PrintUnused(TextStream &, bool) const;
     /** Saves this DataNode into a BinStream. */
@@ -498,10 +499,10 @@ public:
     DELETE_POOL_OVERLOAD(DataArray);
 };
 
-inline TextStream &operator<<(TextStream &ts, const DataNode &node) {
-    node.Print(ts, false);
-    return ts;
-}
+// inline TextStream &operator<<(TextStream &ts, const DataNode &node) {
+//     node.Print(ts, false);
+//     return ts;
+// }
 
 inline BinStream &operator<<(BinStream &bs, const DataNode &node) {
     node.Save(bs);

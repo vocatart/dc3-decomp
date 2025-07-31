@@ -75,9 +75,7 @@ namespace STLPORT {
             );
         }
 
-        void deallocate(pointer ptr, size_type count) const {
-            _MemOrPoolFreeSTL(count * sizeof(T), FastPool, ptr);
-        }
+        void deallocate(pointer ptr, size_type count) const;
 
         void construct(pointer ptr, const_reference value) const { new (ptr) T(value); }
         void destroy(pointer ptr) const { ptr->~T(); }
