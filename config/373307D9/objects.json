@@ -950,7 +950,7 @@
             "system/utl/LocaleOrdinal.cpp": "MISSING",
             "system/utl/MBT.cpp": "MISSING",
             "system/utl/Magnu.cpp": "MISSING",
-            "system/utl/MakeString.cpp": "MISSING",
+            "system/utl/MakeString.cpp": "NonMatching",
             "system/utl/MeasureMap.cpp": "MISSING",
             "system/utl/MemHeap.cpp": "MISSING",
             "system/utl/MemMgr.cpp": "MISSING",

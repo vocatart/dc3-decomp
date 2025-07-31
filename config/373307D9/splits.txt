@@ -4389,12 +4389,13 @@ system/ui/UIListSubList.cpp:
 	.pdata      start:0x822EA3D0 end:0x822EA488
 	.text       start:0x827C9080 end:0x827C9FF0
 	.data       start:0x82F18868 end:0x82F189A0
-	.data       start:0x830E4ACC end:0x830E5450 rename:.bss
+	.data       start:0x830E4ACC end:0x830E4ADC rename:.bss
 
 system/utl/MakeString.cpp:
 	.rdata      start:0x820D55E8 end:0x820D592C
 	.pdata      start:0x822EA488 end:0x822EA518
 	.text       start:0x827C9FF0 end:0x827CAF68
+	.data       start:0x830E4ADC end:0x830E4B08 rename:.bss
 
 system/utl/MemMgr.cpp:
 	.rdata      start:0x820D592C end:0x820D6258
