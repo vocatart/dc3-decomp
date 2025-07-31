@@ -1,7 +1,5 @@
 #pragma once
 #include "utl/TextStream.h"
-#include "utl/Str.h"
-#include "utl/MakeString.h"
 #include "utl/TextFileStream.h"
 #include <list>
 #include <string.h>
@@ -66,6 +64,9 @@ public:
         return ret;
     }
 };
+
+#include "utl/Str.h"
+#include "utl/MakeString.h"
 
 extern Debug TheDebug;
 extern const char *kAssertStr;

@@ -1,4 +1,5 @@
 #pragma once
+#include "os/Debug.h"
 #include "utl/BinStream.h"
 #include "utl/PoolAlloc.h"
 #include "utl/Str.h"
@@ -237,11 +238,13 @@ public:
         return dynamic_cast<T *>(GetObj(source));
     }
 
-    bool operator==(const DataNode &n) const;
+    bool Equal(const DataNode&, DataArray*, bool) const;
     bool operator!=(const DataNode &n) const;
+    bool operator>(const DataNode&) const;
     bool NotNull() const;
     bool operator!() const { return !NotNull(); }
     DataNode &operator=(const DataNode &n);
+    static const char* DataTypeString(DataType);
 
     /** Print the DataNode's contents to the TextStream.
      * @param [in] s The TextStream to print to.
@@ -364,11 +367,15 @@ public:
     }
 
     /** Increment this DataArray's reference count. */
-    void AddRef() { mRefs++; }
+    void AddRef() {
+        mRefs++;
+        MILO_ASSERT(mRefs > 0, 0x11C);
+    }
     /** Decrement this DataArray's reference count. */
     void Release() {
-        if (--mRefs == 0)
-            delete this;
+        mRefs--;
+        MILO_ASSERT(mRefs >= 0, 0x122);
+        if(mRefs == 0) delete this;
     }
 
     /** Get the DataNode at the given node index.
@@ -495,8 +502,8 @@ public:
     ExecuteScript(int firstCmd, Hmx::Object *_this, const DataArray *_args, int firstArg);
     const DataNode &Evaluate(int i) const { return Node(i).Evaluate(); }
 
-    NEW_POOL_OVERLOAD(DataArray);
-    DELETE_POOL_OVERLOAD(DataArray);
+    // NEW_POOL_OVERLOAD(DataArray);
+    // DELETE_POOL_OVERLOAD(DataArray);
 };
 
 // inline TextStream &operator<<(TextStream &ts, const DataNode &node) {
@@ -534,6 +541,8 @@ const char *DataVarName(const DataNode *);
 
 /** A smart pointer that manages the lifetime of a DataArray. */
 class DataArrayPtr {
+private:
+    DataArray *mData;
 public:
     DataArrayPtr() { mData = new DataArray(0); }
 
@@ -589,14 +598,12 @@ public:
     operator DataArray *() const { return mData; }
     DataArray *operator->() const { return mData; }
 
-    DataArray *mData;
-
     ~DataArrayPtr() { mData->Release(); }
     DataNode &Node(int i) const { return mData->Node(i); }
 };
 
 inline BinStream &operator>>(BinStream &bs, DataArrayPtr &ptr) {
-    ptr.mData->Load(bs);
+    ptr->Load(bs);
     return bs;
 }
 

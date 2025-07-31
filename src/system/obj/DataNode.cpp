@@ -1,10 +1,12 @@
+#include "Data.h"
 #include "obj/Data.h"
 #include "os/Debug.h"
+#include "utl/TextStream.h"
 #include <map>
 
+int gEvalIndex;
 std::map<Symbol, DataNode> gDataVars;
 DataNode gEvalNode[8];
-int gEvalIndex;
 
 bool DataNode::CompatibleType(DataType ty) const {
     if (mType == ty)
@@ -20,6 +22,88 @@ bool DataNode::CompatibleType(DataType ty) const {
         return false;
     }
     return true;
+}
+
+const char* DataNode::DataTypeString(DataType ty){
+    switch(ty) {
+        case 0:
+            return "kDataInt";
+        case 1:
+            return "kDataFloat";
+        case 2:
+            return "kDataVar";
+        case 3:
+            return "kDataFunc";
+        case 4:
+            return "kDataObject";
+        case 5:
+            return "kDataSymbol";
+        case 6:
+            return "kDataUnhandled";
+        case 0x10:
+            return "kDataArray";
+        case 0x11:
+            return "kDataCommand";
+        case 0x12:
+            return "kDataString";
+        case 0x13:
+            return "kDataProperty";
+        case 0x14:
+            return "kDataGlob";
+        case 7:
+            return "kDataIfdef";
+        case 8:
+            return "kDataElse";
+        case 9:
+            return "kDataEndif";
+        case 0x20:
+            return "kDataDefine";
+        case 0x21:
+            return "kDataInclude";
+        case 0x22:
+            return "kDataMerge";
+        case 0x23:
+            return "kDataIfndef";
+        case 0x24:
+            return "kDataAutorun";
+        case 0x25:
+            return "kDataUndef";
+        default:
+            return "Unknown data type";
+    }
+}
+
+DataNode::DataNode(const DataNode &node) {
+    mValue = node.mValue;
+    mType = node.mType;
+    if (mType & kDataArray)
+        mValue.array->AddRef();
+}
+
+DataNode::DataNode(const DataArrayPtr &ptr) {
+    mValue.array = ptr;
+    ptr->AddRef();
+    mType = kDataArray;
+}
+
+DataNode::DataNode(DataArray *array, DataType type) {
+    MILO_ASSERT(array, 0x158);
+    mValue.array = array;
+    mValue.array->AddRef();
+    MILO_ASSERT(type & kDataArray, 0x15B);
+    mType = type;
+}
+
+DataNode &DataNode::operator=(const DataNode &node) {
+    if (&node != this) {
+        if (mType & kDataArray)
+            mValue.array->Release();
+        mValue = node.mValue;
+        mType = node.mType;
+        if (mType & kDataArray)
+            mValue.array->AddRef();
+    }
+    return *this;
 }
 
 const DataNode &UseQueue(const DataNode &node) {
@@ -70,6 +154,11 @@ const char *DataVarName(const DataNode *node) {
         }
     }
     return "<null>";
+}
+
+bool DataNode::PrintUnused(TextStream&, bool) const {
+    MILO_WARN("Enable PRINT_UNUSED in Data.h to utilize DataNode::PrintUnused()");
+    return false;
 }
 
 int DataNode::Int(const DataArray *source) const {
@@ -334,6 +423,17 @@ DataNode *DataNode::Var(const DataArray *source) const {
             MILO_FAIL("Data %s is not Var", s);
     }
     return mValue.var;
+}
+
+bool DataNode::operator>(const DataNode& other) const {
+    if((mType == kDataInt || mType == kDataFloat) && (other.mType == kDataInt || other.mType == kDataFloat)){
+        return LiteralFloat() > other.LiteralFloat();
+    }
+    else return false;
+}
+
+bool DataNode::operator!=(const DataNode& other) const {
+    return !Equal(other, nullptr, true);
 }
 
 DataNode &DataVariable(Symbol s) { return gDataVars[s]; }

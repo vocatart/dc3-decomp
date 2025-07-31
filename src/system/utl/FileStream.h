@@ -33,8 +33,8 @@ public:
 
     int Size() { return (mFile) ? mFile->Size() : 0; }
 
-    NEW_OVERLOAD;
-    DELETE_OVERLOAD;
+    // NEW_OVERLOAD;
+    // DELETE_OVERLOAD;
 
     File *mFile;
     class String mFilename;

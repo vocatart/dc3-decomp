@@ -2297,7 +2297,7 @@ system/obj/Dir.cpp:
 	.text       start:0x82EDB450 end:0x82EDB528 rename:.text$yc
 	.text       start:0x82EE1E58 end:0x82EE1F18 rename:.text$yd
 	.data       start:0x82F10380 end:0x82F1047C
-	.data       start:0x82F63B24 end:0x82F64728 rename:.bss
+	.data       start:0x82F63B24 end:0x82F64638 rename:.bss
 
 system/obj/Utl.cpp:
 	.rdata      start:0x82070078 end:0x82070838
@@ -2316,6 +2316,7 @@ system/obj/DataNode.cpp:
 	.text       start:0x8259CF08 end:0x8259F220
 	.text       start:0x82EDB5D8 end:0x82EDB6B0 rename:.text$yc
 	.text       start:0x82EE1F38 end:0x82EE1F78 rename:.text$yd
+	.data       start:0x82F64638 end:0x82F64728 rename:.bss
 
 system/obj/DataArray.cpp:
 	.rdata      start:0x82071260 end:0x82071A94
