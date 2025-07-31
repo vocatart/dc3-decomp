@@ -23,7 +23,7 @@ protected:
 public:
     FixedString(){}
     FixedString(char*, int);
-    const char* Str() const { return mStr; }
+    const char* c_str() const { return mStr; }
 
     bool operator<(const FixedString&) const;
     FixedString& operator+=(const char*);

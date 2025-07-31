@@ -21,7 +21,7 @@ String::String(){
 
 bool String::operator==(const FixedString& str) const {
     const char* this_p = mStr;
-    const char* other_p = str.Str();
+    const char* other_p = str.c_str();
     int i1;
     do {
         i1 = *other_p - *this_p;

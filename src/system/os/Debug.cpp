@@ -22,7 +22,7 @@ ModalCallbackFunc* Debug::SetModalCallback(ModalCallbackFunc* func){
     mModalCallback = func;
     if (!gNotifies.empty()) {
         for (int i = 0; i < gNotifies.size(); i++) {
-            MILO_WARN("%s\n", gNotifies[i].Str());
+            MILO_WARN("%s\n", gNotifies[i].c_str());
         }
         gNotifies.clear();
     }
@@ -34,9 +34,9 @@ void DebugModal(enum Debug::ModalType &ty, class FixedString &str, bool b3){
         str += "\n\n-- Program ended --\n";
     }
     else {
-        gNotifies.push_back(str.Str());
+        gNotifies.push_back(str.c_str());
     }
-    MILO_LOG("%s\n", str.Str());
+    MILO_LOG("%s\n", str.c_str());
 }
 
 Debug::Debug()

@@ -175,7 +175,7 @@ int DataNode::Int(const DataArray *source) const {
         if (source)
             MILO_FAIL(
                 "Data %s is not Int (file %s, line %d)",
-                s.Str(),
+                s.c_str(),
                 source->File(),
                 source->Line()
             );
@@ -192,7 +192,7 @@ int DataNode::LiteralInt(const DataArray *source) const {
         if (source)
             MILO_FAIL(
                 "Data %s is not Int (file %s, line %d)",
-                s.Str(),
+                s.c_str(),
                 source->File(),
                 source->Line()
             );
@@ -210,7 +210,7 @@ Symbol DataNode::Sym(const DataArray *source) const {
         if (source)
             MILO_FAIL(
                 "Data %s is not Symbol (file %s, line %d)",
-                s.Str(),
+                s.c_str(),
                 source->File(),
                 source->Line()
             );
@@ -227,7 +227,7 @@ Symbol DataNode::LiteralSym(const DataArray *source) const {
         if (source)
             MILO_FAIL(
                 "Data %s is not Symbol (file %s, line %d)",
-                s.Str(),
+                s.c_str(),
                 source->File(),
                 source->Line()
             );
@@ -248,7 +248,7 @@ Symbol DataNode::ForceSym(const DataArray *source) const {
             if (source)
                 MILO_FAIL(
                     "Data %s is not String (file %s, line %d)",
-                    s.Str(),
+                    s.c_str(),
                     source->File(),
                     source->Line()
                 );
@@ -270,7 +270,7 @@ const char *DataNode::Str(const DataArray *source) const {
             if (source)
                 MILO_FAIL(
                     "Data %s is not String (file %s, line %d)",
-                    s.Str(),
+                    s.c_str(),
                     source->File(),
                     source->Line()
                 );
@@ -291,7 +291,7 @@ const char *DataNode::LiteralStr(const DataArray *source) const {
             if (source)
                 MILO_FAIL(
                     "Data %s is not String (file %s, line %d)",
-                    s.Str(),
+                    s.c_str(),
                     source->File(),
                     source->Line()
                 );
@@ -313,7 +313,7 @@ float DataNode::Float(const DataArray *source) const {
             if (source)
                 MILO_FAIL(
                     "Data %s is not Float (file %s, line %d)",
-                    s.Str(),
+                    s.c_str(),
                     source->File(),
                     source->Line()
                 );
@@ -334,7 +334,7 @@ float DataNode::LiteralFloat(const DataArray *source) const {
             if (source)
                 MILO_FAIL(
                     "Data %s is not Float (file %s, line %d)",
-                    s.Str(),
+                    s.c_str(),
                     source->File(),
                     source->Line()
                 );
@@ -352,7 +352,7 @@ DataFunc *DataNode::Func(const DataArray *source) const {
         if (source)
             MILO_FAIL(
                 "Data %s is not Func (file %s, line %d)",
-                s.Str(),
+                s.c_str(),
                 source->File(),
                 source->Line()
             );
@@ -370,7 +370,7 @@ DataArray *DataNode::Array(const DataArray *source) const {
         if (source)
             MILO_FAIL(
                 "Data %s is not Array (file %s, line %d)",
-                s.Str(),
+                s.c_str(),
                 source->File(),
                 source->Line()
             );
@@ -387,7 +387,7 @@ DataArray *DataNode::LiteralArray(const DataArray *source) const {
         if (source)
             MILO_FAIL(
                 "Data %s is not Array (file %s, line %d)",
-                s.Str(),
+                s.c_str(),
                 source->File(),
                 source->Line()
             );
@@ -404,7 +404,7 @@ DataArray *DataNode::Command(const DataArray *source) const {
         if (source)
             MILO_FAIL(
                 "Data %s is not Command (file %s, line %d)",
-                s.Str(),
+                s.c_str(),
                 source->File(),
                 source->Line()
             );
@@ -421,7 +421,7 @@ DataNode *DataNode::Var(const DataArray *source) const {
         if (source)
             MILO_FAIL(
                 "Data %s is not Var (file %s, line %d)",
-                s.Str(),
+                s.c_str(),
                 source->File(),
                 source->Line()
             );
