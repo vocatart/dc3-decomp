@@ -71,7 +71,7 @@ namespace STLPORT {
             typeid(pointer);
 #endif
             return reinterpret_cast<pointer>(
-                _MemOrPoolAllocSTL(count * sizeof(T), FastPool)
+                MemOrPoolAllocSTL(count * sizeof(T), 0, 0, 0)
             );
         }
 

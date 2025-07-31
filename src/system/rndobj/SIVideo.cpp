@@ -49,8 +49,8 @@ void SIVideo::Load(BinStream &bs, bool load_data) {
         bs >> mBpp;
     }
     if (mData) {
-        _MemFree(mData);
-        mData = 0;
+        // _MemFree(mData);
+        // mData = 0;
     }
     if (!load_data) {
         mData = (char *)MemAlloc(

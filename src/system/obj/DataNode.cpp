@@ -2,6 +2,7 @@
 #include "obj/Data.h"
 #include "os/Debug.h"
 #include "utl/TextStream.h"
+#include <cstring>
 #include <map>
 
 int gEvalIndex;
@@ -71,6 +72,11 @@ const char* DataNode::DataTypeString(DataType ty){
         default:
             return "Unknown data type";
     }
+}
+
+DataNode::DataNode(const char *c) {
+    mValue.array = new DataArray(c, strlen(c) + 1);
+    mType = kDataString;
 }
 
 DataNode::DataNode(const DataNode &node) {

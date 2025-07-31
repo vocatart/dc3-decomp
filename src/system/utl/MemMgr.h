@@ -1,77 +1,30 @@
-#ifndef UTL_MEMMGR_H
-#define UTL_MEMMGR_H
-#include <types.h>
-#include "utl/PoolAlloc.h"
-#include <cstddef>
+#pragma once
 
-class MemDoTempAllocations {
-public:
-    MemDoTempAllocations(bool, bool);
-    ~MemDoTempAllocations();
+void PhysDelta(const char*);
+bool MemUseLowestMip();
+int _GetFreePhysicalMemory();
+int _GetFreeSystemMemory();
 
-    int mOld; // 0x0
-};
+void* operator new(unsigned int);
+void* operator new[](unsigned int);
 
-class MemHandle {
-public:
-    MemHandle(void *);
-    void *Lock();
-    void Unlock();
-};
+void* MemAlloc(int size, const char* file, int line, const char* name, int align);
+void MemFree(void* mem, const char* file, int line, const char* name);
+void* MemOrPoolAlloc(int size, const char* file, int line, const char* name);
+void* MemOrPoolAllocSTL(int size, const char* file, int line, const char* name);
+void MemOrPoolFree(int, void* mem, const char* file, int line, const char* name);
+void MemOrPoolFreeSTL(int, void* mem, const char* file, int line, const char* name);
 
-MemHandle *_MemAllocH(int);
-void MemFreeH(MemHandle *);
+// #define NEW_OVERLOAD                                                                     \
+//     void *operator new(size_t t) { return _MemAlloc(t, 0); }                             \
+//     void *operator new(size_t, void *place) { return place; }
 
-void *operator new(size_t size);
-void operator delete(void *);
-void *operator new[](size_t size);
-void operator delete[](void *);
+// #define NEW_ARRAY_OVERLOAD                                                               \
+//     void *operator new[](size_t t) { return _MemAlloc(t, 0); }                           \
+//     void *operator new[](size_t, void *place) { return place; }
 
-void *_MemAlloc(int, int);
-void *_MemAllocTemp(int, int);
-void *_MemRealloc(void *, int, int);
-void _MemFree(void *);
+// #define DELETE_OVERLOAD                                                                  \
+//     void operator delete(void *v) { _MemFree(v); }
 
-void *_MemOrPoolAlloc(int, PoolType);
-void _MemOrPoolFree(int, PoolType, void *);
-void *_MemOrPoolAllocSTL(int, PoolType);
-void _MemOrPoolFreeSTL(int, PoolType, void *);
-
-void *MemAlloc(int size, const char *file, int line, const char *function, int align);
-void MemFree(void *, const char *file, int line, const char *function);
-
-#define kNoHeap -3
-#define kSystemHeap -1
-
-int GetCurrentHeapNum();
-int MemFindHeap(const char *);
-void MemPushHeap(int);
-void MemPopHeap();
-int MemNumHeaps();
-int MemFindAddrHeap(void *);
-const char *MemHeapName(int);
-void MemFreeBlockStats(int, int &, int &, int &, int &);
-void *MemTruncate(void *, int);
-void MemSetAllowTemp(char *, bool);
-
-class MemTempHeap {
-public:
-    MemTempHeap(int x) { MemPushHeap(x); }
-    ~MemTempHeap() { MemPopHeap(); }
-};
-
-#define NEW_OVERLOAD                                                                     \
-    void *operator new(size_t t) { return _MemAlloc(t, 0); }                             \
-    void *operator new(size_t, void *place) { return place; }
-
-#define NEW_ARRAY_OVERLOAD                                                               \
-    void *operator new[](size_t t) { return _MemAlloc(t, 0); }                           \
-    void *operator new[](size_t, void *place) { return place; }
-
-#define DELETE_OVERLOAD                                                                  \
-    void operator delete(void *v) { _MemFree(v); }
-
-#define DELETE_ARRAY_OVERLOAD                                                            \
-    void operator delete[](void *v) { _MemFree(v); }
-
-#endif
+// #define DELETE_ARRAY_OVERLOAD                                                            \
+//     void operator delete[](void *v) { _MemFree(v); }

@@ -261,7 +261,7 @@ public:
 
 /** An array of DataNodes. */
 class DataArray {
-public:
+private:
     /** The collection of DataNodes in this DataArray. */
     DataNode *mNodes; // 0x0
     /** The file this DataArray is in. */
@@ -274,6 +274,7 @@ public:
     short mLine; // 0xC
     /** unused, supposedly node number in dtb, for debugging */
     short mDeprecated; // 0xE
+public:
     static Symbol gFile;
     static DataFunc *sDefaultHandler;
 
