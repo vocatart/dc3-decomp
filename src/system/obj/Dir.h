@@ -16,11 +16,18 @@ enum InlineDirType {
     kInlineCachedShared = 3
 };
 
-// ObjDirPtr class def goes here
 template <class T>
 class ObjDirPtr : public ObjRefConcrete<T, ObjectDir> {
 public:
+    ObjDirPtr() : ObjRefConcrete<T, ObjectDir>(nullptr), mLoader(nullptr) {}
+    virtual ~ObjDirPtr() {}
+    virtual bool IsDirPtr() { return true; }
+    virtual void Replace(Hmx::Object *);
+
     class DirLoader *mLoader; // 0x10
+
+    bool IsLoaded() const;
+    // void LoadFile(const FilePath&, bool, bool, LoaderPos, bool);
 };
 
 class ObjectDir : public virtual Hmx::Object {
@@ -33,6 +40,16 @@ public:
 
 protected:
     struct Entry {
+        Entry() : name(0), obj(0) {}
+        Entry &operator=(const Entry &entry) {
+            name = entry.name;
+            obj = entry.obj;
+            return *this;
+        }
+        bool operator==(const Entry &e) const { return name == e.name; }
+        bool operator!=(const Entry &e) const { return name != e.name; }
+        operator const char *() const { return name; }
+
         const char *name;
         Hmx::Object *obj;
     };
@@ -42,6 +59,8 @@ protected:
     };
 
     struct InlinedDir {
+        InlinedDir();
+        ~InlinedDir();
         ObjDirPtr<ObjectDir> dir; // 0x0
         FilePath file; // 0x14
         bool shared; // 0x1c
@@ -69,6 +88,7 @@ protected:
 
     ObjectDir();
     Entry *FindEntry(const char *, bool);
+    static ObjectDir *sMainDir;
 
 public:
     // Hmx::Object
@@ -94,7 +114,14 @@ public:
     virtual void ResetEditorState();
     virtual InlineDirType InlineSubDirType();
 
-    void SetCurViewport(ViewportId, Hmx::Object *);
+    void SetCurViewport(ViewportId id, Hmx::Object *o) {
+        mCurViewportID = id;
+        mCurCam = o;
+    }
+    void SetSubDirFlag(bool flag) { mIsSubDir = flag; }
+    void ResetViewports();
+    void SetInlineProxyType(InlineDirType);
+    void Reserve(int, int);
 
     NEW_OVERLOAD(StaticClassName().Str(), 0x111);
     DELETE_OVERLOAD(StaticClassName().Str(), 0x111);

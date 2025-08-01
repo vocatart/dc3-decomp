@@ -7,10 +7,9 @@ private:
     static FilePath sNull;
 
 public:
-    FilePath(const String &str) : String(str) {}
+    FilePath() : String() {}
     FilePath(const char *str) { Set(sRoot.c_str(), str); }
     FilePath(const char *cc, const char *cc2) { Set(cc, cc2); }
-    FilePath() : String() {}
     virtual ~FilePath() {}
 
     void Set(const char *, const char *);

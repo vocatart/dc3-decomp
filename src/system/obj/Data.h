@@ -60,7 +60,6 @@ private:
      * being stored. */
     DataType mType; // 0x4
 public:
-
     DataNode() {
         mValue.integer = 0;
         mType = kDataInt;
@@ -238,13 +237,13 @@ public:
         return dynamic_cast<T *>(GetObj(source));
     }
 
-    bool Equal(const DataNode&, DataArray*, bool) const;
+    bool Equal(const DataNode &, DataArray *, bool) const;
     bool operator!=(const DataNode &n) const;
-    bool operator>(const DataNode&) const;
+    bool operator>(const DataNode &) const;
     bool NotNull() const;
     bool operator!() const { return !NotNull(); }
     DataNode &operator=(const DataNode &n);
-    static const char* DataTypeString(DataType);
+    static const char *DataTypeString(DataType);
 
     /** Print the DataNode's contents to the TextStream.
      * @param [in] s The TextStream to print to.
@@ -284,6 +283,7 @@ public:
     const char *File() const { return mFile.Str(); }
     int Size() const { return mSize; }
     int Line() const { return mLine; }
+    int RefCount() const { return mRefs; }
 
     int UncheckedInt(int i) const { return Node(i).UncheckedInt(); }
     Hmx::Object *UncheckedObj(int i) const { return Node(i).UncheckedObj(); }
@@ -376,7 +376,8 @@ public:
     void Release() {
         mRefs--;
         MILO_ASSERT(mRefs >= 0, 0x122);
-        if(mRefs == 0) delete this;
+        if (mRefs == 0)
+            delete this;
     }
 
     /** Get the DataNode at the given node index.
@@ -544,6 +545,7 @@ const char *DataVarName(const DataNode *);
 class DataArrayPtr {
 private:
     DataArray *mData;
+
 public:
     DataArrayPtr() { mData = new DataArray(0); }
 

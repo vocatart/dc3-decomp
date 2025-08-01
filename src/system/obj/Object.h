@@ -149,6 +149,9 @@ namespace Hmx {
         const DataNode *Property(DataArray *, bool) const;
         DataNode HandleProperty(DataArray *, DataArray *, bool);
         DataNode HandleType(DataArray *);
+        void ChainSource(Hmx::Object *, Hmx::Object *);
+        void LoadType(BinStream &);
+        void LoadRest(BinStream &);
     };
 
 }

@@ -7,6 +7,9 @@ int _GetFreeSystemMemory();
 const char *MemHeapName(int);
 int MemFindAddrHeap(void *);
 
+void MemPushTemp();
+void MemPopTemp();
+
 void *MemAlloc(int size, const char *file, int line, const char *name, int align);
 void MemFree(void *mem, const char *file, int line, const char *name);
 void *MemOrPoolAlloc(int size, const char *file, int line, const char *name);

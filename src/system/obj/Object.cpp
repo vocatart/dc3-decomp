@@ -36,6 +36,8 @@ void Hmx::Object::RemoveSink(Hmx::Object *o, Symbol s) {
         mSinks->RemoveSink(o, s);
 }
 
+ObjectDir *Hmx::Object::DataDir() { return mDir ? mDir : ObjectDir::sMainDir; }
+
 Hmx::Object::Object()
     : mTypeProps(nullptr), mTypeDef(nullptr), mName(gNullStr), mDir(nullptr),
       mSinks(nullptr) {
@@ -55,6 +57,18 @@ void Hmx::Object::RemoveFromDir() {
         }
         entry->obj = nullptr;
     }
+}
+
+DataArray *gPropPath[8];
+
+DataArray *GetNextPropPath() {
+    for (int i = 0; i < 8; i++) {
+        if (gPropPath[i]->RefCount() == 1) {
+            return gPropPath[i];
+        }
+    }
+    MILO_FAIL("Recursive SetProperty call count greater than %d!", 8);
+    return nullptr;
 }
 
 bool Hmx::Object::HasTypeProps() const {
@@ -116,6 +130,13 @@ DataArray *Hmx::Object::ObjectDef(Symbol s) {
     return SystemConfig(sref, s);
 }
 
+void Hmx::Object::LoadType(BinStream &bs) {
+    int revs;
+    bs >> revs;
+    BinStreamRev bsrev(bs, revs);
+    // how does binstreamrev work?
+}
+
 Hmx::Object::~Object() {}
 
 void Hmx::Object::SetName(const char *name, ObjectDir *dir) {
@@ -150,6 +171,15 @@ void Hmx::Object::SetTypeDef(DataArray *def) {
     }
 }
 
+void Hmx::Object::ChainSource(Hmx::Object *source, Hmx::Object *o2) {
+    MILO_ASSERT(source, 0x29D);
+    if (!o2)
+        o2 = this;
+    if (mSinks) {
+        source->GetOrAddSinks()->AddSink(this, gNullStr);
+    }
+}
+
 void Hmx::Object::Save(BinStream &bs) {
     SaveType(bs);
     SaveRest(bs);
@@ -162,6 +192,19 @@ void Hmx::Object::InitObject() {
     if (def) {
         def->ExecuteScript(1, this, nullptr, 1);
     }
+}
+
+DataNode Hmx::Object::HandleType(DataArray *msg) {
+    Symbol t = msg->Sym(1);
+    DataArray *handler = nullptr;
+    if (mTypeDef) {
+        handler = mTypeDef->FindArray(t, false);
+    }
+    if (handler) {
+        MessageTimer timer(this, t);
+        return handler->ExecuteScript(1, this, (const DataArray *)msg, 2);
+    } else
+        return DataNode(kDataUnhandled, 0);
 }
 
 DataNode Hmx::Object::OnIterateRefs(const DataArray *da) {

@@ -90,6 +90,16 @@ public:
     BS_READ_OP(f32)
     BS_READ_OP(f64)
 
+    BinStream &operator>>(char &out) {
+        Read(&out, 1);
+        return *this;
+    }
+
+    BinStream &operator>>(unsigned char &out) {
+        Read(&out, 1);
+        return *this;
+    }
+
     BS_WRITE_OP(int)
     BS_WRITE_OP(uint)
     BS_WRITE_OP(u16)
@@ -97,6 +107,16 @@ public:
     BS_WRITE_OP(u64)
     BS_WRITE_OP(f32)
     BS_WRITE_OP(f64)
+
+    BinStream &operator<<(char c) {
+        Write(&c, 1);
+        return *this;
+    }
+
+    BinStream &operator<<(unsigned char uc) {
+        Write(&uc, 1);
+        return *this;
+    }
 
 #undef BS_READ_OP
 #undef BS_WRITE_OP
@@ -121,4 +141,21 @@ protected:
     bool mLittleEndian; // 0x4
     Rand2 *mCrypto; // 0x8
     std::vector<struct ObjVersion> *mRevStack; // 0xc
+};
+
+inline unsigned short getHmxRev(int packed) { return packed; }
+inline unsigned short getAltRev(int packed) { return (unsigned int)packed >> 0x10; }
+inline int packRevs(unsigned short alt, unsigned short rev) {
+    return (rev & ~0xFFFF0000) | (alt << 0x10);
+}
+
+class BinStreamRev {
+public:
+    BinStreamRev(BinStream &bs, int revs)
+        : mRev(getHmxRev(revs)), mAltRev(getAltRev(revs)), mBinStream(bs) {}
+
+    BinStreamRev &operator>>(bool &);
+    int mRev;
+    int mAltRev;
+    BinStream &mBinStream;
 };
