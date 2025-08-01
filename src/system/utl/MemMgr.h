@@ -30,7 +30,7 @@ void operator delete(void *v) { MemFree(v, "unknown", 0, "unknown"); }
 //     void *operator new[](size_t, void *place) { return place; }
 
 #define DELETE_OVERLOAD(class_name, line_num)                                            \
-    void operator delete(void *v) { MemFree(v, __FILE__, line_num, #class_name); }
+    void operator delete(void *v) { MemFree(v, __FILE__, line_num, class_name); }
 
 // #define DELETE_ARRAY_OVERLOAD                                                            \
 //     void operator delete[](void *v) { _MemFree(v); }

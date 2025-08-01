@@ -15,34 +15,35 @@ namespace Hmx {
 
 class TypeProps : public ObjRefOwner {
 private:
-    DataArray* mMap; // 0x4
-    Hmx::Object* mOwner; // 0x8
+    DataArray *mMap; // 0x4
+    Hmx::Object *mOwner; // 0x8
     ObjPtrList<Hmx::Object> mObjects; // 0xc
 
-    void ReplaceObject(DataNode&, Hmx::Object*, Hmx::Object*);
+    void ReplaceObject(DataNode &, Hmx::Object *, Hmx::Object *);
     void ReleaseObjects();
     void AddRefObjects();
     void ClearAll();
-public:
-    TypeProps(Hmx::Object* o) : mOwner(o), mMap(nullptr), mObjects(this, kObjListOwnerControl) {}
-    virtual ~TypeProps(){ ClearAll(); }
-    virtual Hmx::Object* RefOwner() const { return mOwner; }
-    virtual bool Replace(ObjRef*, Hmx::Object*);
 
-    DataNode* KeyValue(Symbol, bool) const;
+public:
+    TypeProps(Hmx::Object *o)
+        : mOwner(o), mMap(nullptr), mObjects(this, kObjListOwnerControl) {}
+    virtual ~TypeProps() { ClearAll(); }
+    virtual Hmx::Object *RefOwner() const { return mOwner; }
+    virtual bool Replace(ObjRef *, Hmx::Object *);
+
+    DataNode *KeyValue(Symbol, bool) const;
     int Size() const;
     void ClearKeyValue(Symbol);
-    void SetKeyValue(Symbol, const DataNode&, bool);
-    DataArray* GetArray(Symbol);
-    void SetArrayValue(Symbol, int, const DataNode&);
+    void SetKeyValue(Symbol, const DataNode &, bool);
+    DataArray *GetArray(Symbol);
+    void SetArrayValue(Symbol, int, const DataNode &);
     void RemoveArrayValue(Symbol, int);
-    void InsertArrayValue(Symbol, int, const DataNode&);
+    void InsertArrayValue(Symbol, int, const DataNode &);
     // void Load(BinStreamRev&);
-    TypeProps& operator=(const TypeProps&);
-    void Save(BinStream&);
-    DataArray* Map() const { return mMap; }
+    TypeProps &operator=(const TypeProps &);
+    void Save(BinStream &);
+    DataArray *Map() const { return mMap; }
 };
-
 
 namespace Hmx {
 
@@ -50,19 +51,21 @@ namespace Hmx {
     private:
         void RemoveFromDir();
 
-        DataNode OnIterateRefs(const DataArray*);
-        DataNode OnSet(const DataArray*);
-        DataNode OnPropertyAppend(const DataArray*);
-        DataNode OnGetTypeList(const DataArray*);
-        DataNode OnAddSink(DataArray*);
-        DataNode OnRemoveSink(DataArray*);
-        void ExportPropertyChange(DataArray*, Symbol);
+        DataNode OnIterateRefs(const DataArray *);
+        DataNode OnSet(const DataArray *);
+        DataNode OnPropertyAppend(const DataArray *);
+        DataNode OnGetTypeList(const DataArray *);
+        DataNode OnAddSink(DataArray *);
+        DataNode OnRemoveSink(DataArray *);
+        void ExportPropertyChange(DataArray *, Symbol);
+
     protected:
         static Object *sDeleting;
 
-        MsgSinks* GetOrAddSinks();
-        DataNode OnGet(const DataArray*);
-        void BroadcastPropertyChange(DataArray*);
+        MsgSinks *GetOrAddSinks();
+        DataNode OnGet(const DataArray *);
+        void BroadcastPropertyChange(DataArray *);
+
     public:
         ObjRef mRefs; // 0x4
         TypeProps *mTypeProps; // 0x10
@@ -80,12 +83,12 @@ namespace Hmx {
 
         enum SinkMode {
             /** "does a Handle to the sink, this gets all c handlers, type handling, and
-            * exporting." */
+             * exporting." */
             kHandle = 0,
             /** "just Exports to the sink, so no c or type handling" */
             kExport = 1,
-            /** "just calls HandleType, good if know that particular thing is only ever type
-            * handled." */
+            /** "just calls HandleType, good if know that particular thing is only ever
+             * type handled." */
             kType = 2,
             /** "do type handling and exporting using Export, no C handling" */
             kExportType = 3,
@@ -96,8 +99,7 @@ namespace Hmx {
         virtual Object *RefOwner() { return this; }
         virtual bool Replace(ObjRef *, Hmx::Object *);
         OBJ_CLASSNAME(Object);
-        virtual void SetType(Symbol classname);
-        // OBJ_SET_TYPE(Object);
+        OBJ_SET_TYPE(Object);
         virtual DataNode Handle(DataArray *, bool);
         virtual bool SyncProperty(DataNode &, DataArray *, int, PropOp);
         virtual void InitObject();
@@ -117,33 +119,36 @@ namespace Hmx {
         virtual const char *FindPathName();
 
         Symbol Type() const {
-            if(mTypeDef) return mTypeDef->Sym(0);
-            else return Symbol();
+            if (mTypeDef)
+                return mTypeDef->Sym(0);
+            else
+                return Symbol();
         }
         void SetNote(const char *note) { mNote = note; }
-        ObjectDir* Dir() const { return mDir; }
+        ObjectDir *Dir() const { return mDir; }
         const char *AllocHeapName() { return MemHeapName(MemFindAddrHeap(this)); }
 
         void ReplaceRefs(Hmx::Object *);
         int RefCount() const;
-        void RemovePropertySink(Hmx::Object*, DataArray*);
-        bool HasPropertySink(Hmx::Object*, DataArray*);
-        void RemoveSink(Hmx::Object*, Symbol);
-        void SaveType(BinStream&);
-        void SaveRest(BinStream&);
+        void RemovePropertySink(Hmx::Object *, DataArray *);
+        bool HasPropertySink(Hmx::Object *, DataArray *);
+        void RemoveSink(Hmx::Object *, Symbol);
+        void SaveType(BinStream &);
+        void SaveRest(BinStream &);
         void ClearAllTypeProps();
         bool HasTypeProps() const;
-        void AddSink(Hmx::Object*, Symbol, Symbol = Symbol(), SinkMode = kHandle, bool = true);
-        void AddPropertySink(Hmx::Object*, DataArray*, Symbol);
-        void MergeSinks(Hmx::Object*);
+        void
+        AddSink(Hmx::Object *, Symbol, Symbol = Symbol(), SinkMode = kHandle, bool = true);
+        void AddPropertySink(Hmx::Object *, DataArray *, Symbol);
+        void MergeSinks(Hmx::Object *);
         DataNode PropertyArray(Symbol);
-        int PropertySize(DataArray*);
-        void InsertProperty(DataArray*, const DataNode&);
-        void RemoveProperty(DataArray*);
-        void PropertyClear(DataArray*);
-        const DataNode* Property(DataArray*, bool) const;
-        DataNode HandleProperty(DataArray*, DataArray*, bool);
-        DataNode HandleType(DataArray*);
+        int PropertySize(DataArray *);
+        void InsertProperty(DataArray *, const DataNode &);
+        void RemoveProperty(DataArray *);
+        void PropertyClear(DataArray *);
+        const DataNode *Property(DataArray *, bool) const;
+        DataNode HandleProperty(DataArray *, DataArray *, bool);
+        DataNode HandleType(DataArray *);
     };
 
 }
