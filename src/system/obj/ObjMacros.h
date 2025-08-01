@@ -109,3 +109,142 @@ const char *PathName(const class Hmx::Object *obj);
         MILO_WARN("%s unhandled msg: %s", PathName(this), sym);                          \
     return DataNode(kDataUnhandled, 0);                                                  \
     }
+
+// BEGIN SYNCPROPERTY MACROS
+// ---------------------------------------------------------------------------
+
+#define BEGIN_PROPSYNCS(objType)                                                         \
+    bool objType::SyncProperty(DataNode &_val, DataArray *_prop, int _i, PropOp _op) {   \
+        if (_i == _prop->Size())                                                         \
+            return true;                                                                 \
+        else {                                                                           \
+            Symbol sym = _prop->Sym(_i);
+
+#define BEGIN_CUSTOM_PROPSYNC(objType)                                                   \
+    bool PropSync(objType &o, DataNode &_val, DataArray *_prop, int _i, PropOp _op) {    \
+        if (_i == _prop->Size())                                                         \
+            return true;                                                                 \
+        else {                                                                           \
+            Symbol sym = _prop->Sym(_i);
+
+#define SYNC_PROP(s, member)                                                             \
+    {                                                                                    \
+        _NEW_STATIC_SYMBOL(s)                                                            \
+        if (sym == _s)                                                                   \
+            return PropSync(member, _val, _prop, _i + 1, _op);                           \
+    }
+
+// for propsyncs that do something extra if the prop op is specifically kPropSet
+#define SYNC_PROP_SET(s, member, func)                                                   \
+    {                                                                                    \
+        _NEW_STATIC_SYMBOL(s)                                                            \
+        if (sym == _s) {                                                                 \
+            if (_op == kPropSet) {                                                       \
+                func;                                                                    \
+            } else {                                                                     \
+                if (_op == (PropOp)0x40)                                                 \
+                    return false;                                                        \
+                _val = DataNode(member);                                                 \
+            }                                                                            \
+            return true;                                                                 \
+        }                                                                                \
+    }
+
+// for propsyncs that do NOT use size or get - aka, any combo of set, insert, remove, and
+// handle is used
+#define SYNC_PROP_MODIFY(symbol, member, func)                                           \
+    if (sym == symbol) {                                                                 \
+        bool synced = PropSync(member, _val, _prop, _i + 1, _op);                        \
+        if (!synced)                                                                     \
+            return false;                                                                \
+        else {                                                                           \
+            if (!(_op & (kPropSize | kPropGet))) {                                       \
+                func;                                                                    \
+            }                                                                            \
+            return true;                                                                 \
+        }                                                                                \
+    }
+
+// for SYNC_PROP_MODIFY uses where the condition order is flipped
+// if you know how to make this macro and SYNC_PROP_MODIFY into one singular macro,
+// while still matching every instance of SYNC_PROP_MODIFY being used regardless of
+// condition order, by all means please do so, because idk how to do it here
+#define SYNC_PROP_MODIFY_ALT(symbol, member, func)                                       \
+    if (sym == symbol) {                                                                 \
+        bool synced = PropSync(member, _val, _prop, _i + 1, _op);                        \
+        if (synced) {                                                                    \
+            if (!(_op & (kPropSize | kPropGet))) {                                       \
+                func;                                                                    \
+            }                                                                            \
+            return true;                                                                 \
+        } else                                                                           \
+            return false;                                                                \
+    }
+
+#define SYNC_PROP_BITFIELD(symbol, mask_member, line_num)                                \
+    if (sym == symbol) {                                                                 \
+        _i++;                                                                            \
+        if (_i < _prop->Size()) {                                                        \
+            DataNode &node = _prop->Node(_i);                                            \
+            int res = 0;                                                                 \
+            switch (node.Type()) {                                                       \
+            case kDataInt:                                                               \
+                res = node.Int();                                                        \
+                break;                                                                   \
+            case kDataSymbol: {                                                          \
+                const char *bitstr = node.Sym().Str();                                   \
+                MILO_ASSERT_FMT(                                                         \
+                    strncmp("BIT_", bitstr, 4) == 0,                                     \
+                    "%s does not begin with BIT_",                                       \
+                    bitstr                                                               \
+                );                                                                       \
+                Symbol bitsym(bitstr + 4);                                               \
+                const Symbol &test = Symbol(bitsym);                                     \
+                DataArray *macro = DataGetMacro(test);                                   \
+                MILO_ASSERT_FMT(                                                         \
+                    macro, "PROPERTY_BITFIELD %s could not find macro %s", symbol, test  \
+                );                                                                       \
+                res = macro->Int(0);                                                     \
+                break;                                                                   \
+            }                                                                            \
+            default:                                                                     \
+                MILO_ASSERT(0, line_num);                                                 \
+                break;                                                                   \
+            }                                                                            \
+            MILO_ASSERT(_op <= kPropInsert, line_num);                                      \
+            if (_op == kPropGet) {                                                       \
+                int final = mask_member & res;                                           \
+                _val = DataNode(final > 0);                                              \
+            } else {                                                                     \
+                if (_val.Int() != 0)                                                     \
+                    mask_member |= res;                                                  \
+                else                                                                     \
+                    mask_member &= ~res;                                                 \
+            }                                                                            \
+            return true;                                                                 \
+        } else                                                                           \
+            return PropSync(mask_member, _val, _prop, _i, _op);                          \
+    }
+
+#define SYNC_PROP_MODIFY_STATIC(symbol, member, func)                                    \
+    { _NEW_STATIC_SYMBOL(symbol) SYNC_PROP_MODIFY(_s, member, func) }
+
+#define SYNC_PROP_BITFIELD_STATIC(symbol, mask_member, line_num)                         \
+    { _NEW_STATIC_SYMBOL(symbol) SYNC_PROP_BITFIELD(_s, mask_member, line_num) }
+
+#define SYNC_SUPERCLASS(parent)                                                          \
+    if (parent::SyncProperty(_val, _prop, _i, _op))                                      \
+        return true;
+
+#define END_PROPSYNCS                                                                    \
+    return false;                                                                        \
+    }                                                                                    \
+    }
+
+#define END_CUSTOM_PROPSYNC                                                              \
+    return false;                                                                        \
+    }                                                                                    \
+    }
+
+// END SYNCPROPERTY MACROS
+// -----------------------------------------------------------------------------

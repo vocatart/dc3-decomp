@@ -170,6 +170,11 @@ DataNode Hmx::Object::OnIterateRefs(const DataArray *da) {
     return 0;
 }
 
+BEGIN_PROPSYNCS(Hmx::Object)
+    SYNC_PROP_SET(name, mName, SetName(_val.Str(), mDir))
+    SYNC_PROP_SET(type, Type(), SetType(_val.Sym()))
+END_PROPSYNCS
+
 BEGIN_HANDLERS(Hmx::Object)
     HANDLE(get, OnGet)
     HANDLE_EXPR(get_array, PropertyArray(_msg->Sym(2)))
