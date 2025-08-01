@@ -1,7 +1,6 @@
-#include "obj/TypeProps.h"
 #include "Data.h"
 #include "ObjRef.h"
-#include "Object.h"
+#include "obj/Object.h"
 
 DataNode *TypeProps::KeyValue(Symbol key, bool fail) const {
     if (mMap) {

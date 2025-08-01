@@ -17,16 +17,16 @@ void* MemOrPoolAllocSTL(int size, const char* file, int line, const char* name);
 void MemOrPoolFree(int, void* mem, const char* file, int line, const char* name);
 void MemOrPoolFreeSTL(int, void* mem, const char* file, int line, const char* name);
 
-// #define NEW_OVERLOAD                                                                     \
-//     void *operator new(size_t t) { return _MemAlloc(t, 0); }                             \
-//     void *operator new(size_t, void *place) { return place; }
+#define NEW_OVERLOAD(class_name, line_num) \
+    void* operator new(unsigned int s){ return MemAlloc(s, __FILE__, line_num, class_name, 0); } \
+    void* operator new(unsigned int s, void* place){ return place; }
 
 // #define NEW_ARRAY_OVERLOAD                                                               \
 //     void *operator new[](size_t t) { return _MemAlloc(t, 0); }                           \
 //     void *operator new[](size_t, void *place) { return place; }
 
-// #define DELETE_OVERLOAD                                                                  \
-//     void operator delete(void *v) { _MemFree(v); }
+#define DELETE_OVERLOAD(class_name, line_num) \
+    void operator delete(void* v){ MemFree(v, __FILE__, line_num, #class_name); }
 
 // #define DELETE_ARRAY_OVERLOAD                                                            \
 //     void operator delete[](void *v) { _MemFree(v); }

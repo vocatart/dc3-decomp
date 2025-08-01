@@ -2,6 +2,7 @@
 #include "obj/Data.h"
 #include "obj/ObjRef.h"
 #include "obj/Object.h"
+#include "utl/MemMgr.h"
 
 class MsgSinks {
 public:
@@ -15,4 +16,7 @@ public:
     void MergeSinks(Hmx::Object*);
     Symbol GetPropSyncHandler(DataArray*);
     void Export(DataArray*);
+
+    NEW_OVERLOAD("MsgSinks", 0xAF);
+    DELETE_OVERLOAD("MsgSinks", 0xAF);
 };
