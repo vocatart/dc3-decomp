@@ -4,8 +4,11 @@
 #include "os/Platform.h"
 #include "utl/Symbol.h"
 #include "utl/Str.h"
-#include "obj/ObjVersion.h"
 #include <vector>
+
+namespace Hmx {
+    class Object;
+}
 
 enum EofType {
     NotEof = 0,
@@ -37,27 +40,13 @@ public:
     virtual bool Fail() = 0;
     /** Get this BinStream's name. */
     virtual const char *Name() const;
+    virtual int ReadAsync(void *, int);
     /** Get whether or not this BinStream is cached. Interestingly only overwritten in
      * ChunkStream. */
     virtual bool Cached() const { return false; }
     /** Get this BinStream's current platform (Xbox, PS3, etc). Interestingly only
      * overwritten in ChunkStream. */
     virtual Platform GetPlatform() const { return kPlatformNone; }
-    /** The specific implementation for reading from byte data.
-     *  @param [in] data The data to read from.
-     *  @param [in] bytes The number of bytes to read.
-     */
-    virtual void ReadImpl(void *data, int bytes) = 0;
-    /** The specific implementation for writing to byte data.
-     *  @param [in] data The data to write to.
-     *  @param [in] bytes The number of bytes to read.
-     */
-    virtual void WriteImpl(const void *data, int bytes) = 0;
-    /** The specific implementation for seeking within this BinStream.
-     *  @param [in] offset The offset in the data to seek to.
-     *  @param [in] type The Seek type.
-     */
-    virtual void SeekImpl(int offset, SeekType type) = 0;
 
     void Read(void *, int);
     void ReadEndian(void *, int);
@@ -65,11 +54,16 @@ public:
     void Write(const void *, int);
     void WriteEndian(const void *, int);
 
-    void EnableReadEncryption(void);
+    void EnableWriteEncryption();
+    void EnableReadEncryption();
     void DisableEncryption();
     void ReadString(char *, int);
 
+    void Seek(int, SeekType);
     bool AddSharedInlined(const class FilePath &);
+
+    void PushRev(int, Hmx::Object *);
+    int PopRev(Hmx::Object *);
 
     BinStream &operator<<(const char *);
     BinStream &operator<<(const Symbol &);
@@ -106,9 +100,25 @@ public:
 
 #undef BS_READ_OP
 #undef BS_WRITE_OP
+private:
+    /** The specific implementation for reading from byte data.
+     *  @param [in] data The data to read from.
+     *  @param [in] bytes The number of bytes to read.
+     */
+    virtual void ReadImpl(void *data, int bytes) = 0;
+    /** The specific implementation for writing to byte data.
+     *  @param [in] data The data to write to.
+     *  @param [in] bytes The number of bytes to read.
+     */
+    virtual void WriteImpl(const void *data, int bytes) = 0;
+    /** The specific implementation for seeking within this BinStream.
+     *  @param [in] offset The offset in the data to seek to.
+     *  @param [in] type The Seek type.
+     */
+    virtual void SeekImpl(int offset, SeekType type) = 0;
 
 protected:
     bool mLittleEndian; // 0x4
     Rand2 *mCrypto; // 0x8
-    std::vector<ObjVersion>* mRevStack; // 0xc
+    std::vector<struct ObjVersion> *mRevStack; // 0xc
 };

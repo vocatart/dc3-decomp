@@ -1,5 +1,9 @@
-#include "BinStream.h"
+#include "utl/BinStream.h"
+#include "math/Rand.h"
+#include "math/Rand2.h"
+#include "obj/ObjVersion.h"
 #include "os/Debug.h"
+#include <vector>
 
 #define BUF_SIZE 512
 
@@ -12,6 +16,12 @@ void SwapData(const void *in, void *out, int size);
 void BinStream::DisableEncryption() {
     MILO_ASSERT(mCrypto, 0xDC);
     RELEASE(mCrypto);
+}
+
+void BinStream::Seek(int offset, SeekType type) {
+    MILO_ASSERT(!Fail(), 0x11F);
+    MILO_ASSERT(!mCrypto, 0x122);
+    SeekImpl(offset, type);
 }
 
 void BinStream::WriteEndian(const void *in, int size) {
@@ -49,6 +59,13 @@ BinStream &BinStream::operator<<(const Symbol &sym) {
 
 BinStream &BinStream::operator<<(const class String &str) { return *this; }
 
+void BinStream::EnableWriteEncryption() {
+    MILO_ASSERT(!mCrypto, 0xC8);
+    int i = RandomInt();
+    *this << i;
+    mCrypto = new Rand2(i);
+}
+
 void BinStream::ReadEndian(void *out, int size) {
     Read(out, size);
     if (mLittleEndian) {
@@ -56,7 +73,14 @@ void BinStream::ReadEndian(void *out, int size) {
     }
 }
 
-// void BinStream::ReadString(char *, int) {}
+void BinStream::ReadString(char *c, int i) {
+    unsigned int a;
+    *this >> a;
+    if (a >= i)
+        MILO_FAIL("String chars %d > %d", a + 1, i);
+    Read(c, a);
+    c[a] = 0;
+}
 
 BinStream &BinStream::operator>>(Symbol &sym) {
     char buf[BUF_SIZE];
@@ -72,6 +96,21 @@ BinStream &BinStream::operator>>(String &str) {
     return *this;
 }
 
-void BinStream::EnableReadEncryption(void) {}
+void BinStream::EnableReadEncryption() {
+    MILO_ASSERT(!mCrypto, 0xC0);
+    int i;
+    *this >> i;
+    mCrypto = new Rand2(i);
+}
 
-BinStream::~BinStream() { delete mCrypto; }
+BinStream::~BinStream() {
+    delete mCrypto;
+    delete mRevStack;
+}
+
+void BinStream::PushRev(int revs, Hmx::Object *obj) {
+    if (!mRevStack) {
+        mRevStack = new std::vector<ObjVersion>();
+    }
+    mRevStack->push_back(ObjVersion(revs, obj));
+}

@@ -1,10 +1,7 @@
 #pragma once
 #include <cstddef>
 #include <system/utl/MemMgr.h>
-
-#ifdef STL_NODE_ALLOC_DEBUG
 #include <typeinfo>
-#endif
 
 #ifdef STLPORT
 // StlNodeAlloc exists in the STLport namespace
@@ -28,13 +25,13 @@ namespace STLPORT {
             typedef StlNodeAlloc<T2> other;
         };
 
-// #ifdef VERSION_SZBE69_B8
+        // #ifdef VERSION_SZBE69_B8
         // Retail doesn't have constructor calls
         StlNodeAlloc() {}
         StlNodeAlloc(StlNodeAlloc<T> const &) {}
         template <class T2>
         StlNodeAlloc(const StlNodeAlloc<T2> &) {}
-// #endif
+        // #endif
 
         // ...but still has the destructor
         ~StlNodeAlloc() {}
@@ -70,8 +67,28 @@ namespace STLPORT {
             // bank 5/6 use type info for allocation tracing purposes
             typeid(pointer);
 #endif
+
+            // ObjVersion * __thiscall
+            // stlpmtx_std::StlNodeAlloc<>::allocate(StlNodeAlloc<> *this,uint
+            // param_1,void *param_2)
+
+            // {
+            //   char *pcVar1;
+            //   ObjVersion *pOVar2;
+
+            //   pcVar1 = gStlAllocName;
+            //   if (gStlAllocNameLookup) {
+            //     pcVar1 =
+            //     type_info::name(&struct_ObjVersion*_`RTTI_Type_Descriptor',&__type_info_root_node);
+            //   }
+            //   pOVar2 = MemOrPoolAllocSTL(param_1 *
+            //   0x18,"e:\\lazer_build_gmc1\\system\\src\\utl/StlAlloc.h",0 x39
+            //                              ,pcVar1);
+            //   return pOVar2;
+            // }
+
             return reinterpret_cast<pointer>(
-                MemOrPoolAllocSTL(count * sizeof(T), 0, 0, 0)
+                MemOrPoolAllocSTL(count * sizeof(T), __FILE__, 0x39, 0)
             );
         }
 
