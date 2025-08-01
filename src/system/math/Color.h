@@ -5,10 +5,6 @@
 #include "math/Utl.h"
 
 namespace Hmx {
-    class Color32; // forward dec
-}
-
-namespace Hmx {
     class Color {
     public:
         static Color kWhite;
@@ -23,9 +19,6 @@ namespace Hmx {
         Color(float r, float g, float b) : red(r), green(g), blue(b), alpha(1.0f) {}
         Color(float r, float g, float b, float a) : red(r), green(g), blue(b), alpha(a) {}
         Color(int packed) : alpha(1.0f) { Unpack(packed); }
-        Color(const Color32 &);
-
-        Color &operator=(const Color32 &c32);
 
         // copy ctor uses asm magic
         Color(const Color &color) {
@@ -81,53 +74,6 @@ namespace Hmx {
             alpha = ((packed >> 0x18) & 255) / 255.0f;
         }
     };
-
-    class Color32 {
-    public:
-        union {
-            uint color;
-            struct {
-                u8 a, b, g, r;
-            };
-        };
-
-        Color32() { Clear(); }
-        Color32(int i) { color = i; }
-        Color32(const Color32 &other) { color = other.color; }
-        Color32(const Hmx::Color &col) { color = col.PackAlpha(); }
-        Color32(float r, float g, float b, float a) {
-            color = ((int)(a * 255.0f) & 0xFF) << 24 | ((int)(b * 255.0f) & 0xFF) << 16
-                | ((int)(g * 255.0f) & 0xFF) << 8 | ((int)(r * 255.0f) & 0xFF);
-        }
-        void Clear() { color = -1; }
-        void Set(Hmx::Color &col) { color = col.PackAlpha(); }
-        void Set(float r, float g, float b, float a) {
-            color = ((int)(a * 255.0f) & 0xFF) << 24 | ((int)(b * 255.0f) & 0xFF) << 16
-                | ((int)(g * 255.0f) & 0xFF) << 8 | ((int)(r * 255.0f) & 0xFF);
-        }
-        Color32 &operator=(const Color32 &other) {
-            color = other.color;
-            return *this;
-        }
-        bool operator==(const Color32 &other) const { return color == other.color; }
-        bool operator!=(const Color32 &other) const { return color != other.color; }
-        void SetAlpha(float f) { a = f * 255.0f; }
-        int FullColor() const { return color; }
-        int Opaque() const { return color | 0xFF000000; }
-
-        float fr() const { return r * 0.0039215688593685627f; }
-        float fg() const { return g * 0.0039215688593685627f; }
-        float fb() const { return b * 0.0039215688593685627f; }
-        float fa() const { return a * 0.0039215688593685627f; }
-    };
-
-    inline Color::Color(const Color32 &c32) { UnpackAlpha(c32.color); }
-
-    inline Color &Color::operator=(const Color32 &c32) {
-        UnpackAlpha(c32.color);
-        return *this;
-    }
-
 }
 
 void MakeHSL(const Hmx::Color &, float &, float &, float &);
@@ -141,13 +87,6 @@ inline BinStream &operator<<(BinStream &bs, const Hmx::Color &color) {
 
 inline BinStream &operator>>(BinStream &bs, Hmx::Color &color) {
     bs >> color.red >> color.green >> color.blue >> color.alpha;
-    return bs;
-}
-
-inline BinStream &operator>>(BinStream &bs, Hmx::Color32 &color) {
-    Hmx::Color regcolor;
-    bs >> regcolor;
-    color.Set(regcolor);
     return bs;
 }
 
@@ -204,5 +143,3 @@ inline void Interp(const Hmx::Color &c1, const Hmx::Color &c2, float f, Hmx::Col
         Interp(c1.alpha, c2.alpha, f)
     );
 }
-
-void Interp(const Hmx::Color32 &, const Hmx::Color32 &, float, Hmx::Color32 &);
