@@ -2,6 +2,7 @@
 #include "os/System.h" /* IWYU pragma: keep */
 #include "obj/PropSync_p.h" /* IWYU pragma: keep */
 #include "obj/MessageTimer.h" /* IWYU pragma: keep */
+#include "utl/Symbol.h"
 
 namespace Hmx {
     class Object;
@@ -59,6 +60,8 @@ const char *PathName(const class Hmx::Object *obj);
             (MessageTimer::Active()) ? static_cast<Hmx::Object *>(this) : 0, sym         \
         );
 
+#define _NEW_STATIC_SYMBOL(str) static Symbol _s(#str);
+
 #define _HANDLE_CHECKED(expr)                                                            \
     {                                                                                    \
         DataNode result = expr;                                                          \
@@ -66,6 +69,43 @@ const char *PathName(const class Hmx::Object *obj);
             return result;                                                               \
     }
 
+#define HANDLE(s, func)                                                                  \
+    {                                                                                    \
+        _NEW_STATIC_SYMBOL(s)                                                            \
+        if (sym == _s)                                                                   \
+            _HANDLE_CHECKED(func(_msg))                                                  \
+    }
+
+#define HANDLE_EXPR(s, expr)                                                             \
+    {                                                                                    \
+        _NEW_STATIC_SYMBOL(s)                                                            \
+        if (sym == _s)                                                                   \
+            return expr;                                                                 \
+    }
+
+#define HANDLE_ACTION(symbol, action)                                                    \
+    {                                                                                    \
+        _NEW_STATIC_SYMBOL(s)                                                            \
+        if (sym == _s) {                                                                 \
+            /* for style, require any side-actions to be performed via comma operator */ \
+            (action);                                                                    \
+            return 0;                                                                    \
+        }                                                                                \
+    }
+
+#define HANDLE_ARRAY(array)                                                              \
+    {                                                                                    \
+        /* this needs to be placed up here to match Hmx::Object::Handle */               \
+        DataArray *found;                                                                \
+        if (array && (found = array->FindArray(sym, false))) {                           \
+            _HANDLE_CHECKED(found->ExecuteScript(1, this, _msg, 2))                      \
+        }                                                                                \
+    }
+
+#define HANDLE_SUPERCLASS(parent) HANDLE_FORWARD(parent::Handle)
+
 #define END_HANDLERS                                                                     \
+    if (_warn)                                                                           \
+        MILO_WARN("%s unhandled msg: %s", PathName(this), sym);                          \
     return DataNode(kDataUnhandled, 0);                                                  \
     }

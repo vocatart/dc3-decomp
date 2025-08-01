@@ -76,6 +76,7 @@ struct MaxSort {
 class MessageTimer {
 protected:
     static bool sActive;
+    static void AddTime(Hmx::Object *o, Symbol msg, float ms);
 public:
     Timer mTimer;
     class Hmx::Object *mObject;
@@ -88,7 +89,6 @@ public:
     }
     ~MessageTimer() { AddTime(mObject, mMessage, mTimer.SplitMs()); }
     static bool Active() { return sActive; }
-    static void AddTime(Hmx::Object *o, Symbol msg, float ms);
     static void Init();
     static void Start();
     static void Stop();

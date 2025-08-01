@@ -12,6 +12,10 @@ public:
     Symbol() : mStr(gNullStr) {}
     Symbol(const char *);
     Symbol(const Symbol &rhs) : mStr(rhs.mStr) {}
+    // Symbol& operator=(const Symbol& rhs){
+    //     mStr = rhs.mStr;
+    //     return *this;
+    // }
 
     const char* Str() const { return mStr; }
     bool operator<(const Symbol &s) const { return mStr < s.mStr; }

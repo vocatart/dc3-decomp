@@ -34,4 +34,5 @@ public:
     // void Load(BinStreamRev&);
     TypeProps& operator=(const TypeProps&);
     void Save(BinStream&);
+    DataArray* Map() const { return mMap; }
 };

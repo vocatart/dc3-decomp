@@ -4,6 +4,8 @@ void PhysDelta(const char*);
 bool MemUseLowestMip();
 int _GetFreePhysicalMemory();
 int _GetFreeSystemMemory();
+const char* MemHeapName(int);
+int MemFindAddrHeap(void *);
 
 void* operator new(unsigned int);
 void* operator new[](unsigned int);

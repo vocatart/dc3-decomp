@@ -2,6 +2,7 @@
 #include "ObjMacros.h"
 #include "Object.h"
 #include "obj/Object.h"
+#include "utl/BinStream.h"
 
 enum InlineDirType {
     kInlineNever = 0,
@@ -11,6 +12,7 @@ enum InlineDirType {
 };
 
 class ObjectDir : public virtual Hmx::Object {
+friend class Hmx::Object;
 protected:
     struct Entry {
         const char* name;
@@ -29,6 +31,7 @@ protected:
     // };
 
     ObjectDir();
+    Entry* FindEntry(const char*, bool);
 public:
     enum ViewportId {
         kNumViewports = 7
@@ -58,4 +61,9 @@ public:
     virtual InlineDirType InlineSubDirType();
 
     void SetCurViewport(ViewportId, Hmx::Object*);
+
+protected:
+    virtual void AddedObject(Hmx::Object*){}
+    virtual void RemovingObject(Hmx::Object*);
+    virtual void OldLoadProxies(BinStream&, int);
 };
