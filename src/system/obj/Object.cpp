@@ -50,7 +50,7 @@ void Hmx::Object::RemoveFromDir() {
     if (mDir && mDir != sDeleting) {
         mDir->RemovingObject(this);
         ObjectDir::Entry *entry = mDir->FindEntry(mName, false);
-        if(!entry || entry->obj != this){
+        if (!entry || entry->obj != this) {
             MILO_FAIL("No entry for %s in %s", PathName(this), PathName(mDir));
         }
         entry->obj = nullptr;
@@ -58,33 +58,33 @@ void Hmx::Object::RemoveFromDir() {
 }
 
 bool Hmx::Object::HasTypeProps() const {
-    if(mTypeProps){
-        DataArray* tpMap = mTypeProps->Map();
+    if (mTypeProps) {
+        DataArray *tpMap = mTypeProps->Map();
         return tpMap && tpMap->Size() != 0;
     }
     return false;
 }
 
-MsgSinks* Hmx::Object::GetOrAddSinks(){
-    if(!mSinks){
+MsgSinks *Hmx::Object::GetOrAddSinks() {
+    if (!mSinks) {
         mSinks = new MsgSinks(this);
     }
     return mSinks;
 }
 
-void Hmx::Object::AddSink(Hmx::Object* o, Symbol s1, Symbol s2, SinkMode sm, bool b){
-    MsgSinks* sinks = GetOrAddSinks();
+void Hmx::Object::AddSink(Hmx::Object *o, Symbol s1, Symbol s2, SinkMode sm, bool b) {
+    MsgSinks *sinks = GetOrAddSinks();
     sinks->AddSink(o, s1, s2, sm, b);
 }
 
-void Hmx::Object::AddPropertySink(Hmx::Object* o, DataArray* a, Symbol s){
-    MsgSinks* sinks = GetOrAddSinks();
+void Hmx::Object::AddPropertySink(Hmx::Object *o, DataArray *a, Symbol s) {
+    MsgSinks *sinks = GetOrAddSinks();
     sinks->AddPropertySink(o, a, s);
 }
 
-void Hmx::Object::MergeSinks(Hmx::Object* o){
-    if(o && o->mSinks){
-        MsgSinks* sinks = GetOrAddSinks();
+void Hmx::Object::MergeSinks(Hmx::Object *o) {
+    if (o && o->mSinks) {
+        MsgSinks *sinks = GetOrAddSinks();
         sinks->MergeSinks(o);
     }
 }
@@ -106,30 +106,28 @@ void Hmx::Object::SaveRest(BinStream &bs) {
         bs << mNote;
 }
 
-DataArray* Hmx::Object::ObjectDef(Symbol s){
+DataArray *Hmx::Object::ObjectDef(Symbol s) {
     Symbol sref;
-    if(s == gNullStr){
+    if (s == gNullStr) {
         sref = "objects";
         s = ClassName();
-    }
-    else 
+    } else
         sref = "objects";
     return SystemConfig(sref, s);
 }
 
 Hmx::Object::~Object() {}
 
-void Hmx::Object::SetName(const char* name, ObjectDir* dir){
+void Hmx::Object::SetName(const char *name, ObjectDir *dir) {
     RemoveFromDir();
-    if(!name || *name == '\0'){
+    if (!name || *name == '\0') {
         mName = gNullStr;
         mDir = nullptr;
-    }
-    else {
+    } else {
         MILO_ASSERT(dir, 0xE7);
         mDir = dir;
-        ObjectDir::Entry* entry = dir->FindEntry(name, true);
-        if(entry->obj){
+        ObjectDir::Entry *entry = dir->FindEntry(name, true);
+        if (entry->obj) {
             MILO_FAIL("%s already exists", name);
         }
         entry->obj = this;
@@ -138,15 +136,15 @@ void Hmx::Object::SetName(const char* name, ObjectDir* dir){
     }
 }
 
-void Hmx::Object::SetTypeDef(DataArray* def){
-    if(mTypeDef != def){
-        if(mTypeDef){
+void Hmx::Object::SetTypeDef(DataArray *def) {
+    if (mTypeDef != def) {
+        if (mTypeDef) {
             mTypeDef->Release();
             mTypeDef = nullptr;
         }
         ClearAllTypeProps();
         mTypeDef = def;
-        if(mTypeDef){
+        if (mTypeDef) {
             mTypeDef->AddRef();
         }
     }
@@ -155,6 +153,15 @@ void Hmx::Object::SetTypeDef(DataArray* def){
 void Hmx::Object::Save(BinStream &bs) {
     SaveType(bs);
     SaveRest(bs);
+}
+
+void Hmx::Object::InitObject() {
+    static DataArray *objects = SystemConfig("objects");
+    static Symbol init = "init";
+    DataArray *def = ObjectDef(gNullStr)->FindArray(init, false);
+    if (def) {
+        def->ExecuteScript(1, this, nullptr, 1);
+    }
 }
 
 DataNode Hmx::Object::OnIterateRefs(const DataArray *da) {
@@ -170,9 +177,9 @@ DataNode Hmx::Object::OnIterateRefs(const DataArray *da) {
     return 0;
 }
 
-void Hmx::Object::BroadcastPropertyChange(DataArray* a){
+void Hmx::Object::BroadcastPropertyChange(DataArray *a) {
     Symbol s;
-    if(mSinks){
+    if (mSinks) {
         s = mSinks->GetPropSyncHandler(a);
     }
     ExportPropertyChange(a, s);
@@ -202,15 +209,17 @@ void Hmx::Object::RemoveProperty(DataArray *prop) {
     static DataNode n;
     if (!SyncProperty(n, prop, 0, kPropRemove)) {
         MILO_ASSERT(prop->Size() == 2, 0x235);
-        if(mTypeProps){
+        if (mTypeProps) {
             mTypeProps->RemoveArrayValue(prop->Sym(0), prop->Int(1));
         }
     }
 }
 
-void Hmx::Object::Export(DataArray* a, bool b){
-    if(b) HandleType(a);
-    if(mSinks) mSinks->Export(a);
+void Hmx::Object::Export(DataArray *a, bool b) {
+    if (b)
+        HandleType(a);
+    if (mSinks)
+        mSinks->Export(a);
 }
 
 BEGIN_PROPSYNCS(Hmx::Object)
@@ -236,7 +245,10 @@ BEGIN_HANDLERS(Hmx::Object)
     HANDLE_ACTION(set_note, SetNote(_msg->Str(2)))
     HANDLE(iterate_refs, OnIterateRefs)
     HANDLE_EXPR(dir, mDir)
-    HANDLE_ACTION(set_name, SetName(_msg->Str(2), _msg->Size() > 3 ? _msg->Obj<ObjectDir>(3) : Dir()))
+    HANDLE_ACTION(
+        set_name,
+        SetName(_msg->Str(2), _msg->Size() > 3 ? _msg->Obj<ObjectDir>(3) : Dir())
+    )
     HANDLE_ACTION(set_type, SetType(_msg->Sym(2)))
     HANDLE_EXPR(is_a, IsASubclass(ClassName(), _msg->Sym(2)))
     HANDLE_EXPR(get_type, Type())
