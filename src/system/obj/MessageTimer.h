@@ -74,12 +74,12 @@ struct MaxSort {
 };
 
 class MessageTimer {
+protected:
+    static bool sActive;
 public:
     Timer mTimer;
     class Hmx::Object *mObject;
     Symbol mMessage;
-
-    static bool sActive;
 
     MessageTimer(class Hmx::Object *o, Symbol message) : mTimer() {
         mObject = o;

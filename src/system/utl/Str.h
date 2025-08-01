@@ -60,7 +60,7 @@ public:
     // String &operator+=(Symbol);
     // String &operator+=(const String &);
     // String &operator+=(char);
-    // String &operator=(const char *);
+    String &operator=(const char *);
     // String &operator=(Symbol);
     // String &operator=(const String &);
 

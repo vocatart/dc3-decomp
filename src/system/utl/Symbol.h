@@ -1,11 +1,14 @@
 #pragma once
 
+extern const char* gNullStr;
+
 #define STR_TO_SYM(str) *reinterpret_cast<Symbol *>(const_cast<char **>(&str))
 
 class Symbol {
 private:
     const char* mStr;
 public:
+    Symbol() : mStr(gNullStr) {}
     Symbol(const char *);
     Symbol(const Symbol &rhs) : mStr(rhs.mStr) {}
 

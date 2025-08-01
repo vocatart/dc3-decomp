@@ -476,7 +476,7 @@ public:
      * retrieve the corresponding Object and call its handler.
      * @returns The return value of whatever code was executed.
      */
-    DataNode Execute();
+    DataNode Execute(bool);
 
     /** Execute each Command in this DataArray, starting at the given index.
      * The final DataNode in the DataArray will be evaluated separately,

@@ -566,7 +566,7 @@
             "system/obj/DirUnloader.cpp": "MISSING",
             "system/obj/MessageTimer.cpp": "MISSING",
             "system/obj/Msg.cpp": "MISSING",
-            "system/obj/Object.cpp": "MISSING",
+            "system/obj/Object.cpp": "NonMatching",
             "system/obj/PropSync.cpp": "MISSING",
             "system/obj/Task.cpp": "MISSING",
             "system/obj/TextFile.cpp": "MISSING",
