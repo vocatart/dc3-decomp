@@ -1,5 +1,4 @@
-#ifndef MATH_SHA1_H
-#define MATH_SHA1_H
+#pragma once
 #include "utl/BinStream.h"
 
 union SHA1_WORKSPACE_BLOCK {
@@ -33,5 +32,3 @@ public:
 };
 
 BinStream &operator>>(BinStream &, CSHA1::Digest &);
-
-#endif

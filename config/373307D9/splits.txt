@@ -10580,7 +10580,7 @@ system/gesture/NavigationSkeletonDir.cpp:
 	.rdata      start:0x822AC540 end:0x822AC66C rename:.rdata$r
 	.pdata      start:0x8231A968 end:0x8231AA08
 	.text       start:0x82E06090 end:0x82E06BF8
-	.data       start:0x82F44848 end:0x82F44964
+	.data       start:0x82F44848 end:0x82F44870
 	.data       start:0x8316B30C end:0x8316B32C rename:.bss
 
 system/math/Sort.cpp:
@@ -10588,6 +10588,7 @@ system/math/Sort.cpp:
 
 system/math/Primes.cpp:
 	.text       start:0x82E06C48 end:0x82E06C88
+	.data       start:0x82F44870 end:0x82F44964
 
 system/math/Key.cpp:
 	.rdata      start:0x822559C0 end:0x822559E0
