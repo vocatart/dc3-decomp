@@ -22,11 +22,13 @@ namespace Hmx {
         DataNode OnGetTypeList(const DataArray*);
         DataNode OnAddSink(DataArray*);
         DataNode OnRemoveSink(DataArray*);
+        void ExportPropertyChange(DataArray*, Symbol);
     protected:
         static Object *sDeleting;
 
         MsgSinks* GetOrAddSinks();
         DataNode OnGet(const DataArray*);
+        void BroadcastPropertyChange(DataArray*);
     public:
         ObjRef mRefs; // 0x4
         TypeProps *mTypeProps; // 0x10
@@ -107,6 +109,7 @@ namespace Hmx {
         void PropertyClear(DataArray*);
         const DataNode* Property(DataArray*, bool) const;
         DataNode HandleProperty(DataArray*, DataArray*, bool);
+        DataNode HandleType(DataArray*);
     };
 
 }

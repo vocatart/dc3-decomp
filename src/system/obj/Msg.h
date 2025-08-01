@@ -13,4 +13,6 @@ public:
     void AddSink(Hmx::Object*, Symbol, Symbol = Symbol(), Hmx::Object::SinkMode = Hmx::Object::kHandle, bool = true);
     void AddPropertySink(Hmx::Object*, DataArray*, Symbol);
     void MergeSinks(Hmx::Object*);
+    Symbol GetPropSyncHandler(DataArray*);
+    void Export(DataArray*);
 };

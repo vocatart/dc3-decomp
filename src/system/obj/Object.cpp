@@ -170,6 +170,49 @@ DataNode Hmx::Object::OnIterateRefs(const DataArray *da) {
     return 0;
 }
 
+void Hmx::Object::BroadcastPropertyChange(DataArray* a){
+    Symbol s;
+    if(mSinks){
+        s = mSinks->GetPropSyncHandler(a);
+    }
+    ExportPropertyChange(a, s);
+}
+
+int Hmx::Object::PropertySize(DataArray *prop) {
+    static DataNode n;
+    if (SyncProperty(n, prop, 0, kPropSize)) {
+        return n.Int();
+    } else {
+        MILO_ASSERT(prop->Size() == 1, 0x208);
+        Symbol name = prop->Sym(0);
+        const DataNode *a = mTypeProps->KeyValue(name, false);
+        if (a == nullptr) {
+            if (mTypeDef != nullptr) {
+                a = &mTypeDef->FindArray(name)->Evaluate(1);
+            } else
+                MILO_FAIL("%s: property %s not found", PathName(this), name);
+        }
+        MILO_ASSERT(a->Type() == kDataArray, 0x21B);
+        return a->UncheckedArray()->Size();
+    }
+    return 0;
+}
+
+void Hmx::Object::RemoveProperty(DataArray *prop) {
+    static DataNode n;
+    if (!SyncProperty(n, prop, 0, kPropRemove)) {
+        MILO_ASSERT(prop->Size() == 2, 0x235);
+        if(mTypeProps){
+            mTypeProps->RemoveArrayValue(prop->Sym(0), prop->Int(1));
+        }
+    }
+}
+
+void Hmx::Object::Export(DataArray* a, bool b){
+    if(b) HandleType(a);
+    if(mSinks) mSinks->Export(a);
+}
+
 BEGIN_PROPSYNCS(Hmx::Object)
     SYNC_PROP_SET(name, mName, SetName(_val.Str(), mDir))
     SYNC_PROP_SET(type, Type(), SetType(_val.Sym()))
