@@ -1,4 +1,5 @@
 #pragma once
+#include <cstring>
 
 extern const char* gNullStr;
 
@@ -14,6 +15,16 @@ public:
 
     const char* Str() const { return mStr; }
     bool operator<(const Symbol &s) const { return mStr < s.mStr; }
+    bool Null() const { return mStr == gNullStr; }    
+    bool operator==(const Symbol &s) const { return mStr == s.mStr; }
+    bool operator!=(const Symbol &s) const { return mStr != s.mStr; }
+    bool operator!=(const char *cc) const { return !(*this == cc); }
+    bool operator==(const char *cc) const {
+        if (cc)
+            return strcmp(mStr, cc) == 0;
+        else
+            return Null();
+    }
 
     static void PreInit(int, int);
     static void Init(void);
