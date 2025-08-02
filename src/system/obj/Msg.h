@@ -4,19 +4,200 @@
 #include "obj/Object.h"
 #include "utl/MemMgr.h"
 
+/** A DataArray container to send to other objects for handling. */
+class Message {
+public:
+    // Message(); // if there IS a void ctor for Msg i can't find it
+
+    Message(Symbol type) {
+        mData = new DataArray(2);
+        mData->Node(1) = type;
+    }
+
+    Message(Symbol type, const DataNode &arg1) {
+        mData = new DataArray(3);
+        mData->Node(1) = type;
+        mData->Node(2) = arg1;
+    }
+
+    Message(Symbol type, const DataNode &arg1, const DataNode &arg2) {
+        mData = new DataArray(4);
+        mData->Node(1) = type;
+        mData->Node(2) = arg1;
+        mData->Node(3) = arg2;
+    }
+
+    Message(
+        Symbol type, const DataNode &arg1, const DataNode &arg2, const DataNode &arg3
+    ) {
+        mData = new DataArray(5);
+        mData->Node(1) = type;
+        mData->Node(2) = arg1;
+        mData->Node(3) = arg2;
+        mData->Node(4) = arg3;
+    }
+
+    Message(
+        Symbol type,
+        const DataNode &arg1,
+        const DataNode &arg2,
+        const DataNode &arg3,
+        const DataNode &arg4
+    ) {
+        mData = new DataArray(6);
+        mData->Node(1) = type;
+        mData->Node(2) = arg1;
+        mData->Node(3) = arg2;
+        mData->Node(4) = arg3;
+        mData->Node(5) = arg4;
+    }
+
+    Message(
+        Symbol type,
+        const DataNode &arg1,
+        const DataNode &arg2,
+        const DataNode &arg3,
+        const DataNode &arg4,
+        const DataNode &arg5
+    ) {
+        mData = new DataArray(7);
+        mData->Node(1) = type;
+        mData->Node(2) = arg1;
+        mData->Node(3) = arg2;
+        mData->Node(4) = arg3;
+        mData->Node(5) = arg4;
+        mData->Node(6) = arg5;
+    }
+
+    Message(
+        Symbol type,
+        const DataNode &arg1,
+        const DataNode &arg2,
+        const DataNode &arg3,
+        const DataNode &arg4,
+        const DataNode &arg5,
+        const DataNode &arg6
+    ) {
+        mData = new DataArray(8);
+        mData->Node(1) = type;
+        mData->Node(2) = arg1;
+        mData->Node(3) = arg2;
+        mData->Node(4) = arg3;
+        mData->Node(5) = arg4;
+        mData->Node(6) = arg5;
+        mData->Node(7) = arg6;
+    }
+
+    Message(
+        Symbol type,
+        const DataNode &arg1,
+        const DataNode &arg2,
+        const DataNode &arg3,
+        const DataNode &arg4,
+        const DataNode &arg5,
+        const DataNode &arg6,
+        const DataNode &arg7
+    ) {
+        mData = new DataArray(9);
+        mData->Node(1) = type;
+        mData->Node(2) = arg1;
+        mData->Node(3) = arg2;
+        mData->Node(4) = arg3;
+        mData->Node(5) = arg4;
+        mData->Node(6) = arg5;
+        mData->Node(7) = arg6;
+        mData->Node(8) = arg7;
+    }
+
+    Message(
+        Symbol type,
+        const DataNode &arg1,
+        const DataNode &arg2,
+        const DataNode &arg3,
+        const DataNode &arg4,
+        const DataNode &arg5,
+        const DataNode &arg6,
+        const DataNode &arg7,
+        const DataNode &arg8
+    ) {
+        mData = new DataArray(10);
+        mData->Node(1) = type;
+        mData->Node(2) = arg1;
+        mData->Node(3) = arg2;
+        mData->Node(4) = arg3;
+        mData->Node(5) = arg4;
+        mData->Node(6) = arg5;
+        mData->Node(7) = arg6;
+        mData->Node(8) = arg7;
+        mData->Node(9) = arg8;
+    }
+
+    Message(
+        Symbol type,
+        const DataNode &arg1,
+        const DataNode &arg2,
+        const DataNode &arg3,
+        const DataNode &arg4,
+        const DataNode &arg5,
+        const DataNode &arg6,
+        const DataNode &arg7,
+        const DataNode &arg8,
+        const DataNode &arg9
+    ) {
+        mData = new DataArray(11);
+        mData->Node(1) = type;
+        mData->Node(2) = arg1;
+        mData->Node(3) = arg2;
+        mData->Node(4) = arg3;
+        mData->Node(5) = arg4;
+        mData->Node(6) = arg5;
+        mData->Node(7) = arg6;
+        mData->Node(8) = arg7;
+        mData->Node(9) = arg8;
+        mData->Node(10) = arg9;
+    }
+
+    Message(DataArray *da) : mData(da) { da->AddRef(); }
+
+    Message(int i) { mData = new DataArray(i + 2); }
+
+    virtual ~Message() { mData->Release(); }
+
+    DataArray *mData; // 0x0
+
+    operator DataArray *() const { return mData; }
+    DataArray *operator->() const { return mData; }
+    DataArray *Data() const { return mData; }
+
+    void SetType(Symbol type) { mData->Node(1) = type; }
+
+    Symbol Type() const { return mData->Sym(1); }
+
+    DataNode &operator[](int idx) { return mData->Node(idx + 2); }
+};
+
 class MsgSinks {
 public:
-    MsgSinks(Hmx::Object*);
-    bool Replace(ObjRef*, Hmx::Object*);
-    void RemovePropertySink(Hmx::Object*, DataArray*);
-    bool HasPropertySink(Hmx::Object*, DataArray*);
-    void RemoveSink(Hmx::Object*, Symbol);
-    void AddSink(Hmx::Object*, Symbol, Symbol = Symbol(), Hmx::Object::SinkMode = Hmx::Object::kHandle, bool = true);
-    void AddPropertySink(Hmx::Object*, DataArray*, Symbol);
-    void MergeSinks(Hmx::Object*);
-    Symbol GetPropSyncHandler(DataArray*);
-    void Export(DataArray*);
+    MsgSinks(Hmx::Object *);
+    bool Replace(ObjRef *, Hmx::Object *);
+    void RemovePropertySink(Hmx::Object *, DataArray *);
+    bool HasPropertySink(Hmx::Object *, DataArray *);
+    void RemoveSink(Hmx::Object *, Symbol);
+    void AddSink(
+        Hmx::Object *,
+        Symbol,
+        Symbol = Symbol(),
+        Hmx::Object::SinkMode = Hmx::Object::kHandle,
+        bool = true
+    );
+    void AddPropertySink(Hmx::Object *, DataArray *, Symbol);
+    void MergeSinks(Hmx::Object *);
+    Symbol GetPropSyncHandler(DataArray *);
+    void Export(DataArray *);
 
     NEW_OVERLOAD("MsgSinks", 0xAF);
     DELETE_OVERLOAD("MsgSinks", 0xAF);
 };
+
+#include "obj/PropSync_p.h"
+bool PropSync(MsgSinks &, DataNode &, DataArray *, int, PropOp);

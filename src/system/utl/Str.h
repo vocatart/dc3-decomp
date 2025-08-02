@@ -62,7 +62,7 @@ public:
     // String &operator+=(char);
     String &operator=(const char *);
     // String &operator=(Symbol);
-    // String &operator=(const String &);
+    String &operator=(const String &);
 
     // char &operator[](unsigned int);
     // char rindex(int) const;

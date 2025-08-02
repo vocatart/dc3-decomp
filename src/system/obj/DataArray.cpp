@@ -33,7 +33,7 @@ void DataArray::SetFileLine(Symbol file, int line) {
 void DataArray::SetFile(Symbol file) { gFile = file; }
 
 bool strncat_tofit(FixedString &str, const char *cc, int i) {
-    if (strlen(str.c_str()) + strlen(cc) < i) {
+    if ((int)(strlen(str.c_str()) + strlen(cc)) < i) {
         str += cc;
         return true;
     } else

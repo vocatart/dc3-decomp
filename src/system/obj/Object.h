@@ -7,6 +7,7 @@
 #include "utl/BinStream.h"
 #include "utl/MemMgr.h"
 #include "utl/Symbol.h"
+#include <map>
 
 class MsgSinks;
 namespace Hmx {
@@ -39,11 +40,16 @@ public:
     void SetArrayValue(Symbol, int, const DataNode &);
     void RemoveArrayValue(Symbol, int);
     void InsertArrayValue(Symbol, int, const DataNode &);
-    // void Load(BinStreamRev&);
+    void Load(BinStreamRev &);
     TypeProps &operator=(const TypeProps &);
     void Save(BinStream &);
     DataArray *Map() const { return mMap; }
+
+    NEW_OVERLOAD("TypeProps", 0x485);
+    DELETE_OVERLOAD("TypeProps", 0x485);
 };
+
+typedef Hmx::Object *ObjectFunc(void);
 
 namespace Hmx {
 
@@ -58,6 +64,8 @@ namespace Hmx {
         DataNode OnAddSink(DataArray *);
         DataNode OnRemoveSink(DataArray *);
         void ExportPropertyChange(DataArray *, Symbol);
+
+        static std::map<Symbol, ObjectFunc *> sFactories;
 
     protected:
         static Object *sDeleting;
@@ -96,7 +104,7 @@ namespace Hmx {
 
         Object();
         virtual ~Object();
-        virtual Object *RefOwner() { return this; }
+        virtual Object *RefOwner() const { return const_cast<Object *>(this); }
         virtual bool Replace(ObjRef *, Hmx::Object *);
         OBJ_CLASSNAME(Object);
         OBJ_SET_TYPE(Object);
@@ -153,6 +161,8 @@ namespace Hmx {
         void ChainSource(Hmx::Object *, Hmx::Object *);
         void LoadType(BinStream &);
         void LoadRest(BinStream &);
+        void SetProperty(Symbol, const DataNode &);
+        void SetProperty(DataArray *, const DataNode &);
     };
 
 }

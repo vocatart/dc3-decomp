@@ -12,6 +12,15 @@
 #include "utl/BinStream.h"
 #include "utl/Symbol.h"
 
+std::map<Symbol, ObjectFunc *> Hmx::Object::sFactories;
+DataArrayPtr gPropPaths[8] = {
+    DataArrayPtr(new DataArray(1)), DataArrayPtr(new DataArray(1)),
+    DataArrayPtr(new DataArray(1)), DataArrayPtr(new DataArray(1)),
+    DataArrayPtr(new DataArray(1)), DataArrayPtr(new DataArray(1)),
+    DataArrayPtr(new DataArray(1)), DataArrayPtr(new DataArray(1))
+};
+MsgSinks gSinks(nullptr);
+
 bool Hmx::Object::Replace(ObjRef *ref, Hmx::Object *obj) {
     if (mSinks)
         return mSinks->Replace(ref, obj);
@@ -59,12 +68,10 @@ void Hmx::Object::RemoveFromDir() {
     }
 }
 
-DataArray *gPropPath[8];
-
 DataArray *GetNextPropPath() {
     for (int i = 0; i < 8; i++) {
-        if (gPropPath[i]->RefCount() == 1) {
-            return gPropPath[i];
+        if (gPropPaths[i]->RefCount() == 1) {
+            return gPropPaths[i];
         }
     }
     MILO_FAIL("Recursive SetProperty call count greater than %d!", 8);
@@ -220,6 +227,16 @@ DataNode Hmx::Object::OnIterateRefs(const DataArray *da) {
     return 0;
 }
 
+void Hmx::Object::ExportPropertyChange(DataArray *a, Symbol s) {
+    if (!s.Null()) {
+        MILO_ASSERT(mSinks, 0x17F);
+        static Message msg("blah", 0);
+        msg.SetType(s);
+        msg[0] = DataNode(a, kDataArray);
+        Export(msg, true);
+    }
+}
+
 void Hmx::Object::BroadcastPropertyChange(DataArray *a) {
     Symbol s;
     if (mSinks) {
@@ -268,7 +285,78 @@ void Hmx::Object::Export(DataArray *a, bool b) {
 BEGIN_PROPSYNCS(Hmx::Object)
     SYNC_PROP_SET(name, mName, SetName(_val.Str(), mDir))
     SYNC_PROP_SET(type, Type(), SetType(_val.Sym()))
+    SYNC_PROP(sinks, mSinks ? *mSinks : gSinks)
 END_PROPSYNCS
+
+void Hmx::Object::Copy(const Hmx::Object *o, CopyType ty) {
+    if (ty != kCopyFromMax) {
+        mNote = o->mNote;
+        if (ClassName() == o->ClassName()) {
+            SetTypeDef(o->mTypeDef);
+            if (o->HasTypeProps() && !mTypeProps) {
+                mTypeProps = new TypeProps(this);
+            } else if (!o->HasTypeProps()) {
+                RELEASE(mTypeProps);
+            }
+            if (mTypeProps) {
+                *mTypeProps = *o->mTypeProps;
+            }
+        } else if (o->mTypeDef || mTypeDef) {
+            MILO_WARN(
+                "Can't copy type \"%s\" or type props of %s to %s, different classes %s and %s",
+                o->Type(),
+                mName,
+                o->mName,
+                o->ClassName(),
+                ClassName()
+            );
+        }
+    }
+}
+
+void Hmx::Object::Load(BinStream &bs) {
+    LoadType(bs);
+    LoadRest(bs);
+}
+
+DataNode Hmx::Object::OnSet(const DataArray *a) {
+    MILO_ASSERT_FMT(
+        a->Size() % 2 == 0,
+        "Uneven number of properties (file %s, line %d)",
+        a->File(),
+        a->Line()
+    );
+    for (int i = 2; i < a->Size(); i += 2) {
+        const DataNode &n = a->Evaluate(i);
+        if (n.Type() == kDataSymbol) {
+            const char *str = n.UncheckedStr();
+            SetProperty(STR_TO_SYM(str), a->Evaluate(i + 1));
+        } else {
+            if (n.Type() != kDataArray) {
+                String str;
+                n.Print(str, true, 0);
+                MILO_FAIL(
+                    "Data %s is not array or symbol (file %s, line %d)",
+                    str.c_str(),
+                    a->File(),
+                    a->Line()
+                );
+            }
+            SetProperty(n.UncheckedArray(), a->Evaluate(i + 1));
+        }
+    }
+    return 0;
+}
+
+DataNode Hmx::Object::OnPropertyAppend(const DataArray *da) {
+    DataArray *arr = da->Array(2);
+    int size = PropertySize(arr);
+    DataArray *cloned = arr->Clone(true, false, 1);
+    cloned->Node(cloned->Size() - 1) = size;
+    InsertProperty(cloned, da->Evaluate(3));
+    cloned->Release();
+    return size;
+}
 
 BEGIN_HANDLERS(Hmx::Object)
     HANDLE(get, OnGet)
