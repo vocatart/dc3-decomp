@@ -78,7 +78,7 @@ DataArray *GetNextPropPath() {
     return nullptr;
 }
 
-bool Hmx::Object::HasTypeProps() const {
+__declspec(noinline) bool Hmx::Object::HasTypeProps() const {
     if (mTypeProps) {
         DataArray *tpMap = mTypeProps->Map();
         return tpMap && tpMap->Size() != 0;
