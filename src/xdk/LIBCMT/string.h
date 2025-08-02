@@ -14,7 +14,12 @@ char *strndup(const char *src, size_t size);
 
 size_t strxfrm(char *dest, const char *src, size_t count);
 
-size_t strlen(const char *str);
+inline size_t strlen(const char *str) {
+    char *p = (char *)str;
+    while (*p++ != '\0')
+        ;
+    return p - str;
+}
 
 int strcmp(const char *lhs, const char *rhs);
 int strncmp(const char *lhs, const char *rhs, size_t count);

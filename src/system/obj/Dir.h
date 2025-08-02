@@ -123,6 +123,8 @@ public:
     void SetInlineProxyType(InlineDirType);
     void Reserve(int, int);
 
+    static ObjectDir *Main() { return sMainDir; }
+
     NEW_OVERLOAD(StaticClassName().Str(), 0x111);
     DELETE_OVERLOAD(StaticClassName().Str(), 0x111);
 

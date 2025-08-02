@@ -1,11 +1,12 @@
 #pragma once
 #include "obj/Data.h"
-// #include "obj/Object.h"
-// #include "obj/Dir.h"
+#include "obj/Object.h"
+#include "obj/Dir.h"
 #include "utl/MemMgr.h"
-// #include "obj/ObjPtr_p.h"
+#include "obj/ObjPtr_p.h"
 // #include "obj/DataUtl.h"
-/*
+#include <map>
+
 extern Hmx::Object *gDataThis;
 
 class DataFuncObj : public Hmx::Object {
@@ -22,31 +23,31 @@ public:
         return mFunc->ExecuteScript(2, gDataThis, _msg, 1);
     }
 
-    NEW_POOL_OVERLOAD(DataFuncObj);
-    DELETE_POOL_OVERLOAD(DataFuncObj);
+    // NEW_POOL_OVERLOAD(DataFuncObj);
+    // DELETE_POOL_OVERLOAD(DataFuncObj);
 
     static DataNode New(DataArray *);
 };
 
-class DataThisPtr : public ObjPtr<Hmx::Object, class ObjectDir> {
-public:
-    DataThisPtr() : ObjPtr(0, 0) {}
-    virtual ~DataThisPtr() {}
-    virtual void Replace(Hmx::Object *from, Hmx::Object *to) {
-        *this = to;
-        if (gDataThis == from)
-            DataSetThis(to);
-    }
-    void operator=(Hmx::Object *obj) {
-        ObjPtr<Hmx::Object, class ObjectDir>::operator=(obj);
-    }
-};
+// class DataThisPtr : public ObjPtr<Hmx::Object, class ObjectDir> {
+// public:
+//     DataThisPtr() : ObjPtr(0, 0) {}
+//     virtual ~DataThisPtr() {}
+//     virtual void Replace(Hmx::Object *from, Hmx::Object *to) {
+//         *this = to;
+//         if (gDataThis == from)
+//             DataSetThis(to);
+//     }
+//     void operator=(Hmx::Object *obj) {
+//         ObjPtr<Hmx::Object, class ObjectDir>::operator=(obj);
+//     }
+// };
 
 #define DEF_DATA_FUNC(name) static DataNode name(DataArray *array)
 
 extern std::map<Symbol, DataFunc *> gDataFuncs;
-extern DataThisPtr gDataThisPtr;
-*/
+// extern DataThisPtr gDataThisPtr;
+
 void DataRegisterFunc(Symbol s, DataFunc *func);
 Symbol DataFuncName(DataFunc *);
 bool FileListCallBack(char *);

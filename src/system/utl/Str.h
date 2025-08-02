@@ -19,14 +19,14 @@ inline bool strieq(const char *s1, const char *s2) { return stricmp(s1, s2) == 0
 
 class FixedString {
 protected:
-    char* mStr; // 0x0
+    char *mStr; // 0x0
 public:
-    FixedString(){}
-    FixedString(char*, int);
-    const char* c_str() const { return mStr; }
+    FixedString() {}
+    FixedString(char *, int);
+    const char *c_str() const { return mStr; }
 
-    bool operator<(const FixedString&) const;
-    FixedString& operator+=(const char*);
+    bool operator<(const FixedString &) const;
+    FixedString &operator+=(const char *);
 };
 
 class String : public TextStream, public FixedString {
@@ -42,11 +42,11 @@ public:
     String(const String &);
     String(unsigned int, char);
 
-    bool operator==(const FixedString&) const;
+    bool operator==(const FixedString &) const;
 
     // static const unsigned int npos;
 
-    // unsigned int length() const { return strlen(mStr); }
+    unsigned int length() const { return strlen(mStr); }
     // unsigned int capacity() const { return mCap; }
     // const char *c_str() const { return mStr; }
     bool empty() const { return *mStr == '\0'; }

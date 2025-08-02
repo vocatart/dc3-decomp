@@ -256,6 +256,7 @@ public:
     void Save(BinStream &d) const;
     /** Loads this DataNode from a BinStream. */
     void Load(BinStream &d);
+    void Load(BinStream &, class ObjectDir *);
 };
 
 /** An array of DataNodes. */
@@ -273,6 +274,9 @@ private:
     short mLine; // 0xC
     /** unused, supposedly node number in dtb, for debugging */
     short mDeprecated; // 0xE
+
+    ~DataArray();
+
 public:
     static Symbol gFile;
     static DataFunc *sDefaultHandler;
@@ -396,7 +400,7 @@ public:
      * @param [in] type The type of this DataArray (array, command, property, etc)
      * @param [in] compact If true, print any strings in a compact manner.
      */
-    void Print(TextStream &s, DataType type, bool compact) const;
+    void Print(TextStream &s, DataType type, bool compact, int) const;
     /** As the name would indicate, this goes unused. */
     bool PrintUnused(TextStream &, DataType, bool) const;
 
@@ -465,7 +469,6 @@ public:
 
     DataArray(int size);
     DataArray(const void *glob, int size);
-    ~DataArray();
 
     void SetFileLine(Symbol, int);
     /** Sort the nodes in this DataArray. */
@@ -504,7 +507,7 @@ public:
     ExecuteScript(int firstCmd, Hmx::Object *_this, const DataArray *_args, int firstArg);
     const DataNode &Evaluate(int i) const { return Node(i).Evaluate(); }
 
-    // NEW_POOL_OVERLOAD(DataArray);
+    NEW_POOL_OVERLOAD("DataArray", 0xD2);
     // DELETE_POOL_OVERLOAD(DataArray);
 };
 

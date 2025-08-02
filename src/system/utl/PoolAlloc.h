@@ -35,12 +35,14 @@ public:
     void Refill();
 };
 
-void* PoolAlloc(int classSize, int reqSize, const char* file, int line, const char* name);
-void PoolFree(int, void* mem, const char* file, int line, const char* name);
+void *PoolAlloc(int classSize, int reqSize, const char *file, int line, const char *name);
+void PoolFree(int, void *mem, const char *file, int line, const char *name);
 
-// #define NEW_POOL_OVERLOAD(obj)                                                           \
-//     void *operator new(size_t s) { return _PoolAlloc(sizeof(obj), s, FastPool); }        \
-//     void *operator new(size_t, void *place) { return place; }
+#define NEW_POOL_OVERLOAD(class_name, line_num)                                          \
+    void *operator new(unsigned int s) {                                                 \
+        return PoolAlloc(s, s, __FILE__, line_num, class_name);                          \
+    }                                                                                    \
+    void *operator new(unsigned int s, void *place) { return place; }
 
 // #define DELETE_POOL_OVERLOAD(obj)                                                        \
 //     void operator delete(void *v) { _PoolFree(sizeof(obj), FastPool, v); }

@@ -126,6 +126,7 @@ namespace Hmx {
         }
         void SetNote(const char *note) { mNote = note; }
         ObjectDir *Dir() const { return mDir; }
+        const char *Name() const { return mName; }
         const char *AllocHeapName() { return MemHeapName(MemFindAddrHeap(this)); }
 
         void ReplaceRefs(Hmx::Object *);
@@ -154,4 +155,11 @@ namespace Hmx {
         void LoadRest(BinStream &);
     };
 
+}
+inline TextStream &operator<<(TextStream &ts, const Hmx::Object *obj) {
+    if (obj)
+        ts << obj->Name();
+    else
+        ts << "<null>";
+    return ts;
 }
