@@ -14,7 +14,13 @@ void *MemAlloc(int size, const char *file, int line, const char *name, int align
 void MemFree(void *mem, const char *file, int line, const char *name);
 void *MemOrPoolAlloc(int size, const char *file, int line, const char *name);
 void *MemOrPoolAllocSTL(int size, const char *file, int line, const char *name);
-void MemOrPoolFree(int, void *mem, const char *file, int line, const char *name);
+void MemOrPoolFree(
+    int,
+    void *mem,
+    const char *file = "unknown",
+    int line = 0,
+    const char *name = "unknown"
+);
 void MemOrPoolFreeSTL(int, void *mem, const char *file, int line, const char *name);
 
 void *operator new(unsigned int);

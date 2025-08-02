@@ -1,13 +1,14 @@
 #pragma once
 #include <cstring>
 
-extern const char* gNullStr;
+extern const char *gNullStr;
 
 #define STR_TO_SYM(str) *reinterpret_cast<Symbol *>(const_cast<char **>(&str))
 
 class Symbol {
 private:
-    const char* mStr;
+    const char *mStr;
+
 public:
     Symbol() : mStr(gNullStr) {}
     Symbol(const char *);
@@ -17,9 +18,9 @@ public:
     //     return *this;
     // }
 
-    const char* Str() const { return mStr; }
+    const char *Str() const { return mStr; }
     bool operator<(const Symbol &s) const { return mStr < s.mStr; }
-    bool Null() const { return mStr == gNullStr; }    
+    bool Null() const { return mStr == gNullStr; }
     bool operator==(const Symbol &s) const { return mStr == s.mStr; }
     bool operator!=(const Symbol &s) const { return mStr != s.mStr; }
     bool operator!=(const char *cc) const { return !(*this == cc); }
@@ -29,6 +30,7 @@ public:
         else
             return Null();
     }
+    operator int() { return (int)mStr; }
 
     static void PreInit(int, int);
     static void Init(void);

@@ -84,6 +84,7 @@ public:
     }
     BS_READ_OP(int)
     BS_READ_OP(uint)
+    BS_READ_OP(s16)
     BS_READ_OP(u16)
     BS_READ_OP(u32)
     BS_READ_OP(u64)
@@ -100,8 +101,16 @@ public:
         return *this;
     }
 
+    BinStream &operator>>(bool &b) {
+        unsigned char uc;
+        *this >> uc;
+        b = (uc != 0);
+        return *this;
+    }
+
     BS_WRITE_OP(int)
     BS_WRITE_OP(uint)
+    BS_WRITE_OP(s16)
     BS_WRITE_OP(u16)
     BS_WRITE_OP(u32)
     BS_WRITE_OP(u64)
@@ -114,6 +123,12 @@ public:
     }
 
     BinStream &operator<<(unsigned char uc) {
+        Write(&uc, 1);
+        return *this;
+    }
+
+    BinStream &operator<<(bool b) {
+        unsigned char uc = (b) ? 1 : 0;
         Write(&uc, 1);
         return *this;
     }
