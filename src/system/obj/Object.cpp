@@ -288,6 +288,12 @@ BEGIN_PROPSYNCS(Hmx::Object)
     SYNC_PROP(sinks, mSinks ? *mSinks : gSinks)
 END_PROPSYNCS
 
+void Hmx::Object::BroadcastPropertyChange(Symbol s) {
+    static DataArray *a = new DataArray(1);
+    a->Node(0) = s;
+    BroadcastPropertyChange(a);
+}
+
 void Hmx::Object::Copy(const Hmx::Object *o, CopyType ty) {
     if (ty != kCopyFromMax) {
         mNote = o->mNote;

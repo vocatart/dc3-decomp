@@ -1,8 +1,6 @@
 #pragma once
 #include "obj/Data.h"
-#include "obj/ObjRef.h"
-#include "obj/Object.h"
-#include "utl/MemMgr.h"
+#include "obj/ObjPtr_p.h"
 
 /** A DataArray container to send to other objects for handling. */
 class Message {
@@ -176,9 +174,29 @@ public:
     DataNode &operator[](int idx) { return mData->Node(idx + 2); }
 };
 
+#include "obj/ObjList.h"
+#include "obj/Object.h"
+#include "utl/MemMgr.h"
+
+class ObjRef;
+
 class MsgSinks {
 public:
+    struct Sink {
+        ObjOwnerPtr<Hmx::Object> obj; // 0x0
+        Hmx::Object::SinkMode mode; // 0x14
+    };
+    struct EventSinkElem : public Sink {
+        Symbol handler; // 0x18
+    };
+    struct EventSink {
+        Symbol event; // 0x0
+        bool unk4; // 0x4
+        ObjList<EventSinkElem> sinks; // 0x8
+    };
+
     MsgSinks(Hmx::Object *);
+    ~MsgSinks();
     bool Replace(ObjRef *, Hmx::Object *);
     void RemovePropertySink(Hmx::Object *, DataArray *);
     bool HasPropertySink(Hmx::Object *, DataArray *);
@@ -197,6 +215,13 @@ public:
 
     NEW_OVERLOAD("MsgSinks", 0xAF);
     DELETE_OVERLOAD("MsgSinks", 0xAF);
+
+private:
+    DataArray *unk0;
+    ObjList<Sink> mSinks; // 0x4
+    ObjList<EventSink> mEventSinks; // 0x10
+    int unk1c;
+    Hmx::Object *mOwner; // 0x20
 };
 
 #include "obj/PropSync_p.h"

@@ -73,6 +73,7 @@ namespace Hmx {
         MsgSinks *GetOrAddSinks();
         DataNode OnGet(const DataArray *);
         void BroadcastPropertyChange(DataArray *);
+        void BroadcastPropertyChange(Symbol);
 
     public:
         ObjRef mRefs; // 0x4
