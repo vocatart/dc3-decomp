@@ -77,14 +77,14 @@ class MessageTimer {
 protected:
     static bool sActive;
     static void AddTime(Hmx::Object *o, Symbol msg, float ms);
+
 public:
     Timer mTimer;
     class Hmx::Object *mObject;
     Symbol mMessage;
 
-    MessageTimer(class Hmx::Object *o, Symbol message) : mTimer() {
-        mObject = o;
-        mMessage = message;
+    MessageTimer(class Hmx::Object *o, Symbol message)
+        : mTimer(), mObject(o), mMessage(message) {
         mTimer.Restart();
     }
     ~MessageTimer() { AddTime(mObject, mMessage, mTimer.SplitMs()); }

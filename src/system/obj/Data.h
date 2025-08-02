@@ -508,6 +508,7 @@ public:
     const DataNode &Evaluate(int i) const { return Node(i).Evaluate(); }
 
     NEW_POOL_OVERLOAD("DataArray", 0xD2);
+    DELETE_POOL_OVERLOAD(sizeof(DataArray), "DataArray", 0xD2);
     // DELETE_POOL_OVERLOAD(DataArray);
 };
 

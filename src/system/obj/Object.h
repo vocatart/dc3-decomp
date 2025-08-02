@@ -157,6 +157,7 @@ namespace Hmx {
         void RemoveProperty(DataArray *);
         void PropertyClear(DataArray *);
         const DataNode *Property(DataArray *, bool) const;
+        const DataNode *Property(Symbol, bool) const;
         DataNode HandleProperty(DataArray *, DataArray *, bool);
         DataNode HandleType(DataArray *);
         void ChainSource(Hmx::Object *, Hmx::Object *);

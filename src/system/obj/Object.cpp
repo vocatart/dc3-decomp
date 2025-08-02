@@ -144,7 +144,15 @@ void Hmx::Object::LoadType(BinStream &bs) {
     // how does binstreamrev work?
 }
 
-Hmx::Object::~Object() {}
+Hmx::Object::~Object() {
+    if (mTypeDef) {
+        mTypeDef->Release();
+        mTypeDef = nullptr;
+    }
+    ClearAllTypeProps();
+    RemoveFromDir();
+    RELEASE(mSinks);
+}
 
 void Hmx::Object::SetName(const char *name, ObjectDir *dir) {
     RemoveFromDir();
@@ -227,6 +235,91 @@ DataNode Hmx::Object::OnIterateRefs(const DataArray *da) {
     return 0;
 }
 
+DataNode Hmx::Object::OnGetTypeList(const DataArray *a) {
+    DataArray *def = ObjectDef(gNullStr);
+    DataArrayPtr ptr;
+    static Symbol allow_null_type = "allow_null_type";
+    bool b6 = true;
+    DataArray *nullArr = def->FindArray(allow_null_type, false);
+    if (nullArr) {
+        b6 = nullArr->ExecuteScript(1, this, nullptr, 1).Int();
+    }
+    if (b6) {
+        ptr->Insert(ptr->Size(), gNullStr);
+    }
+    DataArray *typesArr = def->FindArray("types", false);
+    if (typesArr) {
+        for (int i = 1; i < typesArr->Size(); i++) {
+            DataArray *curArr = typesArr->Array(i);
+            DataArray *helpArr = curArr->FindArray("help", false);
+            if (helpArr) {
+                DataArray *newArr = new DataArray(2);
+                newArr->Node(0) = curArr->Sym(0);
+                newArr->Node(1) = DataNode(helpArr, kDataArray);
+                ptr->Insert(ptr->Size(), DataNode(newArr, kDataArray));
+                newArr->Release();
+            } else {
+                ptr->Insert(ptr->Size(), curArr->Sym(0));
+            }
+        }
+    }
+    return ptr;
+}
+
+const DataNode *Hmx::Object::Property(DataArray *prop, bool fail) const {
+    static DataNode n(0);
+    // if prop was synced, return the prop node n
+    if (const_cast<Hmx::Object *>(this)->SyncProperty(n, prop, 0, kPropGet))
+        return &n;
+    Symbol propKey = prop->Sym(0);
+
+    if (mTypeProps) {
+        // retrieve property val from typeprops array
+        const DataNode *propValue = mTypeProps->KeyValue(propKey, false);
+        if (!propValue) {
+            if (mTypeDef) {
+                DataArray *found = mTypeDef->FindArray(propKey, fail);
+                if (found)
+                    propValue = &found->Evaluate(1);
+            }
+        }
+        if (propValue) {
+            int cnt = prop->Size();
+            if (cnt == 1)
+                return propValue;
+            else if (cnt == 2) {
+                if (propValue->Type() == kDataArray) {
+                    DataArray *ret = propValue->UncheckedArray();
+                    return &ret->Node(prop->Int(1));
+                }
+            }
+        }
+    }
+    if (fail) {
+        MILO_FAIL("%s: property %s not found", PathName(this), PrintPropertyPath(prop));
+    }
+    return nullptr;
+}
+
+const DataNode *Hmx::Object::Property(Symbol prop, bool fail) const {
+    static DataArrayPtr d(new DataArray(1));
+    d->Node(0) = prop;
+    return Property(d, fail);
+}
+
+DataNode Hmx::Object::HandleProperty(DataArray *prop, DataArray *a2, bool fail) {
+    static DataNode n(a2, kDataArray);
+    if (SyncProperty(n, prop, 0, kPropHandle)) {
+        return n;
+    }
+    if (fail) {
+        MILO_FAIL(
+            "%s: property %s not found", PathName(this), prop ? prop->Sym(0) : "<none>"
+        );
+    }
+    return 0;
+}
+
 void Hmx::Object::ExportPropertyChange(DataArray *a, Symbol s) {
     if (!s.Null()) {
         MILO_ASSERT(mSinks, 0x17F);
@@ -235,6 +328,22 @@ void Hmx::Object::ExportPropertyChange(DataArray *a, Symbol s) {
         msg[0] = DataNode(a, kDataArray);
         Export(msg, true);
     }
+}
+
+DataNode Hmx::Object::PropertyArray(Symbol sym) {
+    static DataArrayPtr d(new DataArray(1));
+    d->Node(0) = sym;
+    int size = PropertySize(d);
+    DataArray *newArr = new DataArray(size);
+    static DataArrayPtr path(new DataArray(2));
+    path->Node(0) = sym;
+    for (int i = 0; i < size; i++) {
+        path->Node(1) = i;
+        newArr->Node(i) = *Property(path, true);
+    }
+    DataNode ret = DataNode(newArr, kDataArray);
+    newArr->Release();
+    return ret;
 }
 
 void Hmx::Object::BroadcastPropertyChange(DataArray *a) {
@@ -394,4 +503,5 @@ BEGIN_HANDLERS(Hmx::Object)
     HANDLE_ARRAY(mTypeDef)
     HANDLE(add_sink, OnAddSink)
     HANDLE(remove_sink, OnRemoveSink)
+    Export(_msg, false);
 END_HANDLERS
