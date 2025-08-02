@@ -14,7 +14,7 @@
                 "/c",
                 "/GR",
                 "/Zi",
-                "/O2",
+                "/O1",
                 "/Ob1",
                 "/Oi",
                 "/EHa"
@@ -23,13 +23,13 @@
         "engine": {
             "base": "base",
             "flags": [
-                "/O1"
+                
             ]
         },
         "xdk": {
             "base": "base",
             "flags": [
-                "/O1"
+                
             ]
         }
     }

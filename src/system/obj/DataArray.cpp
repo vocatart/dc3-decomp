@@ -32,7 +32,13 @@ void DataArray::SetFileLine(Symbol file, int line) {
 
 void DataArray::SetFile(Symbol file) { gFile = file; }
 
-bool strncat_tofit(FixedString &, const char *cc, int i) { return false; }
+bool strncat_tofit(FixedString &str, const char *cc, int i) {
+    if (strlen(str.c_str()) + strlen(cc) < i) {
+        str += cc;
+        return true;
+    } else
+        return false;
+}
 
 DataNode &DataArray::Node(int i) const {
     MILO_ASSERT_FMT(
