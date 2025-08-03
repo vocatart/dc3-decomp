@@ -1,5 +1,4 @@
-#ifndef UTL_STR_H
-#define UTL_STR_H
+#pragma once
 #include "utl/TextStream.h"
 #include "utl/Symbol.h"
 #include <cstring>
@@ -23,11 +22,16 @@ protected:
 public:
     FixedString() {}
     FixedString(char *, int);
+
+    unsigned int length() const { return strlen(mStr); }
+    unsigned int capacity() const { return *(unsigned int *)(mStr - 4); }
     const char *c_str() const { return mStr; }
+    bool empty() const { return *mStr == '\0'; }
 
     bool operator<(const FixedString &) const;
     FixedString &operator+=(const char *);
     unsigned int find(const char *) const;
+    char &operator[](unsigned int);
 };
 
 class String : public TextStream, public FixedString {
@@ -47,11 +51,6 @@ public:
 
     // static const unsigned int npos;
 
-    unsigned int length() const { return strlen(mStr); }
-    // unsigned int capacity() const { return mCap; }
-    // const char *c_str() const { return mStr; }
-    bool empty() const { return *mStr == '\0'; }
-
     // void reserve(unsigned int);
 
     // String operator+(const char *) const;
@@ -65,7 +64,6 @@ public:
     // String &operator=(Symbol);
     String &operator=(const String &);
 
-    // char &operator[](unsigned int);
     // char rindex(int) const;
     // char &rindex(int);
 
@@ -107,10 +105,9 @@ public:
 
 bool SearchReplace(const char *, const char *, const char *, char *);
 bool StrNCopy(char *, const char *, int);
+void RemoveSpaces(char *, int, const char *);
 
 // inline TextStream &operator<<(TextStream &ts, const String &str) {
 //     ts.Print(str.c_str());
 //     return ts;
 // }
-
-#endif

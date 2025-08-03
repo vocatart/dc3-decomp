@@ -1,8 +1,26 @@
 #include "utl/MakeString.h"
 #include "os/Debug.h"
 #include "os/System.h"
+#include "os/CritSec.h"
+#include "utl/MemMgr.h"
 
 bool bufExceeded = false;
+static CriticalSection *gLock;
+static char ***gBuf;
+
+void InitMakeString() {
+    if (!gLock) {
+        gLock = new CriticalSection();
+        gBuf = (char ***)MemAlloc(0x18, __FILE__, 0x93, "MakeString Buffer", 0);
+        for (int i = 0; i < 6; i++) {
+            gBuf[i] = (char **)MemAlloc(0x40, __FILE__, 0x97, "MakeString Buffer", 0);
+            for (int j = 0; j < 16; j++) {
+                gBuf[i][j] =
+                    (char *)MemAlloc(0x1000, __FILE__, 0x9B, "MakeString Buffer", 0);
+            }
+        }
+    }
+}
 
 char *NextBuf() { return 0; }
 
