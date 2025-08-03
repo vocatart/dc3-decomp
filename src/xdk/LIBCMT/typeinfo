@@ -7,21 +7,21 @@ namespace std {
 
     class type_info {
     public:
-        /*virtual*/ ~type_info();
-        bool operator==(const type_info &rhs) const {
-            return strcmp(this->m_Name, rhs.m_Name) == 0;
-        }
-
-        bool before(const type_info &rhs) const throw();
-        size_t hash_code() const throw() { return m_HashCode; }
-        const char *name() const throw() { return m_Name; }
+        virtual ~type_info();
+        size_t hash_code() const;
+        bool operator==(const type_info &rhs) const;
+        bool operator!=(const type_info &rhs) const;
+        int before(const type_info &rhs) const;
+        // size_t hash_code() const noexcept;
+        const char *name() const { return m_Name; }
+        const char *raw_name() const;
 
     private:
         // These constructors are normally deleted, but our C++ version
         // doesn't support that, so they're privated as a workaround
         type_info();
-        type_info(const type_info &);
-        type_info &operator=(const type_info &);
+        type_info(const type_info &rhs); // cannot be copied
+        type_info &operator=(const type_info &rhs); // cannot be copied
 
         const char *m_Name;
         size_t m_HashCode;

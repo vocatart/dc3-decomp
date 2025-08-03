@@ -76,8 +76,8 @@ namespace STLPORT {
             //   char *pcVar1;
             //   ObjVersion *pOVar2;
 
-            //   pcVar1 = gStlAllocName;
-            //   if (gStlAllocNameLookup) {
+            //   pcVar1 = gStlAllocName; // defined in MemMgr.cpp
+            //   if (gStlAllocNameLookup) { // ditto
             //     pcVar1 =
             //     type_info::name(&struct_ObjVersion*_`RTTI_Type_Descriptor',&__type_info_root_node);
             //   }
