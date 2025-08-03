@@ -1,4 +1,5 @@
 #pragma once
+#include "utl/MemMgr.h"
 #include <vector>
 
 class StringTable {
@@ -15,8 +16,8 @@ private:
     void AddBuf(int);
 
 public:
-    // NEW_POOL_OVERLOAD(StringTable);
-    // DELETE_POOL_OVERLOAD(StringTable);
+    NEW_OVERLOAD("StringTable", 0x11);
+    DELETE_OVERLOAD("StringTable", 0x11);
 
     StringTable(int);
     ~StringTable();

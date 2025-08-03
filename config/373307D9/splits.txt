@@ -4437,7 +4437,7 @@ system/utl/Loader.cpp:
 	.text       start:0x82EDD478 end:0x82EDD4B0 rename:.text$yc
 	.text       start:0x82EE3378 end:0x82EE3388 rename:.text$yd
 	.data       start:0x82F189FC end:0x82F18AC8
-	.data       start:0x830E5740 end:0x830E57CC rename:.bss
+	.data       start:0x830E5740 end:0x830E57B0 rename:.bss
 
 system/utl/TextStream.cpp:
 	.rdata      start:0x820D7098 end:0x820D71F0
@@ -4451,7 +4451,7 @@ system/utl/Symbol.cpp:
 	.text       start:0x827D2748 end:0x827D3BE0
 	.text       start:0x82EDD4B0 end:0x82EDD508 rename:.text$yc
 	.text       start:0x82EE3388 end:0x82EE33B8 rename:.text$yd
-	.data       start:0x830E57CC end:0x830E57DC rename:.bss
+	.data       start:0x830E57B0 end:0x830E57D8 rename:.bss
 
 system/utl/MemTrack.cpp:
 	.rdata      start:0x820D74B8 end:0x820D77D0
@@ -4460,7 +4460,7 @@ system/utl/MemTrack.cpp:
 	.text       start:0x827D3BE0 end:0x827D4CA0
 	.text       start:0x82EDD508 end:0x82EDD578 rename:.text$yc
 	.text       start:0x82EE33B8 end:0x82EE33D8 rename:.text$yd
-	.data       start:0x830E57DC end:0x830E5A1C rename:.bss
+	.data       start:0x830E57D8 end:0x830E5A1C rename:.bss
 
 system/utl/Magnu.cpp:
 	.rdata      start:0x820D77D0 end:0x820D78C4

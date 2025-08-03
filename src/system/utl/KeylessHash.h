@@ -71,6 +71,8 @@ public:
             idx = 0;
     }
 
+    void Clear();
+
     // keep these in here so that they're inlined - needed for ObjDirItr
 
     /** Get the very first valid entry in the table. */
@@ -171,7 +173,7 @@ T2 *KeylessHash<T1, T2>::Insert(const T2 &val) {
 
 template <class T1, class T2>
 void KeylessHash<T1, T2>::Resize(int size, T2 *entries) {
-    MILO_ASSERT(size > mNumEntries * 2, 0xF3);
+    MILO_ASSERT(size > mNumEntries * 2, 0xE6);
     bool owned;
     if (entries)
         owned = false;
@@ -186,7 +188,7 @@ void KeylessHash<T1, T2>::Resize(int size, T2 *entries) {
     mNumEntries = 0;
     for (T2 *it = Begin(); it != 0; it = Next(it)) {
         int i = HashString(*it, size);
-        MILO_ASSERT(i >= 0, 0x108);
+        MILO_ASSERT(i >= 0, 0xFB);
         while (entries[i] != mEmpty) {
             i++;
             if (i == size)
@@ -200,4 +202,13 @@ void KeylessHash<T1, T2>::Resize(int size, T2 *entries) {
     mEntries = entries;
     mSize = size;
     mOwnEntries = owned;
+}
+
+template <class T1, class T2>
+void KeylessHash<T1, T2>::Clear() {
+    delete[] mEntries;
+    mEntries = nullptr;
+    mSize = 0;
+    mOwnEntries = true;
+    mNumEntries = 0;
 }
