@@ -31,20 +31,22 @@ const char *PathName(const class Hmx::Object *obj);
 // --------------------------------------------------------------------------------
 #define OBJ_SET_TYPE(classname)                                                           \
     virtual void SetType(Symbol classname) {                                              \
-        static DataArray *types = SystemConfig("objects", StaticClassName(), "types");    \
-        if (classname.Null())                                                             \
-            SetTypeDef(0);                                                                \
-        else {                                                                            \
+        DataArray *def;                                                                   \
+        if (!classname.Null()) {                                                          \
+            static DataArray *types =                                                     \
+                SystemConfig("objects", StaticClassName(), "types");                      \
             DataArray *found = types->FindArray(classname, false);                        \
-            if (found != 0)                                                               \
-                SetTypeDef(found);                                                        \
-            else {                                                                        \
+            if (found) {                                                                  \
+                def = found;                                                              \
+            } else {                                                                      \
                 MILO_WARN(                                                                \
                     "%s:%s couldn't find type %s", ClassName(), PathName(this), classname \
                 );                                                                        \
-                SetTypeDef(0);                                                            \
+                def = nullptr;                                                            \
             }                                                                             \
-        }                                                                                 \
+        } else                                                                            \
+            def = nullptr;                                                                \
+        SetTypeDef(def);                                                                  \
     }
 
 // END SET TYPE MACRO

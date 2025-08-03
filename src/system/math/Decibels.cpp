@@ -11,8 +11,5 @@ float DbToRatio(float db) {
 
 float RatioToDb(float ratio) {
     MILO_ASSERT(ratio >= 0.0f, 0x1B);
-    if (ratio <= 0.0f)
-        return -96.0f;
-    else
-        return log10(ratio) * 20.0f;
+    return ratio <= 0.0f ? -96.0f : (float)log10(ratio) * 20.0f;
 }

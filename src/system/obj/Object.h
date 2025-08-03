@@ -165,6 +165,10 @@ namespace Hmx {
         void LoadRest(BinStream &);
         void SetProperty(Symbol, const DataNode &);
         void SetProperty(DataArray *, const DataNode &);
+
+        static Object *NewObject(Symbol);
+        static bool RegisteredFactory(Symbol);
+        static void RegisterFactory(Symbol, ObjectFunc *);
     };
 
 }

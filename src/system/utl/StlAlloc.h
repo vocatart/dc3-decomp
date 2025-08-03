@@ -60,38 +60,40 @@ namespace STLPORT {
         const_pointer address(const_reference value) const { return &value; }
         size_type max_size() const { return size_type(-1) / sizeof(T); }
 
-        pointer allocate(const size_type count, const void *hint = nullptr) const {
-#ifdef STL_NODE_ALLOC_DEBUG
-            // A leftover from the earlier prototype versions of RB3;
-            // bank 5/6 use type info for allocation tracing purposes
-            typeid(pointer);
-#endif
+        pointer allocate(const size_type count, const void *hint = nullptr) const;
+        //          {
+        // #ifdef STL_NODE_ALLOC_DEBUG
+        //             // A leftover from the earlier prototype versions of RB3;
+        //             // bank 5/6 use type info for allocation tracing purposes
+        //             typeid(pointer);
+        // #endif
 
-            // typeid(pointer);
+        //             // typeid(pointer);
 
-            // ObjVersion * __thiscall
-            // stlpmtx_std::StlNodeAlloc<>::allocate(StlNodeAlloc<> *this,uint
-            // param_1,void *param_2)
+        //             // ObjVersion * __thiscall
+        //             // stlpmtx_std::StlNodeAlloc<>::allocate(StlNodeAlloc<> *this,uint
+        //             // param_1,void *param_2)
 
-            // {
-            //   char *pcVar1;
-            //   ObjVersion *pOVar2;
+        //             // {
+        //             //   char *pcVar1;
+        //             //   ObjVersion *pOVar2;
 
-            //   pcVar1 = gStlAllocName; // defined in MemMgr.cpp
-            //   if (gStlAllocNameLookup) { // ditto
-            //     pcVar1 =
-            //     type_info::name(&struct_ObjVersion*_`RTTI_Type_Descriptor',&__type_info_root_node);
-            //   }
-            //   pOVar2 = MemOrPoolAllocSTL(param_1 *
-            //   0x18,"e:\\lazer_build_gmc1\\system\\src\\utl/StlAlloc.h",0 x39
-            //                              ,pcVar1);
-            //   return pOVar2;
-            // }
+        //             //   pcVar1 = gStlAllocName; // defined in MemMgr.cpp
+        //             //   if (gStlAllocNameLookup) { // ditto
+        //             //     pcVar1 =
+        //             //
+        //             type_info::name(&struct_ObjVersion*_`RTTI_Type_Descriptor',&__type_info_root_node);
+        //             //   }
+        //             //   pOVar2 = MemOrPoolAllocSTL(param_1 *
+        //             //   0x18,"e:\\lazer_build_gmc1\\system\\src\\utl/StlAlloc.h",0 x39
+        //             //                              ,pcVar1);
+        //             //   return pOVar2;
+        //             // }
 
-            return reinterpret_cast<pointer>(
-                MemOrPoolAllocSTL(count * sizeof(T), __FILE__, 0x39, 0)
-            );
-        }
+        //             return reinterpret_cast<pointer>(
+        //                 MemOrPoolAllocSTL(count * sizeof(T), __FILE__, 0x39, 0)
+        //             );
+        //         }
 
         void deallocate(pointer ptr, size_type count) const;
 

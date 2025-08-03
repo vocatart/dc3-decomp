@@ -397,11 +397,33 @@ BEGIN_PROPSYNCS(Hmx::Object)
     SYNC_PROP(sinks, mSinks ? *mSinks : gSinks)
 END_PROPSYNCS
 
+Hmx::Object *Hmx::Object::NewObject(Symbol s) {
+    std::map<Symbol, ObjectFunc *>::iterator it = sFactories.find(s);
+    MILO_ASSERT_FMT(it != sFactories.end(), "Unknown class %s", s);
+    return (it->second)();
+}
+
+bool Hmx::Object::RegisteredFactory(Symbol s) {
+    return sFactories.find(s) != sFactories.end();
+}
+
 void Hmx::Object::BroadcastPropertyChange(Symbol s) {
     static DataArray *a = new DataArray(1);
     a->Node(0) = s;
     BroadcastPropertyChange(a);
 }
+
+void Hmx::Object::PropertyClear(DataArray *propArr) {
+    int size = PropertySize(propArr);
+    DataArray *cloned = propArr->Clone(true, false, 1);
+    while (size-- != 0) {
+        cloned->Node(cloned->Size() - 1) = size;
+        RemoveProperty(cloned);
+    }
+    cloned->Release();
+}
+
+void Hmx::Object::RegisterFactory(Symbol s, ObjectFunc *func) { sFactories[s] = func; }
 
 void Hmx::Object::Copy(const Hmx::Object *o, CopyType ty) {
     if (ty != kCopyFromMax) {

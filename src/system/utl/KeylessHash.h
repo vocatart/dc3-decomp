@@ -25,6 +25,12 @@ private:
     /** The type T2 representing a removed hash table entry. */
     T2 mRemoved;
 
+    /** Get the first valid entry in the table from the supplied entry.
+     * @param [in] entry The indexed entry in the table to begin searching from.
+     * @returns The first valid entry from the supplied entry, if it exists.
+     */
+    T2 *FirstFrom(T2 *entry);
+
 public:
     // NEW_OVERLOAD;
     // DELETE_OVERLOAD;
@@ -51,12 +57,6 @@ public:
      */
     void Resize(int size, T2 *entries);
 
-    /** Get the first valid entry in the table from the supplied entry.
-     * @param [in] entry The indexed entry in the table to begin searching from.
-     * @returns The first valid entry from the supplied entry, if it exists.
-     */
-    T2 *FirstFrom(T2 *entry);
-
     // getters
     int Size() const { return mSize; }
     int UsedSize() const { return mNumEntries; }
@@ -71,6 +71,7 @@ public:
             idx = 0;
     }
 
+    void Remove(T2 *);
     void Clear();
 
     // keep these in here so that they're inlined - needed for ObjDirItr
