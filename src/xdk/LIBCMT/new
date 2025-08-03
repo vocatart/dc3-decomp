@@ -1,6 +1,6 @@
 #pragma once
-#include <cstddef>
-#include <exception>
+#include "cstddef"
+#include "exception"
 
 namespace std {
 
@@ -26,13 +26,9 @@ void operator delete(void *ptr) throw();
 void operator delete[](void *ptr) throw();
 
 // Placement new/delete
-inline void *operator new(std::size_t size, void *place) throw() {
-    return place;
-}
+inline void *operator new(std::size_t size, void *place) throw() { return place; }
 
-inline void *operator new[](std::size_t size, void *place) throw() {
-    return place;
-}
+inline void *operator new[](std::size_t size, void *place) throw() { return place; }
 
 inline void operator delete(void *ptr, void *place) throw() {}
 

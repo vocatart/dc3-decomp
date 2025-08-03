@@ -1,5 +1,4 @@
 #pragma once
-#include <cstddef>
 #include <system/utl/MemMgr.h>
 #include <typeinfo>
 
@@ -67,6 +66,8 @@ namespace STLPORT {
             // bank 5/6 use type info for allocation tracing purposes
             typeid(pointer);
 #endif
+
+            // typeid(pointer);
 
             // ObjVersion * __thiscall
             // stlpmtx_std::StlNodeAlloc<>::allocate(StlNodeAlloc<> *this,uint
