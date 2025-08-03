@@ -19,7 +19,21 @@ void Symbol::PreInit(int stringSize, int hashSize) {
     TheDebug.AddExitCallback(Symbol::Terminate);
 }
 
-// Symbol::Symbol(const char *) {}
+Symbol::Symbol(const char *str) {
+    if (str && *str) {
+        const char **entry = gHashTable.Find(str);
+        if (entry) {
+            mStr = *entry;
+        } else {
+            mStr = gStringTable->Add(str);
+            if (strlen(str) > 100) {
+                MILO_WARN("Huge symbol %s", str);
+            }
+            gHashTable.Insert(mStr);
+        }
+    } else
+        mStr = gNullStr;
+}
 
 // not sure where else to put this, it's only used here
 struct Alpha {

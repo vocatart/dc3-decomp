@@ -127,7 +127,7 @@ template <class T1, class T2>
 T2 *KeylessHash<T1, T2>::Find(const char *const &key) {
     if (mEntries) {
         int i = HashString(key, mSize);
-        MILO_ASSERT(i >= 0, 0x88);
+        MILO_ASSERT(i >= 0, 0x86);
 
         for (; mEntries[i] != mEmpty; Advance(i)) {
             if (mEntries[i] != mRemoved) {
