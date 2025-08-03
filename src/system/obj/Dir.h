@@ -122,6 +122,7 @@ public:
     void ResetViewports();
     void SetInlineProxyType(InlineDirType);
     void Reserve(int, int);
+    Hmx::Object *FindObject(const char *, bool, bool);
 
     static ObjectDir *Main() { return sMainDir; }
 
@@ -133,3 +134,6 @@ protected:
     virtual void RemovingObject(Hmx::Object *);
     virtual void OldLoadProxies(BinStream &, int);
 };
+
+extern bool gLoadingProxyFromDisk;
+extern const char *kNotObjectMsg;

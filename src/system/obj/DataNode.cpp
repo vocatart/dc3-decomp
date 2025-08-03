@@ -1,9 +1,12 @@
 #include "Data.h"
+#include "Dir.h"
 #include "obj/Data.h"
 #include "os/Debug.h"
+#include "utl/BinStream.h"
 #include "utl/TextStream.h"
 #include "obj/DataFunc.h"
 #include "obj/Object.h"
+#include "obj/DataUtl.h"
 #include <cstring>
 #include <map>
 
@@ -127,19 +130,18 @@ const DataNode &UseQueue(const DataNode &node) {
     return gEvalNode[i];
 }
 
-// const DataNode &DataNode::Evaluate() const {
-//     if (mType == kDataCommand) {
-//         DataNode lol = mValue.array->Execute();
-//         return UseQueue(lol);
-//     } else if (mType == kDataVar) {
-//         return *mValue.var;
-//     } else if (mType == kDataProperty) {
-//         MILO_ASSERT(gDataThis, 0x78);
-//         const DataNode *n = gDataThis->Property(mValue.array, true);
-//         return UseQueue(*n);
-//     } else
-//         return *this;
-// }
+const DataNode &DataNode::Evaluate() const {
+    if (mType == kDataCommand) {
+        return UseQueue(mValue.array->Execute(true));
+    } else if (mType == kDataVar) {
+        return *mValue.var;
+    } else if (mType == kDataProperty) {
+        MILO_ASSERT(gDataThis, 0x7A);
+        const DataNode *n = gDataThis->Property(mValue.array, true);
+        return UseQueue(*n);
+    } else
+        return *this;
+}
 
 bool DataNode::NotNull() const {
     const DataNode &n = Evaluate();
@@ -506,7 +508,24 @@ DataFunc *DataNode::Func(const DataArray *source) const {
     return mValue.func;
 }
 
-// public: class Hmx::Object * __cdecl DataNode::GetObj(class DataArray const *) const
+Hmx::Object *DataNode::GetObj(const DataArray *source) const {
+    const DataNode &n = Evaluate();
+    if (n.mType == kDataObject)
+        return n.mValue.object;
+    else {
+        const char *str = n.LiteralStr(source);
+        Hmx::Object *ret = 0;
+        if (*str != '\0') {
+            ret = gDataDir->FindObject(str, true, true);
+            if (!ret) {
+                const char *msg =
+                    PathName(gDataDir) != nullptr ? PathName(gDataDir) : "**no file**";
+                MILO_FAIL(kNotObjectMsg, str, msg);
+            }
+        }
+        return ret;
+    }
+}
 
 DataArray *DataNode::Array(const DataArray *source) const {
     const DataNode &n = Evaluate();
@@ -585,6 +604,8 @@ bool DataNode::operator>(const DataNode &other) const {
         return false;
 }
 
+bool DataNode::Equal(const DataNode &, DataArray *, bool) const { return false; }
+
 bool DataNode::operator!=(const DataNode &other) const {
     return !Equal(other, nullptr, true);
 }
@@ -623,7 +644,7 @@ void DataNode::Load(BinStream &d) {
     case kDataString:
     case kDataGlob:
         mValue.array = new DataArray(0);
-        mValue.array->LoadGlob(d, (mType - kDataString) == 0);
+        mValue.array->LoadGlob(d, mType == kDataString);
         break;
     case kDataArray:
     case kDataCommand:
@@ -632,11 +653,11 @@ void DataNode::Load(BinStream &d) {
         mValue.array->Load(d);
         break;
     case kDataObject:
-        // d.ReadString(buf, 0x80);
-        // mValue.object = gDataDir->FindObject(buf, true);
-        //         if (mValue.object == 0 && *buf) {
-        //             MILO_WARN("Couldn't find %s from %s", buf, gDataDir->Name());
-        //         }
+        d.ReadString(buf, 0x80);
+        mValue.object = gDataDir->FindObject(buf, true, true);
+        if (!mValue.object && *buf) {
+            MILO_WARN("Couldn't find %s from %s", buf, gDataDir->Name());
+        }
         break;
     case kDataVar: {
         Symbol sym;
@@ -645,13 +666,7 @@ void DataNode::Load(BinStream &d) {
         break;
     }
     case kDataUnhandled:
-        mType = kDataInt;
-        d >> mValue.integer;
-        break;
     case kDataInt:
-        mType = kDataUnhandled;
-        d >> mValue.integer;
-        break;
     case kDataElse:
     case kDataEndif:
     case kDataAutorun:
@@ -661,4 +676,11 @@ void DataNode::Load(BinStream &d) {
         MILO_FAIL("Unrecognized node type: %x", mType);
         break;
     }
+}
+
+void DataNode::Load(BinStream &d, ObjectDir *dir) {
+    ObjectDir *old = gDataDir;
+    gDataDir = dir;
+    Load(d);
+    gDataDir = old;
 }

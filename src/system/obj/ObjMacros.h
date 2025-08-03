@@ -286,3 +286,9 @@ const char *PathName(const class Hmx::Object *obj);
 
 // END COPY MACROS
 // -------------------------------------------------------------------------------------
+
+#define NEW_OBJ(objType)                                                                 \
+    static Hmx::Object *NewObject() { return new objType; }
+
+#define REGISTER_OBJ_FACTORY(objType)                                                    \
+    Hmx::Object::RegisterFactory(objType::StaticClassName(), objType::NewObject);

@@ -2394,7 +2394,7 @@ system/obj/DataFile.cpp:
 	.text       start:0x825BEB70 end:0x825C1D08
 	.text       start:0x82EDBE00 end:0x82EDBF30 rename:.text$yc
 	.text       start:0x82EE2168 end:0x82EE2198 rename:.text$yd
-	.data       start:0x82F10888 end:0x82F10910
+	.data       start:0x82F10888 end:0x82F10908
 	.data       start:0x82F64D1C end:0x82F64D68 rename:.bss
 
 system/obj/DataUtl.cpp:
@@ -2405,7 +2405,7 @@ system/obj/DataUtl.cpp:
 	.text       start:0x825C1D08 end:0x825C32D0
 	.text       start:0x82EDBF30 end:0x82EDC008 rename:.text$yc
 	.text       start:0x82EE2198 end:0x82EE21C8 rename:.text$yd
-	.data       start:0x82F10910 end:0x82F10984
+	.data       start:0x82F10908 end:0x82F10984
 	.data       start:0x82F64D68 end:0x82F65290 rename:.bss
 
 system/obj/Msg.cpp:

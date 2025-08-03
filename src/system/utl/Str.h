@@ -27,6 +27,7 @@ public:
 
     bool operator<(const FixedString &) const;
     FixedString &operator+=(const char *);
+    unsigned int find(const char *) const;
 };
 
 class String : public TextStream, public FixedString {
@@ -77,7 +78,6 @@ public:
     void resize(unsigned int);
     // unsigned int find(char, unsigned int) const;
     // unsigned int find(char) const;
-    // unsigned int find(const char *) const;
     // unsigned int find(const char *, unsigned int) const;
     // unsigned int find_first_of(const char *, unsigned int) const;
     // unsigned int find_last_of(char) const;
