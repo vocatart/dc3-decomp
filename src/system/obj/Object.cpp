@@ -5,8 +5,10 @@
 #include "ObjRef.h"
 #include "Object.h"
 #include "obj/Data.h"
+#include "obj/DataFunc.h"
 #include "obj/Utl.h"
 #include "os/Debug.h"
+#include "os/OSFuncs.h"
 #include "os/Platform.h"
 #include "os/System.h"
 #include "utl/BinStream.h"
@@ -53,7 +55,7 @@ Hmx::Object::Object()
     mRefs.Init();
 }
 
-void Hmx::Object::ReplaceRefs(Hmx::Object *obj) { mRefs.ReplaceList(obj); }
+// void Hmx::Object::ReplaceRefs(Hmx::Object *obj) { mRefs.ReplaceList(obj); }
 
 int Hmx::Object::RefCount() const { return mRefs.RefCount(); }
 
@@ -137,8 +139,7 @@ DataArray *Hmx::Object::ObjectDef(Symbol s) {
     return SystemConfig(sref, s);
 }
 
-unsigned short Hmx::Object::gRev = 2;
-unsigned short Hmx::Object::gAltRev = 0;
+static const unsigned short gRevs[4] = { 2, 0, 0, 0 };
 
 void Hmx::Object::LoadType(BinStream &bs) {
     int revs;
@@ -150,7 +151,7 @@ void Hmx::Object::LoadType(BinStream &bs) {
             PathName(this),
             ClassName(),
             bsrev.mRev,
-            gRev
+            gRevs[0]
         );
     }
     if (bsrev.mAltRev > 0) {
@@ -159,7 +160,7 @@ void Hmx::Object::LoadType(BinStream &bs) {
             PathName(this),
             ClassName(),
             bsrev.mAltRev,
-            gAltRev
+            gRevs[2]
         );
     }
     Symbol s;
@@ -169,6 +170,7 @@ void Hmx::Object::LoadType(BinStream &bs) {
 }
 
 Hmx::Object::~Object() {
+    MILO_ASSERT_FMT(MainThread(), "Can't delete objects outside of the main thread");
     if (mTypeDef) {
         mTypeDef->Release();
         mTypeDef = nullptr;
@@ -176,6 +178,13 @@ Hmx::Object::~Object() {
     ClearAllTypeProps();
     RemoveFromDir();
     RELEASE(mSinks);
+    Hmx::Object *old = sDeleting;
+    sDeleting = this;
+    ReplaceRefs(nullptr);
+    sDeleting = old;
+    if (gDataThis == this) {
+        gDataThis = nullptr;
+    }
 }
 
 void Hmx::Object::SetName(const char *name, ObjectDir *dir) {
