@@ -22,7 +22,6 @@ public:
     StringTable(int);
     ~StringTable();
     const char *Add(const char *);
-    void Clear();
     void Reserve(int);
     int Size() const;
     int UsedSize() const;

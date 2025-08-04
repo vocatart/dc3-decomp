@@ -1,4 +1,5 @@
 #include "utl/StringTable.h"
+#include "utl/MemMgr.h"
 
 int StringTable::UsedSize() const {
     int size = 0;
@@ -21,7 +22,11 @@ int StringTable::Size() const {
     return size;
 }
 
-StringTable::~StringTable() { Clear(); }
+StringTable::~StringTable() {
+    for (int i = 0; i < mBuffers.size(); i++) {
+        MemFree(mBuffers[i].chars);
+    }
+}
 
 StringTable::StringTable(int i) : mCurChar(0), mCurBuf(-1) {
     if (i != 0)

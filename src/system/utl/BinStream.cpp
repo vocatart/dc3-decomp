@@ -40,30 +40,38 @@ bool BinStream::AddSharedInlined(const class FilePath &) {
 
 BinStream &BinStream::operator<<(const char *str) {
     MILO_ASSERT(str, 0x60);
-    int len = 0;
-    const char *cc = str;
-    while (*++cc)
-        ;
-    len = cc - str;
-    len--;
+    int size = strlen(str);
+    *this << size;
+    Write(str, size);
+    return *this;
+}
+
+BinStream &BinStream::operator<<(const Symbol &sym) {
+    const char *str = sym.Str();
+    unsigned int len = strlen(str);
+    MILO_ASSERT(len < BUF_SIZE, 0x6C);
     *this << len;
     Write(str, len);
     return *this;
 }
 
-BinStream &BinStream::operator<<(const Symbol &sym) {
-    int len;
-    MILO_ASSERT(len < BUF_SIZE, 0x6C);
+BinStream &BinStream::operator<<(const class String &str) {
+    int size = str.length();
+    *this << size;
+    Write(str.c_str(), size);
     return *this;
 }
-
-BinStream &BinStream::operator<<(const class String &str) { return *this; }
 
 void BinStream::EnableWriteEncryption() {
     MILO_ASSERT(!mCrypto, 0xC8);
     int i = RandomInt();
     *this << i;
     mCrypto = new Rand2(i);
+}
+
+int BinStream::ReadAsync(void *v, int i) {
+    Read(v, i);
+    return Fail() & i; // fix this
 }
 
 void BinStream::ReadEndian(void *out, int size) {
