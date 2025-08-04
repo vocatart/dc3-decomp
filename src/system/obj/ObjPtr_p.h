@@ -28,7 +28,7 @@ public:
         MILO_ASSERT(mOwner, 0xCE);
     }
     virtual ~ObjOwnerPtr() {}
-    virtual Hmx::Object *RefOwner() const { return mObj->RefOwner(); }
+    virtual Hmx::Object *RefOwner() const { return mObject->RefOwner(); }
     virtual void Replace(Hmx::Object *obj) { mOwner->Replace(this, obj); }
 };
 

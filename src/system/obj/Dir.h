@@ -19,7 +19,9 @@ enum InlineDirType {
 template <class T>
 class ObjDirPtr : public ObjRefConcrete<T, ObjectDir> {
 public:
-    ObjDirPtr() : ObjRefConcrete<T, ObjectDir>(nullptr), mLoader(nullptr) {}
+    ObjDirPtr() : ObjRefConcrete(nullptr), mLoader(nullptr) {}
+    ObjDirPtr(T *);
+    ObjDirPtr(const ObjDirPtr &);
     virtual ~ObjDirPtr() {}
     virtual bool IsDirPtr() { return true; }
     virtual void Replace(Hmx::Object *);
@@ -27,6 +29,7 @@ public:
     class DirLoader *mLoader; // 0x10
 
     bool IsLoaded() const;
+    ObjDirPtr &operator=(T *);
     // void LoadFile(const FilePath&, bool, bool, LoaderPos, bool);
 };
 

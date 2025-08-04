@@ -60,30 +60,30 @@ public:
 template <class T1, class T2 = class ObjectDir>
 class ObjRefConcrete : public ObjRef {
 protected:
-    T1 *mObj; // 0xc
+    T1 *mObject; // 0xc
 public:
-    ObjRefConcrete(T1 *obj) : mObj(obj) {
+    ObjRefConcrete(T1 *obj) : mObject(obj) {
         if (obj) {
             // prev gets set here too
             // next->prev = this;
         }
     }
-    ObjRefConcrete(const ObjRefConcrete &o) : mObj(o.mObj) {
-        if (mObj) {
+    ObjRefConcrete(const ObjRefConcrete &o) : mObject(o.mObject) {
+        if (mObject) {
             next = o.next;
             prev = o.prev;
-            mObj->mRefs.prev = this;
+            mObject->mRefs.prev = this;
             prev->next = this;
         }
     }
 
     virtual ~ObjRefConcrete() {
-        if (mObj) {
+        if (mObject) {
             prev->next = next;
             next->prev = prev;
         }
     }
-    virtual Hmx::Object *GetObj() const { return mObj; }
+    virtual Hmx::Object *GetObj() const { return mObject; }
     virtual void Replace(Hmx::Object *obj) { SetObj(obj); }
 
     void SetObjConcrete(T1 *);
@@ -91,6 +91,6 @@ public:
     Hmx::Object *SetObj(Hmx::Object *);
     bool Load(class BinStream &, bool, ObjectDir *);
 
-    T1 *operator->() const { return mObj; }
-    operator T1 *() const { return mObj; }
+    T1 *operator->() const { return mObject; }
+    operator T1 *() const { return mObject; }
 };

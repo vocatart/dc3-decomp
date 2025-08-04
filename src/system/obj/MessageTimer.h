@@ -1,12 +1,12 @@
 #pragma once
 #include "os/Timer.h"
 #include "os/Debug.h"
+#include "utl/MemMgr.h"
 #include "utl/Symbol.h"
 #include <vector>
 #include <algorithm>
 
-class ObjEntry {
-public:
+struct ObjEntry {
     ObjEntry(Symbol s, float ms, int inum) : name(s), maxMs(ms), totalMs(ms), num(inum) {}
     Symbol name; // 0x0
     float maxMs; // 0x4
@@ -23,6 +23,9 @@ public:
             totalMs / num
         );
     }
+
+    NEW_OVERLOAD("ObjEntry", 0x16);
+    DELETE_OVERLOAD("ObjEntry", 0x16);
 };
 
 struct ObjSort {
@@ -31,12 +34,8 @@ struct ObjSort {
     }
 };
 
-class EventEntry {
-public:
-    EventEntry(Symbol s, Hmx::Object *o, float ms) {
-        msgs = s;
-        Add(o, ms);
-    }
+struct EventEntry {
+    EventEntry(Symbol s, Hmx::Object *o, float ms) : msgs(s) { Add(o, ms); }
 
     Symbol msgs; // 0x0
     std::vector<ObjEntry *> objs; // 0x4
@@ -49,8 +48,7 @@ public:
 
     float MaxMs() {
         float total = 0.0f;
-        int i;
-        for (i = 0; i < objs.size(); i++) {
+        for (int i = 0; i < objs.size(); i++) {
             MaxEq(total, objs[i]->maxMs);
         }
         return total;
@@ -65,11 +63,14 @@ public:
     }
 
     void Add(Hmx::Object *o, float ms);
+
+    NEW_OVERLOAD("EventEntry", 0x3D);
+    DELETE_OVERLOAD("EventEntry", 0x3D);
 };
 
 struct MaxSort {
     bool operator()(EventEntry *e1, EventEntry *e2) const {
-        return e1->MaxMs() < e2->MaxMs() ? true : false;
+        return e1->MaxMs() > e2->MaxMs();
     }
 };
 

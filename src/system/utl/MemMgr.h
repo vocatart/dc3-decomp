@@ -10,7 +10,7 @@ int MemFindAddrHeap(void *);
 void MemPushTemp();
 void MemPopTemp();
 
-void *MemAlloc(int size, const char *file, int line, const char *name, int align);
+void *MemAlloc(int size, const char *file, int line, const char *name, int align = 0);
 void MemFree(
     void *mem, const char *file = "unknown", int line = 0, const char *name = "unknown"
 );
