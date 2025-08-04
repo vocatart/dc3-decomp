@@ -18,12 +18,11 @@ void ObjectDir::SetInlineProxyType(InlineDirType t) {
 }
 
 void ObjectDir::Reserve(int hashSize, int stringSize) {
-    MemPushTemp();
+    MemTemp tmp;
     if (mHashTable.Size() < hashSize) {
         mHashTable.Resize(hashSize, 0);
     }
     mStringTable.Reserve(stringSize);
-    MemPopTemp();
 }
 
 ObjectDir::InlinedDir::InlinedDir() : dir(), file() {}

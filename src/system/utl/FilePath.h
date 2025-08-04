@@ -10,7 +10,7 @@ public:
     FilePath() : String() {}
     FilePath(const char *str) { Set(sRoot.c_str(), str); }
     FilePath(const char *cc, const char *cc2) { Set(cc, cc2); }
-    virtual ~FilePath() {}
+    // virtual ~FilePath() {} // i guess hmx didn't have this for FilePath?
 
     void Set(const char *, const char *);
 

@@ -130,18 +130,42 @@ void Hmx::Object::SaveRest(BinStream &bs) {
 DataArray *Hmx::Object::ObjectDef(Symbol s) {
     Symbol sref;
     if (s == gNullStr) {
-        sref = "objects";
         s = ClassName();
+        sref = "objects";
     } else
         sref = "objects";
     return SystemConfig(sref, s);
 }
 
+unsigned short Hmx::Object::gRev = 2;
+unsigned short Hmx::Object::gAltRev = 0;
+
 void Hmx::Object::LoadType(BinStream &bs) {
     int revs;
     bs >> revs;
     BinStreamRev bsrev(bs, revs);
-    // how does binstreamrev work?
+    if (bsrev.mRev > 2) {
+        MILO_FAIL(
+            "%s can't load new %s version %d > %d",
+            PathName(this),
+            ClassName(),
+            bsrev.mRev,
+            gRev
+        );
+    }
+    if (bsrev.mAltRev > 0) {
+        MILO_FAIL(
+            "%s can't load new %s alt version %d > %d",
+            PathName(this),
+            ClassName(),
+            bsrev.mAltRev,
+            gAltRev
+        );
+    }
+    Symbol s;
+    bs >> s;
+    SetType(s);
+    bs.PushRev(packRevs(bsrev.mAltRev, bsrev.mRev), this);
 }
 
 Hmx::Object::~Object() {
@@ -448,6 +472,21 @@ void Hmx::Object::Copy(const Hmx::Object *o, CopyType ty) {
                 ClassName()
             );
         }
+    }
+}
+
+void Hmx::Object::LoadRest(BinStream &bs) {
+    int revs = bs.PopRev(this);
+    BinStreamRev bsrev(bs, revs);
+    if (!mTypeProps) {
+        mTypeProps = new TypeProps(this);
+    }
+    mTypeProps->Load(bsrev);
+    if (!mTypeProps->HasProps()) {
+        RELEASE(mTypeProps);
+    }
+    if (bsrev.mRev > 0) {
+        bsrev.mBinStream >> mNote;
     }
 }
 

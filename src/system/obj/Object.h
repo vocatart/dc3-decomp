@@ -44,6 +44,7 @@ public:
     TypeProps &operator=(const TypeProps &);
     void Save(BinStream &);
     DataArray *Map() const { return mMap; }
+    bool HasProps() const { return mMap && mMap->Size() != 0; }
 
     NEW_OVERLOAD("TypeProps", 0x485);
     DELETE_OVERLOAD("TypeProps", 0x485);
@@ -66,6 +67,8 @@ namespace Hmx {
         void ExportPropertyChange(DataArray *, Symbol);
 
         static std::map<Symbol, ObjectFunc *> sFactories;
+        static unsigned short gRev;
+        static unsigned short gAltRev;
 
     protected:
         static Object *sDeleting;

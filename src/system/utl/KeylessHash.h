@@ -83,11 +83,8 @@ public:
 };
 
 template <class T1, class T2>
-KeylessHash<T1, T2>::KeylessHash(
-    int size, const T2 &empty, const T2 &removed, T2 *entries
-) {
-    mEmpty = empty;
-    mRemoved = removed;
+KeylessHash<T1, T2>::KeylessHash(int size, const T2 &empty, const T2 &removed, T2 *entries)
+    : mEmpty(empty), mRemoved(removed) {
     if (entries) {
         mSize = size;
         mEntries = entries;
@@ -98,7 +95,7 @@ KeylessHash<T1, T2>::KeylessHash(
         mOwnEntries = true;
     } else {
         mSize = 0;
-        mEntries = 0;
+        mEntries = nullptr;
         mOwnEntries = true;
     }
     for (int i = 0; i < mSize; i++) {
