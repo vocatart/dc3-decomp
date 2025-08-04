@@ -21,10 +21,10 @@ public:
 // ObjRef size: 0xc
 class ObjRef {
 protected:
-public:
     // seems to be a linked list of an Object's refs
     ObjRef *next; // 0x4
     ObjRef *prev; // 0x8
+public:
     ObjRef() {}
     virtual ~ObjRef() {}
     virtual Hmx::Object *RefOwner() const { return nullptr; }
@@ -38,6 +38,35 @@ public:
     }
     virtual ObjRefOwner *Parent() const { return nullptr; }
 
+    class iterator {
+    private:
+        ObjRef *curRef;
+
+    public:
+        iterator() : curRef(nullptr) {}
+        iterator(ObjRef *ref) : curRef(ref) {}
+        operator ObjRef *() const { return curRef; }
+        ObjRef *operator->() const { return curRef; }
+
+        iterator operator++() {
+            curRef = curRef->next;
+            return *this;
+        }
+
+        iterator operator++(int) {
+            iterator tmp = *this;
+            ++*this;
+            return tmp;
+        }
+
+        bool operator!=(iterator it) { return curRef != it.curRef; }
+        bool operator==(iterator it) { return curRef == it.curRef; }
+        bool operator!() { return curRef == nullptr; }
+    };
+
+    iterator begin() const { return iterator(next); }
+    iterator end() const { return iterator((ObjRef *)this); }
+
     void Init() { next = prev = this; }
     void ReplaceList(Hmx::Object *obj) {
         for (ObjRef *it = next; it != this; it = next) {
@@ -49,10 +78,20 @@ public:
     }
     int RefCount() const {
         int count = 0;
-        for (ObjRef *it = next; it != this; it = it->next) {
+        for (ObjRef::iterator it = begin(); it != end(); ++it) {
             count++;
         }
         return count;
+    }
+
+    // per ObjectDir::HasDirPtrs, this is the way to iterate across refs
+    // for (ObjRef *it = mRefs.next; it != &mRefs; it = it->next) {
+
+    // void AddRef(ObjRef*);
+
+    void Release() {
+        prev->next = next;
+        next->prev = prev;
     }
 };
 
@@ -66,21 +105,44 @@ public:
         if (obj) {
             // prev gets set here too
             // next->prev = this;
+            // next = &obj->mRefs;
+            // prev = obj->mRefs.prev;
+            // obj->mRefs.prev = this;
+            // prev->next = this;
         }
     }
+
+    // void __thiscall ObjDirPtr<>::ObjDirPtr<>(ObjDirPtr<> *this,ObjectDir *param_1)
+
+    // {
+    //   int iVar1;
+
+    //   *(this + 0xc) = param_1;
+    //   *this = &ObjRefConcrete<>::`vftable';
+    //   if (param_1 != 0x0) { obj
+    //     iVar1 = *(*(param_1 + 4) + 4); obj->mRefs.next
+    //     *(this + 4) = param_1 + iVar1 + 8;
+    //     *(this + 8) = *(param_1 + iVar1 + 0x10);
+    //     *(param_1 + iVar1 + 0x10) = this;
+    //     *(*(this + 8) + 4) = this;
+    //   }
+    //   *(this + 0x10) = 0;
+    //   *this = &`vftable';
+    //   return;
+    // }
+
     ObjRefConcrete(const ObjRefConcrete &o) : mObject(o.mObject) {
         if (mObject) {
-            next = o.next;
-            prev = o.prev;
-            mObject->mRefs.prev = this;
-            prev->next = this;
+            // next = o.next;
+            // prev = o.prev;
+            // mObject->mRefs.prev = this;
+            // prev->next = this;
         }
     }
 
     virtual ~ObjRefConcrete() {
         if (mObject) {
-            prev->next = next;
-            next->prev = prev;
+            Release();
         }
     }
     virtual Hmx::Object *GetObj() const { return mObject; }
@@ -88,7 +150,11 @@ public:
 
     void SetObjConcrete(T1 *);
     void CopyRef(const ObjRefConcrete &);
-    Hmx::Object *SetObj(Hmx::Object *);
+    Hmx::Object *SetObj(Hmx::Object *root_obj) {
+        T1 *obj = root_obj ? dynamic_cast<T1 *>(root_obj) : nullptr;
+        SetObjConcrete(obj);
+        return mObject ? mObject : nullptr;
+    }
     bool Load(class BinStream &, bool, ObjectDir *);
 
     T1 *operator->() const { return mObject; }

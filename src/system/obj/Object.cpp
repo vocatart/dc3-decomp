@@ -14,6 +14,7 @@
 #include "utl/BinStream.h"
 #include "utl/Symbol.h"
 
+bool gLoadingProxyFromDisk = false;
 std::map<Symbol, ObjectFunc *> Hmx::Object::sFactories;
 DataArrayPtr gPropPaths[8] = {
     DataArrayPtr(new DataArray(1)), DataArrayPtr(new DataArray(1)),
@@ -258,8 +259,8 @@ DataNode Hmx::Object::HandleType(DataArray *msg) {
 DataNode Hmx::Object::OnIterateRefs(const DataArray *da) {
     DataNode *var = da->Var(2);
     DataNode node(*var);
-    for (ObjRef *it = mRefs.next; it != &mRefs; it = mRefs.next) {
-        *var = (*it++).RefOwner();
+    for (ObjRef::iterator it = mRefs.begin(); it != mRefs.end(); ++it) {
+        *var = it->RefOwner();
         for (int i = 3; i < da->Size(); i++) {
             da->Command(i)->Execute(true);
         }

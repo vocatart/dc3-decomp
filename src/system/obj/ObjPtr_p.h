@@ -6,7 +6,7 @@
 
 // ObjPtr size: 0x14
 template <class T>
-class ObjPtr : public ObjRefConcrete<T, ObjectDir> {
+class ObjPtr : public ObjRefConcrete<T> {
 private:
     Hmx::Object *mOwner; // 0x10
 public:
@@ -19,7 +19,7 @@ public:
 
 // ObjOwnerPtr size: 0x14
 template <class T>
-class ObjOwnerPtr : public ObjRefConcrete<T, ObjectDir> {
+class ObjOwnerPtr : public ObjRefConcrete<T> {
 private:
     ObjRefOwner *mOwner; // 0x10
 public:

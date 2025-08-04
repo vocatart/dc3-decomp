@@ -2,6 +2,7 @@
 #include "math/Mtx.h"
 #include "obj/ObjRef.h"
 #include "obj/Object.h"
+#include "os/Debug.h"
 #include "utl/BinStream.h"
 #include "utl/FilePath.h"
 #include "utl/KeylessHash.h"
@@ -16,20 +17,23 @@ enum InlineDirType {
     kInlineCachedShared = 3
 };
 
-template <class T>
-class ObjDirPtr : public ObjRefConcrete<T, ObjectDir> {
+template <class C>
+class ObjDirPtr : public ObjRefConcrete<C> {
 public:
     ObjDirPtr() : ObjRefConcrete(nullptr), mLoader(nullptr) {}
-    ObjDirPtr(T *);
+    ObjDirPtr(C *);
     ObjDirPtr(const ObjDirPtr &);
-    virtual ~ObjDirPtr() {}
+    virtual ~ObjDirPtr() { *this = nullptr; }
     virtual bool IsDirPtr() { return true; }
-    virtual void Replace(Hmx::Object *);
+    virtual void Replace(Hmx::Object *o) {
+        MILO_ASSERT(ObjRefConcrete<C>::mObject, 0x70);
+        *this = o ? dynamic_cast<C *>(o) : nullptr;
+    }
 
     class DirLoader *mLoader; // 0x10
 
     bool IsLoaded() const;
-    ObjDirPtr &operator=(T *);
+    ObjDirPtr &operator=(C *);
     // void LoadFile(const FilePath&, bool, bool, LoaderPos, bool);
 };
 
@@ -39,6 +43,10 @@ class ObjectDir : public virtual Hmx::Object {
 public:
     enum ViewportId {
         kNumViewports = 7
+    };
+
+    class Viewport {
+        Transform mXfm;
     };
 
 protected:
@@ -55,10 +63,6 @@ protected:
 
         const char *name;
         Hmx::Object *obj;
-    };
-
-    class Viewport {
-        Transform mXfm;
     };
 
     struct InlinedDir {
@@ -122,10 +126,14 @@ public:
         mCurCam = o;
     }
     void SetSubDirFlag(bool flag) { mIsSubDir = flag; }
+    bool IsProxy() const { return this != Dir(); }
     void ResetViewports();
     void SetInlineProxyType(InlineDirType);
     void Reserve(int, int);
     Hmx::Object *FindObject(const char *, bool, bool);
+    bool InlineProxy(BinStream &);
+    bool HasDirPtrs() const;
+    void TransferLoaderState(ObjectDir *);
 
     static ObjectDir *Main() { return sMainDir; }
     static void PreInit(int, int);
@@ -137,7 +145,9 @@ protected:
     virtual void AddedObject(Hmx::Object *) {}
     virtual void RemovingObject(Hmx::Object *);
     virtual void OldLoadProxies(BinStream &, int);
+
+    bool SaveSubdirs();
+    bool ShouldSaveProxy(BinStream &);
 };
 
-extern bool gLoadingProxyFromDisk;
 extern const char *kNotObjectMsg;

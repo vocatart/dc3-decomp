@@ -173,6 +173,9 @@ namespace Hmx {
     };
 
 }
+
+extern bool gLoadingProxyFromDisk;
+
 inline TextStream &operator<<(TextStream &ts, const Hmx::Object *obj) {
     if (obj)
         ts << obj->Name();
