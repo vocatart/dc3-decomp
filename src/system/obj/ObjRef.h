@@ -68,10 +68,19 @@ public:
             // next->prev = this;
         }
     }
+    ObjRefConcrete(const ObjRefConcrete &o) : mObj(o.mObj) {
+        if (mObj) {
+            next = o.next;
+            prev = o.prev;
+            mObj->mRefs.prev = this;
+            prev->next = this;
+        }
+    }
+
     virtual ~ObjRefConcrete() {
         if (mObj) {
-            // next->prev = prev;
-            // prev->next = next;
+            prev->next = next;
+            next->prev = prev;
         }
     }
     virtual Hmx::Object *GetObj() const { return mObj; }
@@ -81,4 +90,7 @@ public:
     void CopyRef(const ObjRefConcrete &);
     Hmx::Object *SetObj(Hmx::Object *);
     bool Load(class BinStream &, bool, ObjectDir *);
+
+    T1 *operator->() const { return mObj; }
+    operator T1 *() const { return mObj; }
 };

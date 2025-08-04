@@ -1,7 +1,7 @@
 #pragma once
 #include "utl/Symbol.h"
 #include "obj/Data.h"
-#include "os/Debug.h"
+#include "os/OSFuncs.h"
 
 #define TIMER_GET_CYCLES(name) u32 cycle;
 

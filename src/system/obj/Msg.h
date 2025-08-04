@@ -183,15 +183,25 @@ class ObjRef;
 class MsgSinks {
 public:
     struct Sink {
+        Sink(Hmx::Object *owner) : obj(owner, nullptr) {}
+
+        Sink &operator=(const Sink &s);
+
         ObjOwnerPtr<Hmx::Object> obj; // 0x0
         Hmx::Object::SinkMode mode; // 0x14
     };
     struct EventSinkElem : public Sink {
+        EventSinkElem(Hmx::Object *owner) : Sink(owner) {}
+        EventSinkElem &operator=(const EventSinkElem &);
+
         Symbol handler; // 0x18
     };
     struct EventSink {
+        EventSink(Hmx::Object *owner) : sinks(owner) {}
+        void Add(Hmx::Object *, Hmx::Object::SinkMode, Symbol, bool);
+
         Symbol event; // 0x0
-        bool unk4; // 0x4
+        bool chainProxy; // 0x4
         ObjList<EventSinkElem> sinks; // 0x8
     };
 
@@ -212,6 +222,9 @@ public:
     void MergeSinks(Hmx::Object *);
     Symbol GetPropSyncHandler(DataArray *);
     void Export(DataArray *);
+    bool HasSink(Hmx::Object *) const;
+
+    ObjList<Sink> &Sinks() { return mSinks; }
 
     NEW_OVERLOAD("MsgSinks", 0xAF);
     DELETE_OVERLOAD("MsgSinks", 0xAF);
@@ -220,8 +233,10 @@ private:
     DataArray *unk0;
     ObjList<Sink> mSinks; // 0x4
     ObjList<EventSink> mEventSinks; // 0x10
-    int unk1c;
+    int mExporting; // 0x1c
     Hmx::Object *mOwner; // 0x20
+
+    static Symbol sCurrentExportEvent;
 };
 
 #include "obj/PropSync_p.h"

@@ -121,3 +121,12 @@ void RemoveSpaces(char *, int, const char *);
 //     ts.Print(str.c_str());
 //     return ts;
 // }
+
+template <int N>
+class StackString : public TextStream, public FixedString {
+private:
+    char mStack[N];
+
+public:
+    StackString() : FixedString(&mStack, N + 5) {}
+};

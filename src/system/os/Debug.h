@@ -1,7 +1,6 @@
 #pragma once
 #include "utl/TextStream.h"
 #include "utl/TextFileStream.h"
-#include "xdk/xapilibi/getcurrentthreadid.h"
 #include <list>
 #include <string.h>
 // #include <setjmp.h>
@@ -93,13 +92,3 @@ public:
 };
 
 extern DebugFailer TheDebugFailer;
-
-extern u32 gMainThreadID;
-
-inline bool MainThread() {
-    if (gMainThreadID == -1)
-        return true;
-    if (GetCurrentThreadId() == gMainThreadID)
-        return true;
-    return false;
-}

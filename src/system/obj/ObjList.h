@@ -8,25 +8,29 @@ namespace Hmx {
 
 template <class T>
 class ObjList : public std::list<T> {
+private:
     typedef typename std::list<T> Base;
+    Hmx::Object *mOwner;
 
 public:
     ObjList(Hmx::Object *o) : mOwner(o) {}
-    Hmx::Object *mOwner;
 
     Hmx::Object *Owner() { return mOwner; }
 
-    void resize(unsigned long ul) {
-        Base &me = *this;
-        me.resize(ul, T(mOwner));
+    void resize(unsigned int ul) { Base::resize(ul, T(mOwner)); }
+
+    void push_front() { insert(begin(), T(mOwner)); }
+
+    void push_front(const T &t) {
+        push_front();
+        front() = t;
     }
 
     void push_back() { resize(size() + 1); }
 
     void push_back(const T &t) {
         push_back();
-        T &last = back();
-        last = t;
+        back() = t;
     }
 
     void operator=(const ObjList &oList) {

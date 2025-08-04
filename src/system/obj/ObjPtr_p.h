@@ -24,6 +24,9 @@ private:
     ObjRefOwner *mOwner; // 0x10
 public:
     ObjOwnerPtr(ObjRefOwner *owner, T *ptr);
+    ObjOwnerPtr(const ObjOwnerPtr &o) : ObjRefConcrete(o), mOwner(o.mOwner) {
+        MILO_ASSERT(mOwner, 0xCE);
+    }
     virtual ~ObjOwnerPtr() {}
     virtual Hmx::Object *RefOwner() const { return mObj->RefOwner(); }
     virtual void Replace(Hmx::Object *obj) { mOwner->Replace(this, obj); }
