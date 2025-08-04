@@ -1,4 +1,5 @@
 #pragma once
+#include "utl/MemMgr.h"
 #include "utl/TextStream.h"
 #include "utl/Symbol.h"
 #include <cstring>
@@ -22,6 +23,11 @@ protected:
 public:
     FixedString() {}
     FixedString(char *, int);
+    ~FixedString() {
+        if (capacity() != 0) {
+            MemOrPoolFree(capacity() + 5, mStr - 4);
+        }
+    }
 
     unsigned int length() const { return strlen(mStr); }
     unsigned int capacity() const { return *(unsigned int *)(mStr - 4); }
@@ -30,8 +36,22 @@ public:
 
     bool operator<(const FixedString &) const;
     FixedString &operator+=(const char *);
+    bool contains(const char *) const;
+
     unsigned int find(const char *) const;
+    unsigned int find(char, unsigned int) const;
+    unsigned int find(char) const;
+    unsigned int find_last_of(char) const;
+    unsigned int find_last_of(const char *) const;
+    unsigned int find(const char *, unsigned int) const;
+    unsigned int find_first_of(const char *, unsigned int) const;
+
     char &operator[](unsigned int);
+
+    void ToLower();
+    void ToUpper();
+    void ReplaceAll(char, char);
+    int compare(unsigned int, unsigned int, const char *) const;
 };
 
 class String : public TextStream, public FixedString {
@@ -39,7 +59,7 @@ class String : public TextStream, public FixedString {
     // FixedString = 0x4
 public:
     virtual ~String();
-    virtual void Print(const char *);
+    virtual void Print(const char *str) { *this += str; }
 
     String();
     String(const char *);
@@ -49,57 +69,47 @@ public:
 
     bool operator==(const FixedString &) const;
 
-    // static const unsigned int npos;
+    static const unsigned int npos;
 
-    // void reserve(unsigned int);
+    void reserve(unsigned int);
 
-    // String operator+(const char *) const;
-    // String operator+(char) const;
-    // String operator+(const String &) const;
-    // String &operator+=(const char *);
-    // String &operator+=(Symbol);
-    // String &operator+=(const String &);
-    // String &operator+=(char);
+    String operator+(const char *) const;
+    String operator+(char) const;
+    String operator+(const FixedString &) const;
+    String &operator+=(const char *);
+    String &operator+=(Symbol);
+    String &operator+=(const FixedString &);
+    String &operator+=(char);
     String &operator=(const char *);
-    // String &operator=(Symbol);
+    String &operator=(Symbol);
+    String &operator=(const FixedString &);
     String &operator=(const String &);
 
     // char rindex(int) const;
     // char &rindex(int);
 
-    // bool operator!=(const char *) const;
-    // bool operator!=(const String &) const;
-    // bool operator==(const char *) const;
+    bool operator!=(const char *) const;
+    bool operator!=(const FixedString &) const;
+    bool operator==(const char *) const;
     // bool operator==(const String &) const;
     // bool operator<(const String &) const;
+    bool operator==(Symbol) const;
 
     void resize(unsigned int);
-    // unsigned int find(char, unsigned int) const;
-    // unsigned int find(char) const;
-    // unsigned int find(const char *, unsigned int) const;
-    // unsigned int find_first_of(const char *, unsigned int) const;
-    // unsigned int find_last_of(char) const;
-    // unsigned int find_last_of(const char *) const;
     // unsigned int rfind(const char *) const;
 
-    // bool contains(const char *) const;
+    int split(const char *token, std::vector<String> &subStrings) const;
 
-    // int split(const char *token, std::vector<String> &subStrings) const;
+    String substr(unsigned int) const;
+    String substr(unsigned int, unsigned int) const;
 
-    // String substr(unsigned int) const;
-    // String substr(unsigned int, unsigned int) const;
-
-    // void ToLower();
-    // void ToUpper();
-
-    // void ReplaceAll(char, char);
     // void swap(String &);
-    // String &replace(unsigned int, unsigned int, const char *);
+    String &replace(unsigned int, unsigned int, const char *);
     String &erase();
-    // String &erase(unsigned int);
-    // String &erase(unsigned int, unsigned int);
-    // String &insert(unsigned int, unsigned int, char);
-    // String &insert(unsigned int, const char *);
+    String &erase(unsigned int);
+    String &erase(unsigned int, unsigned int);
+    String &insert(unsigned int, unsigned int, char);
+    String &insert(unsigned int, const char *);
     // String &insert(unsigned int, const String &);
 };
 
