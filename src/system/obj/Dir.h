@@ -128,6 +128,7 @@ public:
     Hmx::Object *FindObject(const char *, bool, bool);
 
     static ObjectDir *Main() { return sMainDir; }
+    static void PreInit(int, int);
 
     NEW_OVERLOAD(StaticClassName().Str(), 0x111);
     DELETE_OVERLOAD(StaticClassName().Str(), 0x111);

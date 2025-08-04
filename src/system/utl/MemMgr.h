@@ -6,6 +6,10 @@ int _GetFreePhysicalMemory();
 int _GetFreeSystemMemory();
 const char *MemHeapName(int);
 int MemFindAddrHeap(void *);
+int GetCurrentHeapNum();
+int MemNumHeaps();
+#define kNoHeap -3
+#define kSystemHeap -1
 
 void MemPushTemp();
 void MemPopTemp();

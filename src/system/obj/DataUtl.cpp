@@ -1,7 +1,11 @@
 #include "obj/Data.h"
+#include "obj/DataFunc.h"
 #include "obj/Dir.h"
 #include "obj/Object.h"
 #include "obj/TextFile.h"
+#include "utl/FilePath.h"
+#include "utl/Loader.h"
+#include "utl/Option.h"
 #include <map>
 
 #define VAR_STACK_SIZE 100
@@ -25,6 +29,8 @@ VarStack *gVarStackPtr = gVarStack;
 void DataMacroWarning(bool b) { gDataMacroWarning = b; }
 
 Hmx::Object *DataThis() { return gDataThis; }
+
+Loader *DataFactory(const FilePath &, LoaderPos);
 
 bool DataUpdateArray(DataArray *a1, DataArray *a2) {
     if (a2->Size() != 0) {
@@ -120,7 +126,15 @@ void DataPopVar() {
     gVarStackPtr--;
 }
 
-void DataInit() { REGISTER_OBJ_FACTORY(TextFile); }
+void DataInit() {
+    DataInitFuncs();
+    TheLoadMgr.RegisterFactory("dta", DataFactory);
+    TheLoadMgr.RegisterFactory("dtx", DataFactory);
+    REGISTER_OBJ_FACTORY(TextFile);
+    gDataMacroWarning = OptionBool("no_macro_warn", true);
+    //   gDataMacroWarning = OptionBool("no_macro_warn",true);
+    ObjectDir::PreInit(19997, 150000);
+}
 
 DataArray *DataGetMacro(Symbol s) {
     const std::map<Symbol, DataArray *>::iterator it = gMacroTable.find(s);
@@ -162,7 +176,7 @@ void DataTerminate() {
     gMacroTable.clear();
     gDataThis = nullptr;
     gDataDir = nullptr;
-    // DataTermFuncs();
+    DataTermFuncs();
 }
 
 void DataSetMacro(Symbol key, DataArray *macro) {
