@@ -280,8 +280,6 @@ private:
 public:
     static Symbol gFile;
     static DataFunc *sDefaultHandler;
-
-    static int NodeCmp(const void *, const void *);
     static void SetFile(Symbol);
 
     const char *File() const { return mFile.Str(); }
@@ -473,7 +471,7 @@ public:
 
     void SetFileLine(Symbol, int);
     /** Sort the nodes in this DataArray. */
-    void SortNodes();
+    void SortNodes(int);
 
     /** Execute the value of this DataNode.
      * If the value is a DataFunc, call it directly.
