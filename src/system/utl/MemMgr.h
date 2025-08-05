@@ -8,6 +8,10 @@ const char *MemHeapName(int);
 int MemFindAddrHeap(void *);
 int GetCurrentHeapNum();
 int MemNumHeaps();
+int MemFindHeap(const char *);
+void MemPushHeap(int);
+void MemPopHeap();
+
 #define kNoHeap -3
 #define kSystemHeap -1
 

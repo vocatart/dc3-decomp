@@ -23,7 +23,7 @@ class ObjDirPtr : public ObjRefConcrete<C> {
 public:
     ObjDirPtr() : ObjRefConcrete(nullptr), mLoader(nullptr) {}
     ObjDirPtr(C *);
-    ObjDirPtr(const ObjDirPtr &);
+    ObjDirPtr(const ObjDirPtr &o) : ObjRefConcrete<C>(o.mObject), mLoader(nullptr) {}
     virtual ~ObjDirPtr() { *this = nullptr; }
     virtual bool IsDirPtr() { return true; }
     virtual void Replace(Hmx::Object *o) {
@@ -41,6 +41,11 @@ public:
         return mObject;
     }
     void LoadFile(const FilePath &, bool, bool, LoaderPos, bool);
+
+    void LoadInlinedFile(const FilePath &fp, BinStream &bs) {
+        *this = nullptr;
+        // there's more
+    }
 };
 
 class ObjectDir : public virtual Hmx::Object {
@@ -113,7 +118,9 @@ public:
     virtual void Copy(const Hmx::Object *, CopyType);
     virtual void Load(BinStream &);
     virtual void PostSave(BinStream &);
-    virtual void SetName(const char *, ObjectDir *);
+    virtual void SetName(const char *name, ObjectDir *dir) {
+        Hmx::Object::SetName(name, dir);
+    }
     virtual ObjectDir *DataDir();
     virtual void PreLoad(BinStream &);
     virtual void PostLoad(BinStream &);
@@ -173,6 +180,7 @@ protected:
     void LoadSubDir(int, const FilePath &, BinStream &, bool);
     void AddedSubDir(ObjDirPtr<ObjectDir> &);
     void RemovingSubDir(ObjDirPtr<ObjectDir> &);
+    ObjDirPtr<ObjectDir> PostLoadInlined();
 };
 
 extern const char *kNotObjectMsg;
@@ -184,14 +192,14 @@ private:
     void Advance();
     void RecurseSubdirs(ObjectDir *);
 
+    ObjectDir::Entry *mEntry; // 0x0
+    T *mObj; // 0x4
+    std::list<ObjectDir *> mSubDirs; // 0x8
+
 public:
     ObjDirItr(ObjectDir *, bool);
     ObjDirItr &operator++();
 
     operator T *() { return mObj; }
     T *operator->() { return mObj; }
-
-    ObjectDir::Entry *mEntry; // 0x0
-    T *mObj; // 0x4
-    std::list<ObjectDir *> mSubDirs; // 0x8
 };

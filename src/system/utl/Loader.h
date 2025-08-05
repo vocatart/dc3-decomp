@@ -2,6 +2,7 @@
 #include "os/Platform.h"
 #include "os/Timer.h"
 #include "utl/FilePath.h"
+#include "utl/MemMgr.h"
 #include <list>
 
 enum LoaderPos {
@@ -25,6 +26,9 @@ public:
     virtual const char *DebugText() = 0;
     virtual bool IsLoaded() const = 0;
     virtual const char *StateName() const { return "Unknown"; }
+
+    NEW_OVERLOAD("Loader", 0xA8);
+    DELETE_OVERLOAD("Loader", 0xA8);
 
 protected:
     virtual void PollLoading() = 0;
@@ -59,9 +63,11 @@ public:
     void FinishAsyncUnload() { mAsyncUnload--; }
     bool EditMode() const { return mEditMode; }
     Platform GetPlatform() const { return (Platform)mPlatform; }
+    int AsyncUnload() const; // { return mAsyncUnload; }
 
     void SetEditMode(bool);
     void RegisterFactory(const char *, LoaderFactoryFunc *);
+    void PollUntilLoaded(Loader *, Loader *);
 };
 
 extern LoadMgr TheLoadMgr;

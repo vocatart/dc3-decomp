@@ -36,11 +36,11 @@ inline void DeleteAll(Container &container) {
 //     vec.swap(copy);
 // }
 
-// template <typename T VECTOR_SIZE_PARAM>
-// inline void ClearAndShrink(std::vector<T VECTOR_SIZE_ARG> &vec) {
-//     std::vector<T VECTOR_SIZE_ARG> temp;
-//     vec.swap(temp);
-// }
+template <class T>
+inline void ClearAndShrink(std::vector<T> &vec) {
+    std::vector<T> temp;
+    vec.swap(temp);
+}
 
 template <class T>
 void RemoveSwap(std::vector<T *> &vec, T *obj) {

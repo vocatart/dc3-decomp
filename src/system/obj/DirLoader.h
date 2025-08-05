@@ -28,8 +28,11 @@ public:
     ObjectDir *GetDir();
     void Cleanup(const char *);
 
+    NEW_POOL_OVERLOAD("DirLoader", 0x2A);
+    DELETE_POOL_OVERLOAD(sizeof(DirLoader), "DirLoader", 0x2A);
+
     static bool sPrintTimes;
-    static void SetCacheMode(bool mode) { sCacheMode = mode; }
+    static void SetCacheMode(bool);
 
     static Symbol GetDirClass(const char *);
     static const char *CachedPath(const char *, bool);

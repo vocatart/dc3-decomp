@@ -134,12 +134,14 @@ namespace Hmx {
             else
                 return Symbol();
         }
-        ObjRef *Refs() const { return (ObjRef *)&mRefs; }
+        // ObjRef *Refs() const { return (ObjRef *)&mRefs; }
         void SetNote(const char *note) { mNote = note; }
         DataArray *TypeDef() const { return mTypeDef; }
         ObjectDir *Dir() const { return mDir; }
         const char *Name() const { return mName; }
         const char *AllocHeapName() { return MemHeapName(MemFindAddrHeap(this)); }
+        void AddRef(ObjRef *ref) { ref->AddRef(&mRefs); }
+        void Release(ObjRef *ref) { ref->Release(&mRefs); }
 
         void ReplaceRefs(Hmx::Object *);
         int RefCount() const;

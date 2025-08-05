@@ -20,10 +20,27 @@ public:
 
 // ObjRef size: 0xc
 class ObjRef {
+    friend class Hmx::Object;
+
 protected:
     // seems to be a linked list of an Object's refs
     ObjRef *next; // 0x4
     ObjRef *prev; // 0x8
+
+    // i *think* this is good?
+    void AddRef(ObjRef *ref) {
+        next = ref;
+        prev = ref->prev;
+        ref->prev = this;
+        prev->next = this;
+    }
+
+    void Release(ObjRef *ref) {
+        // do something with ref here
+        prev->next = next;
+        next->prev = prev;
+    }
+
 public:
     ObjRef() {}
     ObjRef(const ObjRef &other) : next(other.next), prev(other.prev) {
@@ -90,18 +107,6 @@ public:
 
     // per ObjectDir::HasDirPtrs, this is the way to iterate across refs
     // for (ObjRef *it = mRefs.next; it != &mRefs; it = it->next) {
-
-    void AddRef(ObjRef *ref) {
-        next = ref;
-        prev = ref->prev;
-        ref->prev = this;
-        prev->next = this;
-    }
-
-    void Release() {
-        prev->next = next;
-        next->prev = prev;
-    }
 };
 
 // ObjRefConcrete size: 0x10
@@ -112,41 +117,19 @@ protected:
 public:
     ObjRefConcrete(T1 *obj) : mObject(obj) {
         if (obj) {
-            AddRef(obj->Refs());
+            obj->AddRef(this);
         }
     }
 
-    // void __thiscall ObjDirPtr<>::ObjDirPtr<>(ObjDirPtr<> *this,ObjectDir *param_1)
-
-    // {
-    //   int iVar1;
-
-    //   *(this + 0xc) = param_1;
-    //   *this = &ObjRefConcrete<>::`vftable';
-    //   if (param_1 != 0x0) { obj
-    //     iVar1 = *(*(param_1 + 4) + 4); obj->mRefs.next
-    //     *(this + 4) = param_1 + iVar1 + 8;
-    //     *(this + 8) = *(param_1 + iVar1 + 0x10);
-    //     *(param_1 + iVar1 + 0x10) = this;
-    //     *(*(this + 8) + 4) = this;
-    //   }
-    //   *(this + 0x10) = 0;
-    //   *this = &`vftable';
-    //   return;
+    // ObjRefConcrete(const ObjRefConcrete &o) : mObject(o.mObject) {
+    //     if (mObject) {
+    //         mObject->AddRef(this);
+    //     }
     // }
-
-    ObjRefConcrete(const ObjRefConcrete &o) : mObject(o.mObject) {
-        if (mObject) {
-            // next = o.next;
-            // prev = o.prev;
-            // mObject->mRefs.prev = this;
-            // prev->next = this;
-        }
-    }
 
     virtual ~ObjRefConcrete() {
         if (mObject) {
-            Release();
+            mObject->Release(this);
         }
     }
     virtual Hmx::Object *GetObj() const { return mObject; }

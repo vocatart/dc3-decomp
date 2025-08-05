@@ -85,7 +85,7 @@ const char *PathName(const class Hmx::Object *obj);
             return expr;                                                                 \
     }
 
-#define HANDLE_ACTION(symbol, action)                                                    \
+#define HANDLE_ACTION(s, action)                                                         \
     {                                                                                    \
         _NEW_STATIC_SYMBOL(s)                                                            \
         if (sym == _s) {                                                                 \

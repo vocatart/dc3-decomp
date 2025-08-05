@@ -9,6 +9,8 @@
 #include "utl/BinStream.h"
 #include "utl/ChunkStream.h"
 
+void DirLoader::SetCacheMode(bool mode) { sCacheMode = mode; }
+
 ObjectDir *DirLoader::GetDir() {
     MILO_ASSERT(IsLoaded(), 0x82);
     unk98 = true;
@@ -154,12 +156,14 @@ DirLoader::~DirLoader() {
             RELEASE(mDir);
         }
     }
-    // if (mProxyDir)
-    //     mProxyDir->Release(this);
-    // if (mCallback && unk99) {
-    //     // mCallback->FailedLoading(this);
-    //     mCallback = 0;
-    // }
+    if (mProxyDir) {
+        mProxyDir->Release(nullptr);
+        // mProxyDir = nullptr;
+    }
+    if (mCallback && unk99) {
+        mCallback->FailedLoading(this);
+        mCallback = 0;
+    }
 }
 
 DirLoader::DirLoader(

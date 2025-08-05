@@ -2,13 +2,18 @@
 #include "Msg.h"
 #include "Object.h"
 #include "math/Mtx.h"
+#include "obj/Data.h"
 #include "obj/DataUtl.h"
+#include "obj/DirLoader.h"
+#include "obj/DirUnloader.h"
 #include "obj/ObjMacros.h"
 #include "obj/Object.h"
 #include "os/Debug.h"
+#include "os/System.h"
 #include "utl/FilePath.h"
 #include "utl/Loader.h"
 #include "utl/MemMgr.h"
+#include "utl/Std.h"
 #include "utl/Symbol.h"
 #include "utl/BinStream.h"
 
@@ -37,10 +42,8 @@ void ObjectDir::SetInlineProxyType(InlineDirType t) {
 void ObjectDir::Load(BinStream &bs) {
     PreLoad(bs);
     PostLoad(bs);
-    if (IsProxy() && !mProxyFile.empty()) {
-        // class Loader *ldr = TheLoadMgr.GetLoader(mProxyFile);
-        // if (ldr)
-        //     TheLoadMgr.PollUntilLoaded(ldr, 0);
+    if (IsProxy() && mLoader && !mLoader->IsLoaded()) {
+        TheLoadMgr.PollUntilLoaded(mLoader, nullptr);
     }
 }
 
@@ -152,6 +155,36 @@ void ObjectDir::LoadSubDir(int i, const FilePath &fp, BinStream &bs, bool b) {
     }
 }
 
+void PreloadArray(DataArray *arr, int idx) {
+    for (int i = idx; i < arr->Size(); i++) {
+        DataArray *curArr = arr->Array(i);
+        if (curArr->Size() != 0) {
+            if (curArr->Type(0) == kDataArray) {
+                PreloadArray(curArr, 0);
+            } else {
+                const char *str = curArr->Str(0);
+                bool shouldPop = false;
+                if (curArr->Size() > 1) {
+                    MemPushHeap(MemFindHeap(curArr->Sym(1).Str()));
+                    shouldPop = true;
+                }
+                MILO_ASSERT(gPreloadIdx < DIM(gPreloaded), 0xA35);
+                gPreloaded[gPreloadIdx++].LoadFile(str, false, true, kLoadFront, false);
+                if (shouldPop) {
+                    MemPopHeap();
+                }
+            }
+        }
+    }
+}
+
+void PreloadSharedSubdirs(Symbol s) {
+    DataArray *arr = SystemConfig("preload_subdirs")->FindArray(s, false);
+    if (arr) {
+        PreloadArray(arr, 1);
+    }
+}
+
 void ObjectDir::Terminate() {
     DeleteShared();
     sSuperClassMap.clear();
@@ -228,6 +261,38 @@ void CheckForDuplicates() {
     syms.unique();
 }
 
+ObjDirPtr<ObjectDir> ObjectDir::PostLoadInlined() {
+    MILO_ASSERT(mInlinedDirs.size() > 0, 0x296);
+    InlinedDir iDir = mInlinedDirs.back();
+    mInlinedDirs.pop_back();
+    if (mInlinedDirs.size() == 0) {
+        ClearAndShrink(mInlinedDirs);
+    }
+    if (iDir.shared && iDir.file.length() != 0 && !iDir.dir) {
+        MILO_WARN("Couldn't load shared inlined file %s\n", iDir.file);
+    }
+    return iDir.dir;
+}
+
+void ObjectDir::SetProxyFile(const FilePath &fp, bool b) {
+    if (!IsProxy()) {
+        MILO_WARN("Can't set proxy file if own dir");
+    } else {
+        mProxyFile = fp;
+        mProxyOverride = b;
+        if (!b) {
+            DeleteObjects();
+            DeleteSubDirs();
+            if (!mProxyFile.empty()) {
+                DirLoader *dl = new DirLoader(
+                    mProxyFile, kLoadFront, nullptr, nullptr, this, false, nullptr
+                );
+                TheLoadMgr.PollUntilLoaded(dl, nullptr);
+            }
+        }
+    }
+}
+
 ObjectDir::ObjectDir()
     : mHashTable(0, Entry(), Entry(), 0), mStringTable(0), mProxyOverride(false),
       mInlineProxyType(kInlineCached), mLoader(nullptr), mIsSubDir(false),
@@ -237,7 +302,25 @@ ObjectDir::ObjectDir()
     ResetViewports();
 }
 
-ObjectDir::~ObjectDir() { mSubDirs.clear(); }
+ObjectDir::~ObjectDir() {
+    mSubDirs.clear();
+    delete mLoader;
+    if (TheLoadMgr.AsyncUnload()) {
+        new DirUnloader(this);
+    } else {
+        DeleteObjects();
+        DeleteSubDirs();
+    }
+    if (!IsProxy()) {
+        SetName(nullptr, nullptr);
+    }
+    if (mPathName != gNullStr) {
+        MemOrPoolFree(strlen(mPathName) + 1, (void *)mPathName);
+    }
+    if (mAlwaysInlineHash != gNullStr) {
+        MemOrPoolFree(strlen(mAlwaysInlineHash) + 1, (void *)mAlwaysInlineHash);
+    }
+}
 
 ObjectDir::Entry *ObjectDir::FindEntry(const char *name, bool add) {
     if (name == 0 || *name == '\0')
@@ -279,10 +362,9 @@ void ObjectDir::PreInit(int hashSize, int stringSize) {
     sMainDir->SetName("main", sMainDir);
     DataSetThis(sMainDir);
     sSuperClassMap.clear();
-    //   bVar3 = UsingCD();
-    //   if (bVar3) {
-    //     DirLoader::SetCacheMode(true);
-    //   }
+    if (UsingCD()) {
+        DirLoader::SetCacheMode(true);
+    }
 }
 
 void ObjectDir::SaveInlined(const FilePath &fp, bool share, InlineDirType type) {

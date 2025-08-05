@@ -13,3 +13,6 @@ DataArray *SystemConfig(Symbol, Symbol);
 DataArray *SystemConfig(Symbol, Symbol, Symbol);
 
 Symbol PlatformSymbol(Platform);
+
+bool UsingCD();
+void SetUsingCD(bool);
