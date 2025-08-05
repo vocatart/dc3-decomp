@@ -135,6 +135,7 @@ namespace Hmx {
                 return Symbol();
         }
         void SetNote(const char *note) { mNote = note; }
+        DataArray *TypeDef() const { return mTypeDef; }
         ObjectDir *Dir() const { return mDir; }
         const char *Name() const { return mName; }
         const char *AllocHeapName() { return MemHeapName(MemFindAddrHeap(this)); }

@@ -138,6 +138,8 @@ public:
     iterator end() const { return iterator(0); }
     iterator erase(iterator);
     iterator insert(iterator, Hmx::Object *);
+
+    bool remove(T1 *);
 };
 
 // // ObjDirPtr size: 0x14

@@ -294,6 +294,7 @@ public:
     DataNode *UncheckedVar(int i) const { return Node(i).UncheckedVar(); }
     DataArray *UncheckedArray(int i) const { return Node(i).UncheckedArray(); }
     DataFunc *UncheckedFunc(int i) const { return Node(i).UncheckedFunc(); }
+    const char *UncheckedStr(int i) const { return Node(i).UncheckedStr(); }
 
     /** Get the DataType at the given node index.
      * @param [in] i The node index.

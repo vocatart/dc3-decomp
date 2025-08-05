@@ -35,7 +35,10 @@ struct ObjSort {
 };
 
 struct EventEntry {
-    EventEntry(Symbol s, Hmx::Object *o, float ms) : msgs(s) { Add(o, ms); }
+    EventEntry(Symbol s, Hmx::Object *o, float ms) {
+        msgs = s;
+        Add(o, ms);
+    }
 
     Symbol msgs; // 0x0
     std::vector<ObjEntry *> objs; // 0x4
