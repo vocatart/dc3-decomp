@@ -23,6 +23,8 @@
 #define ROTATE_LEFT(x, i) (((x) << (i)) | ((x) >> ((sizeof((x)) * 8) - (i))))
 #define ROTATE_RIGHT(x, i) (((x) >> (i)) | ((x) << ((sizeof((x)) * 8) - (i))))
 
+#define DIM(x) (sizeof((x)) / sizeof((x)[0]))
+
 #define null 0
 
 #define RELEASE(x) (delete x, x = null)

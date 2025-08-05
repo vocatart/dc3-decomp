@@ -13,6 +13,7 @@ extern Hmx::Object *gDataThis;
 
 /** Returns gDataThis. */
 Hmx::Object *DataThis();
+Hmx::Object *DataSetThis(Hmx::Object *o);
 
 void DataInit();
 void DataTerminate();

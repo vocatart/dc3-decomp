@@ -168,6 +168,7 @@ namespace Hmx {
         void SetProperty(Symbol, const DataNode &);
         void SetProperty(DataArray *, const DataNode &);
 
+        NEW_OBJ(Hmx::Object);
         static Object *NewObject(Symbol);
         static bool RegisteredFactory(Symbol);
         static void RegisterFactory(Symbol, ObjectFunc *);

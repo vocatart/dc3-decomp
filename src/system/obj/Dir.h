@@ -6,6 +6,7 @@
 #include "utl/BinStream.h"
 #include "utl/FilePath.h"
 #include "utl/KeylessHash.h"
+#include "utl/Loader.h"
 #include "utl/MemMgr.h"
 #include "utl/StringTable.h"
 #include <vector>
@@ -34,7 +35,12 @@ public:
 
     bool IsLoaded() const;
     ObjDirPtr &operator=(C *);
-    // void LoadFile(const FilePath&, bool, bool, LoaderPos, bool);
+    operator C *() const { return mObject; }
+    C *operator->() const {
+        MILO_ASSERT(ObjRefConcrete<C>::mObject, 0x5F);
+        return mObject;
+    }
+    void LoadFile(const FilePath &, bool, bool, LoaderPos, bool);
 };
 
 class ObjectDir : public virtual Hmx::Object {
@@ -49,7 +55,6 @@ public:
         Transform mXfm;
     };
 
-protected:
     struct Entry {
         Entry() : name(0), obj(0) {}
         Entry &operator=(const Entry &entry) {
@@ -65,6 +70,7 @@ protected:
         Hmx::Object *obj;
     };
 
+protected:
     struct InlinedDir {
         InlinedDir();
         ~InlinedDir();
@@ -94,7 +100,6 @@ protected:
     const char *mAlwaysInlineHash; // 0x98
 
     ObjectDir();
-    Entry *FindEntry(const char *, bool);
     static ObjectDir *sMainDir;
 
 public:
@@ -134,10 +139,22 @@ public:
     bool InlineProxy(BinStream &);
     bool HasDirPtrs() const;
     void TransferLoaderState(ObjectDir *);
+    Viewport &CurViewport();
+    bool HasSubDir(ObjectDir *);
+    void SaveProxy(BinStream &);
+    FilePath GetSubDirPath(const FilePath &, const BinStream &);
+    void DeleteObjects();
+    void RemoveSubDir(const ObjDirPtr<ObjectDir> &);
+    void DeleteSubDirs();
+    ObjectDir *FindContainingDir(const char *);
+    void AppendSubDir(const ObjDirPtr<ObjectDir> &);
 
     static ObjectDir *Main() { return sMainDir; }
     static void PreInit(int, int);
+    static void Terminate();
+    static std::map<std::pair<Symbol, Symbol>, bool> sSuperClassMap;
 
+    NEW_OBJ(ObjectDir);
     NEW_OVERLOAD(StaticClassName().Str(), 0x111);
     DELETE_OVERLOAD(StaticClassName().Str(), 0x111);
 
@@ -148,6 +165,31 @@ protected:
 
     bool SaveSubdirs();
     bool ShouldSaveProxy(BinStream &);
+    Entry *FindEntry(const char *, bool);
+    void SaveInlined(const FilePath &, bool, InlineDirType);
+    void PreLoadInlined(const FilePath &, bool, InlineDirType);
+    void LoadSubDir(int, const FilePath &, BinStream &, bool);
+    void AddedSubDir(ObjDirPtr<ObjectDir> &);
+    void RemovingSubDir(ObjDirPtr<ObjectDir> &);
 };
 
 extern const char *kNotObjectMsg;
+
+/** Iterates through each Object in an ObjectDir that is of type T. */
+template <class T>
+class ObjDirItr {
+private:
+    void Advance();
+    void RecurseSubdirs(ObjectDir *);
+
+public:
+    ObjDirItr(ObjectDir *, bool);
+    ObjDirItr &operator++();
+
+    operator T *() { return mObj; }
+    T *operator->() { return mObj; }
+
+    ObjectDir::Entry *mEntry; // 0x0
+    T *mObj; // 0x4
+    std::list<ObjectDir *> mSubDirs; // 0x8
+};
