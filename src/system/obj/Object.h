@@ -69,14 +69,6 @@ namespace Hmx {
         static std::map<Symbol, ObjectFunc *> sFactories;
 
     protected:
-        static Object *sDeleting;
-
-        MsgSinks *GetOrAddSinks();
-        DataNode OnGet(const DataArray *);
-        void BroadcastPropertyChange(DataArray *);
-        void BroadcastPropertyChange(Symbol);
-
-    public:
         ObjRef mRefs; // 0x4
         TypeProps *mTypeProps; // 0x10
         DataArray *mTypeDef; // 0x14
@@ -85,6 +77,14 @@ namespace Hmx {
         ObjectDir *mDir; // 0x24
         MsgSinks *mSinks; // 0x28
 
+        static Object *sDeleting;
+
+        MsgSinks *GetOrAddSinks();
+        DataNode OnGet(const DataArray *);
+        void BroadcastPropertyChange(DataArray *);
+        void BroadcastPropertyChange(Symbol);
+
+    public:
         enum CopyType {
             kCopyDeep = 0,
             kCopyShallow = 1,

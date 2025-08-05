@@ -53,10 +53,16 @@ ObjectDir *Hmx::Object::DataDir() { return mDir ? mDir : ObjectDir::sMainDir; }
 Hmx::Object::Object()
     : mTypeProps(nullptr), mTypeDef(nullptr), mName(gNullStr), mDir(nullptr),
       mSinks(nullptr) {
-    mRefs.Init();
+    mRefs.Clear();
 }
 
-// void Hmx::Object::ReplaceRefs(Hmx::Object *obj) { mRefs.ReplaceList(obj); }
+void Hmx::Object::ReplaceRefs(Hmx::Object *obj) {
+    if (mRefs.begin() != mRefs.end()) {
+        ObjRef other(mRefs);
+        mRefs.Clear();
+        other.ReplaceList(obj);
+    }
+}
 
 int Hmx::Object::RefCount() const { return mRefs.RefCount(); }
 
@@ -97,19 +103,16 @@ MsgSinks *Hmx::Object::GetOrAddSinks() {
 }
 
 void Hmx::Object::AddSink(Hmx::Object *o, Symbol s1, Symbol s2, SinkMode sm, bool b) {
-    MsgSinks *sinks = GetOrAddSinks();
-    sinks->AddSink(o, s1, s2, sm, b);
+    GetOrAddSinks()->AddSink(o, s1, s2, sm, b);
 }
 
 void Hmx::Object::AddPropertySink(Hmx::Object *o, DataArray *a, Symbol s) {
-    MsgSinks *sinks = GetOrAddSinks();
-    sinks->AddPropertySink(o, a, s);
+    GetOrAddSinks()->AddPropertySink(o, a, s);
 }
 
 void Hmx::Object::MergeSinks(Hmx::Object *o) {
     if (o && o->mSinks) {
-        MsgSinks *sinks = GetOrAddSinks();
-        sinks->MergeSinks(o);
+        GetOrAddSinks()->MergeSinks(o);
     }
 }
 
@@ -515,8 +518,9 @@ DataNode Hmx::Object::OnSet(const DataArray *a) {
     for (int i = 2; i < a->Size(); i += 2) {
         const DataNode &n = a->Evaluate(i);
         if (n.Type() == kDataSymbol) {
+            const DataNode &eval = a->Evaluate(i + 1);
             const char *str = n.UncheckedStr();
-            SetProperty(STR_TO_SYM(str), a->Evaluate(i + 1));
+            SetProperty(STR_TO_SYM(str), eval);
         } else {
             if (n.Type() != kDataArray) {
                 String str;

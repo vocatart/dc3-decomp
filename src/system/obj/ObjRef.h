@@ -26,6 +26,10 @@ protected:
     ObjRef *prev; // 0x8
 public:
     ObjRef() {}
+    ObjRef(const ObjRef &other) : next(other.next), prev(other.prev) {
+        prev->next = this;
+        next->prev = this;
+    }
     virtual ~ObjRef() {}
     virtual Hmx::Object *RefOwner() const { return nullptr; }
     virtual bool IsDirPtr() { return false; }
@@ -67,9 +71,9 @@ public:
     iterator begin() const { return iterator(next); }
     iterator end() const { return iterator((ObjRef *)this); }
 
-    void Init() { next = prev = this; }
+    void Clear() { next = prev = this; }
     void ReplaceList(Hmx::Object *obj) {
-        for (ObjRef *it = next; it != this; it = next) {
+        while (next != this) {
             next->Replace(obj);
             if (this == next) {
                 MILO_FAIL("ReplaceList stuck in infinite loop");
