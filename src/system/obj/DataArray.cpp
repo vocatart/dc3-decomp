@@ -1,9 +1,38 @@
+#include "math/Rand.h"
 #include "obj/Data.h"
+#include "obj/DataFunc.h"
+#include "obj/DataUtl.h"
+#include "obj/Dir.h"
 #include "obj/Object.h"
 #include "os/Debug.h"
 #include "utl/BinStream.h"
 #include "utl/MemMgr.h"
 #include "utl/Str.h"
+
+DataArray *gCallStack[HANDLE_STACK_SIZE];
+DataArray **gCallStackPtr = gCallStack;
+int gPreExecuteLevel;
+DataFunc *DataArray::sDefaultHandler;
+DataFunc *gPreExecuteFunc;
+Symbol DataArray::gFile;
+
+class DataCallStackFrame {
+public:
+    DataCallStackFrame(DataArray *arr) {
+        MILO_ASSERT(gCallStackPtr - gCallStack < HANDLE_STACK_SIZE, 0x2F);
+        *gCallStackPtr++ = arr;
+
+        if (gPreExecuteFunc && (gCallStackPtr - gCallStack) <= gPreExecuteLevel) {
+            gPreExecuteFunc(arr);
+        }
+    }
+
+    ~DataCallStackFrame() {
+        if (--gCallStackPtr == gCallStack) {
+            gPreExecuteFunc = nullptr;
+        }
+    }
+};
 
 DataNode *NodesAlloc(int size) {
     return (DataNode *)MemOrPoolAlloc(size, __FILE__, 0xFE, "Nodes");
@@ -453,11 +482,128 @@ DataArray *DataArray::Clone(bool deep, bool eval, int extra) {
     return da;
 }
 
+void DataArray::RandomSortNodes() {
+    if (mSize > 0) {
+        for (int i = 0; i < mSize; i++) {
+            int newIdx = RandomInt(0, mSize);
+            DataNode tmp = mNodes[i];
+            mNodes[i] = mNodes[newIdx];
+            mNodes[newIdx] = tmp;
+        }
+    }
+}
+
+DataNode DataArray::Execute(bool fail) {
+    DataCallStackFrame frame(this);
+    START_AUTO_TIMER_CALLBACK("array_exec", DataArrayGlitchCB, this);
+    DataNode &node = (DataNode &)Evaluate(0);
+    switch (node.Type()) {
+    case kDataFunc:
+        return node.UncheckedFunc()(this);
+    case kDataObject: {
+        Hmx::Object *obj = node.UncheckedObj();
+        if (obj) {
+            return obj->Handle(this, true);
+        }
+        break;
+    }
+    case kDataSymbol: {
+        const char *str = node.UncheckedStr();
+        Hmx::Object *obj = gDataDir->FindObject(str, true, true);
+        if (obj) {
+            return obj->Handle(this, true);
+        }
+        std::map<Symbol, DataFunc *>::iterator func = gDataFuncs.find(STR_TO_SYM(str));
+        if (func != gDataFuncs.end()) {
+            // Cache the function into the array to optimize repeat calls
+            node = func->second;
+            return func->second(this);
+        }
+        break;
+    }
+    case kDataString: {
+        Hmx::Object *object = gDataDir->FindObject(node.UncheckedStr(), true, true);
+        if (object) {
+            return object->Handle(this, true);
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    if (sDefaultHandler) {
+        DataNode n = sDefaultHandler(this);
+        if (n.Type() != kDataUnhandled) {
+            return n;
+        }
+    }
+    if (fail) {
+        String str;
+        Node(0).Print(str, true, 0);
+        String str2;
+        node.Print(str, true, 0);
+        const char *msg;
+        if (str == str2) {
+            msg = MakeString(
+                "%s not function or object (file %s, line %d)", str.c_str(), mFile, mLine
+            );
+        } else {
+            msg = MakeString(
+                "%s = %s not function or object (file %s, line %d)",
+                str2.c_str(),
+                str.c_str(),
+                mFile,
+                mLine
+            );
+        }
+        TheDebugFailer << msg;
+    }
+    return 0;
+}
+
 DataNode DataArray::ExecuteBlock(int len) {
     for (; len < mSize - 1; len++) {
         Command(len)->Execute(true);
     }
     return Evaluate(len);
+}
+
+DataNode DataArray::ExecuteScript(
+    int index, Hmx::Object *obj, const DataArray *_args, int _argStart
+) {
+    DataCallStackFrame frame(this);
+
+    int numVars = 0;
+    int size = mSize;
+
+    if (index < (size - 1) && mNodes[index].Type() == kDataArray) {
+        DataArray *arr = mNodes[index].UncheckedArray();
+        numVars = arr->Size();
+        MILO_ASSERT(_args != NULL || numVars == 0, 0x4E3);
+
+        for (int i = 0; i < numVars; i++) {
+            DataNode *var = arr->Var(i);
+            DataPushVar(var);
+            *var = _args->Evaluate(i + _argStart);
+        }
+
+        index++;
+    }
+
+    DataNode ret;
+    if (index >= size) {
+        ret = DataNode(0);
+    } else {
+        Hmx::Object *setThis = DataSetThis(obj);
+        ret = ExecuteBlock(index);
+        DataSetThis(setThis);
+    }
+
+    while (numVars-- != 0) {
+        DataPopVar();
+    }
+
+    return ret;
 }
 
 BinStream &operator>>(BinStream &bs, DataArray *&da) {

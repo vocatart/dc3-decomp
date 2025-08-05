@@ -23,7 +23,9 @@ class ObjOwnerPtr : public ObjRefConcrete<T> {
 private:
     ObjRefOwner *mOwner; // 0x10
 public:
-    ObjOwnerPtr(ObjRefOwner *owner, T *ptr);
+    ObjOwnerPtr(ObjRefOwner *owner, T *ptr) : ObjRefConcrete<T>(ptr), mOwner(owner) {
+        MILO_ASSERT(owner, 0xC8);
+    }
     ObjOwnerPtr(const ObjOwnerPtr &o) : ObjRefConcrete(o), mOwner(o.mOwner) {
         MILO_ASSERT(mOwner, 0xCE);
     }

@@ -494,6 +494,7 @@ public:
     void Load(BinStream &d);
     void SaveGlob(BinStream &d, bool str) const;
     void LoadGlob(BinStream &d, bool str);
+    void RandomSortNodes();
 
     /** Execute a script in dta.
      * @param [in] firstCmd The index of this DataArray containing the first Command.

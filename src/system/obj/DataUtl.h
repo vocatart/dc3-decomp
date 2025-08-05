@@ -20,3 +20,6 @@ void DataTerminate();
 void DataMacroWarning(bool);
 
 bool DataUpdateArray(DataArray *, DataArray *);
+
+void DataPushVar(DataNode *var);
+void DataPopVar();

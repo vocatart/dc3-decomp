@@ -1,4 +1,5 @@
 #pragma once
+#include "os/Platform.h"
 #include "os/Timer.h"
 #include "utl/FilePath.h"
 #include <list>
@@ -57,6 +58,7 @@ public:
     void StartAsyncUnload() { mAsyncUnload++; }
     void FinishAsyncUnload() { mAsyncUnload--; }
     bool EditMode() const { return mEditMode; }
+    Platform GetPlatform() const { return (Platform)mPlatform; }
 
     void SetEditMode(bool);
     void RegisterFactory(const char *, LoaderFactoryFunc *);

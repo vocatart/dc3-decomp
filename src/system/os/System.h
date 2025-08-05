@@ -1,5 +1,6 @@
 #pragma once
 #include "obj/Data.h"
+#include "os/Platform.h"
 #include "utl/Symbol.h"
 
 int Hx_snprintf(char *, unsigned int, char const *, ...);
@@ -10,3 +11,5 @@ DataArray *SystemConfig();
 DataArray *SystemConfig(Symbol);
 DataArray *SystemConfig(Symbol, Symbol);
 DataArray *SystemConfig(Symbol, Symbol, Symbol);
+
+Symbol PlatformSymbol(Platform);

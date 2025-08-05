@@ -91,7 +91,12 @@ public:
     // per ObjectDir::HasDirPtrs, this is the way to iterate across refs
     // for (ObjRef *it = mRefs.next; it != &mRefs; it = it->next) {
 
-    // void AddRef(ObjRef*);
+    void AddRef(ObjRef *ref) {
+        next = ref;
+        prev = ref->prev;
+        ref->prev = this;
+        prev->next = this;
+    }
 
     void Release() {
         prev->next = next;
@@ -107,12 +112,7 @@ protected:
 public:
     ObjRefConcrete(T1 *obj) : mObject(obj) {
         if (obj) {
-            // prev gets set here too
-            // next->prev = this;
-            // next = &obj->mRefs;
-            // prev = obj->mRefs.prev;
-            // obj->mRefs.prev = this;
-            // prev->next = this;
+            AddRef(obj->Refs());
         }
     }
 

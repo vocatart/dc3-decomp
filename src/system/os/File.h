@@ -76,10 +76,10 @@ void FileTerminate();
 const char *FileMakePath(const char *root, const char *file, char *);
 const char *FileRelativePath(const char *root, const char *filepath);
 
-const char *FileGetPath(const char *, char *);
+const char *FileGetPath(const char *);
 const char *FileGetExt(const char *root);
 const char *FileGetDrive(const char *file);
-const char *FileGetBase(const char *file, char *base);
+const char *FileGetBase(const char *file);
 const char *FileGetName(const char *file);
 int FileGetStat(const char *iFilename, FileStat *iBuffer);
 

@@ -131,6 +131,8 @@ public:
         mCurCam = o;
     }
     void SetSubDirFlag(bool flag) { mIsSubDir = flag; }
+    void SetLoader(DirLoader *dl) { mLoader = dl; }
+    DirLoader *Loader() const { return mLoader; }
     bool IsProxy() const { return this != Dir(); }
     void ResetViewports();
     void SetInlineProxyType(InlineDirType);
