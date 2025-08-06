@@ -409,6 +409,71 @@ DirLoader::~DirLoader() {
 
 const char *DirLoader::DebugText() { return MakeString("DL: %s", mFile.c_str()); }
 
+void DirLoader::SaveObjects(BinStream &bs, ObjectDir *dir) {
+    char buf[256];
+    MILO_ASSERT(sTopSaveDir != dir, 0x10C);
+    if (!sTopSaveDir)
+        sTopSaveDir = dir;
+    ObjectDir *dirdir = dir->Dir();
+    strcpy(buf, dir->Name());
+    if (dirdir != dir) {
+        dir->SetName(NextName(dir->Name(), dir), dir);
+    }
+    int hashSize = dir->HashTableUsedSize();
+    int strSize = dir->StrTableUsedSize();
+    for (ObjDirItr<Hmx::Object> it(dir, false); it != nullptr; ++it) {
+        if (it != dir) {
+            it->PreSave(bs);
+        }
+    }
+    dir->PreSave(bs);
+    bs << 0x20;
+    bs << dir->ClassName() << dir->Name();
+    bs << hashSize * 2;
+    bs << strSize;
+    bs << false;
+    std::list<Hmx::Object *> objects;
+    for (ObjDirItr<Hmx::Object> it(dir, false); it != nullptr; ++it) {
+        if (it != dir) {
+            objects.push_back(it);
+        }
+    }
+    objects.sort(ClassAndNameSort());
+    bs << objects.size();
+    for (std::list<Hmx::Object *>::const_iterator it = objects.begin();
+         it != objects.end();
+         it++) {
+        bs << (*it)->ClassName() << (*it)->Name();
+    }
+    SetActiveChunkObject(dir);
+    dir->Save(bs);
+    WriteDeadAndMark(bs);
+    for (std::list<Hmx::Object *>::const_iterator it = objects.begin();
+         it != objects.end();
+         it++) {
+        SetActiveChunkObject(*it);
+        (*it)->Save(bs);
+        WriteDeadAndMark(bs);
+        ObjectDir *proxy = dynamic_cast<ObjectDir *>(*it);
+        if (proxy)
+            proxy->SaveProxy(bs);
+    }
+    if (!bs.Cached()) {
+        dir->PostSave(bs);
+        for (std::list<Hmx::Object *>::const_iterator it = objects.begin();
+             it != objects.end();
+             it++) {
+            (*it)->PostSave(bs);
+        }
+    }
+    if (dirdir != dir) {
+        dir->SetName(buf, dir);
+    }
+    if (sTopSaveDir == dir) {
+        sTopSaveDir = nullptr;
+    }
+}
+
 bool DirLoader::SaveObjects(const char *cc, ObjectDir *dir, bool b3) {
     if (sCacheMode && dir->InlineSubDirType() != kInlineNever) {
         MILO_LOG("Not caching %s because it is an inlined subdir.\n", cc);

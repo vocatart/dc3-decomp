@@ -13,3 +13,5 @@ bool IsASubclass(Symbol child, Symbol parent);
 const char *PrintPropertyPath(DataArray *);
 
 void ReserveToFit(ObjectDir *, ObjectDir *, int);
+
+const char *NextName(const char *, class ObjectDir *);

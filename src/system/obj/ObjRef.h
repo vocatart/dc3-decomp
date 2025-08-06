@@ -36,9 +36,9 @@ protected:
     }
 
     void Release(ObjRef *ref) {
-        // do something with ref here
         prev->next = next;
         next->prev = prev;
+        // do something with ref here
     }
 
 public:

@@ -80,3 +80,4 @@ private:
 };
 
 BinStream &MarkChunk(BinStream &);
+void SetActiveChunkObject(Hmx::Object *obj);

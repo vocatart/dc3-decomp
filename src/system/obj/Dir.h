@@ -148,6 +148,11 @@ public:
     void SetLoader(DirLoader *dl) { mLoader = dl; }
     DirLoader *Loader() const { return mLoader; }
     bool IsProxy() const { return this != Dir(); }
+    int HashTableSize() const { return mHashTable.Size(); }
+    int StrTableSize() const { return mStringTable.Size(); }
+    int HashTableUsedSize() const { return mHashTable.UsedSize(); }
+    int StrTableUsedSize() const { return mStringTable.UsedSize(); }
+
     void ResetViewports();
     void SetInlineProxyType(InlineDirType);
     void Reserve(int, int);
