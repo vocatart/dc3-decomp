@@ -25,6 +25,7 @@
 const char *kNotObjectMsg = "Could not find %s in dir \"%s\"";
 ObjectDir *ObjectDir::sMainDir;
 ObjectDir *gDir;
+std::map<std::pair<Symbol, Symbol>, bool> ObjectDir::sSuperClassMap;
 
 BinStream &operator>>(BinStream &bs, InlineDirType &ty) {
     unsigned char uc;

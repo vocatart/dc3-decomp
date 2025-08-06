@@ -148,7 +148,7 @@ const char *PathName(const class Hmx::Object *obj);
             } else {                                                                     \
                 if (_op == (PropOp)0x40)                                                 \
                     return false;                                                        \
-                _val = DataNode(member);                                                 \
+                _val = member;                                                           \
             }                                                                            \
             return true;                                                                 \
         }                                                                                \

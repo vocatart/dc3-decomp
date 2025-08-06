@@ -369,6 +369,45 @@ BinStream &operator<<(BinStream &bs, const DataArray *da) {
     return bs;
 }
 
+void DataAppendStackTrace(FixedString &msg) {
+    if (gCallStackPtr <= gCallStack) {
+        return;
+    }
+
+    msg += "\n\nData Stack Trace";
+
+    char visualStudioFmt[14];
+    bool msg_full = false;
+
+    for (DataArray **ptr = gCallStackPtr - 1; ptr >= gCallStack; ptr--) {
+        DataArray *a = *ptr;
+
+        String s;
+        if (a->Size() > 0) {
+            a->Node(0).Print(s, true, 0);
+        }
+
+        memcpy(visualStudioFmt, "\n   %s(%d):%s", 0xe);
+        const char *visualStudioMsg =
+            MakeString(visualStudioFmt, a->File(), a->Line(), s.c_str());
+        if (!msg_full) {
+            if (!strncat_tofit(msg, visualStudioMsg, 0x400)) {
+                MILO_LOG(msg.c_str());
+                msg_full = true;
+                msg += MakeString(
+                    "\n   ... %d omitted stack frames", (ptr - gCallStack) + 1
+                );
+            }
+        }
+        if (msg_full) {
+            MILO_LOG(visualStudioMsg);
+        }
+    }
+    if (msg_full) {
+        MILO_LOG("\n");
+    }
+}
+
 DataArray *DataArray::FindArray(int tag, bool fail) const {
     DataNode *dn;
     DataNode *dn_end = &mNodes[mSize];

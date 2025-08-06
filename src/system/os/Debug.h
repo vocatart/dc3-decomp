@@ -66,6 +66,7 @@ public:
 
 #include "utl/Str.h"
 #include "utl/MakeString.h"
+#include <list>
 
 extern Debug TheDebug;
 extern const char *kAssertStr;
@@ -92,3 +93,29 @@ public:
 };
 
 extern DebugFailer TheDebugFailer;
+
+namespace {
+    bool AddToStrings(const char *name, std::list<String> &strings);
+}
+
+class DebugNotifyOncer {
+private:
+    std::list<String> mStrings;
+
+public:
+    DebugNotifyOncer() {}
+    ~DebugNotifyOncer() {}
+
+    DebugNotifyOncer &operator<<(const char *cc) {
+        if (AddToStrings(cc, mStrings)) {
+            TheDebugNotifier << cc;
+        }
+        return *this;
+    }
+};
+
+#define MILO_NOTIFY_ONCE(...)                                                            \
+    {                                                                                    \
+        static DebugNotifyOncer _dw;                                                     \
+        _dw << MakeString(__VA_ARGS__);                                                  \
+    }

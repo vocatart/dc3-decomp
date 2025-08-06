@@ -128,5 +128,8 @@ private:
     char mStack[N];
 
 public:
-    StackString() : FixedString(&mStack, N + 5) {}
+    StackString() : FixedString(mStack, N + 5) {}
+    virtual ~StackString() {}
+    virtual void Print(const char *str) { *this += str; }
+    operator const char *() const { return c_str(); }
 };

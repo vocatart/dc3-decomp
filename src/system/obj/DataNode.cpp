@@ -3,6 +3,7 @@
 #include "obj/Data.h"
 #include "os/Debug.h"
 #include "utl/BinStream.h"
+#include "utl/Str.h"
 #include "utl/TextStream.h"
 #include "obj/DataFunc.h"
 #include "obj/Object.h"
@@ -604,7 +605,63 @@ bool DataNode::operator>(const DataNode &other) const {
         return false;
 }
 
-bool DataNode::Equal(const DataNode &, DataArray *, bool) const { return false; }
+bool DataNode::Equal(const DataNode &n, DataArray *a, bool warn) const {
+    const DataNode &first = mType < n.Type() ? *this : n;
+    const DataNode &second = mType < n.Type() ? n : *this;
+    DataType firstType = first.Type();
+    DataType secondType = second.Type();
+    if (firstType == secondType) {
+        bool res;
+        if (firstType == kDataString) {
+            res = streq(first.UncheckedStr(), second.UncheckedStr());
+        } else {
+            res = first.UncheckedInt() == second.UncheckedInt();
+        }
+        return res;
+    } else {
+        const char *objName = "";
+        if (firstType == kDataInt && secondType == kDataFloat) {
+            return first.UncheckedInt() == second.UncheckedInt();
+        } else {
+            if (firstType == kDataObject) {
+                Hmx::Object *obj = first.UncheckedObj();
+                if (obj)
+                    objName = obj->Name();
+                if (secondType == kDataSymbol) {
+                    return streq(objName, second.UncheckedStr());
+                } else if (secondType == kDataString) {
+                    return streq(objName, second.UncheckedStr());
+                }
+            }
+            if (firstType == kDataSymbol) {
+                if (secondType == kDataString) {
+                    return streq(first.UncheckedStr(), second.UncheckedStr());
+                }
+            } else if (secondType != kDataString && secondType != kDataSymbol) {
+                warn &= secondType != kDataObject; // i dunno lol
+            }
+        }
+        if (firstType == kDataUnhandled || secondType == kDataUnhandled) {
+            warn = false;
+        }
+        if (warn) {
+            StackString<32> str1;
+            StackString<32> str2;
+            first.Print(str1, true, 0);
+            second.Print(str2, true, 0);
+            MILO_NOTIFY_ONCE(
+                "DataNode::Equal: DataNodes %s and %s (%s and %s) are not compatible (file %s, line %d)",
+                str1,
+                str2,
+                DataTypeString(first.Type()),
+                DataTypeString(second.Type()),
+                a ? a->File() : "",
+                a ? a->Line() : -1
+            );
+        }
+    }
+    return false;
+}
 
 bool DataNode::operator!=(const DataNode &other) const {
     return !Equal(other, nullptr, true);
