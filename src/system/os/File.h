@@ -4,6 +4,8 @@
 
 #define FILE_OPEN_NOARK 0x10000
 
+extern bool gNullFiles;
+
 class File {
 public:
     File() { sOpenCount++; }
@@ -73,7 +75,7 @@ extern "C" {
 void FileInit();
 void FileTerminate();
 
-const char *FileMakePath(const char *root, const char *file, char *);
+const char *FileMakePath(const char *root, const char *file);
 const char *FileRelativePath(const char *root, const char *filepath);
 
 const char *FileGetPath(const char *);

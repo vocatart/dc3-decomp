@@ -58,6 +58,11 @@ private:
     void DumpObjectMemDelta(const Hmx::Object *, const MemPointDelta &) const;
     void AddTypeObjectMemDelta(const Hmx::Object *, const MemPointDelta &) const;
 
+    void LoadObjs();
+    void LoadDir();
+    void LoadResources();
+    void CreateObjects();
+    void LoadHeader();
     void OpenFile();
     void DoneLoading() {}
 

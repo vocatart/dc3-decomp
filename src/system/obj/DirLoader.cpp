@@ -6,9 +6,11 @@
 #include "obj/Dir.h"
 #include "os/Debug.h"
 #include "os/File.h"
+#include "os/Platform.h"
 #include "os/System.h"
 #include "utl/BinStream.h"
 #include "utl/ChunkStream.h"
+#include "utl/FilePath.h"
 #include "utl/Loader.h"
 #include "utl/MemPoint.h"
 #include "utl/TextFileStream.h"
@@ -407,6 +409,37 @@ DirLoader::~DirLoader() {
 
 const char *DirLoader::DebugText() { return MakeString("DL: %s", mFile.c_str()); }
 
+bool DirLoader::SaveObjects(const char *cc, ObjectDir *dir, bool b3) {
+    if (sCacheMode && dir->InlineSubDirType() != kInlineNever) {
+        MILO_LOG("Not caching %s because it is an inlined subdir.\n", cc);
+        return false;
+    } else {
+        FilePathTracker tracker(FileGetPath(cc));
+        cc = CachedPath(cc, false);
+        if (sCacheMode) {
+            FileGetPath(cc);
+            FileMkDir();
+        }
+        Platform p = sCacheMode ? TheLoadMgr.GetPlatform() : kPlatformPC;
+        MILO_ASSERT(p != kPlatformNone, 0x1B3);
+        ChunkStream cs(
+            cc,
+            ChunkStream::kWrite,
+            p == kPlatformWii ? 0x10000 : 0x20000,
+            gNullFiles,
+            p,
+            sCacheMode
+        );
+        if (cs.Fail()) {
+            MILO_WARN("Could not open file: %s", cc);
+            return false;
+        } else {
+            SaveObjects(cs, dir);
+            return true;
+        }
+    }
+}
+
 DirLoader::DirLoader(
     const FilePath &fp,
     LoaderPos pos,
@@ -437,5 +470,48 @@ DirLoader::DirLoader(
             }
         }
     }
+    if (fp.empty()) {
+        mRoot = FilePath::Root();
+    } else {
+        const char *filePath = FileGetPath(mFile.c_str());
+        char buf[256];
+        strcpy(buf, filePath);
+        if (strlen(buf) - 4 > 0) {
+            // strcpy(&buf[strlen(buf)], "/gen");
+            strcat(buf, "/gen");
+        }
+        mRoot = FileMakePath(FileRoot(), buf);
+    }
     mState = &DirLoader::OpenFile;
+}
+
+const char *DirLoader::StateName() const {
+    if (mState == &DirLoader::OpenFile)
+        return "OpenFile";
+    else if (mState == &DirLoader::LoadHeader)
+        return "LoadHeader";
+    else if (mState == &DirLoader::LoadDir)
+        return "LoadDir";
+    else if (mState == &DirLoader::LoadResources)
+        return "LoadResources";
+    else if (mState == &DirLoader::CreateObjects)
+        return "CreateObjects";
+    else if (mState == &DirLoader::LoadObjs)
+        return "LoadObjs";
+    else if (mState == &DirLoader::DoneLoading)
+        return "DoneLoading";
+    else
+        return "INVALID";
+}
+
+ObjectDir *DirLoader::LoadObjects(const FilePath &fp, Callback *cb, BinStream *bs) {
+    if (sTypeMemDumpFile) {
+        sMemPointMap.clear();
+    }
+    DirLoader dirLoader(fp, kLoadFront, cb, bs, nullptr, false, nullptr);
+    TheLoadMgr.PollUntilLoaded(&dirLoader, nullptr);
+    if (sTypeMemDumpFile) {
+        WriteTypeMemDump(sTypeMemDumpFile);
+    }
+    return dirLoader.GetDir();
 }
