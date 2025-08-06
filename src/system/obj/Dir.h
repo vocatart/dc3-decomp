@@ -1,5 +1,6 @@
 #pragma once
 #include "math/Mtx.h"
+#include "obj/DirLoader.h"
 #include "obj/ObjRef.h"
 #include "obj/Object.h"
 #include "os/Debug.h"
@@ -31,7 +32,7 @@ public:
         *this = o ? dynamic_cast<C *>(o) : nullptr;
     }
 
-    class DirLoader *mLoader; // 0x10
+    DirLoader *mLoader; // 0x10
 
     bool IsLoaded() const;
     ObjDirPtr &operator=(C *);
@@ -48,6 +49,11 @@ public:
     }
 };
 
+template <class C>
+BinStream &operator<<(BinStream &bs, const ObjDirPtr<C> &ptr) {
+    return bs;
+}
+
 class ObjectDir : public virtual Hmx::Object {
     friend class Hmx::Object;
 
@@ -57,6 +63,7 @@ public:
     };
 
     class Viewport {
+    public:
         Transform mXfm;
     };
 
@@ -101,7 +108,7 @@ protected:
     ViewportId mCurViewportID; // 0x88
     Hmx::Object *unk8c; // 0x8c
     Hmx::Object *mCurCam; // 0x90
-    int mAlwaysInlined; // 0x94
+    int mAlwaysInlined; // 0x94 / -0xC
     const char *mAlwaysInlineHash; // 0x98
 
     ObjectDir();
@@ -160,7 +167,10 @@ public:
 
     static ObjectDir *Main() { return sMainDir; }
     static void PreInit(int, int);
+    static void Init();
     static void Terminate();
+    // key: Symbol child, Symbol parent
+    // value: bool for whether child is a subclass of parent
     static std::map<std::pair<Symbol, Symbol>, bool> sSuperClassMap;
 
     NEW_OBJ(ObjectDir);
@@ -180,7 +190,10 @@ protected:
     void LoadSubDir(int, const FilePath &, BinStream &, bool);
     void AddedSubDir(ObjDirPtr<ObjectDir> &);
     void RemovingSubDir(ObjDirPtr<ObjectDir> &);
+    void Iterate(DataArray *, bool);
     ObjDirPtr<ObjectDir> PostLoadInlined();
+
+    DataNode OnFind(DataArray *);
 };
 
 extern const char *kNotObjectMsg;

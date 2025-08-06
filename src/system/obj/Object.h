@@ -188,3 +188,5 @@ inline TextStream &operator<<(TextStream &ts, const Hmx::Object *obj) {
         ts << "<null>";
     return ts;
 }
+
+#define NULL_OBJ (Hmx::Object *)nullptr

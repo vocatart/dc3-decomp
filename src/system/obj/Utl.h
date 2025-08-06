@@ -1,4 +1,5 @@
 #pragma once
+#include "obj/Dir.h"
 #include "utl/Symbol.h"
 #include "obj/Data.h"
 
@@ -10,3 +11,5 @@
 bool IsASubclass(Symbol child, Symbol parent);
 
 const char *PrintPropertyPath(DataArray *);
+
+void ReserveToFit(ObjectDir *, ObjectDir *, int);

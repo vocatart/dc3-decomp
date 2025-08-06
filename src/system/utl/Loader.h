@@ -68,6 +68,8 @@ public:
     void SetEditMode(bool);
     void RegisterFactory(const char *, LoaderFactoryFunc *);
     void PollUntilLoaded(Loader *, Loader *);
+    Loader *GetLoader(const FilePath &) const;
+    Loader *ForceGetLoader(const FilePath &);
 };
 
 extern LoadMgr TheLoadMgr;

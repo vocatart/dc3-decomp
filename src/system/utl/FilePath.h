@@ -18,6 +18,7 @@ public:
     //     return FileRelativePath(sRoot.c_str(), this->c_str());
     // }
     void SetRoot(const char *str) { Set(sRoot.c_str(), str); }
+    static const char *Root() { return sRoot.c_str(); }
 };
 
 // inline TextStream &operator<<(TextStream &ts, FilePath &fp) {
@@ -34,14 +35,11 @@ public:
 //     return bs;
 // }
 
-// class FilePathTracker {
-// public:
-//     FilePathTracker(const char *root) {
-//         mOldRoot = FilePath::sRoot;
-//         ResetRoot(root);
-//     }
+class FilePathTracker {
+public:
+    FilePathTracker(const char *root);
 
-//     ~FilePathTracker() { FilePath::sRoot = mOldRoot; }
+    ~FilePathTracker();
 
-//     FilePath mOldRoot;
-// };
+    FilePath mOldRoot;
+};

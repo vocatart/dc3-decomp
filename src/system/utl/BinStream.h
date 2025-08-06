@@ -174,3 +174,22 @@ public:
     int mAltRev;
     BinStream &mBinStream;
 };
+
+// Note: `Allocator` here is actually the size/capacity type parameter on Wii.
+// The name is based on Xbox 360 symbols, which show the allocator type instead.
+template <class T, class Allocator>
+BinStream &operator<<(BinStream &bs, const std::vector<T, Allocator> &vec) {
+    bs << (int)vec.size();
+    for (typename std::vector<T, Allocator>::const_iterator it = vec.begin();
+         it != vec.end();
+         it++) {
+        bs << *it;
+    }
+    return bs;
+}
+
+/* WARNING: Inlined function: __savegprlr_27 */
+/* class BinStream & __cdecl operator<<<class ObjectDir::Viewport,class
+   stlpmtx_std::StlNodeAlloc<class ObjectDir::Viewport> >(class BinStream &,class
+   stlpmtx_std::vector<class ObjectDir::Viewport,class stlpmtx_std::StlNodeAlloc<class
+   ObjectDir::Viewport> > const &) */

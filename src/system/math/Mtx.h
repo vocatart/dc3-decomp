@@ -116,6 +116,11 @@ namespace Hmx {
     };
 }
 
+inline BinStream &operator<<(BinStream &bs, const Hmx::Matrix3 &mtx) {
+    bs << mtx.x << mtx.y << mtx.z;
+    return bs;
+}
+
 inline BinStream &operator>>(BinStream &bs, Hmx::Matrix3 &mtx) {
     bs >> mtx.x >> mtx.y >> mtx.z;
     return bs;
@@ -162,6 +167,11 @@ public:
 
     bool operator==(const Transform &tf) const { return m == tf.m && v == tf.v; }
 };
+
+inline BinStream &operator<<(BinStream &bs, const Transform &tf) {
+    bs << tf.m << tf.v;
+    return bs;
+}
 
 inline BinStream &operator>>(BinStream &bs, Transform &tf) {
     bs >> tf.m >> tf.v;

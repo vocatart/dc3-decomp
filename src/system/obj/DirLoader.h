@@ -28,6 +28,9 @@ public:
     ObjectDir *GetDir();
     void Cleanup(const char *);
 
+    const char *ProxyName() const { return mProxyName; }
+    ObjectDir *ProxyDir() const { return mProxyDir; }
+
     NEW_POOL_OVERLOAD("DirLoader", 0x2A);
     DELETE_POOL_OVERLOAD(sizeof(DirLoader), "DirLoader", 0x2A);
 
@@ -39,6 +42,7 @@ public:
     static bool ShouldBlockSubdirLoad(const FilePath &);
     static bool SaveObjects(const char *, ObjectDir *, bool);
     static void SaveObjects(BinStream &, ObjectDir *);
+    static Loader *New(const FilePath &, LoaderPos);
     static ObjectDir *LoadObjects(const FilePath &, Callback *, BinStream *);
 
 private:
