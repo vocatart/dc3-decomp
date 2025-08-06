@@ -13,6 +13,8 @@ DataArray *SystemConfig(Symbol, Symbol);
 DataArray *SystemConfig(Symbol, Symbol, Symbol);
 
 Symbol PlatformSymbol(Platform);
+bool PlatformLittleEndian(Platform);
+Platform ConsolePlatform(); // { return kPlatformXBox; }
 
 bool UsingCD();
 void SetUsingCD(bool);

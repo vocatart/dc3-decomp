@@ -28,7 +28,7 @@ public:
         kSeekEnd = 2,
     };
 
-    BinStream(bool littleEndian);
+    BinStream(bool littleEndian = false);
     virtual ~BinStream();
     /** Completely flush out this BinStream. */
     virtual void Flush() = 0;
