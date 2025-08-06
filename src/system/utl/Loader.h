@@ -27,6 +27,9 @@ public:
     virtual bool IsLoaded() const = 0;
     virtual const char *StateName() const { return "Unknown"; }
 
+    LoaderPos GetPos() const { return mPos; }
+    FilePath &LoaderFile() { return mFile; }
+
     NEW_OVERLOAD("Loader", 0xA8);
     DELETE_OVERLOAD("Loader", 0xA8);
 
@@ -64,6 +67,7 @@ public:
     bool EditMode() const { return mEditMode; }
     Platform GetPlatform() const { return (Platform)mPlatform; }
     int AsyncUnload() const; // { return mAsyncUnload; }
+    const std::list<Loader *> &Loaders() const { return mLoaders; }
 
     void SetEditMode(bool);
     void RegisterFactory(const char *, LoaderFactoryFunc *);

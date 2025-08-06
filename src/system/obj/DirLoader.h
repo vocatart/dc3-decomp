@@ -5,6 +5,8 @@
 #include "utl/BinStream.h"
 #include "utl/FilePath.h"
 #include "utl/Loader.h"
+#include "utl/MemPoint.h"
+#include "utl/TextFileStream.h"
 
 class DirLoader : public Loader, public ObjRefOwner {
     typedef void (DirLoader::*DirLoaderStateFunc)(void);
@@ -42,7 +44,10 @@ public:
     static bool ShouldBlockSubdirLoad(const FilePath &);
     static bool SaveObjects(const char *, ObjectDir *, bool);
     static void SaveObjects(BinStream &, ObjectDir *);
+    static void WriteTypeMemDump(TextFileStream *);
     static Loader *New(const FilePath &, LoaderPos);
+    static DirLoader *Find(const FilePath &);
+    static DirLoader *FindLast(const FilePath &);
     static ObjectDir *LoadObjects(const FilePath &, Callback *, BinStream *);
 
 private:
@@ -50,6 +55,8 @@ private:
 
     Symbol FixClassName(Symbol);
     bool SetupDir(Symbol);
+    void DumpObjectMemDelta(const Hmx::Object *, const MemPointDelta &) const;
+    void AddTypeObjectMemDelta(const Hmx::Object *, const MemPointDelta &) const;
 
     void OpenFile();
     void DoneLoading() {}
@@ -78,4 +85,8 @@ private:
 
     static bool sCacheMode;
     static bool (*sPathEval)(const char *);
+    static ObjectDir *sTopSaveDir;
+    static TextFileStream *sObjectMemDumpFile;
+    static TextFileStream *sTypeMemDumpFile;
+    static std::map<String, MemPointDelta> sMemPointMap;
 };
