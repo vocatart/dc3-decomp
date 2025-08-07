@@ -144,6 +144,7 @@ namespace Hmx {
         void Release(ObjRef *ref) { ref->Release(&mRefs); }
 
         void ReplaceRefs(Hmx::Object *);
+        void ReplaceRefsFrom(Hmx::Object *, Hmx::Object *);
         int RefCount() const;
         void RemovePropertySink(Hmx::Object *, DataArray *);
         bool HasPropertySink(Hmx::Object *, DataArray *);

@@ -152,6 +152,7 @@ public:
     int StrTableSize() const { return mStringTable.Size(); }
     int HashTableUsedSize() const { return mHashTable.UsedSize(); }
     int StrTableUsedSize() const { return mStringTable.UsedSize(); }
+    const char *GetPathName() const { return mPathName; }
 
     void ResetViewports();
     void SetInlineProxyType(InlineDirType);
