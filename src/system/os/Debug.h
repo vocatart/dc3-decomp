@@ -54,7 +54,7 @@ public:
     ModalCallbackFunc *SetModalCallback(ModalCallbackFunc *);
     void Exit(int, bool);
     void Modal(bool &, const char *);
-
+    void Warn(const char *);
     void Notify(const char *msg);
     void Fail(const char *msg, void *);
     TextStream *SetReflect(TextStream *ts) {

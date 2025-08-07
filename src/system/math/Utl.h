@@ -141,7 +141,7 @@ inline bool ApproxEq(float f1, float f2) {
     return fabs(f1 - f2) < 0.000099999997f ? true : false;
 }
 
-inline float Modulo(float f1, float f2) {
+float Mod(float f1, float f2) {
     if (f2 == 0.0f)
         return 0.0f;
     float tmp = fmod(f1, f2);
@@ -150,9 +150,9 @@ inline float Modulo(float f1, float f2) {
     return tmp;
 }
 
-inline float ModRange(float f1, float f2, float f3) {
-    return Modulo(f3 - f1, f2 - f1) + f1;
-}
+// inline float ModRange(float f1, float f2, float f3) {
+//     return Modulo(f3 - f1, f2 - f1) + f1;
+// }
 
 inline float Interp(float a, float b, float t) { return t * (b - a) + a; }
 

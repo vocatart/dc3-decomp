@@ -1,9 +1,13 @@
 #include "obj/DataFunc.h"
 #include "math/Decibels.h"
+#include "math/Rand.h"
 #include "math/Utl.h"
 #include "obj/Data.h"
 #include "obj/Object.h"
 #include "os/Debug.h"
+#include "os/System.h"
+#include "utl/Locale.h"
+#include "utl/Str.h"
 
 bool SwitchMatch(const DataNode &n1, const DataNode &n2) {
     if (n1.Type() == kDataArray) {
@@ -441,4 +445,298 @@ DEF_DATA_FUNC(DataClampEq) {
     } else
         *array->Var(1) = ret;
     return ret;
+}
+
+DEF_DATA_FUNC(DataMultiply) {
+    const DataNode &n1 = array->Evaluate(1);
+    const DataNode &n2 = array->Evaluate(2);
+    bool isFloat = false;
+    int multi = 1;
+    float multf = 1;
+    int size = array->Size();
+    for (int i = 1; i < size; i++) {
+        const DataNode &cur = array->Evaluate(i);
+        if (cur.Type() != kDataFloat) {
+            multi *= cur.LiteralInt();
+        } else {
+            multf *= cur.LiteralFloat();
+            isFloat = true;
+        }
+    }
+    if (isFloat) {
+        return multf * (float)multi;
+    } else {
+        return multi;
+    }
+    return 0;
+}
+
+DEF_DATA_FUNC(DataMultiplyEq) {
+    DataNode ret = DataMultiply(array);
+    if (array->Type(1) == kDataProperty) {
+        MILO_ASSERT(gDataThis, 0x2C3);
+        gDataThis->SetProperty(array->UncheckedArray(1), ret);
+    } else
+        *array->Var(1) = ret;
+    return ret;
+}
+
+DEF_DATA_FUNC(DataDivide) { return array->Float(1) / array->Float(2); }
+
+DEF_DATA_FUNC(DataDivideEq) {
+    DataNode ret = DataDivide(array);
+    if (array->Type(1) == kDataProperty) {
+        MILO_ASSERT(gDataThis, 0x2CF);
+        gDataThis->SetProperty(array->UncheckedArray(1), ret);
+    } else
+        *array->Var(1) = ret;
+    return ret;
+}
+
+DEF_DATA_FUNC(DataSqrt) { return std::sqrt(array->Float(1)); }
+
+DEF_DATA_FUNC(DataPow) { return std::pow(array->Float(1), array->Float(2)); }
+
+DEF_DATA_FUNC(DataMod) {
+    const DataNode &n1 = array->Evaluate(1);
+    const DataNode &n2 = array->Evaluate(2);
+    if (n1.Type() == kDataFloat || n2.Type() == kDataFloat) {
+        return Mod(n1.LiteralFloat(array), n2.LiteralFloat(array));
+    } else {
+        return Mod(n1.LiteralInt(array), n2.LiteralInt(array));
+    }
+}
+
+DEF_DATA_FUNC(DataDist) {
+    float z1 = array->Float(3);
+    float z2 = array->Float(6);
+    float y1 = array->Float(2);
+    float y2 = array->Float(5);
+    float x1 = array->Float(1);
+    float x2 = array->Float(4);
+
+    return std::sqrt(
+        (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2)
+    );
+}
+
+DEF_DATA_FUNC(DataSymbol) { return array->ForceSym(1); }
+
+DEF_DATA_FUNC(DataChar) {
+    static char newChar[2];
+    const DataNode &n = array->Evaluate(1);
+    newChar[0] = n.Int();
+    newChar[1] = '\0';
+    return newChar;
+}
+
+DEF_DATA_FUNC(DataAsc) {
+    const char *str = array->Str(1);
+    MILO_ASSERT(strlen(str) == 1, 0x2FF);
+    return *str;
+}
+
+DEF_DATA_FUNC(DataInt) {
+    const DataNode &n = array->Evaluate(1);
+    DataType t = n.Type();
+    if (t == kDataSymbol || t == kDataString) {
+        return atoi(n.Str());
+    } else if (t == kDataObject || t == kDataInt) {
+        return n.UncheckedInt();
+    } else {
+        return (int)n.LiteralFloat(array);
+    }
+}
+
+DEF_DATA_FUNC(DataRound) { return Round(array->Evaluate(1).LiteralFloat()); }
+
+DEF_DATA_FUNC(DataFloor) { return std::floor(array->Float(1)); }
+
+DEF_DATA_FUNC(DataCeil) { return std::ceil(array->Float(1)); }
+
+DEF_DATA_FUNC(DataDelete) {
+    delete array->Obj<Hmx::Object>(1);
+    return 0;
+}
+
+DEF_DATA_FUNC(DataNew) {
+    Hmx::Object *obj = Hmx::Object::NewObject(array->Sym(1));
+    if (array->Size() > 2) {
+        if (array->Type(2) == kDataArray) {
+            obj->SetTypeDef(array);
+        } else {
+            obj->SetName(array->Str(2), gDataDir);
+            if (array->Size() > 3) {
+                if (array->Type(3) == kDataArray) {
+                    obj->SetTypeDef(array);
+                } else {
+                    obj->SetType(array->Sym(3));
+                }
+            }
+        }
+    }
+    return obj;
+}
+
+DEF_DATA_FUNC(DataForEach) {
+    DataArray *arr = array->Array(2);
+    arr->AddRef();
+    DataNode *var = array->Var(1);
+
+    DataNode save(*var);
+    for (int i = 0; i < arr->Size(); i++) {
+        *var = arr->Evaluate(i);
+        for (int j = 3; j < array->Size(); j++) {
+            array->Command(j)->Execute(true);
+        }
+    }
+
+    *var = save;
+    arr->Release();
+    return 0;
+}
+
+DEF_DATA_FUNC(DataForEachInt) {
+    DataNode *var = array->Var(1);
+    int begin = array->Int(2);
+    int end = array->Int(3);
+    int inc = end > begin ? 1 : -1;
+
+    DataNode save(*var);
+    for (int cur = begin; cur != end; cur += inc) {
+        *var = cur;
+        for (int cnt = 4; cnt < array->Size(); cnt++) {
+            array->Command(cnt)->Execute(true);
+        }
+        cur = var->UncheckedInt();
+    }
+
+    *var = save;
+    return 0;
+}
+
+DEF_DATA_FUNC(DataGetElem) {
+    int i = array->Int(2);
+    DataArray *a = array->Array(1);
+    return a->Node(i);
+}
+
+DEF_DATA_FUNC(DataGetLastElem) {
+    DataArray *arr = array->Array(1);
+    MILO_ASSERT(arr->Size() > 0, 0x403);
+    return arr->Node(arr->Size() - 1);
+}
+
+DEF_DATA_FUNC(DataObject) {
+    const DataNode &n = array->Evaluate(1);
+    if (n.Type() == kDataObject)
+        return n;
+    else {
+        const char *s = n.LiteralStr(array);
+        Hmx::Object *o = gDataDir->FindObject(s, true, true);
+        if (!o && s[0]) {
+            MILO_FAIL(
+                kNotObjectMsg, s, PathName(gDataDir) ? PathName(gDataDir) : "**no file**"
+            );
+        }
+        return o;
+    }
+}
+
+DEF_DATA_FUNC(DataLocalize) {
+    const char *localized = Localize(array->ForceSym(1), nullptr, TheLocale);
+    return localized ? localized : gNullStr;
+}
+
+DEF_DATA_FUNC(DataLocalizeSeparatedInt) {
+    return LocalizeSeparatedInt(array->Int(1), TheLocale);
+}
+
+DEF_DATA_FUNC(DataLocalizeFloat) { return LocalizeFloat(array->Str(1), array->Float(2)); }
+
+DEF_DATA_FUNC(DataSyncReloadLocale) {
+    SyncReloadLocale();
+    return 1;
+}
+
+DEF_DATA_FUNC(DataPrintUnused) {
+    return SystemConfig(array->Sym(1))->PrintUnused(TheDebug, kDataArray, true);
+}
+
+DEF_DATA_FUNC(DataPrintStack) {
+    StackString<2048> str;
+    DataAppendStackTrace(str);
+    MILO_LOG("%s\n", str);
+    return 0;
+}
+
+DEF_DATA_FUNC(DataStartsWith) {
+    return strneq(
+        array->Str(1),
+        array->Str(2),
+        (array->Size() > 3) ? array->Int(3) : strlen(array->Str(2))
+    );
+}
+
+DEF_DATA_FUNC(DataTime) {
+    int i;
+    for (i = 1; i < array->Size(); i++) {
+        DataNode &eval = array->Node(i);
+        if (eval.Type() == kDataCommand)
+            break;
+        eval.Print(TheDebug, true, 0);
+    }
+
+    if (i == 1) {
+        MILO_LOG("Timing %s, line %d:", array->File(), array->Line());
+    }
+
+    Timer time;
+    time.Start();
+    while (i < array->Size()) {
+        array->Command(i++)->Execute(true);
+    }
+    time.Stop();
+
+    MILO_LOG(" %f ms\n", time.Ms());
+    return time.Ms();
+};
+
+DEF_DATA_FUNC(DataRandomInt) { return RandomInt(array->Int(1), array->Int(2)); }
+
+DEF_DATA_FUNC(DataRandomFloat) {
+    if (array->Size() > 1) {
+        return RandomFloat(array->Float(1), array->Float(2));
+    } else {
+        return RandomFloat();
+    }
+}
+
+DEF_DATA_FUNC(DataRandomElem) {
+    DataArray *a = array->Array(1);
+    MILO_ASSERT_FMT(
+        a->Size() != 0, "Empty array (file %s, line %d)", array->File(), array->Line()
+    );
+    return a->Node(RandomInt(0, a->Size()));
+}
+
+DEF_DATA_FUNC(DataRandom) { return array->Evaluate(RandomInt(1, array->Size())); }
+
+DEF_DATA_FUNC(DataRandomSeed) {
+    SeedRand(array->Int(1));
+    return 0;
+}
+
+DEF_DATA_FUNC(DataRandomSort) {
+    array->Array(1)->RandomSortNodes();
+    return 0;
+}
+
+DEF_DATA_FUNC(DataWarn) {
+    String str;
+    for (int i = 1; i < array->Size(); i++) {
+        array->Evaluate(i).Print(str, true, 0);
+    }
+    TheDebug.Warn(str.c_str());
+    return 0;
 }

@@ -100,6 +100,11 @@ public:
         mType = kDataFloat;
     }
 
+    DataNode(double d) {
+        mValue.real = d;
+        mType = kDataFloat;
+    }
+
     DataNode(const DataNode &);
     DataNode(const char *string);
     DataNode(const class String &string);
