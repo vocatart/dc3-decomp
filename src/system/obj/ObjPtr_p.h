@@ -11,7 +11,7 @@ private:
     Hmx::Object *mOwner; // 0x10
 public:
     ObjPtr(Hmx::Object *owner, T *ptr) : ObjRefConcrete<T>(ptr), mOwner(owner) {}
-    ObjPtr(const ObjPtr &p);
+    ObjPtr(const ObjPtr &p) : ObjRefConcrete(p), mOwner(p.mOwner) {}
     virtual ~ObjPtr() {}
     virtual Hmx::Object *RefOwner() const { return mOwner; }
 };

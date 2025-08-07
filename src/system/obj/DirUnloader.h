@@ -8,8 +8,10 @@ public:
     DirUnloader(ObjectDir *);
     virtual ~DirUnloader();
     virtual const char *DebugText();
-    virtual bool IsLoaded() const;
+    virtual bool IsLoaded() const { return false; }
+
+private:
     virtual void PollLoading();
 
-    std::vector<ObjPtr<Hmx::Object> > mObjects; // 0x34
+    std::vector<ObjPtr<Hmx::Object> > mObjects; // 0x48
 };

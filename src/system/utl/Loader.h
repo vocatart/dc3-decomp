@@ -62,8 +62,8 @@ public:
     LoadMgr();
     ~LoadMgr();
 
-    void StartAsyncUnload() { mAsyncUnload++; }
-    void FinishAsyncUnload() { mAsyncUnload--; }
+    void StartAsyncUnload(); // { mAsyncUnload++; }
+    void FinishAsyncUnload(); // { mAsyncUnload--; }
     bool EditMode() const { return mEditMode; }
     Platform GetPlatform() const { return (Platform)mPlatform; }
     int AsyncUnload() const; // { return mAsyncUnload; }
