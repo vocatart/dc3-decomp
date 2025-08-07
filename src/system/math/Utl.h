@@ -12,7 +12,7 @@ inline int CountBits(int num) {
 
     var_r3 = num;
     var_r4 = 0;
-    while (var_r3 != 0) {
+    while (var_r3 != 0U) {
         temp_r0 = var_r3 & 1;
         var_r3 = (int)((unsigned int)var_r3 >> 1U);
         var_r4 += temp_r0;
@@ -33,7 +33,7 @@ inline int HighestBit(int num) {
 }
 
 inline int LowestBit(int num) {
-    if (num == 0) {
+    if (num == 0U) {
         return 0;
     } else {
         int bit = 1;
@@ -74,11 +74,7 @@ inline T Max(T x, T y, T z) {
 
 template <class T>
 inline T Clamp(T min, T max, T value) {
-    if (value > max)
-        return max;
-    if (value < min)
-        return min;
-    return value;
+    return value > max ? max : (value < min ? min : value);
 }
 
 template <class T>
@@ -135,7 +131,9 @@ inline int Mod(int num, int modbase) {
 
 inline bool IsFloatZero(float f) { return fabs(f) < 0.0001f; }
 
-inline bool IsFloatOne(float f) { return fabs(f - 1.0f) < 0.000099999997f ? true : false; }
+inline bool IsFloatOne(float f) {
+    return fabs(f - 1.0f) < 0.000099999997f ? true : false;
+}
 
 inline bool IsFabsZero(float f) { return fabs(f) < 0.000099999997f ? true : false; }
 

@@ -140,6 +140,17 @@ public:
     virtual void ResetEditorState();
     virtual InlineDirType InlineSubDirType();
 
+    template <class T>
+    T *Find(const char *name, bool parentDirs) {
+        T *castedObj = dynamic_cast<T *>(FindObject(name, false, true));
+        if (!castedObj && parentDirs) {
+            MILO_FAIL(
+                kNotObjectMsg, name, PathName(this) ? PathName(this) : "**no file**"
+            );
+        }
+        return castedObj;
+    }
+
     void SetCurViewport(ViewportId id, Hmx::Object *o) {
         mCurViewportID = id;
         mCurCam = o;

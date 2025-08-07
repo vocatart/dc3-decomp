@@ -2,15 +2,15 @@
 #include "obj/Data.h"
 #include "obj/Object.h"
 #include "obj/Dir.h"
-#include "utl/MemMgr.h"
 #include "obj/ObjPtr_p.h"
-// #include "obj/DataUtl.h"
+#include "obj/DataUtl.h"
+#include "utl/PoolAlloc.h"
 #include <map>
 
 extern Hmx::Object *gDataThis;
 
 class DataFuncObj : public Hmx::Object {
-public:
+private:
     DataArray *mFunc;
 
     DataFuncObj(DataArray *da) : mFunc(da) {
@@ -18,35 +18,32 @@ public:
         SetName(da->Str(1), ObjectDir::Main());
     }
 
+public:
     virtual ~DataFuncObj() { mFunc->Release(); }
     virtual DataNode Handle(DataArray *_msg, bool _warn) {
         return mFunc->ExecuteScript(2, gDataThis, _msg, 1);
     }
 
-    // NEW_POOL_OVERLOAD(DataFuncObj);
-    // DELETE_POOL_OVERLOAD(DataFuncObj);
+    NEW_POOL_OVERLOAD("DataFuncObj", 0x4F);
+    DELETE_POOL_OVERLOAD(sizeof(DataFuncObj), "DataFuncObj", 0x4F);
 
     static DataNode New(DataArray *);
 };
 
-// class DataThisPtr : public ObjPtr<Hmx::Object, class ObjectDir> {
-// public:
-//     DataThisPtr() : ObjPtr(0, 0) {}
-//     virtual ~DataThisPtr() {}
-//     virtual void Replace(Hmx::Object *from, Hmx::Object *to) {
-//         *this = to;
-//         if (gDataThis == from)
-//             DataSetThis(to);
-//     }
-//     void operator=(Hmx::Object *obj) {
-//         ObjPtr<Hmx::Object, class ObjectDir>::operator=(obj);
-//     }
-// };
+class DataThisPtr : public ObjPtr<Hmx::Object> {
+public:
+    DataThisPtr() : ObjPtr(nullptr, nullptr) {}
+    virtual ~DataThisPtr() {}
+    virtual void Replace(Hmx::Object *);
+    //     void operator=(Hmx::Object *obj) {
+    //         ObjPtr<Hmx::Object, class ObjectDir>::operator=(obj);
+    //     }
+};
 
-#define DEF_DATA_FUNC(name) static DataNode name(DataArray *array)
+#define DEF_DATA_FUNC(name) DataNode name(DataArray *array)
 
 extern std::map<Symbol, DataFunc *> gDataFuncs;
-// extern DataThisPtr gDataThisPtr;
+extern DataThisPtr gDataThisPtr;
 
 void DataRegisterFunc(Symbol s, DataFunc *func);
 Symbol DataFuncName(DataFunc *);
