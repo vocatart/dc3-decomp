@@ -174,7 +174,7 @@ void ObjectDir::LoadSubDir(int i, const FilePath &fp, BinStream &bs, bool b) {
     } else {
         FilePath subdirpath = GetSubDirPath(fp, bs);
         if (streq(mPathName, subdirpath.c_str())) {
-            MILO_WARN(
+            MILO_NOTIFY(
                 "%s trying to subdir self in slot %d, setting NULL", PathName(this), i
             );
             mSubDirs[i] = 0;
@@ -280,7 +280,7 @@ void CheckForDuplicates() {
          previous = *it, ++it) {
         Symbol cur = *it;
         if (cur == previous) {
-            MILO_WARN("Duplicate object %s in config", cur);
+            MILO_NOTIFY("Duplicate object %s in config", cur);
             fail = true;
         }
     }
@@ -354,14 +354,14 @@ ObjDirPtr<ObjectDir> ObjectDir::PostLoadInlined() {
         ClearAndShrink(mInlinedDirs);
     }
     if (iDir.shared && iDir.file.length() != 0 && !iDir.dir) {
-        MILO_WARN("Couldn't load shared inlined file %s\n", iDir.file);
+        MILO_NOTIFY("Couldn't load shared inlined file %s\n", iDir.file);
     }
     return iDir.dir;
 }
 
 void ObjectDir::SetProxyFile(const FilePath &fp, bool b) {
     if (!IsProxy()) {
-        MILO_WARN("Can't set proxy file if own dir");
+        MILO_NOTIFY("Can't set proxy file if own dir");
     } else {
         mProxyFile = fp;
         mProxyOverride = b;
@@ -479,7 +479,7 @@ ObjectDir *SyncSubDir(const FilePath &fp, ObjectDir *dir) {
             for (ObjDirItr<Hmx::Object> it(dir, false); it != nullptr; ++it) {
                 Hmx::Object *found = retDir->FindObject(it->Name(), false, true);
                 if (found && found != retDir && &*it != dir) {
-                    MILO_WARN(
+                    MILO_NOTIFY(
                         "%s exists in dir and subdir, so replacing %s with %s",
                         it->Name(),
                         PathName(it),
@@ -573,7 +573,7 @@ END_HANDLERS
 void ObjectDir::SaveInlined(const FilePath &fp, bool share, InlineDirType type) {
     MILO_ASSERT(type != kInlineNever, 0x26A);
     if (type == kInlineAlways && share) {
-        MILO_WARN("Can't share kInlineAlways Dirs");
+        MILO_NOTIFY("Can't share kInlineAlways Dirs");
         share = false;
     }
     InlinedDir dir;
@@ -586,7 +586,7 @@ void ObjectDir::SaveInlined(const FilePath &fp, bool share, InlineDirType type) 
 void ObjectDir::PreLoadInlined(const FilePath &fp, bool share, InlineDirType type) {
     MILO_ASSERT(type != kInlineNever, 0x27C);
     if (type == kInlineAlways && share) {
-        MILO_WARN("Can't share kInlineAlways Dirs");
+        MILO_NOTIFY("Can't share kInlineAlways Dirs");
         share = false;
     }
     InlinedDir dir;

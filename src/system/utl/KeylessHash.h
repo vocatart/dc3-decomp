@@ -157,7 +157,7 @@ T2 *KeylessHash<T1, T2>::Insert(const T2 &val) {
             MILO_ASSERT(mSize, 0xB5);
             Resize(mSize * 2, 0);
             // if (!LOADMGR_EDITMODE && MakeStringInitted()) {
-            //     MILO_WARN("Resizing hash table (%d)", mSize);
+            //     MILO_NOTIFY("Resizing hash table (%d)", mSize);
             // }
             return Insert(val);
         }

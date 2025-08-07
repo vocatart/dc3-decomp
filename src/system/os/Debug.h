@@ -54,7 +54,7 @@ public:
     ModalCallbackFunc *SetModalCallback(ModalCallbackFunc *);
     void Exit(int, bool);
     void Modal(bool &, const char *);
-    void Warn(const char *);
+    void Warn(const char *msg);
     void Notify(const char *msg);
     void Fail(const char *msg, void *);
     TextStream *SetReflect(TextStream *ts) {
@@ -76,9 +76,17 @@ extern const char *kAssertStr;
 #define MILO_ASSERT_FMT(cond, ...)                                                       \
     ((cond) || (TheDebugFailer << (MakeString(__VA_ARGS__)), 0))
 #define MILO_FAIL(...) TheDebugFailer << MakeString(__VA_ARGS__)
-#define MILO_WARN(...) TheDebugNotifier << MakeString(__VA_ARGS__)
+#define MILO_WARN(...) TheDebugWarner << MakeString(__VA_ARGS__)
+#define MILO_NOTIFY(...) TheDebugNotifier << MakeString(__VA_ARGS__)
 #define MILO_NOTIFY_BETA(...) DebugBeta() << MakeString(__VA_ARGS__)
 #define MILO_LOG(...) TheDebug << MakeString(__VA_ARGS__)
+
+class DebugWarner {
+public:
+    void operator<<(const char *c) { TheDebug.Warn(c); }
+};
+
+extern DebugWarner TheDebugWarner;
 
 class DebugNotifier {
 public:

@@ -27,7 +27,7 @@ Symbol::Symbol(const char *str) {
         } else {
             mStr = gStringTable->Add(str);
             if (strlen(str) > 100) {
-                MILO_WARN("Huge symbol %s", str);
+                MILO_NOTIFY("Huge symbol %s", str);
             }
             gHashTable.Insert(mStr);
         }

@@ -39,7 +39,7 @@ const char *PathName(const class Hmx::Object *obj);
             if (found) {                                                                  \
                 def = found;                                                              \
             } else {                                                                      \
-                MILO_WARN(                                                                \
+                MILO_NOTIFY(                                                              \
                     "%s:%s couldn't find type %s", ClassName(), PathName(this), classname \
                 );                                                                        \
                 def = nullptr;                                                            \
@@ -110,7 +110,7 @@ const char *PathName(const class Hmx::Object *obj);
 
 #define END_HANDLERS                                                                     \
     if (_warn)                                                                           \
-        MILO_WARN("%s unhandled msg: %s", PathName(this), sym);                          \
+        MILO_NOTIFY("%s unhandled msg: %s", PathName(this), sym);                        \
     return DataNode(kDataUnhandled, 0);                                                  \
     }
 

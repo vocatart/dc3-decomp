@@ -65,7 +65,7 @@ void MsgSinks::AddSink(
 ) {
     MILO_ASSERT(s, 0x9C);
     if (ev.Null() && !chainProxy) {
-        MILO_WARN("%s can't have chainProxy false with no event", PathName(mOwner));
+        MILO_NOTIFY("%s can't have chainProxy false with no event", PathName(mOwner));
     }
     RemoveSink(s, ev);
     if (ev.Null()) {
@@ -87,7 +87,7 @@ void MsgSinks::AddSink(
              ++it) {
             if (it->event == ev) {
                 if (chainProxy != it->chainProxy) {
-                    MILO_WARN("%s mismatched proxy chain for %s", PathName(mOwner), ev);
+                    MILO_NOTIFY("%s mismatched proxy chain for %s", PathName(mOwner), ev);
                     mEventSinks.back().Add(s, mode, handler, mExporting);
                     return;
                 }

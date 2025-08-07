@@ -24,7 +24,7 @@ ModalCallbackFunc *Debug::SetModalCallback(ModalCallbackFunc *func) {
     mModalCallback = func;
     if (!gNotifies.empty()) {
         for (int i = 0; i < gNotifies.size(); i++) {
-            MILO_WARN("%s\n", gNotifies[i].c_str());
+            MILO_NOTIFY("%s\n", gNotifies[i].c_str());
         }
         gNotifies.clear();
     }

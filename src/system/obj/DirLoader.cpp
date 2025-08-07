@@ -339,7 +339,7 @@ void DirLoader::WriteTypeMemDump(TextFileStream *file) {
 
 void DirLoader::Cleanup(const char *str) {
     if (str) {
-        MILO_WARN(str);
+        MILO_NOTIFY(str);
     }
     mObjects.clear();
     if (mOwnStream)
@@ -496,7 +496,7 @@ bool DirLoader::SaveObjects(const char *cc, ObjectDir *dir, bool b3) {
             sCacheMode
         );
         if (cs.Fail()) {
-            MILO_WARN("Could not open file: %s", cc);
+            MILO_NOTIFY("Could not open file: %s", cc);
             return false;
         } else {
             SaveObjects(cs, dir);

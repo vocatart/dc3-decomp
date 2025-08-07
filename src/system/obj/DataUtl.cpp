@@ -185,7 +185,7 @@ void DataSetMacro(Symbol key, DataArray *macro) {
         val->Release();
     if (macro) {
         if (val && gDataMacroWarning)
-            MILO_WARN(
+            MILO_NOTIFY(
                 "Resetting macro %s (file %s, line %d)", key, macro->File(), macro->Line()
             );
         val = macro;

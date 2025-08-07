@@ -298,7 +298,7 @@ int NodeCmp(const void *a, const void *b) {
         return stricmp(a, b);
     }
     default:
-        MILO_WARN("could not sort array, bad type");
+        MILO_NOTIFY("could not sort array, bad type");
         return 0;
     }
 }

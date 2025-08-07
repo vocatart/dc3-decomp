@@ -29,7 +29,7 @@ FormatString::FormatString()
 
 FormatString &FormatString::operator<<(int i) {
     if (mType != kInt)
-        MILO_WARN(
+        MILO_NOTIFY(
             "FormatString: '%s' doesn't start with kInt.  Format: '%s'", mFmt, mFmtBuf
         );
     char tmp = *mFmtEnd;
@@ -38,7 +38,7 @@ FormatString &FormatString::operator<<(int i) {
     *mFmtEnd = tmp;
     if (n < 0 && !bufExceeded) {
         bufExceeded = true;
-        MILO_WARN("MakeString() buffer size %d exceeded", 0x1000);
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", 0x1000);
     }
     mBufSize -= n;
     UpdateType();
@@ -47,7 +47,7 @@ FormatString &FormatString::operator<<(int i) {
 
 const char *FormatString::Str() {
     if (mType != kNone)
-        MILO_WARN(
+        MILO_NOTIFY(
             "FormatString: '%s' doesn't start with kNone.  Format: '%s'", mFmt, mFmtBuf
         );
     if (*mFmt != '\0') {
@@ -63,7 +63,7 @@ const char *FormatString::Str() {
 
 FormatString &FormatString::operator<<(const char *cc) {
     if (mType != kStr)
-        MILO_WARN(
+        MILO_NOTIFY(
             "FormatString: '%s' doesn't start with kStr.  Format: '%s'", mFmt, mFmtBuf
         );
     MILO_ASSERT_FMT(

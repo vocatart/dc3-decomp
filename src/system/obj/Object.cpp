@@ -639,7 +639,7 @@ void Hmx::Object::Copy(const Hmx::Object *o, CopyType ty) {
                 *mTypeProps = *o->mTypeProps;
             }
         } else if (o->mTypeDef || mTypeDef) {
-            MILO_WARN(
+            MILO_NOTIFY(
                 "Can't copy type \"%s\" or type props of %s to %s, different classes %s and %s",
                 o->Type(),
                 mName,

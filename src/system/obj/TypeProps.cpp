@@ -28,7 +28,7 @@ void GetSaveFlags(DataArray *arr, bool &proxy, bool &none) {
             else if (arr->Sym(i) == no_save)
                 none = true;
             else
-                MILO_WARN("Unknown type def attribute %s", arr->Sym(i));
+                MILO_NOTIFY("Unknown type def attribute %s", arr->Sym(i));
         }
     }
 }

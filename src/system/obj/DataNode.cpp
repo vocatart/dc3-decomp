@@ -261,7 +261,7 @@ void DataNode::Print(TextStream &ts, bool b, int i3) const {
 }
 
 bool DataNode::PrintUnused(TextStream &, bool) const {
-    MILO_WARN("Enable PRINT_UNUSED in Data.h to utilize DataNode::PrintUnused()");
+    MILO_NOTIFY("Enable PRINT_UNUSED in Data.h to utilize DataNode::PrintUnused()");
     return false;
 }
 
@@ -713,7 +713,7 @@ void DataNode::Load(BinStream &d) {
         d.ReadString(buf, 0x80);
         mValue.object = gDataDir->FindObject(buf, true, true);
         if (!mValue.object && *buf) {
-            MILO_WARN("Couldn't find %s from %s", buf, gDataDir->Name());
+            MILO_NOTIFY("Couldn't find %s from %s", buf, gDataDir->Name());
         }
         break;
     case kDataVar: {
