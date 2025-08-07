@@ -567,7 +567,7 @@
             "system/obj/MessageTimer.cpp": "NonMatching",
             "system/obj/Msg.cpp": "NonMatching",
             "system/obj/Object.cpp": "NonMatching",
-            "system/obj/PropSync.cpp": "MISSING",
+            "system/obj/PropSync.cpp": "NonMatching",
             "system/obj/Task.cpp": "MISSING",
             "system/obj/TextFile.cpp": "NonMatching",
             "system/obj/TypeProps.cpp": "NonMatching",
