@@ -165,6 +165,7 @@ public:
     int StrTableUsedSize() const { return mStringTable.UsedSize(); }
     const char *GetPathName() const { return mPathName; }
     const std::vector<ObjDirPtr<ObjectDir> > &SubDirs() const { return mSubDirs; }
+    InlineDirType InlineProxyType() const { return mInlineProxyType; }
 
     void ResetViewports();
     void SetInlineProxyType(InlineDirType);

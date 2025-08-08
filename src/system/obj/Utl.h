@@ -1,5 +1,6 @@
 #pragma once
 #include "obj/Dir.h"
+#include "obj/Object.h"
 #include "utl/Symbol.h"
 #include "obj/Data.h"
 
@@ -25,6 +26,27 @@ const char *SafeName(Hmx::Object *obj);
  */
 DataNode ObjectList(class ObjectDir *dir, Symbol parentSym, bool b);
 
+/** Given a Symbol for a class name, fill out the classes vector with all of its
+ * superclass names.
+ * @param [in] classSym The class name, in Symbol form.
+ * @param [out] classes The vector of this class's superclasses.
+ */
+void RecurseSuperClasses(Symbol classSym, std::vector<Symbol> &classes);
+
+/** Given a Symbol for a class name, fill out the classes vector with all of its
+ * superclass names, plus "Object".
+ * @param [in] classSym The class name, in Symbol form.
+ * @param [out] classes The vector of this class's superclasses.
+ */
+void ListSuperClasses(Symbol classSym, std::vector<Symbol> &classes);
+
+/** Search for parent class searchClass in the collection of classSym's superclasses.
+ * @param [in] classSym The class name, in Symbol form.
+ * @param [in] searchClass The superclass to search for in classSym's hierarchy.
+ * @returns True if searchClass exists in classSym's superclass hierarchy, false if not.
+ */
+bool RecurseSuperClassesSearch(Symbol classSym, Symbol searchClass);
+
 /** Determine whether or not child is a subclass of parent.
  * @param [in] child The child class's name, in Symbol form.
  * @param [in] parent The potential parent class's name, in Symbol form.
@@ -46,6 +68,25 @@ void ReserveToFit(class ObjectDir *src, class ObjectDir *dst, int extraObjects);
 
 const char *NextName(const char *, class ObjectDir *);
 
+/** Copy Object from into Object to.
+ * @param [in] from The Object to copy from.
+ * @param [in] to The Object to copy into.
+ * @param [in] ty The copy type.
+ * @param [in] setProxyFile If true, set to's proxy file to from's. If false, copy from's
+ * type properties into to's.
+ * @returns The newly copied Object.
+ */
+Hmx::Object *CopyObject(
+    Hmx::Object *from, Hmx::Object *to, Hmx::Object::CopyType ty, bool setProxyFile
+);
+
+/** Create a clone of an Object.
+ * @param [in] from The Object to clone.
+ * @param [in] instance If true, create a shallow copy. If false, create a deep copy.
+ * @returns The newly cloned Object.
+ */
+Hmx::Object *CloneObject(Hmx::Object *from, bool instance);
+
 /** Replaces the Object from with to.
  * @param [in] from The Object to be replaced.
  * @param [in] to The Object serving as the replacement.
@@ -59,7 +100,38 @@ void ReplaceObject(
     Hmx::Object *from, Hmx::Object *to, bool copyDeep, bool deleteFrom, bool setProxyFile
 );
 
+/** Get the number of used string table entries across and ObjectDir and all of its
+ * subdirs.
+ * @param [in] dir The ObjectDir to count string table entries from.
+ * @returns The number of used string table entries across dir and all of its subdirs.
+ */
+int SubDirStringUsed(class ObjectDir *dir);
+
+/** Get the number of used hash table entries across and ObjectDir and all of its subdirs.
+ * @param [in] dir The ObjectDir to count hash table entries from.
+ * @returns The number of used hash table entries across dir and all of its subdirs.
+ */
+int SubDirHashUsed(class ObjectDir *dir);
+
+/** Copy the type properties (TypeProps) from Object from into Object to.
+ * @param [in] from The Object to copy type props from.
+ * @param [in] to The Object to copy type props into.
+ */
+void CopyTypeProperties(Hmx::Object *from, Hmx::Object *to);
+
+const char *ClassExt(Symbol);
+void AddClassExt(char *, Symbol);
 const char *PrintPropertyPath(DataArray *);
+bool StringMatchesFilter(const char *, const char *);
+int GetPropSize(Hmx::Object *, DataArray *, int);
+bool IsPropPathValid(Hmx::Object *, DataArray *);
+bool PathCompare(DataArray *, DataArray *);
+const DataNode *GetPropertyVal(Hmx::Object *, DataArray *, bool);
+void FileCallbackFullPath(const char *, const char *);
+void FileCallback(const char *, const char *);
+void WalkProps(DataArray *, std::list<Symbol> &, std::list<Symbol> *);
+void ReloadObjectType(Hmx::Object *, DataArray *);
+void ListProperties(std::list<Symbol> &, Symbol, Symbol, std::list<Symbol> *);
 
 // mergefilter classes go here
 class MergeFilter {

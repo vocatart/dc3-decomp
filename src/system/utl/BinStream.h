@@ -170,6 +170,8 @@ public:
         : mRev(getHmxRev(revs)), mAltRev(getAltRev(revs)), mBinStream(bs) {}
 
     BinStreamRev &operator>>(bool &);
+    operator BinStream &() const { return mBinStream; }
+
     int mRev;
     int mAltRev;
     BinStream &mBinStream;
