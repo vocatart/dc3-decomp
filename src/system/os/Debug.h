@@ -15,6 +15,7 @@ public:
 
     typedef void ModalCallbackFunc(ModalType &, FixedString &, bool);
 
+private:
     bool mNoDebug; // 0x4
     bool mFailing; // 0x5
     bool mExiting; // 0x6
@@ -39,6 +40,7 @@ public:
     String unk124;
     String unk12c;
 
+public:
     Debug();
     virtual ~Debug();
     virtual void Print(const char *);
@@ -48,6 +50,11 @@ public:
     void SetTry(bool);
     void AddExitCallback(ExitCallbackFunc *func) { mExitCallbacks.push_front(func); }
     void RemoveExitCallback(ExitCallbackFunc *);
+    bool CheckModalCallback(ModalCallbackFunc *func) { return mModalCallback == func; }
+    ModalCallbackFunc *ModalCallback() const { return mModalCallback; }
+    bool NoModal() const { return mNoModal; }
+    void SetNoModal(bool nomodal) { mNoModal = nomodal; }
+
     void StartLog(const char *, bool);
     void StopLog();
     void Init();
@@ -63,6 +70,8 @@ public:
         return ret;
     }
 };
+
+typedef void ModalCallbackFunc(Debug::ModalType &, FixedString &, bool);
 
 #include "utl/Str.h"
 #include "utl/MakeString.h"
@@ -114,11 +123,10 @@ public:
     DebugNotifyOncer() {}
     ~DebugNotifyOncer() {}
 
-    DebugNotifyOncer &operator<<(const char *cc) {
+    void operator<<(const char *cc) {
         if (AddToStrings(cc, mStrings)) {
             TheDebugNotifier << cc;
         }
-        return *this;
     }
 };
 

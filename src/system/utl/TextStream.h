@@ -6,7 +6,7 @@
 /** A stream of text. */
 class TextStream {
 public:
-    TextStream();
+    TextStream() {}
     virtual ~TextStream() {}
     virtual void Print(const char *) = 0;
 

@@ -35,9 +35,6 @@ public:
     DataThisPtr() : ObjPtr(nullptr, nullptr) {}
     virtual ~DataThisPtr() {}
     virtual void Replace(Hmx::Object *);
-    //     void operator=(Hmx::Object *obj) {
-    //         ObjPtr<Hmx::Object, class ObjectDir>::operator=(obj);
-    //     }
 };
 
 #define DEF_DATA_FUNC(name) DataNode name(DataArray *array)
