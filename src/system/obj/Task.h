@@ -1,6 +1,9 @@
 #pragma once
+#include "obj/Data.h"
+#include "obj/ObjPtr_p.h"
 #include "obj/Object.h"
 #include "utl/MemMgr.h"
+#include "utl/SongPos.h"
 
 enum TaskUnits {
     kTaskSeconds = 0,
@@ -24,9 +27,50 @@ public:
     DELETE_OVERLOAD("Task", 0x1A);
 };
 
+class MessageTask : public Task {
+private:
+    ObjOwnerPtr<Hmx::Object> mObj; // 0x2c
+    DataArray *mMsg; // 0x40
+public:
+    MessageTask(Hmx::Object *, DataArray *);
+    virtual ~MessageTask();
+    virtual bool Replace(ObjRef *, Hmx::Object *);
+    virtual void Poll(float);
+};
+
+class ScriptTask : public Task {
+public:
+    struct Var {
+        Var(DataNode *np, const DataNode &n) : var(np), value(n) {}
+        Var(DataNode *np) : var(np), value(*np) {}
+        void Swap();
+
+        DataNode *var; // 0x0
+        DataNode value; // 0x4
+    };
+    ScriptTask(DataArray *, bool, DataArray *);
+    virtual ~ScriptTask();
+    virtual bool Replace(ObjRef *, Hmx::Object *);
+    virtual void Poll(float);
+
+protected:
+    std::list<Var> mVars; // 0x2c
+    ObjPtrList<Hmx::Object> mObjects; // 0x34
+    ObjOwnerPtr<Hmx::Object> mThis; // 0x48
+    DataArray *mScript; // 0x5c
+    bool mOnce; // 0x60
+
+    void SwapVars();
+    void UpdateVarsObjects(DataArray *);
+};
+
 class TaskTimeline {
 public:
-    struct TaskInfo {};
+    struct TaskInfo {
+        TaskInfo(Task *t, float f) : unk0(nullptr, t), unk14(f) {}
+        ObjPtr<Task> unk0;
+        float unk14;
+    };
 
     TaskTimeline();
     ~TaskTimeline();
@@ -34,7 +78,20 @@ public:
     void AddTask(Task *, float);
     void ClearTasks();
     void ResetTaskTime(float);
-    void AddTask(const TaskInfo &);
+
+    void SetTime(float f, bool b) {
+        mLastTime = b ? f : mTime;
+        mTime = f;
+    }
+
+    float GetTime() const { return mTime; }
+    float DeltaTime() const { return mTime - mLastTime; }
+
+    void SetDeltaTime(float delta) { mLastTime = mTime - delta; }
+    void SetTimeAndDelta(float time, float delta) {
+        mLastTime = time - delta;
+        mTime = time;
+    }
 
 private:
     std::list<TaskInfo> mTasks; // 0x0
@@ -42,6 +99,8 @@ private:
     float mTime; // 0x10
     float mLastTime; // 0x14
     Task *mPollingTask; // 0x18
+
+    void AddTask(const TaskInfo &);
 };
 
 class TaskMgr : public Hmx::Object {
@@ -78,15 +137,20 @@ public:
     void SetAVOffset(float);
     float DeltaTutorialSeconds() const;
     void ClearTimelineTasks(TaskUnits);
+    void QueueTaskDelete(Task *);
+    void ResetTaskTime(float, float);
+    void ResetBeatTaskTime(float);
 
     DataNode OnTimeTilNext(DataArray *);
     // const SongPos &GetSongPos() const { return mSongPos; }
 
-    // TaskTimeline *mTimelines; // 0x1c
-    // SongPos mSongPos; // 0x20
-    // bool mAutoSecondsBeats; // 0x34
-    // Timer mTime; // 0x38
-    // float mAVOffset; // 0x68
+    TaskTimeline *mTimelines; // 0x2c
+    SongPos mSongPos; // 0x30
+    bool mAutoSecondsBeats; // 0x48
+    int unk4c; // 0x4c
+    Timer mTime; // 0x50
+    float mAVOffset; // 0x80
+    std::vector<ObjPtr<Task> > unk84; // 0x84
 };
 
 extern TaskMgr TheTaskMgr;

@@ -116,16 +116,16 @@ protected:
     T1 *mObject; // 0xc
 public:
     ObjRefConcrete(T1 *obj) : mObject(obj) {
-        if (obj) {
-            obj->AddRef(this);
+        if (mObject) {
+            mObject->AddRef(this);
         }
     }
 
-    // ObjRefConcrete(const ObjRefConcrete &o) : mObject(o.mObject) {
-    //     if (mObject) {
-    //         mObject->AddRef(this);
-    //     }
-    // }
+    ObjRefConcrete(const ObjRefConcrete &o) : mObject(o.mObject) {
+        if (mObject) {
+            mObject->AddRef(this);
+        }
+    }
 
     virtual ~ObjRefConcrete() {
         if (mObject) {
