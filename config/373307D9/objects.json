@@ -608,7 +608,7 @@
             "system/os/CritSec.cpp": "MISSING",
             "system/os/DateTime.cpp": "MISSING",
             "system/os/Debug.cpp": "NonMatching",
-            "system/os/File.cpp": "MISSING",
+            "system/os/File.cpp": "NonMatching",
             "system/os/FileCache.cpp": "MISSING",
             "system/os/File_Win.cpp": "MISSING",
             "system/os/HDCache.cpp": "MISSING",

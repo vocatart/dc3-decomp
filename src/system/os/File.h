@@ -8,8 +8,8 @@ extern bool gNullFiles;
 
 class File {
 public:
-    File() { sOpenCount++; }
-    virtual ~File() { sOpenCount--; }
+    File() {}
+    virtual ~File();
     virtual class String Filename() const {
         class String str;
         return str;
@@ -101,7 +101,7 @@ void FileEnumerate(
 );
 void FileRecursePattern(const char *, void (*)(char const *, char const *), bool);
 
-void operator>>(class BinStream *, FileStat &);
+class BinStream &operator>>(class BinStream &, FileStat &);
 }
 
 File *NewFile(const char *, int);
