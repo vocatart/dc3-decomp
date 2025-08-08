@@ -20,7 +20,7 @@ enum TaskUnits {
 class Task : public Hmx::Object {
 public:
     Task() {}
-    virtual ~Task() {}
+    // virtual ~Task() {}
     virtual void Poll(float) = 0;
 
     NEW_OVERLOAD("Task", 0x1A);
@@ -62,6 +62,30 @@ protected:
 
     void SwapVars();
     void UpdateVarsObjects(DataArray *);
+};
+
+class ThreadTask : public ScriptTask {
+private:
+    bool mWait; // 0x64
+    int mCurrent; // 0x68
+    float mTime; // 0x6c
+    bool mExecuting; // 0x70
+    float mTimeout; // 0x74
+
+    DataNode OnWait(DataArray *);
+    DataNode OnWaitTimeout(DataArray *);
+    DataNode OnSleep(DataArray *);
+    DataNode OnLoop(DataArray *);
+    DataNode OnExit(DataArray *);
+    DataNode OnCurrent(DataArray *);
+    DataNode OnSetCurrent(DataArray *);
+
+public:
+    ThreadTask(DataArray *, DataArray *);
+    virtual ~ThreadTask() {}
+    virtual bool Replace(ObjRef *, Hmx::Object *);
+    virtual DataNode Handle(DataArray *, bool);
+    virtual void Poll(float);
 };
 
 class TaskTimeline {
@@ -141,6 +165,7 @@ public:
     void ResetTaskTime(float, float);
     void ResetBeatTaskTime(float);
 
+private:
     DataNode OnTimeTilNext(DataArray *);
     // const SongPos &GetSongPos() const { return mSongPos; }
 
