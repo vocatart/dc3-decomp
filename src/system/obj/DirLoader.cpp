@@ -482,8 +482,7 @@ bool DirLoader::SaveObjects(const char *cc, ObjectDir *dir, bool b3) {
         FilePathTracker tracker(FileGetPath(cc));
         cc = CachedPath(cc, false);
         if (sCacheMode) {
-            FileGetPath(cc);
-            FileMkDir();
+            FileMkDir(FileGetPath(cc));
         }
         Platform p = sCacheMode ? TheLoadMgr.GetPlatform() : kPlatformPC;
         MILO_ASSERT(p != kPlatformNone, 0x1B3);

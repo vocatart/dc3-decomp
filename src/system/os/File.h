@@ -90,7 +90,7 @@ int FileOpen(const char *iFilename, int iMode);
 int FileClose(int iFd);
 int FileDelete(const char *);
 int FileWrite(int iFd, void *iBuff, unsigned int iLen);
-int FileMkDir();
+int FileMkDir(const char *);
 
 void FileDiscSpinUp();
 void FileNormalizePath(const char *);
@@ -115,6 +115,6 @@ void FileQualifiedFilename(char *, int, const char *);
 const char *FileLocalize(const char *iFilename, char *buffer);
 
 bool FileReadOnly(const char *filepath);
-bool FileExists(const char *filepath, int);
+bool FileExists(const char *filepath, int, String *);
 bool FileIsLocal(const char *);
 bool FileIsDLC(const char *);

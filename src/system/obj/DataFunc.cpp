@@ -3,11 +3,16 @@
 #include "math/Rand.h"
 #include "math/Utl.h"
 #include "obj/Data.h"
+#include "obj/DataFile.h"
+#include "obj/DataUtl.h"
 #include "obj/Object.h"
+#include "obj/Utl.h"
 #include "os/Debug.h"
+#include "os/File.h"
 #include "os/System.h"
 #include "utl/Locale.h"
 #include "utl/Str.h"
+#include "utl/TextFileStream.h"
 
 bool SwitchMatch(const DataNode &n1, const DataNode &n2) {
     if (n1.Type() == kDataArray) {
@@ -740,3 +745,572 @@ DEF_DATA_FUNC(DataWarn) {
     TheDebug.Warn(str.c_str());
     return 0;
 }
+
+DEF_DATA_FUNC(DataNotify) {
+    String str;
+    for (int i = 1; i < array->Size(); i++) {
+        array->Evaluate(i).Print(str, true, 0);
+    }
+    TheDebug.Notify(str.c_str());
+    return 0;
+}
+
+DEF_DATA_FUNC(DataFail) {
+    String str;
+    for (int i = 1; i < array->Size(); i++) {
+        array->Evaluate(i).Print(str, true, 0);
+    }
+    TheDebug << MakeString("%d\n", array->Line());
+    TheDebug.Fail(str.c_str(), nullptr);
+    return 0;
+}
+
+DEF_DATA_FUNC(DataAssert) {
+    bool pass = array->Evaluate(1).Int();
+    if (!pass) {
+        String str("");
+        for (int i = 2; i < array->Size(); i++) {
+            array->Evaluate(i).Print(str, true, 0);
+        }
+        MILO_FAIL("DataAssert %s (file %s, line %d)", str, array->File(), array->Line());
+    }
+    return 0;
+}
+
+DEF_DATA_FUNC(DataCond) {
+    for (int i = 1; i < array->Size(); i++) {
+        DataNode &n = array->Node(i);
+        if (n.Type() == kDataArray) {
+            DataArray *arr = n.UncheckedArray();
+            if (arr->Node(0).NotNull()) {
+                return arr->ExecuteScript(1, gDataThis, nullptr, 1);
+            }
+        } else {
+            return array->ExecuteScript(i, gDataThis, nullptr, 1);
+        }
+    }
+    return 0;
+}
+
+DEF_DATA_FUNC(DataSwitch) {
+    const DataNode &match = array->Evaluate(1);
+    for (int i = 2; i < array->Size(); i++) {
+        DataNode &n = array->Node(i);
+        if (n.Type() == kDataArray) {
+            DataArray *arr = n.UncheckedArray();
+            if (SwitchMatch(arr->Node(0), match)) {
+                return arr->ExecuteScript(1, gDataThis, nullptr, 1);
+            }
+        } else {
+            return array->ExecuteScript(i, gDataThis, nullptr, 1);
+        }
+    }
+    return 0;
+}
+
+DEF_DATA_FUNC(DataInsertElems) {
+    array->Array(1)->InsertNodes(array->Int(2), array->Array(3));
+    return 0;
+}
+
+DEF_DATA_FUNC(DataInsertElem) {
+    DataArray *arr = array->Array(1);
+    int idx = array->Int(2);
+    arr->Insert(idx, array->Evaluate(3));
+    return 0;
+}
+
+DEF_DATA_FUNC(DataPrintArray) {
+    array->Array(1)->Print(TheDebug, kDataArray, false, 0);
+    return 0;
+}
+
+DEF_DATA_FUNC(DataArrayToString) {
+    bool compact = true;
+    if (array->Size() > 2)
+        compact = array->Int(2);
+    String str;
+    array->Array(1)->Print(str, kDataArray, compact, 0);
+    return MakeString("%s", str.c_str());
+}
+
+DEF_DATA_FUNC(DataSize) {
+    if (array->Type(1) == kDataProperty) {
+        MILO_ASSERT(gDataThis, 0x54D);
+        return gDataThis->PropertySize(array->UncheckedArray(1));
+    }
+    return array->Array(1)->Size();
+}
+
+DEF_DATA_FUNC(DataRemoveElem) {
+    DataArray *a = array->Array(1);
+    a->Remove(array->Evaluate(2));
+    return 0;
+}
+
+DEF_DATA_FUNC(DataResize) {
+    array->Array(1)->Resize(array->Int(2));
+    return 0;
+}
+
+DEF_DATA_FUNC(DataNewArray) {
+    const DataNode &n = array->Evaluate(1);
+    DataArrayPtr ptr;
+    if (n.Type() == kDataInt) {
+        ptr->Resize(n.LiteralInt());
+    } else if (n.Type() == kDataArray) {
+        ptr = n.LiteralArray()->Clone(true, true, 0);
+    } else
+        MILO_FAIL("DataNewArray wrong argument for %s %d", array->File(), array->Line());
+    return ptr;
+}
+
+DEF_DATA_FUNC(DataSetElem) {
+    DataArray *aaaa = array->Array(1);
+    int i = array->Int(2);
+    const DataNode &n = array->Evaluate(3);
+    return aaaa->Node(i) = n;
+}
+
+DEF_DATA_FUNC(DataQuote) { return array->Node(1); }
+
+DEF_DATA_FUNC(DataEval) { return array->Evaluate(1).Evaluate(); }
+
+DEF_DATA_FUNC(DataReverseInterp) {
+    float value = InverseLerp(array->Float(1), array->Float(2), array->Float(3));
+    return Clamp(0.0f, 1.0f, value);
+}
+
+DEF_DATA_FUNC(DataInterp) {
+    float st, end, pct;
+    pct = array->Float(3);
+    end = array->Float(2);
+    st = array->Float(1);
+    return Interp(st, end, pct);
+}
+
+DEF_DATA_FUNC(DataInc) {
+    if (array->Type(1) == kDataProperty) {
+        MILO_ASSERT(gDataThis, 0x596);
+        DataArray *a = array->UncheckedArray(1);
+        int x = gDataThis->Property(a, true)->Int() + 1;
+        gDataThis->SetProperty(a, x);
+        return x;
+
+    } else {
+        DataNode *Pn = array->Var(1);
+        int i = Pn->Int();
+        return *Pn = i + 1;
+    }
+}
+
+DEF_DATA_FUNC(DataDec) {
+    if (array->Type(1) == kDataProperty) {
+        MILO_ASSERT(gDataThis, 0x5A7);
+        DataArray *a = array->UncheckedArray(1);
+        int x = gDataThis->Property(a, true)->Int() - 1;
+        gDataThis->SetProperty(a, x);
+        return x;
+
+    } else {
+        DataNode *Pn = array->Var(1);
+        int i = Pn->Int();
+        return *Pn = i - 1;
+    }
+}
+
+DEF_DATA_FUNC(DataHandleType) {
+    for (int i = 1; i < array->Size(); i++) {
+        DataArray *arr = array->Array(i);
+        const DataNode &n = arr->Evaluate(0);
+        Hmx::Object *obj;
+        if (n.Type() == kDataObject) {
+            obj = n.UncheckedObj();
+        } else {
+            obj = gDataDir->FindObject(n.LiteralStr(array), true, true);
+        }
+        if (obj)
+            obj->HandleType(arr);
+    }
+    return 0;
+}
+
+DEF_DATA_FUNC(DataHandleTypeRet) {
+    DataArray *arr = array->Array(1);
+    const DataNode &n = arr->Evaluate(0);
+    Hmx::Object *obj;
+    if (n.Type() == kDataObject) {
+        obj = n.UncheckedObj();
+    } else {
+        obj = gDataDir->FindObject(n.LiteralStr(array), true, true);
+    }
+    if (!obj) {
+        String str;
+        n.Print(str, true, 0);
+        MILO_FAIL(
+            "Object %s not found (file %s, line %d)",
+            str.c_str(),
+            array->File(),
+            array->Line()
+        );
+    }
+    return obj->HandleType(arr);
+}
+
+DEF_DATA_FUNC(DataExport) {
+    DataArray *a = array->Array(1);
+    bool i = array->Int(2);
+    const DataNode &n = a->Evaluate(0);
+    Hmx::Object *obj;
+    if (n.Type() == kDataObject)
+        obj = n.UncheckedObj();
+    else
+        obj = gDataDir->FindObject(n.LiteralStr(array), true, true);
+    if (obj)
+        obj->Export(a, i);
+    return 0;
+}
+
+DEF_DATA_FUNC(DataHandle) {
+    for (int i = 1; i < array->Size(); i++) {
+        DataArray *handlo = array->Array(i);
+        const DataNode &n = handlo->Evaluate(0);
+        Hmx::Object *obj;
+        if (n.Type() == kDataObject)
+            obj = n.UncheckedObj();
+        else if (n.Type() == kDataInt)
+            obj = nullptr;
+        else
+            obj = gDataDir->FindObject(n.LiteralStr(array), true, true);
+        if (obj)
+            obj->Handle(handlo, false);
+    }
+    return 0;
+}
+
+DEF_DATA_FUNC(DataHandleRet) {
+    DataArray *a = array->Array(1);
+    Hmx ::Object *o;
+    const DataNode &n = a->Evaluate(0);
+    if (n.Type() == kDataObject)
+        o = n.UncheckedObj();
+    else
+        o = gDataDir->FindObject(n.LiteralStr(array), true, true);
+    if (!o) {
+        String str;
+        n.Print(str, true, 0);
+        MILO_FAIL(
+            "Object %s not found (file %s, line %d)",
+            str.c_str(),
+            array->File(),
+            array->Line()
+        );
+    }
+    return o->Handle(a, false);
+}
+
+DEF_DATA_FUNC(DataRun) {
+    const char *e = FileMakePath(FileExecRoot(), array->Str(1));
+    DataArray *read = DataReadFile(e, true);
+    DataNode ret;
+    if (read) {
+        ret = read->ExecuteScript(0, gDataThis, nullptr, 1);
+        read->Release();
+    }
+    return ret;
+}
+
+DEF_DATA_FUNC(OnReadFile) {
+    DataArray *read = DataReadFile(array->Str(1), true);
+    if (read == 0) {
+        return 0;
+    } else {
+        DataNode dn(read, kDataArray);
+        read->Release();
+        return dn;
+    }
+}
+
+DEF_DATA_FUNC(OnWriteFile) {
+    DataArray *write_me = array->Array(2);
+    DataWriteFile(array->Str(1), write_me, false);
+    return 0;
+}
+
+DEF_DATA_FUNC(OnWriteStringToFile) {
+    bool i2 = array->Size() > 3 ? array->Int(3) : true;
+    TextFileStream *stream = new TextFileStream(array->Str(1), i2);
+    *stream << array->Str(2);
+    delete stream;
+    return 0;
+}
+
+DEF_DATA_FUNC(OnFileExists) { return FileExists(array->Str(1), 0, nullptr); }
+
+DEF_DATA_FUNC(OnFileMkDir) { return FileMkDir(array->Str(1)); }
+
+DEF_DATA_FUNC(OnFileReadOnly) { return FileReadOnly(array->Str(1)); }
+
+DEF_DATA_FUNC(DataExit) {
+    TheDebug.Exit(0, true);
+    return 0;
+}
+
+DEF_DATA_FUNC(DataContains) {
+    DataArray *w = array->Array(1);
+    const DataNode &n = array->Evaluate(2);
+    bool b = !w->Contains(n.UncheckedInt());
+    if (b)
+        return DataNode(kDataUnhandled, 0);
+    else
+        return 1;
+}
+
+DataNode DataFindExists(DataArray *array, bool fail) {
+    DataArray *arr = array->Array(1);
+    for (int i = 2; i < array->Size(); i++) {
+        const DataNode &n = array->Evaluate(i);
+        if (n.Type() == kDataInt || n.Type() == kDataSymbol) {
+            arr = arr->FindArray(n.UncheckedInt(), false);
+            if (!arr) {
+                if (fail) {
+                    String str;
+                    n.Print(str, true, 0);
+                    MILO_FAIL(
+                        "Failed to find %s (file %s, line %d)",
+                        str.c_str(),
+                        array->File(),
+                        array->Line()
+                    );
+                }
+                return DataNode(kDataUnhandled, 0);
+            }
+        } else {
+            String str;
+            n.Print(str, true, 0);
+            MILO_FAIL(
+                "Bad key %s (file %s, line %d)", str.c_str(), array->File(), array->Line()
+            );
+        }
+    }
+    return DataNode(arr, kDataArray);
+}
+
+DEF_DATA_FUNC(DataFindExists) { return DataFindExists(array, false); }
+
+DEF_DATA_FUNC(DataFind) { return DataFindExists(array, true); }
+
+DEF_DATA_FUNC(DataFindObj) {
+    class ObjectDir *d = ObjectDir::Main();
+    int i;
+    for (i = 1; i < array->Size() - 1; i++) {
+        const DataNode &n = array->Evaluate(i);
+        if (n.Type() == kDataObject)
+            d = n.Obj<ObjectDir>();
+        else {
+            const char *name = n.LiteralStr();
+            d = d->Find<ObjectDir>(name, false);
+        }
+        if (!d)
+            return d;
+    }
+    return d->Find<Hmx::Object>(array->Str(i), false);
+}
+
+DEF_DATA_FUNC(DataBasename) { return FileGetBase(array->Str(1)); }
+
+DEF_DATA_FUNC(DataDirname) {
+    const char *s = FileGetPath(array->Str(1));
+    unsigned int x = String(s).find_last_of("/");
+    return s + (x == FixedString::npos ? 0 : x + 1);
+}
+
+DEF_DATA_FUNC(DataHasSubStr) { return (int)strstr(array->Str(1), array->Str(2)); }
+
+DEF_DATA_FUNC(DataHasAnySubStr) {
+    DataArray *a = array->Array(2);
+    for (int i = 0; i < a->Size(); i++) {
+        const char *haystack = a->Str(i);
+        if (strstr(array->Str(1), haystack))
+            return 1;
+    }
+    return 0;
+}
+
+DEF_DATA_FUNC(DataFindSubStr) {
+    String s(array->Str(1));
+    return (int)s.find(array->Str(2));
+}
+
+DEF_DATA_FUNC(DataSubStr) {
+    String s(array->Str(1));
+    int i1 = array->Int(2);
+    int i2 = array->Int(3);
+    String substr = s.substr(i1, i2);
+    return substr;
+}
+
+DEF_DATA_FUNC(DataStrCat) {
+    DataNode &n = *array->Var(1);
+    String s(n.Str());
+    for (int i = 2; i < array->Size(); i++) {
+        s += array->Str(i);
+    }
+    n = s.c_str();
+    return n.Str();
+}
+
+DEF_DATA_FUNC(DataStringFlags) {
+    int mask = array->Int(1);
+    DataArray *arr = array->Array(2);
+    String s("");
+    for (int i = 0; i < arr->Size(); i++) {
+        DataArray *macro = DataGetMacro(arr->Str(i));
+        MILO_ASSERT(macro && macro->Size() == 1, 0x700);
+        if (macro->Int(0) & mask) {
+            if (s != "") {
+                s += "|";
+            }
+            s += arr->Str(i);
+        }
+    }
+    return s;
+}
+
+DEF_DATA_FUNC(DataStrToLower) {
+    String s = array->Str(1);
+    s.ToLower();
+    return s;
+}
+
+DEF_DATA_FUNC(DataStrToUpper) {
+    String s = array->Str(1);
+    s.ToUpper();
+    return s;
+}
+
+DEF_DATA_FUNC(DataStrlen) { return (int)strlen(array->Str(1)); }
+
+DEF_DATA_FUNC(DataStrElem) {
+    char s[2] = "A";
+    s[0] = array->Str(1)[array->Int(2)];
+    return (Symbol)s;
+}
+
+DEF_DATA_FUNC(DataStrieq) { return strieq(array->Str(1), array->Str(2)); }
+
+DEF_DATA_FUNC(DataSearchReplace) {
+    const char *s3 = array->Str(3);
+    const char *s2 = array->Str(2);
+    const char *s1 = array->Str(1);
+    char beeg[0x800];
+    bool ret = SearchReplace(s1, s2, s3, beeg);
+    *array->Var(4) = beeg;
+    return ret;
+}
+
+DEF_DATA_FUNC(DataFlatten) {
+    int numNodes = 0;
+    for (int i = 1; i < array->Size(); i++) {
+        const DataNode &n = array->Evaluate(i);
+        numNodes += n.Type() == kDataArray ? n.Array()->Size() : 1;
+    }
+    DataArrayPtr ptr(new DataArray(numNodes));
+    int idx = 0;
+    for (int i = 1; i < array->Size(); i++) {
+        const DataNode &n = array->Evaluate(i);
+        if (n.Type() == kDataArray) {
+            for (int j = 0; j < n.Array()->Size(); j++) {
+                ptr->Node(idx++) = n.Array()->Node(j);
+            }
+        } else {
+            ptr->Node(idx++) = n;
+        }
+    }
+    return ptr;
+}
+
+DEF_DATA_FUNC(DataPushBack) {
+    DataArray *work = array->Array(1);
+    int nu_size = work->Size();
+    work->Resize(nu_size + 1);
+    work->Node(nu_size) = array->Evaluate(2);
+    return 0;
+}
+
+DEF_DATA_FUNC(DataSort) {
+    array->Array(1)->SortNodes(0);
+    return 0;
+}
+
+DEF_DATA_FUNC(DataGetType) { return array->Evaluate(1).Type(); }
+
+DEF_DATA_FUNC(DataWith) {
+    return array->ExecuteScript(2, array->Obj<Hmx::Object>(1), NULL, 1);
+}
+
+DEF_DATA_FUNC(OnSetThis) {
+    Hmx::Object *new_this = array->Obj<Hmx::Object>(1);
+    gDataThisPtr.SetObjConcrete(new_this);
+    DataSetThis(new_this);
+    return 0;
+}
+
+DEF_DATA_FUNC(DataMacroElem) {
+    DataArray *macro = DataGetMacro(array->Str(1));
+    int i = array->Size() > 2 ? array->Int(2) : 0;
+    MILO_ASSERT(macro && macro->Size() > i, 0x797);
+    return macro->Node(i);
+}
+
+DEF_DATA_FUNC(DataMacroSize) {
+    DataArray *macro = DataGetMacro(array->Str(1));
+    MILO_ASSERT(macro, 0x79E);
+    return macro->Size();
+}
+
+DEF_DATA_FUNC(DataReplaceObject) {
+    bool copyDeep = array->Size() > 3 ? array->Int(3) : true;
+    bool deleteFrom = array->Size() > 4 ? array->Int(4) : true;
+    bool setProxyFile = array->Size() > 5 ? array->Int(5) : true;
+    ReplaceObject(array->GetObj(1), array->GetObj(2), copyDeep, deleteFrom, setProxyFile);
+    return 0;
+}
+
+DEF_DATA_FUNC(DataNextName) {
+    class ObjectDir *d = gDataDir;
+    if (array->Size() > 2) {
+        d = array->Obj<class ObjectDir>(2);
+    }
+    return NextName(array->Str(1), d);
+}
+
+DataNode Quasiquote(const DataNode &node) {
+    static Symbol unquote("unquote");
+    static Symbol unquoteAbbrev(",");
+    DataType nodeType = node.Type();
+    if (nodeType == kDataArray || nodeType == kDataCommand) {
+        DataArray *nodeArr = node.UncheckedArray();
+
+        if (nodeType == kDataCommand && nodeArr->Type(0) == kDataSymbol) {
+            const char *str = nodeArr->UncheckedStr(0);
+            Symbol sym = STR_TO_SYM(str);
+            if (sym == unquote || sym == unquoteAbbrev) {
+                return nodeArr->Evaluate(1);
+            }
+        }
+
+        DataArrayPtr ptr(new DataArray(nodeArr->Size()));
+        for (int i = 0; i < nodeArr->Size(); i++) {
+            ptr->Node(i) = Quasiquote(nodeArr->Node(i));
+        }
+
+        return DataNode(ptr, nodeType);
+    } else {
+        return node;
+    }
+}
+
+DEF_DATA_FUNC(DataQuasiquote) { return Quasiquote(array->Node(1)); }
+
+DEF_DATA_FUNC(DataUnquote) { return array->Evaluate(1); }

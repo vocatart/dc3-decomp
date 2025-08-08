@@ -23,3 +23,6 @@ bool DataUpdateArray(DataArray *, DataArray *);
 
 void DataPushVar(DataNode *var);
 void DataPopVar();
+
+DataArray *DataGetMacro(Symbol s);
+Symbol DataGetMacroByInt(int value, const char *prefix);

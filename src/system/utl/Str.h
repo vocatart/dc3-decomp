@@ -52,6 +52,8 @@ public:
     void ToUpper();
     void ReplaceAll(char, char);
     int compare(unsigned int, unsigned int, const char *) const;
+
+    static const unsigned int npos;
 };
 
 class String : public TextStream, public FixedString {
@@ -68,8 +70,6 @@ public:
     String(unsigned int, char);
 
     bool operator==(const FixedString &) const;
-
-    static const unsigned int npos;
 
     void reserve(unsigned int);
 

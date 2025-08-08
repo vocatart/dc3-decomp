@@ -15,3 +15,5 @@ const char *PrintPropertyPath(DataArray *);
 void ReserveToFit(ObjectDir *, ObjectDir *, int);
 
 const char *NextName(const char *, class ObjectDir *);
+
+void ReplaceObject(Hmx::Object *, Hmx::Object *, bool, bool, bool);
