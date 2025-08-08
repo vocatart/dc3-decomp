@@ -1,4 +1,5 @@
 #pragma once
+#include "utl/MemMgr.h"
 #include <types.h>
 #include "math/Rand2.h"
 #include "os/Platform.h"
@@ -64,6 +65,9 @@ public:
 
     void PushRev(int, Hmx::Object *);
     int PopRev(Hmx::Object *);
+
+    NEW_OVERLOAD("BinStream", 0x55);
+    DELETE_OVERLOAD("BinStream", 0x55);
 
     BinStream &operator<<(const char *);
     BinStream &operator<<(const Symbol &);

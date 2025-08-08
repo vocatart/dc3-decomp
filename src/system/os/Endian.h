@@ -1,19 +1,19 @@
 #pragma once
 
-template <>
-inline void EndianSwapEq(unsigned int &i) {
-    i = i >> 0x18 | i << 0x18 | i >> 8 & 0xFF00 | (i & 0xFF00) << 8;
-}
+// template <>
+// inline void EndianSwapEq(unsigned int &i) {
+//     i = i >> 0x18 | i << 0x18 | i >> 8 & 0xFF00 | (i & 0xFF00) << 8;
+// }
 
-template <>
-inline void EndianSwapEq(unsigned short &s) {
-    s = (s << 8 | s >> 8);
-}
+// template <>
+// inline void EndianSwapEq(unsigned short &s) {
+//     s = (s << 8 | s >> 8);
+// }
 
-template <>
-inline void EndianSwapEq(short &s) {
-    s = (s << 8 | s >> 8);
-}
+// template <>
+// inline void EndianSwapEq(short &s) {
+//     s = (s << 8 | s >> 8);
+// }
 
 inline unsigned short EndianSwap(unsigned short s) {
     unsigned short us = s;

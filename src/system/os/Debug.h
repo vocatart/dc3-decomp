@@ -111,6 +111,22 @@ public:
 
 extern DebugFailer TheDebugFailer;
 
+class DebugNotifyOncePrinter {
+    char msg[0x100];
+
+public:
+    void operator<<(const char *cc) {
+        if (strcmp(msg, cc)) {
+            strncpy(msg, cc, 0xFF);
+            TheDebug.Print(cc);
+        }
+    }
+};
+
+extern DebugNotifyOncePrinter TheDebugNotifyOncePrinter;
+
+#define MILO_PRINT_ONCE(...) TheDebugNotifyOncePrinter << MakeString(__VA_ARGS__)
+
 namespace {
     bool AddToStrings(const char *name, std::list<String> &strings);
 }

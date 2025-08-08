@@ -214,6 +214,8 @@ public:
 
 class AutoGlitchReport {
 public:
+    AutoGlitchReport(float, const char *);
+    ~AutoGlitchReport();
     static void EnableCallback();
 };
 

@@ -3,6 +3,8 @@
 #include "os/System.h"
 #define SNPRINTF Hx_snprintf
 
+TextStream::TextStream() {}
+
 TextStream &TextStream::operator<<(bool b) {
     const char *str = b ? "true" : "false";
     Print(str);
@@ -10,7 +12,7 @@ TextStream &TextStream::operator<<(bool b) {
 }
 
 void TextStream::Space(int i) {
-    for(; i > 0; i--){
+    for (; i > 0; i--) {
         Print(" ");
     }
 }
