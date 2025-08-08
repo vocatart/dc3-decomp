@@ -19,6 +19,7 @@ public:
     // }
     void SetRoot(const char *str) { Set(sRoot.c_str(), str); }
     static const char *Root() { return sRoot.c_str(); }
+    static FilePath &FPRoot() { return sRoot; }
 };
 
 // inline TextStream &operator<<(TextStream &ts, FilePath &fp) {

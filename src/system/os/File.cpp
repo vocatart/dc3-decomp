@@ -1,9 +1,11 @@
 #include "os/File.h"
 #include "obj/Data.h"
+#include "obj/DataFunc.h"
 #include "os/Debug.h"
 #include "os/System.h"
 #include "utl/BinStream.h"
 #include "utl/Loader.h"
+#include "utl/Option.h"
 #include <cctype>
 
 File *gOpenCaptureFile; // 0x18
@@ -167,32 +169,28 @@ String UniqueFilename(const char *c1, const char *c2) {
     return ret;
 }
 
-// void UniqueFilename(String *out,char *param_2,char *param_3)
-
-// {
-//   char *pcVar1;
-//   File *pFVar2;
-//   int iVar3;
-//   String *pSStack00000014;
-//   char *pcStack0000001c;
-//   char *pcStack00000024;
-//   int local_3c [3];
-
-//   iVar3 = 0;
-//   pSStack00000014 = out;
-//   pcStack0000001c = param_2;
-//   pcStack00000024 = param_3;
-//   String::String(out);
-//   pFVar2 = 0x0;
-//   do {
-//     iVar3 = iVar3 + 1;
-//     local_3c[0] = iVar3;
-//     pcVar1 = MakeString<>("%s_%06d.%s",&stack0x0000001c,local_3c,&stack0x00000024);
-//     String::operator=(out,pcVar1);
-//     if (pFVar2 != 0x0) {
-//       (***pFVar2)(pFVar2,1);
-//     }
-//     pFVar2 = NewFile((out->super_FixedString).mStr,1);
-//   } while (pFVar2 != 0x0);
-//   return;
-// }
+void FileInit() {
+    strcpy(gRoot, ".");
+    strcpy(gExecRoot, ".");
+    strcpy(gSystemRoot, FileMakePath(gExecRoot, "../../system/run"));
+    FilePath::FPRoot().Set(gRoot, gRoot);
+    DataRegisterFunc("file_root", OnFileRoot);
+    DataRegisterFunc("file_exec_root", OnFileExecRoot);
+    // DataRegisterFunc("file_get_drive", OnFileGetDrive);
+    // DataRegisterFunc("file_get_path", OnFileGetPath);
+    // DataRegisterFunc("file_get_base", OnFileGetBase);
+    // DataRegisterFunc("file_get_ext", OnFileGetExt);
+    // DataRegisterFunc("file_match", OnFileMatch);
+    // DataRegisterFunc("file_absolute_path", OnFileAbsolutePath);
+    // DataRegisterFunc("file_relative_path", OnFileRelativePath);
+    // DataRegisterFunc("with_file_root", OnWithFileRoot);
+    // DataRegisterFunc("synch_proc", OnSynchProc);
+    // DataRegisterFunc("toggle_fake_file_errors", OnToggleFakeFileErrors);
+    // DataRegisterFunc("enumerate_frame_rate_results", OnEnumerateFrameRateResults);
+    const char *str = OptionStr("file_order", nullptr);
+    if (str && *str) {
+        gOpenCaptureFile = NewFile(str, 0x301);
+        MILO_ASSERT(gOpenCaptureFile, 0x18F);
+    }
+    TheDebug.AddExitCallback(FileTerminate);
+}
