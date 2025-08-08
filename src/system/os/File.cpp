@@ -173,7 +173,7 @@ void FileInit() {
     strcpy(gRoot, ".");
     strcpy(gExecRoot, ".");
     strcpy(gSystemRoot, FileMakePath(gExecRoot, "../../system/run"));
-    FilePath::FPRoot().Set(gRoot, gRoot);
+    FilePath::Root().Set(gRoot, gRoot);
     DataRegisterFunc("file_root", OnFileRoot);
     DataRegisterFunc("file_exec_root", OnFileExecRoot);
     // DataRegisterFunc("file_get_drive", OnFileGetDrive);

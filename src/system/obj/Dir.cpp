@@ -120,8 +120,8 @@ bool ObjectDir::HasSubDir(ObjectDir *dir) {
 void ObjectDir::SaveProxy(BinStream &bs) {
     if (ShouldSaveProxy(bs) && InlineProxy(bs)) {
         gLoadingProxyFromDisk = true;
-        const char *path =
-            mProxyFile.empty() ? FilePath::Root() : FileGetPath(mProxyFile.c_str());
+        const char *path = mProxyFile.empty() ? FilePath::Root().c_str()
+                                              : FileGetPath(mProxyFile.c_str());
         FilePathTracker tracker(path);
         DirLoader::SaveObjects(bs, this);
     }
@@ -521,7 +521,7 @@ BEGIN_PROPSYNCS(ObjectDir)
     }
     SYNC_PROP_SET(
         proxy_file,
-        FileRelativePath(FilePath::Root(), ProxyFile().c_str()),
+        FileRelativePath(FilePath::Root().c_str(), ProxyFile().c_str()),
         SetProxyFile(_val.Str(), false)
     )
     SYNC_PROP(inline_proxy, (int &)mInlineProxyType)
@@ -623,7 +623,7 @@ void ObjectDir::Save(BinStream &bs) {
     bs << mViewports;
     bs << mCurViewportID;
     bs << mIsSubDir;
-    bs << FileRelativePath(FilePath::Root(), mProxyFile.c_str());
+    bs << FileRelativePath(FilePath::Root().c_str(), mProxyFile.c_str());
     std::vector<ObjDirPtr<ObjectDir> > inlinedSubDirs;
     std::vector<ObjDirPtr<ObjectDir> > notInlinedSubDirs;
     if (SaveSubdirs()) {

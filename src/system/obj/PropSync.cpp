@@ -15,10 +15,10 @@ bool PropSync(class String &str, DataNode &node, DataArray *prop, int i, PropOp 
 bool PropSync(FilePath &fp, DataNode &node, DataArray *prop, int i, PropOp op) {
     MILO_ASSERT(i == prop->Size() && (op & (kPropSet|kPropGet|kPropInsert)), 0x1C);
     if (op == kPropGet)
-        node = FileRelativePath(FilePath::Root(), fp.c_str());
+        node = FileRelativePath(FilePath::Root().c_str(), fp.c_str());
     else {
         const char *str = node.Str();
-        fp.Set(FilePath::Root(), str);
+        fp.Set(FilePath::Root().c_str(), str);
     }
     return true;
 }

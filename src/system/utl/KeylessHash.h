@@ -9,6 +9,7 @@
 #include "math/Primes.h"
 #include "math/Sort.h"
 #include "os/Debug.h"
+#include "utl/Loader.h"
 template <class T1, class T2>
 class KeylessHash {
 private:
@@ -139,27 +140,31 @@ T2 *KeylessHash<T1, T2>::Find(const char *const &key) {
 
 template <class T1, class T2>
 T2 *KeylessHash<T1, T2>::Insert(const T2 &val) {
-    MILO_ASSERT(val != mEmpty && val != mRemoved, 0x9A);
+    MILO_ASSERT(val != mEmpty && val != mRemoved, 0x98);
     if (!mEntries) {
-        MILO_ASSERT(mOwnEntries, 0x9E);
+        MILO_ASSERT(mOwnEntries, 0x9C);
         Resize(0x19, 0);
     }
     const char *valStr = (const char *)val;
     int i = HashString(valStr, mSize);
-    MILO_ASSERT(i >= 0, 0xA4);
+    MILO_ASSERT(i >= 0, 0xA2);
     while (mEntries[i] != mEmpty && mEntries[i] != mRemoved
            && !streq((const char *)mEntries[i], valStr)) {
         Advance(i);
     }
     if (mEntries[i] == mEmpty) {
         mNumEntries++;
+        // FIXME: if mNumEntries > mSize / 2 fails,
+        // you need to go to the hash table full if checker
         if (mNumEntries > mSize / 2 && mOwnEntries) {
-            MILO_ASSERT(mSize, 0xB5);
+            MILO_ASSERT(mSize, 0xB3);
             Resize(mSize * 2, 0);
-            // if (!LOADMGR_EDITMODE && MakeStringInitted()) {
-            //     MILO_NOTIFY("Resizing hash table (%d)", mSize);
-            // }
+            if (!TheLoadMgr.EditMode()) {
+                MILO_NOTIFY("Resizing hash table (%d)", mSize);
+            }
             return Insert(val);
+        } else {
+            MILO_NOTIFY_ONCE("Hash table half full (%d)", mSize / 2);
         }
         if (mNumEntries >= mSize) {
             MILO_FAIL("Hash table full (%d)", mSize);
