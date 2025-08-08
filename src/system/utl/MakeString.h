@@ -36,7 +36,7 @@ public:
     FormatString &operator<<(const char *);
     FormatString &operator<<(float);
     FormatString &operator<<(double);
-    FormatString &operator<<(const class String &);
+    FormatString &operator<<(const class FixedString &);
     FormatString &operator<<(class Symbol);
 
     const char *Str();

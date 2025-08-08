@@ -572,7 +572,7 @@
             "system/obj/Task.cpp": "MISSING",
             "system/obj/TextFile.cpp": "NonMatching",
             "system/obj/TypeProps.cpp": "NonMatching",
-            "system/obj/Utl.cpp": "MISSING",
+            "system/obj/Utl.cpp": "NonMatching",
             
             "system/oggvorbis/VorbisMem.cpp": "MISSING",
             "system/oggvorbis/bitrate.c": "MISSING",

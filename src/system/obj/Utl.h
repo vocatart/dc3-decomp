@@ -65,6 +65,8 @@ const char *PrintPropertyPath(DataArray *);
 class MergeFilter {
 public:
     enum Action {
+    };
+    enum SubdirAction {
         kMerge,
         kReplace,
         kKeep,
@@ -79,18 +81,18 @@ public:
     };
 
     MergeFilter() : mAction(kMerge), mSubdirs(kNoSubdirs) {}
-    MergeFilter(Action a, Subdirs s) : mAction(a), mSubdirs(s) {}
+    MergeFilter(SubdirAction a, Subdirs s) : mAction(a), mSubdirs(s) {}
     virtual ~MergeFilter() {}
-    virtual Action Filter(Hmx::Object *, Hmx::Object *, class ObjectDir *) {
+    virtual SubdirAction Filter(Hmx::Object *, Hmx::Object *, class ObjectDir *) {
         return mAction;
     }
-    virtual Action FilterSubdir(class ObjectDir *o1, class ObjectDir *) {
+    virtual SubdirAction FilterSubdir(class ObjectDir *o1, class ObjectDir *) {
         return DefaultSubdirAction(o1, mSubdirs);
     }
 
-    static Action DefaultSubdirAction(class ObjectDir *, Subdirs);
+    static SubdirAction DefaultSubdirAction(class ObjectDir *, Subdirs);
 
-    Action mAction;
+    SubdirAction mAction;
     Subdirs mSubdirs;
 };
 
@@ -98,7 +100,7 @@ class DataMergeFilter : public MergeFilter {
 public:
     DataMergeFilter(const DataNode &, Subdirs);
     virtual ~DataMergeFilter() {}
-    virtual Action Filter(Hmx::Object *, Hmx::Object *, class ObjectDir *);
+    virtual SubdirAction Filter(Hmx::Object *, Hmx::Object *, class ObjectDir *);
 
     DataType mType;
     DataFunc *mFunc;

@@ -1501,18 +1501,18 @@ DataMergeFilter::DataMergeFilter(const DataNode &node, Subdirs subs)
     }
 }
 
-MergeFilter::Action
+MergeFilter::SubdirAction
 DataMergeFilter::Filter(Hmx::Object *from, Hmx::Object *to, class ObjectDir *dir) {
     if (mType == kDataInt) {
-        return (MergeFilter::Action)mInt;
+        return (MergeFilter::SubdirAction)mInt;
     } else {
         static DataArrayPtr d(new DataArray(3));
         d->Node(1) = from;
         d->Node(2) = to;
         if (mType == kDataFunc) {
-            return (MergeFilter::Action)mFunc(d).Int();
+            return (MergeFilter::SubdirAction)mFunc(d).Int();
         } else
-            return (MergeFilter::Action)mObj->Handle(d, true).Int();
+            return (MergeFilter::SubdirAction)mObj->Handle(d, true).Int();
     }
 }
 

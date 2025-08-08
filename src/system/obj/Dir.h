@@ -164,6 +164,7 @@ public:
     int HashTableUsedSize() const { return mHashTable.UsedSize(); }
     int StrTableUsedSize() const { return mStringTable.UsedSize(); }
     const char *GetPathName() const { return mPathName; }
+    const std::vector<ObjDirPtr<ObjectDir> > &SubDirs() const { return mSubDirs; }
 
     void ResetViewports();
     void SetInlineProxyType(InlineDirType);
