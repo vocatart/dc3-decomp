@@ -5,6 +5,9 @@
 #include "os/System.h"
 #include <cstdio>
 
+std::list<String> sFilePaths;
+std::list<Symbol> sFiles;
+
 const char *PathName(const Hmx::Object *o) {
     return !o ? "NULL Object" : ((Hmx::Object *)o)->FindPathName();
 }

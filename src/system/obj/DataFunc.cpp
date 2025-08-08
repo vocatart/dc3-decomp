@@ -1480,7 +1480,7 @@ DEF_DATA_FUNC(DataExists) {
 }
 
 DataMergeFilter::DataMergeFilter(const DataNode &node, Subdirs subs)
-    : MergeFilter(kMerge, subs), mType(node.Type()) {
+    : MergeFilter((Action)0, subs), mType(node.Type()) {
     if (mType == kDataInt)
         mInt = node.Int();
     else if (mType == kDataFunc)
@@ -1501,18 +1501,18 @@ DataMergeFilter::DataMergeFilter(const DataNode &node, Subdirs subs)
     }
 }
 
-MergeFilter::SubdirAction
+MergeFilter::Action
 DataMergeFilter::Filter(Hmx::Object *from, Hmx::Object *to, class ObjectDir *dir) {
     if (mType == kDataInt) {
-        return (MergeFilter::SubdirAction)mInt;
+        return (MergeFilter::Action)mInt;
     } else {
         static DataArrayPtr d(new DataArray(3));
         d->Node(1) = from;
         d->Node(2) = to;
         if (mType == kDataFunc) {
-            return (MergeFilter::SubdirAction)mFunc(d).Int();
+            return (MergeFilter::Action)mFunc(d).Int();
         } else
-            return (MergeFilter::SubdirAction)mObj->Handle(d, true).Int();
+            return (MergeFilter::Action)mObj->Handle(d, true).Int();
     }
 }
 

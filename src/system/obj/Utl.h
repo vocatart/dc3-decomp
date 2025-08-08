@@ -80,10 +80,10 @@ public:
         kSubdir4
     };
 
-    MergeFilter() : mAction(kMerge), mSubdirs(kNoSubdirs) {}
-    MergeFilter(SubdirAction a, Subdirs s) : mAction(a), mSubdirs(s) {}
+    MergeFilter() : mAction((Action)0), mSubdirs(kNoSubdirs) {}
+    MergeFilter(Action a, Subdirs s) : mAction(a), mSubdirs(s) {}
     virtual ~MergeFilter() {}
-    virtual SubdirAction Filter(Hmx::Object *, Hmx::Object *, class ObjectDir *) {
+    virtual Action Filter(Hmx::Object *, Hmx::Object *, class ObjectDir *) {
         return mAction;
     }
     virtual SubdirAction FilterSubdir(class ObjectDir *o1, class ObjectDir *) {
@@ -92,7 +92,8 @@ public:
 
     static SubdirAction DefaultSubdirAction(class ObjectDir *, Subdirs);
 
-    SubdirAction mAction;
+protected:
+    Action mAction;
     Subdirs mSubdirs;
 };
 
@@ -100,7 +101,7 @@ class DataMergeFilter : public MergeFilter {
 public:
     DataMergeFilter(const DataNode &, Subdirs);
     virtual ~DataMergeFilter() {}
-    virtual SubdirAction Filter(Hmx::Object *, Hmx::Object *, class ObjectDir *);
+    virtual Action Filter(Hmx::Object *, Hmx::Object *, class ObjectDir *);
 
     DataType mType;
     DataFunc *mFunc;
