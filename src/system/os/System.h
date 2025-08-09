@@ -6,6 +6,7 @@
 int Hx_snprintf(char *, unsigned int, char const *, ...);
 
 extern const char *gNullStr;
+extern std::vector<char *> TheSystemArgs;
 
 DataArray *SystemConfig();
 DataArray *SystemConfig(Symbol);
@@ -18,3 +19,5 @@ Platform ConsolePlatform(); // { return kPlatformXBox; }
 
 bool UsingCD();
 void SetUsingCD(bool);
+
+int SystemExec(const char *);

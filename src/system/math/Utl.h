@@ -141,7 +141,7 @@ inline bool ApproxEq(float f1, float f2) {
     return fabs(f1 - f2) < 0.000099999997f ? true : false;
 }
 
-float Mod(float f1, float f2) {
+inline float Mod(float f1, float f2) {
     if (f2 == 0.0f)
         return 0.0f;
     float tmp = fmod(f1, f2);

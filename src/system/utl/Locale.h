@@ -1,5 +1,6 @@
 #pragma once
 #include "utl/Symbol.h"
+#include "obj/Data.h"
 
 class Locale {
 public:
@@ -23,7 +24,7 @@ public:
     // bool *mUploadedFlags; // 0x18
     // DataArray *mMagnuStrings; // 0x1c
 
-    // void SetMagnuStrings(DataArray *);
+    void SetMagnuStrings(DataArray *);
     // bool FindDataIndex(Symbol, int &, bool) const;
     // const char *Localize(Symbol, bool) const;
 };

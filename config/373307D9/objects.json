@@ -33,6 +33,7 @@
             "lazer/game/Shuttle.cpp": "MISSING",
             "lazer/game/SongDB.cpp": "MISSING",
             "lazer/game/SongSequence.cpp": "MISSING",
+
             "lazer/meta_ham/Accomplishment.cpp": "MISSING",
             "lazer/meta_ham/AccomplishmentCampaignConditional.cpp": "MISSING",
             "lazer/meta_ham/AccomplishmentCategory.cpp": "MISSING",
@@ -159,6 +160,7 @@
             "lazer/meta_ham/VoiceControlPanel.cpp": "MISSING",
             "lazer/meta_ham/VoiceInputPanel.cpp": "MISSING",
             "lazer/meta_ham/WeightInput.cpp": "MISSING",
+
             "lazer/net_ham/ChallengeSystemJobs.cpp": "MISSING",
             "lazer/net_ham/DataMinerJobs.cpp": "MISSING",
             "lazer/net_ham/FitnessGoalJobs.cpp": "MISSING",
@@ -241,6 +243,7 @@
             "system/char/FileMerger.cpp": "MISSING",
             "system/char/FileMergerOrganizer.cpp": "MISSING",
             "system/char/Waypoint.cpp": "MISSING",
+
             "system/flow/DrivenPropertyEntry.cpp": "MISSING",
             "system/flow/DrivenPropertyMathOps.cpp": "NonMatching",
             "system/flow/Flow.cpp": "MISSING",
@@ -271,6 +274,7 @@
             "system/flow/FlowWhile.cpp": "MISSING",
             "system/flow/PropertyEventListener.cpp": "MISSING",
             "system/flow/PropertyEventProvider.cpp": "MISSING",
+
             "system/gesture/ArcDetector.cpp": "MISSING",
             "system/gesture/ArchiveSkeleton.cpp": "MISSING",
             "system/gesture/BaseSkeleton.cpp": "MISSING",
@@ -307,6 +311,7 @@
             "system/gesture/StreamRenderer.cpp": "MISSING",
             "system/gesture/StubCameraInput.cpp": "MISSING",
             "system/gesture/WaveToTurnOnLight.cpp": "MISSING",
+
             "system/hamobj/BustAMoveData.cpp": "MISSING",
             "system/hamobj/CamShotCatVO.cpp": "MISSING",
             "system/hamobj/CharCameraInput.cpp": "MISSING",
@@ -386,6 +391,7 @@
             "system/hamobj/StarsDisplay.cpp": "MISSING",
             "system/hamobj/SuperEasyRemixer.cpp": "MISSING",
             "system/hamobj/TransConstraint.cpp": "MISSING",
+
             "system/jpeg/Jpeg.cpp": "MISSING",
             "system/jpeg/jcapimin.c": "MISSING",
             "system/jpeg/jcapistd.c": "MISSING",
@@ -409,6 +415,7 @@
             "system/jpeg/jmemmgr.c": "MISSING",
             "system/jpeg/jmemnobs.c": "MISSING",
             "system/jpeg/jutils.c": "MISSING",
+
             "system/math/Color.cpp": "NonMatching",
             "system/math/Decibels.cpp": "NonMatching",
             "system/math/DoubleExponentialSmoother.cpp": "MISSING",
@@ -427,6 +434,7 @@
             "system/math/Trig.cpp": "NonMatching",
             "system/math/mtx.cpp": "MISSING",
             "system/math/vec.cpp": "NonMatching",
+
             "system/meta/Achievements.cpp": "MISSING",
             "system/meta/Achievements_Xbox.cpp": "MISSING",
             "system/meta/ButtonHolder.cpp": "MISSING",
@@ -458,6 +466,7 @@
             "system/meta/StorePreviewMgr.cpp": "MISSING",
             "system/meta/StorePurchaser.cpp": "MISSING",
             "system/meta/StreamPlayer.cpp": "MISSING",
+
             "system/midi/DataEventList.cpp": "MISSING",
             "system/midi/DisplayEvents.cpp": "MISSING",
             "system/midi/MidiParser.cpp": "MISSING",
@@ -465,15 +474,18 @@
             "system/midi/MidiReader.cpp": "MISSING",
             "system/midi/MidiReceiver.cpp": "MISSING",
             "system/midi/MidiVarLen.cpp": "MISSING",
+
             "system/movie/Movie.cpp": "MISSING",
             "system/movie/MovieImpl.cpp": "MISSING",
             "system/movie/MovieSys.cpp": "MISSING",
             "system/movie/Splash.cpp": "MISSING",
             "system/movie/TexMovie.cpp": "MISSING",
+
             "system/moviebink/BinkMovieImpl.cpp": "MISSING",
             "system/moviebink/BinkMovieImpl_Xbox.cpp": "MISSING",
             "system/moviebink/BinkMovieSys.cpp": "MISSING",
             "system/moviebink/BinkMovieSys_Xbox.cpp": "MISSING",
+
             "system/net/DingoAuthJob.cpp": "MISSING",
             "system/net/DingoJob.cpp": "MISSING",
             "system/net/DingoSvr.cpp": "MISSING",
@@ -594,6 +606,7 @@
             "system/oggvorbis/smallft.c": "MISSING",
             "system/oggvorbis/synthesis.c": "MISSING",
             "system/oggvorbis/window.c": "MISSING",
+
             "system/os/AppChild.cpp": "MISSING",
             "system/os/Archive.cpp": "MISSING",
             "system/os/ArkFile.cpp": "MISSING",
@@ -668,6 +681,7 @@
             "system/os/xlrctcptransport.cpp": "MISSING",
             "system/os/xlrctransport.cpp": "MISSING",
             "system/os/xlrcutil.cpp": "MISSING",
+
             "system/rnddx9/Cam.cpp": "MISSING",
             "system/rnddx9/CubeTex.cpp": "MISSING",
             "system/rnddx9/Env.cpp": "MISSING",
@@ -684,6 +698,7 @@
             "system/rnddx9/Tex.cpp": "MISSING",
             "system/rnddx9/TexMgr.cpp": "MISSING",
             "system/rnddx9/Utl.cpp": "MISSING",
+
             "system/rndobj/AmbientOcclusion.cpp": "MISSING",
             "system/rndobj/Anim.cpp": "MISSING",
             "system/rndobj/AnimFilter.cpp": "MISSING",
@@ -769,6 +784,7 @@
             "system/rndobj/Watcher.cpp": "MISSING",
             "system/rndobj/Wind.cpp": "MISSING",
             "system/rndobj/wordwrap.cpp": "MISSING",
+
             "system/synth/ADSR.cpp": "MISSING",
             "system/synth/AudioDucker.cpp": "MISSING",
             "system/synth/BinkReader.cpp": "MISSING",
@@ -838,6 +854,7 @@
             "system/synth/crypt.cpp": "MISSING",
             "system/synth/ctr.cpp": "MISSING",
             "system/synth/filterdesign.cpp": "MISSING",
+
             "system/synth_xbox/AAFilter.cpp": "MISSING",
             "system/synth_xbox/Biquad.cpp": "NonMatching",
             "system/synth_xbox/EnvelopeGenerator.cpp": "MISSING",
@@ -882,6 +899,7 @@
             "system/synth_xbox/SynthSample.cpp": "MISSING",
             "system/synth_xbox/TDStretch.cpp": "MISSING",
             "system/synth_xbox/Voice.cpp": "MISSING",
+
             "system/ui/CheatProvider.cpp": "MISSING",
             "system/ui/InlineHelp.cpp": "MISSING",
             "system/ui/LabelNumberTicker.cpp": "MISSING",
@@ -918,6 +936,7 @@
             "system/ui/UITransitionHandler.cpp": "MISSING",
             "system/ui/UITrigger.cpp": "MISSING",
             "system/ui/Utl.cpp": "MISSING",
+
             "system/utl/AllocInfo.cpp": "MISSING",
             "system/utl/BeatMap.cpp": "MISSING",
             "system/utl/BinStream.cpp": "NonMatching",
@@ -951,7 +970,7 @@
             "system/utl/Locale.cpp": "MISSING",
             "system/utl/LocaleOrdinal.cpp": "MISSING",
             "system/utl/MBT.cpp": "MISSING",
-            "system/utl/Magnu.cpp": "MISSING",
+            "system/utl/Magnu.cpp": "NonMatching",
             "system/utl/MakeString.cpp": "NonMatching",
             "system/utl/MeasureMap.cpp": "MISSING",
             "system/utl/MemHeap.cpp": "MISSING",
@@ -968,12 +987,12 @@
             "system/utl/NetLoader.cpp": "MISSING",
             "system/utl/NetLoader_Xbox.cpp": "MISSING",
             "system/utl/OSCMessenger.cpp": "MISSING",
-            "system/utl/Option.cpp": "MISSING",
+            "system/utl/Option.cpp": "NonMatching",
             "system/utl/Pool.cpp": "MISSING",
             "system/utl/PoolAlloc.cpp": "MISSING",
             "system/utl/Profiler.cpp": "MISSING",
             "system/utl/Song.cpp": "MISSING",
-            "system/utl/SongInfoAudioType.cpp": "MISSING",
+            "system/utl/SongInfoAudioType.cpp": "NonMatching",
             "system/utl/SongInfoCopy.cpp": "MISSING",
             "system/utl/Str.cpp": "NonMatching",
             "system/utl/StringTable.cpp": "NonMatching",
@@ -988,6 +1007,7 @@
             "system/utl/VarTimer.cpp": "MISSING",
             "system/utl/WaveFile.cpp": "MISSING",
             "system/utl/trie.cpp": "MISSING",
+
             "system/world/BeatClock.cpp": "MISSING",
             "system/world/CameraManager.cpp": "MISSING",
             "system/world/CameraShot.cpp": "MISSING",
