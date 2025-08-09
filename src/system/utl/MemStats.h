@@ -1,5 +1,12 @@
 #pragma once
 
+// size 0x14
+class HeapStats {
+public:
+    HeapStats() : unk0(0), unk4(0), unk8(0), unkc(0), unk10(0) {}
+    int unk0, unk4, unk8, unkc, unk10;
+};
+
 // size 0x18
 class BlockStat {
 public:
@@ -19,7 +26,7 @@ private:
     int mNumStats; // 0x6004
     bool unk6008; // 0x6008
 public:
-    BlockStatTable(bool);
+    BlockStatTable(bool = false);
     void Clear();
     void SortBySize();
     void SortByName();
