@@ -48,7 +48,7 @@ void InitMakeString();
 bool MakeStringInitted();
 void TerminateMakeString();
 
-inline const char *MakeString(const char *c) {
+const char *MakeString(const char *c) {
     FormatString fs(c);
     return fs.Str();
 }
