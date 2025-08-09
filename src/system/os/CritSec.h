@@ -1,6 +1,6 @@
 #pragma once
-
 #include "utl/MemMgr.h"
+
 class CriticalSection {
 public:
     // int mEntryCount;

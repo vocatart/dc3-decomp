@@ -1,12 +1,23 @@
 #include "utl/MakeString.h"
+#include "obj/Data.h"
 #include "os/Debug.h"
 #include "os/System.h"
 #include "os/CritSec.h"
+#include "os/OSFuncs.h"
 #include "utl/MemMgr.h"
+#include "utl/Str.h"
+#include "xdk/xapilibi/XAPILIBI.h"
+
+#define MAX_BUF_THREADS 6
+#define MAX_BUF_SIZE 0x1000
 
 bool bufExceeded = false;
 static CriticalSection *gLock;
 static char ***gBuf;
+static int gNum[MAX_BUF_THREADS];
+static int gThreadIds[MAX_BUF_THREADS];
+static int gCurThread;
+static int gNumThreads;
 
 void InitMakeString() {
     if (!gLock) {
@@ -22,10 +33,63 @@ void InitMakeString() {
     }
 }
 
-char *NextBuf() { return 0; }
+char *NextBuf() {
+    if (!gLock) {
+        InitMakeString();
+        MILO_LOG("MakeString before InitMakeString!\n");
+        MILO_FAIL("MakeString before InitMakeString!");
+    }
+    CritSecTracker cst(gLock);
+    if (gNumThreads == 0) {
+        gThreadIds[0] = GetCurrentThreadId();
+        gNumThreads = 1;
+    } else {
+        int tID;
+        int curThread = GetCurrentThreadId();
+        int *tptr = &gThreadIds[0];
+        if (gThreadIds[gCurThread] != curThread) {
+            for (tID = 0; tID < gNumThreads; tID++) {
+                if (gThreadIds[tID] == GetCurrentThreadId()) {
+                    break;
+                }
+            }
+            if (tID == gNumThreads) {
+                for (tID = 0; tID < gNumThreads; tID++) {
+                    if (!ValidateThreadId(tID)) {
+                        gThreadIds[tID] = GetCurrentThreadId();
+                        break;
+                    }
+                }
+                if (tID == gNumThreads) {
+                    char msg[256];
+                    if (gNumThreads >= 6) {
+                        Hx_snprintf(
+                            msg,
+                            256,
+                            "Too many threads using MakeString; maybe increase MAX_BUF_THREADS in %s?",
+                            __FILE__
+                        );
+                        TheDebug.Fail(msg, nullptr);
+                        return nullptr;
+                    }
+                    gThreadIds[tID] = GetCurrentThreadId();
+                    gNumThreads++;
+                }
+            }
+            gCurThread = tID;
+        }
+    }
+
+    char *buf = gBuf[gCurThread][gNum[gCurThread]];
+    if (++gNum[gCurThread] == 0x10) {
+        gNum[gCurThread] = 0;
+    }
+
+    return buf;
+}
 
 FormatString::FormatString()
-    : mBuf(NextBuf()), mBufSize(0x1000), mFmtEnd(nullptr), mType(kNone) {}
+    : mBuf(NextBuf()), mBufSize(MAX_BUF_SIZE), mFmtEnd(nullptr), mType(kNone) {}
 
 FormatString &FormatString::operator<<(int i) {
     if (mType != kInt)
@@ -34,11 +98,11 @@ FormatString &FormatString::operator<<(int i) {
         );
     char tmp = *mFmtEnd;
     *mFmtEnd = '\0';
-    int n = Hx_snprintf(mBuf + 0x1000 - mBufSize, mBufSize, mFmt, i);
+    int n = Hx_snprintf(mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, i);
     *mFmtEnd = tmp;
     if (n < 0 && !bufExceeded) {
         bufExceeded = true;
-        MILO_NOTIFY("MakeString() buffer size %d exceeded", 0x1000);
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", MAX_BUF_SIZE);
     }
     mBufSize -= n;
     UpdateType();
@@ -52,11 +116,7 @@ const char *FormatString::Str() {
         );
     if (*mFmt != '\0') {
         MILO_ASSERT(mFmtEnd - mFmt < mBufSize, 0x16F);
-        char *p2 = mFmt;
-        char *p3 = mBuf + 0x1000 - mBufSize;
-        for (; *p2 != 0; p2++, p3++) {
-            *p3 = *p2;
-        }
+        strcpy(mBuf + MAX_BUF_SIZE - mBufSize, mFmt);
     }
     return mBuf;
 }
@@ -73,13 +133,291 @@ FormatString &FormatString::operator<<(const char *cc) {
     *mFmtEnd = '\0';
     int n = Hx_snprintf(mBuf + sizeof(mFmtBuf) - mBufSize, mBufSize, mFmt, cc);
     *mFmtEnd = tmp;
-    MILO_ASSERT(n >= 0, 0x12A);
+    if (n < 0 && !bufExceeded) {
+        bufExceeded = true;
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", MAX_BUF_SIZE);
+    }
     mBufSize -= n;
     UpdateType();
     return *this;
 }
 
+void FormatString::UpdateType() {
+    if (mFmtEnd != 0) {
+        mFmt = mFmtEnd;
+        mFmtEnd = 0;
+    }
+
+    int val = 0;
+    char *ptr = mFmt;
+    for (; *ptr != '\0'; ptr++) {
+        if (*ptr == '%') {
+            if (ptr[1] == '%')
+                ptr++; // '%' escape
+            else if (val != 0)
+                break;
+            else
+                val = 1;
+        } else if (val == 1) {
+            if (*ptr < 'A' || *ptr > 'z')
+                continue;
+            if (*ptr == 'f' || *ptr == 'g') {
+                mType = kFloat;
+            } else if (*ptr == 's') {
+                mType = kStr;
+            } else {
+                mType = kInt;
+            }
+            val = 2;
+        }
+    }
+    if (val == 1) {
+        MILO_NOTIFY("FormatString: unable to identify %s", mFmt);
+    }
+    if (val == 0)
+        mType = kNone;
+    mFmtEnd = ptr;
+}
+
+FormatString &FormatString::operator<<(void *v) {
+    if (mType != kInt)
+        MILO_NOTIFY(
+            "FormatString: '%s' doesn't start with kInt.  Format: '%s'", mFmt, mFmtBuf
+        );
+    char tmp = *mFmtEnd;
+    *mFmtEnd = '\0';
+    int n = Hx_snprintf(mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, v);
+    *mFmtEnd = tmp;
+    if (n < 0 && !bufExceeded) {
+        bufExceeded = true;
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", MAX_BUF_SIZE);
+    }
+    mBufSize -= n;
+    UpdateType();
+    return *this;
+}
+
+FormatString &FormatString::operator<<(unsigned int ui) {
+    if (mType != kInt)
+        MILO_NOTIFY(
+            "FormatString: '%s' doesn't start with kInt.  Format: '%s'", mFmt, mFmtBuf
+        );
+    char tmp = *mFmtEnd;
+    *mFmtEnd = '\0';
+    int n = Hx_snprintf(mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, ui);
+    *mFmtEnd = tmp;
+    if (n < 0 && !bufExceeded) {
+        bufExceeded = true;
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", MAX_BUF_SIZE);
+    }
+    mBufSize -= n;
+    UpdateType();
+    return *this;
+}
+
+FormatString &FormatString::operator<<(long l) {
+    if (mType != kInt)
+        MILO_NOTIFY(
+            "FormatString: '%s' doesn't start with kInt.  Format: '%s'", mFmt, mFmtBuf
+        );
+    char tmp = *mFmtEnd;
+    *mFmtEnd = '\0';
+    int n = Hx_snprintf(mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, l);
+    *mFmtEnd = tmp;
+    if (n < 0 && !bufExceeded) {
+        bufExceeded = true;
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", MAX_BUF_SIZE);
+    }
+    mBufSize -= n;
+    UpdateType();
+    return *this;
+}
+
+FormatString &FormatString::operator<<(unsigned long ul) {
+    if (mType != kInt)
+        MILO_NOTIFY(
+            "FormatString: '%s' doesn't start with kInt.  Format: '%s'", mFmt, mFmtBuf
+        );
+    char tmp = *mFmtEnd;
+    *mFmtEnd = '\0';
+    int n = Hx_snprintf(mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, ul);
+    *mFmtEnd = tmp;
+    if (n < 0 && !bufExceeded) {
+        bufExceeded = true;
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", MAX_BUF_SIZE);
+    }
+    mBufSize -= n;
+    UpdateType();
+    return *this;
+}
+
+FormatString &FormatString::operator<<(long long ll) {
+    if (mType != kInt)
+        MILO_NOTIFY(
+            "FormatString: '%s' doesn't start with kInt.  Format: '%s'", mFmt, mFmtBuf
+        );
+    char tmp = *mFmtEnd;
+    *mFmtEnd = '\0';
+    int n = Hx_snprintf(mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, ll);
+    *mFmtEnd = tmp;
+    if (n < 0 && !bufExceeded) {
+        bufExceeded = true;
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", MAX_BUF_SIZE);
+    }
+    mBufSize -= n;
+    UpdateType();
+    return *this;
+}
+
+FormatString &FormatString::operator<<(unsigned long long ull) {
+    if (mType != kInt)
+        MILO_NOTIFY(
+            "FormatString: '%s' doesn't start with kInt.  Format: '%s'", mFmt, mFmtBuf
+        );
+    char tmp = *mFmtEnd;
+    *mFmtEnd = '\0';
+    int n = Hx_snprintf(mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, ull);
+    *mFmtEnd = tmp;
+    if (n < 0 && !bufExceeded) {
+        bufExceeded = true;
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", MAX_BUF_SIZE);
+    }
+    mBufSize -= n;
+    UpdateType();
+    return *this;
+}
+
+FormatString &FormatString::operator<<(float f) {
+    if (mType != kFloat)
+        MILO_NOTIFY(
+            "FormatString: '%s' doesn't start with kFloat.  Format: '%s'", mFmt, mFmtBuf
+        );
+    char tmp = *mFmtEnd;
+    *mFmtEnd = '\0';
+    int n = Hx_snprintf(mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, f);
+    *mFmtEnd = tmp;
+    if (n < 0 && !bufExceeded) {
+        bufExceeded = true;
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", MAX_BUF_SIZE);
+    }
+    mBufSize -= n;
+    UpdateType();
+    return *this;
+}
+
+FormatString &FormatString::operator<<(double f) {
+    if (mType != kFloat)
+        MILO_NOTIFY(
+            "FormatString: '%s' doesn't start with kFloat.  Format: '%s'", mFmt, mFmtBuf
+        );
+    char tmp = *mFmtEnd;
+    *mFmtEnd = '\0';
+    int n = Hx_snprintf(mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, f);
+    *mFmtEnd = tmp;
+    if (n < 0 && !bufExceeded) {
+        bufExceeded = true;
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", MAX_BUF_SIZE);
+    }
+    mBufSize -= n;
+    UpdateType();
+    return *this;
+}
+
+FormatString &FormatString::operator<<(const String &str) {
+    if (mType != kStr)
+        MILO_NOTIFY(
+            "FormatString: '%s' doesn't start with kStr.  Format: '%s'", mFmt, mFmtBuf
+        );
+    char tmp = *mFmtEnd;
+    *mFmtEnd = '\0';
+    int n = Hx_snprintf(mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, str.c_str());
+    *mFmtEnd = tmp;
+    if (n < 0 && !bufExceeded) {
+        bufExceeded = true;
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", MAX_BUF_SIZE);
+    }
+    mBufSize -= n;
+    UpdateType();
+    return *this;
+}
+
+FormatString &FormatString::operator<<(const FixedString &str) {
+    if (mType != kStr)
+        MILO_NOTIFY(
+            "FormatString: '%s' doesn't start with kStr.  Format: '%s'", mFmt, mFmtBuf
+        );
+    char tmp = *mFmtEnd;
+    *mFmtEnd = '\0';
+    int n = Hx_snprintf(mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, str.c_str());
+    *mFmtEnd = tmp;
+    if (n < 0 && !bufExceeded) {
+        bufExceeded = true;
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", MAX_BUF_SIZE);
+    }
+    mBufSize -= n;
+    UpdateType();
+    return *this;
+}
+
+FormatString &FormatString::operator<<(Symbol s) {
+    if (mType != kStr)
+        MILO_NOTIFY(
+            "FormatString: '%s' doesn't start with kStr.  Format: '%s'", mFmt, mFmtBuf
+        );
+    char tmp = *mFmtEnd;
+    *mFmtEnd = '\0';
+    int n = Hx_snprintf(mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, s.Str());
+    *mFmtEnd = tmp;
+    if (n < 0 && !bufExceeded) {
+        bufExceeded = true;
+        MILO_NOTIFY("MakeString() buffer size %d exceeded", MAX_BUF_SIZE);
+    }
+    mBufSize -= n;
+    UpdateType();
+    return *this;
+}
+
+void FormatString::InitializeWithFmt(const char *fmt, bool b2) {
+    MILO_ASSERT(fmt, 0xC2);
+    if (!StrNCopy(mFmtBuf, fmt, MAX_BUF_SIZE)) {
+        MILO_NOTIFY("Increase mFmtBuf size to %d", strlen(fmt));
+    }
+    mFmt = mFmtBuf;
+    if (b2)
+        UpdateType();
+}
+
 FormatString::FormatString(const char *str)
-    : mBuf(NextBuf()), mBufSize(0x1000), mFmtEnd(nullptr), mType(kNone) {
+    : mBuf(NextBuf()), mBufSize(MAX_BUF_SIZE), mFmtEnd(nullptr), mType(kNone) {
     InitializeWithFmt(str, true);
+}
+
+FormatString &FormatString::operator<<(const DataNode &node) {
+    char tmp = *mFmtEnd;
+    *mFmtEnd = '\0';
+
+    int n;
+    if (mType == kInt) {
+        n = Hx_snprintf(
+            mBuf + MAX_BUF_SIZE - mBufSize,
+            mBufSize,
+            mFmt,
+            node.Type() == kDataFloat ? (int)node.LiteralFloat() : node.LiteralInt()
+        );
+    } else if (mType == kFloat) {
+        n = Hx_snprintf(
+            mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, node.LiteralFloat()
+        );
+    } else if (mType == kStr) {
+        n = Hx_snprintf(mBuf + MAX_BUF_SIZE - mBufSize, mBufSize, mFmt, node.LiteralStr());
+    } else {
+        MILO_NOTIFY("FormatString: Couldn't convert DataNode to '%s'", mFmt);
+        n = 0;
+    }
+
+    *mFmtEnd = tmp;
+    MILO_ASSERT(n >= 0, 0x13E);
+    mBufSize -= n;
+    UpdateType();
+    return *this;
 }

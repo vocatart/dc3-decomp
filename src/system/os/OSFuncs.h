@@ -1,5 +1,5 @@
 #pragma once
-#include "xdk/xapilibi/getcurrentthreadid.h"
+#include "xdk/xapilibi/XAPILIBI.h"
 
 bool MainThread();
 
@@ -12,3 +12,5 @@ inline bool MainThread() {
         return true;
     return false;
 }
+
+bool ValidateThreadId(unsigned long);

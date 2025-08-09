@@ -1,5 +1,11 @@
 #pragma once
 
-#include "types.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-u32 GetCurrentThreadId(void);
+unsigned int GetCurrentThreadId(void);
+
+#ifdef __cplusplus
+}
+#endif
