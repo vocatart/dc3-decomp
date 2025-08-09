@@ -512,9 +512,7 @@ public:
     ExecuteScript(int firstCmd, Hmx::Object *_this, const DataArray *_args, int firstArg);
     const DataNode &Evaluate(int i) const { return Node(i).Evaluate(); }
 
-    NEW_POOL_OVERLOAD("DataArray", 0xD2);
-    DELETE_POOL_OVERLOAD(sizeof(DataArray), "DataArray", 0xD2);
-    // DELETE_POOL_OVERLOAD(DataArray);
+    POOL_OVERLOAD(DataArray, 0xD2);
 };
 
 // inline TextStream &operator<<(TextStream &ts, const DataNode &node) {

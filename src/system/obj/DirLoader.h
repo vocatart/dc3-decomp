@@ -6,6 +6,7 @@
 #include "utl/FilePath.h"
 #include "utl/Loader.h"
 #include "utl/MemPoint.h"
+#include "utl/PoolAlloc.h"
 #include "utl/TextFileStream.h"
 
 class DirLoader : public Loader, public ObjRefOwner {
@@ -33,8 +34,7 @@ public:
     const char *ProxyName() const { return mProxyName; }
     ObjectDir *ProxyDir() const { return mProxyDir; }
 
-    NEW_POOL_OVERLOAD("DirLoader", 0x2A);
-    DELETE_POOL_OVERLOAD(sizeof(DirLoader), "DirLoader", 0x2A);
+    POOL_OVERLOAD(DirLoader, 0x2A);
 
     static bool sPrintTimes;
     static void SetCacheMode(bool);

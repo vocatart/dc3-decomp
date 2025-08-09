@@ -38,13 +38,11 @@ public:
 void *PoolAlloc(int classSize, int reqSize, const char *file, int line, const char *name);
 void PoolFree(int, void *mem, const char *file, int line, const char *name);
 
-#define NEW_POOL_OVERLOAD(class_name, line_num)                                          \
+#define POOL_OVERLOAD(class_name, line_num)                                              \
     static void *operator new(unsigned int s) {                                          \
-        return PoolAlloc(s, s, __FILE__, line_num, class_name);                          \
+        return PoolAlloc(s, s, __FILE__, line_num, #class_name);                         \
     }                                                                                    \
-    static void *operator new(unsigned int s, void *place) { return place; }
-
-#define DELETE_POOL_OVERLOAD(size, class_name, line_num)                                 \
+    static void *operator new(unsigned int s, void *place) { return place; }             \
     static void operator delete(void *v) {                                               \
-        PoolFree(sizeof(v), v, __FILE__, line_num, class_name);                          \
+        PoolFree(sizeof(v), v, __FILE__, line_num, #class_name);                         \
     }

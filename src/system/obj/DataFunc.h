@@ -24,8 +24,7 @@ public:
         return mFunc->ExecuteScript(2, gDataThis, _msg, 1);
     }
 
-    NEW_POOL_OVERLOAD("DataFuncObj", 0x4F);
-    DELETE_POOL_OVERLOAD(sizeof(DataFuncObj), "DataFuncObj", 0x4F);
+    POOL_OVERLOAD(DataFuncObj, 0x4F);
 
     static DataNode New(DataArray *);
 };
