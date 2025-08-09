@@ -30,8 +30,7 @@ public:
     LoaderPos GetPos() const { return mPos; }
     FilePath &LoaderFile() { return mFile; }
 
-    NEW_OVERLOAD("Loader", 0xA8);
-    DELETE_OVERLOAD("Loader", 0xA8);
+    MEM_OVERLOAD(Loader, 0xA8);
 
 protected:
     virtual void PollLoading() = 0;

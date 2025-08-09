@@ -20,8 +20,7 @@ public:
     virtual int GetLoopTick(int tick) const = 0;
     virtual float GetTimeInLoop(float time) = 0;
 
-    NEW_OVERLOAD("TempoMap", 0x13);
-    DELETE_OVERLOAD("TempoMap", 0x13);
+    MEM_OVERLOAD(TempoMap, 0x13);
 };
 
 /** A tempomap with one single tempo for the whole song (i.e. an electronic song). */

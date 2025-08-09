@@ -24,8 +24,7 @@ struct ObjEntry {
         );
     }
 
-    NEW_OVERLOAD("ObjEntry", 0x16);
-    DELETE_OVERLOAD("ObjEntry", 0x16);
+    MEM_OVERLOAD(ObjEntry, 0x16);
 };
 
 struct ObjSort {
@@ -67,8 +66,7 @@ struct EventEntry {
 
     void Add(Hmx::Object *o, float ms);
 
-    NEW_OVERLOAD("EventEntry", 0x3D);
-    DELETE_OVERLOAD("EventEntry", 0x3D);
+    MEM_OVERLOAD(EventEntry, 0x3D);
 };
 
 struct MaxSort {

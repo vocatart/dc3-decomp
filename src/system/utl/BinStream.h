@@ -66,8 +66,7 @@ public:
     void PushRev(int, Hmx::Object *);
     int PopRev(Hmx::Object *);
 
-    NEW_OVERLOAD("BinStream", 0x55);
-    DELETE_OVERLOAD("BinStream", 0x55);
+    MEM_OVERLOAD(BinStream, 0x55);
 
     BinStream &operator<<(const char *);
     BinStream &operator<<(const Symbol &);

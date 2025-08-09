@@ -46,5 +46,5 @@ void PoolFree(int, void *mem, const char *file, int line, const char *name);
 
 #define DELETE_POOL_OVERLOAD(size, class_name, line_num)                                 \
     static void operator delete(void *v) {                                               \
-        PoolFree(size, v, __FILE__, line_num, class_name);                               \
+        PoolFree(sizeof(v), v, __FILE__, line_num, class_name);                          \
     }

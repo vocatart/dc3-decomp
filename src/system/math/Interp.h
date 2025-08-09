@@ -11,7 +11,7 @@ public:
     virtual void Reset(const DataArray *) = 0;
     virtual ~Interpolator() {} // generic dtor
 
-    DELETE_OVERLOAD("Interpolator", 0x28);
+    MEM_OVERLOAD(Interpolator, 0x28);
 
 protected:
     Vector2 mY; // 0x4

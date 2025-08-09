@@ -46,8 +46,7 @@ public:
     DataArray *Map() const { return mMap; }
     bool HasProps() const { return mMap && mMap->Size() != 0; }
 
-    NEW_OVERLOAD("TypeProps", 0x485);
-    DELETE_OVERLOAD("TypeProps", 0x485);
+    MEM_OVERLOAD(TypeProps, 0x485);
 };
 
 typedef Hmx::Object *ObjectFunc(void);

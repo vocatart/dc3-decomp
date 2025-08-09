@@ -13,8 +13,7 @@ public:
     bool TryEnter();
     void Abandon();
 
-    NEW_OVERLOAD("CriticalSection", 0x20);
-    DELETE_OVERLOAD("CriticalSection", 0x20);
+    MEM_OVERLOAD(CriticalSection, 0x20);
 };
 
 class CritSecTracker {

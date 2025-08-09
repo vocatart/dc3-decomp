@@ -16,8 +16,7 @@ private:
     void AddBuf(int);
 
 public:
-    NEW_OVERLOAD("StringTable", 0x11);
-    DELETE_OVERLOAD("StringTable", 0x11);
+    MEM_OVERLOAD(StringTable, 0x11);
 
     StringTable(int);
     ~StringTable();

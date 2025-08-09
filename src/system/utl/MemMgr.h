@@ -45,18 +45,27 @@ void *operator new[](unsigned int);
 
 void operator delete(void *v) { MemFree(v, "unknown", 0, "unknown"); }
 
-#define NEW_OVERLOAD(class_name, line_num)                                               \
+// for Hmx::Objects and their derivatives
+#define OBJ_MEM_OVERLOAD(line_num)                                                       \
     static void *operator new(unsigned int s) {                                          \
-        return MemAlloc(s, __FILE__, line_num, class_name, 0);                           \
+        return MemAlloc(s, __FILE__, line_num, StaticClassName().Str(), 0);              \
     }                                                                                    \
-    static void *operator new(unsigned int s, void *place) { return place; }
+    static void *operator new(unsigned int s, void *place) { return place; }             \
+    static void operator delete(void *v) {                                               \
+        MemFree(v, __FILE__, line_num, StaticClassName().Str());                         \
+    }
+
+// for everything else
+#define MEM_OVERLOAD(class_name, line_num)                                               \
+    static void *operator new(unsigned int s) {                                          \
+        return MemAlloc(s, __FILE__, line_num, #class_name, 0);                          \
+    }                                                                                    \
+    static void *operator new(unsigned int s, void *place) { return place; }             \
+    static void operator delete(void *v) { MemFree(v, __FILE__, line_num, #class_name); }
 
 // #define NEW_ARRAY_OVERLOAD                                                               \
 //     void *operator new[](size_t t) { return _MemAlloc(t, 0); }                           \
 //     void *operator new[](size_t, void *place) { return place; }
-
-#define DELETE_OVERLOAD(class_name, line_num)                                            \
-    static void operator delete(void *v) { MemFree(v, __FILE__, line_num, class_name); }
 
 // #define DELETE_ARRAY_OVERLOAD                                                            \
 //     void operator delete[](void *v) { _MemFree(v); }

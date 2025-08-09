@@ -226,8 +226,7 @@ public:
 
     ObjList<Sink> &Sinks() { return mSinks; }
 
-    NEW_OVERLOAD("MsgSinks", 0xAF);
-    DELETE_OVERLOAD("MsgSinks", 0xAF);
+    MEM_OVERLOAD(MsgSinks, 0xAF);
 
 private:
     DataArray *unk0;

@@ -10,6 +10,5 @@ public:
     Rand2(int);
     int Int();
 
-    NEW_OVERLOAD("Rand2", 18);
-    DELETE_OVERLOAD("Rand2", 18);
+    MEM_OVERLOAD(Rand2, 18);
 };

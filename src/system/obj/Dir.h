@@ -193,8 +193,7 @@ public:
     static std::map<std::pair<Symbol, Symbol>, bool> sSuperClassMap;
 
     NEW_OBJ(ObjectDir);
-    NEW_OVERLOAD(StaticClassName().Str(), 0x111);
-    DELETE_OVERLOAD(StaticClassName().Str(), 0x111);
+    OBJ_MEM_OVERLOAD(0x111);
 
 protected:
     virtual void AddedObject(Hmx::Object *) {}

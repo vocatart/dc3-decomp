@@ -23,8 +23,7 @@ public:
     // virtual ~Task() {}
     virtual void Poll(float) = 0;
 
-    NEW_OVERLOAD("Task", 0x1A);
-    DELETE_OVERLOAD("Task", 0x1A);
+    MEM_OVERLOAD(Task, 0x1A);
 };
 
 class MessageTask : public Task {
