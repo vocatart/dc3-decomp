@@ -30,11 +30,11 @@ inline void DeleteAll(Container &container) {
 //     }
 // }
 
-// template <typename T VECTOR_SIZE_PARAM>
-// inline void TrimExcess(std::vector<T VECTOR_SIZE_ARG> &vec) {
-//     std::vector<T VECTOR_SIZE_ARG> copy(vec);
-//     vec.swap(copy);
-// }
+template <class T>
+inline void TrimExcess(std::vector<T> &vec) {
+    std::vector<T> copy(vec);
+    vec.swap(copy);
+}
 
 template <class T>
 inline void ClearAndShrink(std::vector<T> &vec) {
