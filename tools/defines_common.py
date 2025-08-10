@@ -22,10 +22,6 @@ cflags_includes = [
     # "-i src/sdk",
     # "-i src/sdk/RVL_SDK",
 
-    # Libraries
-    # "-i src/libs",
-    # "-i src/system/speex/include",
-
     # Project source
     # "-i src",
     # "-i src/network",
@@ -33,6 +29,8 @@ cflags_includes = [
     # "-i src/band3",
     "/I src",
     "/I src/system",
+
+    # Libraries
     "/I src/system/oggvorbis",
     "/I src/system/synth/tomcrypt"
 ]

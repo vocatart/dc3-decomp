@@ -2416,7 +2416,7 @@ system/obj/Msg.cpp:
 	.text       start:0x82EDC008 end:0x82EDC020 rename:.text$yc
 	.text       start:0x82EE21C8 end:0x82EE21D8 rename:.text$yd
 	.data       start:0x82F10984 end:0x82F10A68
-	.data       start:0x82F65290 end:0x82F652C0 rename:.bss
+	.data       start:0x82F65290 end:0x82F652A0 rename:.bss
 
 system/obj/TypeProps.cpp:
 	.rdata      start:0x82078700 end:0x82078A40
@@ -2428,13 +2428,14 @@ system/obj/DirUnloader.cpp:
 	.rdata      start:0x82295E9C end:0x82295F20 rename:.rdata$r
 	.pdata      start:0x822D0010 end:0x822D00E8
 	.text       start:0x825C7C20 end:0x825C87A8
-	.data       start:0x82F10A68 end:0x82F11D68
+	.data       start:0x82F10A68 end:0x82F10AB0
 
 system/obj/DataFlex.c:
 	.rdata      start:0x82078D20 end:0x82078E44
 	.pdata      start:0x822D00E8 end:0x822D0110
 	.text       start:0x825C87A8 end:0x825C9160
-	.data       start:0x82F652C0 end:0x82F652DC rename:.bss
+	.data       start:0x82F10AB0 end:0x82F11D68
+	.data       start:0x82F652A0 end:0x82F652C8 rename:.bss
 
 system/obj/TextFile.cpp:
 	.rdata      start:0x82078E44 end:0x82078F88
@@ -2448,7 +2449,7 @@ system/os/System.cpp:
 	.text       start:0x82EDC020 end:0x82EDC098 rename:.text$yc
 	.text       start:0x82EE21D8 end:0x82EE2238 rename:.text$yd
 	.data       start:0x82F11D68 end:0x82F11D80
-	.data       start:0x82F652DC end:0x82F655B0 rename:.bss
+	.data       start:0x82F652C8 end:0x82F655B0 rename:.bss
 
 system/os/Debug.cpp:
 	.rdata      start:0x820796BC end:0x8207A228
