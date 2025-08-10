@@ -1,5 +1,5 @@
 #pragma once
-#include "xdk/xapilibi/XAPILIBI.h"
+#include "xdk/XAPILIBI.h"
 
 bool MainThread();
 
