@@ -174,6 +174,7 @@ public:
 
     BinStreamRev &operator>>(bool &);
     operator BinStream &() const { return mBinStream; }
+    void PushRev(Hmx::Object *obj) { mBinStream.PushRev(packRevs(mAltRev, mRev), obj); }
 
     int mRev;
     int mAltRev;
@@ -192,9 +193,3 @@ BinStream &operator<<(BinStream &bs, const std::vector<T, Allocator> &vec) {
     }
     return bs;
 }
-
-/* WARNING: Inlined function: __savegprlr_27 */
-/* class BinStream & __cdecl operator<<<class ObjectDir::Viewport,class
-   stlpmtx_std::StlNodeAlloc<class ObjectDir::Viewport> >(class BinStream &,class
-   stlpmtx_std::vector<class ObjectDir::Viewport,class stlpmtx_std::StlNodeAlloc<class
-   ObjectDir::Viewport> > const &) */
