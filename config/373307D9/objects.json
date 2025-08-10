@@ -571,7 +571,7 @@
             "system/net/json-c/printbuf.c": "NonMatching",
 
             "system/obj/DataArray.cpp": "NonMatching",
-            "system/obj/DataFile.cpp": "MISSING",
+            "system/obj/DataFile.cpp": "NonMatching",
             "system/obj/DataFlex.c": "NonMatching",
             "system/obj/DataFunc.cpp": "NonMatching",
             "system/obj/DataNode.cpp": "NonMatching",
