@@ -38,7 +38,7 @@ private:
     }
 
 public:
-    BeatMap();
+    BeatMap() {}
     ~BeatMap() {}
 
     /** Attempt to add a new beat marker with the supplied tick and level.
@@ -55,7 +55,7 @@ public:
      * @param [in] idx The index in mInfos to check.
      * @returns True if downbeat, false if not.
      */
-    bool IsDownbeat(int idx) const;
+    int IsDownbeat(int idx) const;
 };
 
 extern BeatMap *TheBeatMap;
