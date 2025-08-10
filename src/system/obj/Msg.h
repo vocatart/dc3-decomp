@@ -185,7 +185,11 @@ public:
     struct Sink {
         Sink(Hmx::Object *owner) : obj(owner, nullptr) {}
 
-        Sink &operator=(const Sink &s);
+        Sink &operator=(const Sink &s) {
+            obj.SetObjConcrete(s.obj);
+            mode = s.mode;
+            return *this;
+        }
 
         ObjOwnerPtr<Hmx::Object> obj; // 0x0
         Hmx::Object::SinkMode mode; // 0x14
@@ -199,6 +203,7 @@ public:
     struct EventSink {
         EventSink(Hmx::Object *owner) : sinks(owner) {}
         void Add(Hmx::Object *, Hmx::Object::SinkMode, Symbol, bool);
+        void Remove(Hmx::Object *, bool);
 
         Symbol event; // 0x0
         bool chainProxy; // 0x4
@@ -223,6 +228,7 @@ public:
     Symbol GetPropSyncHandler(DataArray *);
     void Export(DataArray *);
     bool HasSink(Hmx::Object *) const;
+    void ChainEventSinks(Hmx::Object *, Hmx::Object *);
 
     ObjList<Sink> &Sinks() { return mSinks; }
 

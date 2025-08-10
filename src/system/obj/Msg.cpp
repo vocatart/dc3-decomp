@@ -3,8 +3,44 @@
 #include "obj/ObjPtr_p.h"
 #include "obj/Object.h"
 #include "os/Debug.h"
+#include "utl/Str.h"
+#include "utl/Symbol.h"
 
-Symbol PathToEventName(DataArray *);
+Symbol MsgSinks::sCurrentExportEvent(gNullStr);
+
+Symbol MsgSinks::GetPropSyncHandler(DataArray *arr) {
+    if (unk0) {
+        for (int i = 0; i < unk0->Size(); i += 2) {
+            DataArray *array = unk0->Array(i);
+            if (array->Size() == arr->Size()) {
+                bool ret = true;
+                for (int j = 0; j < array->Size(); j++) {
+                    if (array->UncheckedInt(j) != arr->UncheckedInt(j)) {
+                        ret = false;
+                        break;
+                    }
+                }
+                if (ret)
+                    return unk0->Sym(0);
+            }
+        }
+    }
+    return 0;
+}
+
+Symbol PathToEventName(DataArray *arr) {
+    StackString<100> str("on_");
+    str += arr->Sym(0).Str();
+    for (int i = 1; i < arr->Size(); i++) {
+        if (arr->Type(i) == kDataSymbol) {
+            str += arr->LiteralSym(i).Str();
+        } else {
+            str += MakeString("%i", arr->Int(i));
+        }
+    }
+    str += "_change";
+    return str.c_str();
+}
 
 bool MsgSinks::HasPropertySink(Hmx::Object *o, DataArray *a) {
     Symbol path = PathToEventName(a);
@@ -25,6 +61,28 @@ bool MsgSinks::HasSink(Hmx::Object *o) const {
         }
     }
     return false;
+}
+
+void MsgSinks::ChainEventSinks(Hmx::Object *from, Hmx::Object *to) {
+    for (ObjList<EventSink>::const_iterator it = mEventSinks.begin();
+         it != mEventSinks.end();
+         ++it) {
+        if (it->chainProxy) {
+            from->AddSink(to, it->event);
+        }
+    }
+}
+
+void MsgSinks::EventSink::Remove(Hmx::Object *o, bool b) {
+    for (ObjList<EventSinkElem>::iterator it = sinks.begin(); it != sinks.end(); ++it) {
+        if (it->obj == o) {
+            it->obj->Release(nullptr);
+            if (!b) {
+                sinks.erase(it);
+            }
+            return;
+        }
+    }
 }
 
 void MsgSinks::EventSink::Add(
@@ -98,4 +156,18 @@ void MsgSinks::AddSink(
         mEventSinks.back().chainProxy = chainProxy;
         mEventSinks.back().Add(s, mode, handler, mExporting);
     }
+}
+
+void MsgSinks::AddPropertySink(Hmx::Object *o, DataArray *a, Symbol s) {
+    Symbol handler = GetPropSyncHandler(a);
+    Symbol path = PathToEventName(a);
+    if (!unk0) {
+        unk0 = new DataArray(2);
+    } else {
+        unk0->Resize(unk0->Size() + 2);
+    }
+    unk0->Node(unk0->Size() - 2) = DataNode(a->Clone(true, false, 0), kDataArray);
+    unk0->Node(unk0->Size() - 2).LiteralArray()->Release();
+    unk0->Node(unk0->Size() - 1) = path;
+    AddSink(o, path, s, Hmx::Object::kHandle, false);
 }

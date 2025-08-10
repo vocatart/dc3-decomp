@@ -25,7 +25,7 @@ public:
     ObjOwnerPtr(ObjRefOwner *owner, T *ptr) : ObjRefConcrete<T>(ptr), mOwner(owner) {
         MILO_ASSERT(owner, 0xC8);
     }
-    ObjOwnerPtr(const ObjOwnerPtr &o) : ObjRefConcrete(o), mOwner(o.mOwner) {
+    ObjOwnerPtr(const ObjOwnerPtr &o) : ObjRefConcrete(o.mObject), mOwner(o.mOwner) {
         MILO_ASSERT(mOwner, 0xCE);
     }
     virtual ~ObjOwnerPtr() {}
