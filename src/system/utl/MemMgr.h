@@ -42,8 +42,7 @@ void MemOrPoolFreeSTL(int, void *mem, const char *file, int line, const char *na
 
 void *operator new(unsigned int);
 void *operator new[](unsigned int);
-
-inline void operator delete(void *v) { MemFree(v, "unknown", 0, "unknown"); }
+void operator delete(void *v);
 
 // for Hmx::Objects and their derivatives
 #define OBJ_MEM_OVERLOAD(line_num)                                                       \

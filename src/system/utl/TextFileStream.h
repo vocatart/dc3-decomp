@@ -1,5 +1,4 @@
-#ifndef UTL_TEXTFILESTREAM_H
-#define UTL_TEXTFILESTREAM_H
+#pragma once
 #include "utl/FileStream.h"
 #include "utl/TextStream.h"
 
@@ -11,5 +10,3 @@ public:
 
     FileStream mFile;
 };
-
-#endif
