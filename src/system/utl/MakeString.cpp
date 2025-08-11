@@ -6,7 +6,7 @@
 #include "os/OSFuncs.h"
 #include "utl/MemMgr.h"
 #include "utl/Str.h"
-#include "xdk/XAPILIBI.h"
+#include "xdk/XAPILIB.h"
 
 #define MAX_BUF_THREADS 6
 #define MAX_BUF_SIZE 0x1000

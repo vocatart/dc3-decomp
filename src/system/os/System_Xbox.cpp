@@ -1,6 +1,6 @@
 #include "os/Debug.h"
 #include "os/System.h"
-#include "xdk/XAPILIBI.h"
+#include "xdk/XAPILIB.h"
 #include "xdk/XBDM.h"
 
 unsigned long ULSystemLocale() { return XGetLocale(); }
