@@ -1,11 +1,14 @@
 #pragma once
 #include "utl/MemMgr.h"
+#include "xdk/XBOXKRNL.h"
 
+// size 0x20
 class CriticalSection {
-public:
-    // int mEntryCount;
-    // OSMutex mCritSec;
+private:
+    int mEntryCount; // 0x0
+    CRITICAL_SECTION mCritSec; // 0x4
 
+public:
     CriticalSection();
     ~CriticalSection();
     void Enter();

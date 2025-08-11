@@ -620,7 +620,7 @@
             "system/os/CDReader.cpp": "MISSING",
             "system/os/ContentMgr.cpp": "MISSING",
             "system/os/ContentMgr_Xbox.cpp": "MISSING",
-            "system/os/CritSec.cpp": "MISSING",
+            "system/os/CritSec.cpp": "NonMatching",
             "system/os/DateTime.cpp": "MISSING",
             "system/os/Debug.cpp": "NonMatching",
             "system/os/File.cpp": "NonMatching",
