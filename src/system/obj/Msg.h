@@ -174,6 +174,20 @@ public:
     DataNode &operator[](int idx) { return mData->Node(idx + 2); }
 };
 
+#define DECLARE_MESSAGE(classname, type)                                                 \
+    class classname : public Message {                                                   \
+    public:                                                                              \
+        classname(DataArray *da) : Message(da) {}                                        \
+        virtual ~classname() {}                                                          \
+        static Symbol Type() {                                                           \
+            static Symbol t(type);                                                       \
+            return t;                                                                    \
+        }
+
+#define END_MESSAGE                                                                      \
+    }                                                                                    \
+    ;
+
 #include "obj/ObjList.h"
 #include "obj/Object.h"
 #include "utl/MemMgr.h"
