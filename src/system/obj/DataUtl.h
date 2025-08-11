@@ -26,3 +26,4 @@ void DataPopVar();
 
 DataArray *DataGetMacro(Symbol s);
 Symbol DataGetMacroByInt(int value, const char *prefix);
+void DataSetMacro(Symbol key, DataArray *macro);

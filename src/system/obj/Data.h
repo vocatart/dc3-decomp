@@ -75,6 +75,11 @@ public:
         mType = kDataInt;
     }
 
+    DataNode(unsigned long l) {
+        mValue.integer = l;
+        mType = kDataInt;
+    }
+
     DataNode(Symbol s) {
         mType = kDataSymbol;
         mValue.symbol = s.Str();

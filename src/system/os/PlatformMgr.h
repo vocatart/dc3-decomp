@@ -1,5 +1,8 @@
 #pragma once
+#include "obj/Data.h"
+#include "obj/Msg.h"
 #include "obj/Object.h"
+#include "os/User.h"
 
 enum DiskError {
     kNoDiskError,
@@ -31,9 +34,60 @@ enum QuitType {
 };
 
 class PlatformMgr : public Hmx::Object {
+private:
+    int padding[9]; // 0x2c
+    int mSigninMask; // 0x50
+    int mSigninChangeMask; // 0x54
+    bool mGuideShowing; // 0x58
+    bool mConnected; // 0x59
+    bool unk2a; // 0x5a
+    bool mScreenSaver; // 0x5b
+    PlatformRegion mRegion; // 0x5c
+    DiskError mDiskError; // 0x60
+    // JobMgr* mJobMgr; // 0x64
 public:
     PlatformMgr();
+    virtual ~PlatformMgr();
+    virtual DataNode Handle(DataArray *, bool);
+
     PlatformRegion GetRegion() const;
+    bool IsAnyUserSignedIntoLive() const;
+    bool IsSignedIntoLive(int) const;
+    bool IsSignedIn(int) const;
+    bool IsUserSignedIn(const LocalUser *) const;
+    bool IsPadNumSignedIn(int) const;
+    bool HasPadNumsSigninChanged(int) const;
+    bool HasUserSigninChanged(const LocalUser *) const;
+    bool IsUserSignedIntoLive(const LocalUser *) const;
+    bool HasOnlinePrivilege(int) const;
+    bool UserHasOnlinePrivilege(const LocalUser *) const;
+    bool IsUserAGuest(const LocalUser *) const;
+    bool IsPadAGuest(int) const;
+    void ShowUserFriendsUI(const LocalUser *);
+    void ShowFriendsUI(int);
+    void ShowOfferUI(const LocalUser *);
+    void ShowOfferUI(int);
+    bool ShowUserPartyUI(const LocalUser *);
+    bool ShowPartyUI(int);
+    void InviteUserParty(const LocalUser *);
+    void InviteParty(int);
+    LocalUser *GetOwnerUserOfGuestUser(LocalUser *);
+    int GetOwnerOfGuest(int);
+    void SetRegion(PlatformRegion);
+    void SetDiskError(DiskError);
+    void DebugFakeSigninChangeMsg(int);
 };
 
 extern PlatformMgr ThePlatformMgr;
+
+Symbol PlatformRegionToSymbol(PlatformRegion);
+PlatformRegion SymbolToPlatformRegion(Symbol);
+
+// arg here is a bool
+DECLARE_MESSAGE(DiskErrorMsg, "disk_error")
+DiskErrorMsg() : Message(Type(), 0) {}
+END_MESSAGE
+
+DECLARE_MESSAGE(SigninChangedMsg, "signin_changed")
+SigninChangedMsg(unsigned long u1, unsigned long u2) : Message(Type(), u1, u2) {}
+END_MESSAGE

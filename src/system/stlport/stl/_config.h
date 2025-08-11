@@ -646,11 +646,11 @@ namespace __std_alias = std;
 #  if defined (_STLP_USE_OWN_NAMESPACE)
 #    if !defined (_STLP_DEBUG)
 #      if !defined (_STLP_USING_CROSS_NATIVE_RUNTIME_LIB)
-// #        ifndef _STLP_THREADS
-#          define _STLP_STD_NAME  stlpmtx_std // hack because I can't get the system to pick this
-// #        else
-// #          define _STLP_STD_NAME  stlp_std
-// #        endif
+#        ifndef _STLP_THREADS
+#          define _STLP_STD_NAME  stlpmtx_std
+#        else
+#          define _STLP_STD_NAME  stlp_std
+#        endif
 #      else
 #        ifndef _STLP_THREADS
 #          define _STLP_STD_NAME  stlpxmtx_std

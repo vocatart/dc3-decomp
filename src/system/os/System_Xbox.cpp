@@ -3,8 +3,20 @@
 #include "xdk/XAPILIB.h"
 #include "xdk/XBDM.h"
 
+namespace {
+    DiscErrorCallbackFunc *gCallback;
+}
+
 unsigned long ULSystemLocale() { return XGetLocale(); }
 unsigned long ULSystemLanguage() { return XTLGetLanguage(); }
+
+DiscErrorCallbackFunc *SetDiskErrorCallback(DiscErrorCallbackFunc *func) {
+    DiscErrorCallbackFunc *old = gCallback;
+    gCallback = func;
+    return old;
+}
+
+DiscErrorCallbackFunc *GetDiskErrorCallback() { return gCallback; }
 
 #define SUCCEEDED(hr) hr >= 0
 

@@ -66,3 +66,8 @@ void SystemPreInit(const char *, const char *);
 
 unsigned long ULSystemLocale();
 unsigned long ULSystemLanguage();
+
+typedef void DiscErrorCallbackFunc(void);
+
+DiscErrorCallbackFunc *SetDiskErrorCallback(DiscErrorCallbackFunc *func);
+DiscErrorCallbackFunc *GetDiskErrorCallback();
