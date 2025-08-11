@@ -652,7 +652,7 @@
             "system/os/System.cpp": "NonMatching",
             "system/os/System_Xbox.cpp": "MISSING",
             "system/os/ThreadCall_Win.cpp": "MISSING",
-            "system/os/Timer.cpp": "MISSING",
+            "system/os/Timer.cpp": "NonMatching",
             "system/os/UsbMidiGuitar.cpp": "MISSING",
             "system/os/UsbMidiGuitarMsgs.cpp": "MISSING",
             "system/os/UsbMidiKeyboard.cpp": "MISSING",

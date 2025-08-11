@@ -6,7 +6,7 @@
 #define TIMER_GET_CYCLES(name) u32 cycle;
 
 class Timer {
-public:
+private:
     unsigned int mStart; // 0x00
     // padding, 0x04
     long long mCycles; // 0x08
@@ -23,6 +23,7 @@ public:
     static float sHighCycles2Ms;
     static double sDoubleCycles2Ms;
 
+public:
     static Timer sSlowFrameTimer;
     static float sSlowFrameWaiver;
     static const char *sSlowFrameReason;
@@ -111,14 +112,7 @@ public:
 #define MAX_TOP_VALS 128
 
 class TimerStats {
-public:
-    TimerStats(DataArray *);
-
-    void CollectStats(float, bool, int);
-    void PrintPctile(float);
-    void Dump(const char *, int);
-    void Clear();
-
+private:
     int mCount; // 0x0
     float mAvgMs; // 0x4
     float mStdDevMs; // 0x8
@@ -129,6 +123,13 @@ public:
     int mNumCritOverBudget; // 0x1c
     float mAvgMsInCrit; // 0x20
     float mTopValues[MAX_TOP_VALS]; // 0x24
+public:
+    TimerStats(DataArray *);
+
+    void CollectStats(float, bool, int);
+    void PrintPctile(float);
+    void Dump(const char *, int);
+    void Clear();
 };
 
 typedef void (*AutoTimerCallback)(float elapsed, void *context);
