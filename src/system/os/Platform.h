@@ -8,4 +8,5 @@ enum Platform {
     kPlatformPC = 3,
     kPlatformPS3 = 4,
     kPlatformWii = 5,
+    kPlatform3DS = 6
 };

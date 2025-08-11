@@ -7,6 +7,16 @@ int Hx_snprintf(char *, unsigned int, char const *, ...);
 
 extern const char *gNullStr;
 extern std::vector<char *> TheSystemArgs;
+extern const char *gHostFile;
+extern bool gHostCached;
+
+enum GfxMode {
+    kOldGfx = 0,
+    kNewGfx = 1,
+};
+
+void SetGfxMode(GfxMode);
+GfxMode GetGfxMode();
 
 DataArray *SystemConfig();
 DataArray *SystemConfig(Symbol);
@@ -21,3 +31,6 @@ bool UsingCD();
 void SetUsingCD(bool);
 
 int SystemExec(const char *);
+int SystemMs();
+
+bool HongKongExceptionMet();
