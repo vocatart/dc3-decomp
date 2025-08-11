@@ -5,8 +5,11 @@
 #include "os/Debug.h"
 #include "os/File.h"
 #include "os/Platform.h"
+#include "os/PlatformMgr.h"
+#include "os/Timer.h"
 #include "utl/Loader.h"
 #include "utl/Locale.h"
+#include "utl/Option.h"
 #include <cstdarg>
 #include <cstdio>
 
@@ -20,10 +23,10 @@ DataArray *gSystemTitles;
 int gUsingCD;
 GfxMode gGfxMode;
 
-// int gSystemMs;
-// float gSystemFrac;
-// Timer gSystemTimer;
-// bool gNetUseTimedSleep;
+int gSystemMs;
+float gSystemFrac;
+Timer gSystemTimer;
+bool gNetUseTimedSleep;
 
 std::vector<char *> TheSystemArgs;
 const char *gHostFile;
@@ -146,6 +149,45 @@ void StripEditorData() {
     }
 }
 
+int SystemMs() {
+    gSystemTimer.Restart();
+    float lastMs = gSystemTimer.GetLastMs();
+    int ms = gSystemFrac + lastMs;
+    gSystemFrac = (gSystemFrac + lastMs) - ms;
+    gSystemMs += ms;
+    return gSystemMs;
+}
+
+void SystemPoll(bool b1) {
+    static Timer *_t = AutoTimer ::GetTimer("system_poll");
+    AutoTimer _at(_t, 50.0f, nullptr, nullptr);
+    Timer::ClearSlowFrame();
+    SystemMs();
+    TheDebug.Poll();
+    //   MemcardXbox::Poll(&TheMC);
+    //   if (gUsingCD == 0) {
+    //     HolmesClientPoll();
+    //   }
+    //   JoypadPoll();
+    //   JoypadClientPoll();
+    //   KeyboardPoll();
+    //   ThreadCallPoll();
+    //   FileCache::PollAll();
+    //   LoadMgr::Poll(&TheLoadMgr);
+    //   (**(*TheCacheMgr + 4))();
+    //   (**(*TheNetCacheMgr + 0x58))();
+    //   (**(*TheWebSvcMgr + 0x5c))();
+    //   if (TheAppChild != 0x0) {
+    //     AppChild::Poll(TheAppChild);
+    //   }
+    //   if (param_1) {
+    //     TaskMgr::Poll(&TheTaskMgr);
+    //   }
+    //   PlatformMgr::Poll(&ThePlatformMgr);
+    //   VirtualKeyboard::Poll(&TheVirtualKeyboard);
+    //   (**(*TheContentMgr + 0x68))();
+}
+
 DataArray *SupportedLanguages(bool b) {
     static Symbol system("system");
     static Symbol language("language");
@@ -208,3 +250,38 @@ DataNode OnSupportedLanguages(DataArray *) {
     return DataNode(SupportedLanguages(false), kDataArray);
 }
 DataNode OnSystemMs(DataArray *) { return SystemMs(); }
+
+DataNode OnSwitchSystemLanguage(DataArray *a) {
+    DataArray *langs = SupportedLanguages(true);
+    for (int i = 0; i < langs->Size(); i++) {
+        Symbol cur = langs->Sym(i);
+        if (gSystemLanguage == cur) {
+            SetSystemLanguage(cur, true);
+            break;
+        }
+    }
+    return 0;
+}
+
+void LanguageInit() {
+    if (ThePlatformMgr.GetRegion() == kRegionNone) {
+        MILO_NOTIFY("LanguageInit called, but region has not been initialized");
+    }
+    DataArray *cfg = SystemConfig("system", "language");
+    Symbol lang = GetSystemLanguage("eng");
+    DataArray *remapArr = cfg->FindArray("remap", false);
+    if (remapArr) {
+        remapArr->FindData(lang, lang, false);
+    }
+    Symbol forceSym;
+    if (cfg->FindData("force", forceSym, false)) {
+        if (forceSym != "") {
+            lang = forceSym;
+        }
+    }
+    const char *str = OptionStr("lang", nullptr);
+    if (str) {
+        lang = str;
+    }
+    SetSystemLanguage(lang, false);
+}

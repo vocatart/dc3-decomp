@@ -8,6 +8,7 @@
 typedef void ExitCallbackFunc(void);
 typedef void FixedStringFunc(FixedString &);
 
+// size 0x134
 class Debug : public TextStream {
 public:
     enum ModalType {
@@ -30,6 +31,7 @@ private:
     std::list<ExitCallbackFunc *> mExitCallbacks; // 0x28
     std::list<FixedStringFunc *> unk30; // 0x30
     int unk38; // 0x38
+    // 0x3c is a struct, StackData
     unsigned int mFailThreadStack[50]; // starts at 0x3c
     const char *mFailThreadMsg; // 0x104
     const char *mNotifyThreadMsg; // 0x108

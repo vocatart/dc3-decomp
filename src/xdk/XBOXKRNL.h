@@ -1,24 +1,43 @@
 #pragma once
 
-// size 0x1C
-struct CRITICAL_SECTION {
-    void *DebugInfo; // was PRTL_CRITICAL_SECTION_DEBUG
-    long LockCount; // signed 32-bit
-    long RecursionCount; // signed 32-bit
-    void *OwningThread; // thread handle or ID (pointer-sized)
-    void *LockSemaphore; // handle to semaphore (pointer-sized)
-    unsigned long SpinCount; // 32-bit on 32-bit builds
-    int dummy; // to inflate the size
+// size 0x8
+struct _LIST_ENTRY {
+    _LIST_ENTRY *Flink;
+    _LIST_ENTRY *Blink;
 };
+
+// size 0x1C
+struct _RTL_CRITICAL_SECTION {
+    union {
+        struct {
+            unsigned char Type;
+            unsigned char SpinCount;
+            unsigned char Size;
+            unsigned char Inserted;
+            int SignalState;
+            _LIST_ENTRY WaitListHead;
+        } Event;
+        struct {
+            unsigned int SpinCount;
+            void *Handle;
+        } Usermode;
+        unsigned int RawEvent[4];
+    } Synchronization; // 0x0
+    int LockCount; // 0x10
+    int RecursionCount; // 0x14
+    void *OwningThread; // 0x18
+};
+
+typedef _RTL_CRITICAL_SECTION RTL_CRITICAL_SECTION;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void RtlInitializeCriticalSection(CRITICAL_SECTION *);
-void RtlEnterCriticalSection(CRITICAL_SECTION *);
-void RtlLeaveCriticalSection(CRITICAL_SECTION *);
-int RtlTryEnterCriticalSection(CRITICAL_SECTION *);
+void RtlInitializeCriticalSection(RTL_CRITICAL_SECTION *);
+void RtlEnterCriticalSection(RTL_CRITICAL_SECTION *);
+void RtlLeaveCriticalSection(RTL_CRITICAL_SECTION *);
+int RtlTryEnterCriticalSection(RTL_CRITICAL_SECTION *);
 
 #ifdef __cplusplus
 }

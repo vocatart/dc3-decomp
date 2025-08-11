@@ -21,12 +21,11 @@ private:
     static float sLowCycles2Ms;
     static float sHighCycles2Ms;
     static double sDoubleCycles2Ms;
-
-public:
     static Timer sSlowFrameTimer;
     static float sSlowFrameWaiver;
     static const char *sSlowFrameReason;
 
+public:
     static void Init();
     static void Sleep(int);
 
@@ -34,6 +33,12 @@ public:
         unsigned long lowCycles = cycles;
         long highCycles = cycles >> 32;
         return (lowCycles * sLowCycles2Ms) + (highCycles * sHighCycles2Ms);
+    }
+
+    static void ClearSlowFrame() {
+        sSlowFrameReason = "None";
+        sSlowFrameTimer.Reset();
+        sSlowFrameWaiver = 0;
     }
 
     Timer();
@@ -192,9 +197,9 @@ public:
         }
 
         sDepth++;
-        Timer::sSlowFrameReason = reason;
-        Timer::sSlowFrameWaiver += 10.0f;
-        Timer::sSlowFrameTimer.Start();
+        // Timer::sSlowFrameReason = reason;
+        // Timer::sSlowFrameWaiver += 10.0f;
+        // Timer::sSlowFrameTimer.Start();
     }
 
     ~AutoSlowFrame() {
@@ -203,7 +208,7 @@ public:
         }
 
         sDepth--;
-        Timer::sSlowFrameTimer.Stop();
+        // Timer::sSlowFrameTimer.Stop();
     }
 };
 

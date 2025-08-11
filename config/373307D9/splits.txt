@@ -2521,13 +2521,14 @@ system/os/FileCache.cpp:
 	.text       start:0x82EDC3C0 end:0x82EDC418 rename:.text$yc
 	.text       start:0x82EE2438 end:0x82EE2448 rename:.text$yd
 	.data       start:0x82F122CC end:0x82F12340
-	.data       start:0x82F67A04 end:0x82F67AF8 rename:.bss
+	.data       start:0x82F67A04 end:0x82F67A14 rename:.bss
 
 system/os/System_Xbox.cpp:
 	.rdata      start:0x8207D470 end:0x8207D988
 	.pdata      start:0x822D1620 end:0x822D1820
 	.text       start:0x825E04B0 end:0x825E1C10
 	.data       start:0x82F12340 end:0x82F12348
+	.data       start:0x82F67A14 end:0x82F67AF8 rename:.bss
 
 system/os/PlatformMgr.cpp:
 	.rdata      start:0x8207D988 end:0x8207E6CC

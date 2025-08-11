@@ -6,7 +6,7 @@
 class CriticalSection {
 private:
     int mEntryCount; // 0x0
-    CRITICAL_SECTION mCritSec; // 0x4
+    RTL_CRITICAL_SECTION mCritSec; // 0x4
 
 public:
     CriticalSection();
