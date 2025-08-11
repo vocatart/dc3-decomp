@@ -1005,7 +1005,7 @@
             "system/utl/TextFileStream.cpp": "NonMatching",
             "system/utl/TextStream.cpp": "NonMatching",
             "system/utl/TimeConversion.cpp": "NonMatching",
-            "system/utl/UTF8.cpp": "MISSING",
+            "system/utl/UTF8.cpp": "NonMatching",
             "system/utl/UrlEncode.cpp": "MISSING",
             "system/utl/VarTimer.cpp": "MISSING",
             "system/utl/WaveFile.cpp": "MISSING",
