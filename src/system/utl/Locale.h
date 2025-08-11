@@ -3,6 +3,16 @@
 #include "utl/StringTable.h"
 #include "obj/Data.h"
 
+enum LocaleGender {
+    LocaleGenderMasculine = 0,
+    LocaleGenderFeminine = 1,
+};
+
+enum LocaleNumber {
+    LocaleSingular = 0,
+    LocalePlural = 1,
+};
+
 class Locale {
 private:
     int mSize; // 0x0

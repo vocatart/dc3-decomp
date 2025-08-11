@@ -1,5 +1,4 @@
-#ifndef UTL_FILESTREAM_H
-#define UTL_FILESTREAM_H
+#pragma once
 #include "os/File.h"
 #include "utl/BinStream.h"
 #include "utl/Str.h"
@@ -22,10 +21,7 @@ public:
     virtual int Tell();
     virtual EofType Eof();
     virtual bool Fail();
-    virtual const char *Name() const;
-    virtual void ReadImpl(void *, int);
-    virtual void WriteImpl(const void *, int);
-    virtual void SeekImpl(int, SeekType);
+    virtual const char *Name() const { return mFilename.c_str(); }
 
     void DeleteChecksum();
     void StartChecksum();
@@ -33,14 +29,17 @@ public:
 
     int Size() { return (mFile) ? mFile->Size() : 0; }
 
-    // NEW_OVERLOAD;
-    // DELETE_OVERLOAD;
+    MEM_OVERLOAD(FileStream, 0x1A);
 
+private:
     File *mFile;
     class String mFilename;
     bool mFail;
     StreamChecksumValidator *mChecksumValidator;
     int mBytesChecksummed;
-};
+    virtual void ReadImpl(void *, int);
+    virtual void SeekImpl(int, SeekType);
 
-#endif
+protected:
+    virtual void WriteImpl(const void *, int);
+};
