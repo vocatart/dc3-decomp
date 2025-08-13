@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-void Sleep(unsigned long ms);
+void Sleep(unsigned int ms);
 
 #ifdef __cplusplus
 }

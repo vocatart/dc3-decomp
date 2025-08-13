@@ -647,7 +647,7 @@
             "system/os/NetworkSocket_Win.cpp": "MISSING",
             "system/os/OnlineID.cpp": "NonMatching",
             "system/os/PlatformMgr.cpp": "NonMatching",
-            "system/os/PlatformMgr_Xbox.cpp": "MISSING",
+            "system/os/PlatformMgr_Xbox.cpp": "NonMatching",
             "system/os/SynchronizationEvent.cpp": "MISSING",
             "system/os/System.cpp": "NonMatching",
             "system/os/System_Xbox.cpp": "NonMatching",

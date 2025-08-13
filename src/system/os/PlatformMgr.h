@@ -35,16 +35,21 @@ enum QuitType {
 
 class PlatformMgr : public Hmx::Object {
 private:
-    int padding[9]; // 0x2c
+    bool mHasXSocialPhotoPost; // 0x2c
+    bool mHasXSocialLinkPost; // 0x2d
+    int padding[8]; // 0x30
     int mSigninMask; // 0x50
     int mSigninChangeMask; // 0x54
     bool mGuideShowing; // 0x58
-    bool mConnected; // 0x59
-    bool unk2a; // 0x5a
+    bool mConfirmCancelSwapped; // 0x59
+    bool mConnected; // 0x5a
     bool mScreenSaver; // 0x5b
     PlatformRegion mRegion; // 0x5c
     DiskError mDiskError; // 0x60
     // JobMgr* mJobMgr; // 0x64
+
+    DataNode OnSignInUsers(DataArray *);
+
 public:
     PlatformMgr();
     virtual ~PlatformMgr();
@@ -76,6 +81,25 @@ public:
     void SetRegion(PlatformRegion);
     void SetDiskError(DiskError);
     void DebugFakeSigninChangeMsg(int);
+    bool IsEthernetCableConnected();
+    const char *GetName(int) const;
+    bool HasCreatedContentPrivilege() const;
+    bool HasKinectSharePrvilege() const;
+    void ShowControllerRequiredUI(Hmx::Object *);
+    bool IsInParty();
+    bool IsInPartyWithOthers();
+    bool ShowFitnessBodyProfileUI(int);
+    void SetBackgroundDownloadPriority(bool);
+    void DisableXMP();
+    void EnableXMP();
+    void SetScreenSaver(bool);
+    void CheckMailbox();
+    void RunNetStartUtility();
+    void SetNotifyUILocation(NotifyLocation);
+    bool PollXSocialCapabilities();
+    bool QueryXSocialCapabilities();
+    void SmartGlassSend(unsigned long, const DataArray *);
+    bool IsSmartGlassConnected();
 };
 
 extern PlatformMgr ThePlatformMgr;
