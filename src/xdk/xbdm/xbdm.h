@@ -1,4 +1,5 @@
 #pragma once
+#include "../win_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,7 +24,7 @@ struct _DM_SYSTEM_INFO {
 
 typedef _DM_SYSTEM_INFO DM_SYSTEM_INFO;
 
-int DmGetSystemInfo(DM_SYSTEM_INFO *);
+HRESULT DmGetSystemInfo(DM_SYSTEM_INFO *);
 
 #ifdef __cplusplus
 }

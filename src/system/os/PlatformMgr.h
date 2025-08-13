@@ -33,6 +33,8 @@ enum QuitType {
     kQuitDataManager
 };
 
+typedef bool XCallbackFunc(unsigned long &);
+
 class PlatformMgr : public Hmx::Object {
 private:
     bool mHasXSocialPhotoPost; // 0x2c
@@ -54,6 +56,8 @@ public:
     PlatformMgr();
     virtual ~PlatformMgr();
     virtual DataNode Handle(DataArray *, bool);
+
+    static XCallbackFunc *sXShowCallback;
 
     PlatformRegion GetRegion() const;
     bool IsAnyUserSignedIntoLive() const;
@@ -100,6 +104,9 @@ public:
     bool QueryXSocialCapabilities();
     void SmartGlassSend(unsigned long, const DataArray *);
     bool IsSmartGlassConnected();
+    void UpdateSigninState();
+    void SetPadContext(int, int, int) const;
+    void SetPadPresence(int, int) const;
 };
 
 extern PlatformMgr ThePlatformMgr;

@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-int XNetRandom(unsigned char *, unsigned int);
-DWORD XNetGetEthernetLinkStatus();
+HRESULT XShowNuiFitnessBodyProfileUI(DWORD, DWORD);
+HRESULT XShowFitnessBodyProfileUI(DWORD);
 
 #ifdef __cplusplus
 }

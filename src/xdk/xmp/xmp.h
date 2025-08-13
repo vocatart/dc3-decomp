@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-int XNetRandom(unsigned char *, unsigned int);
-DWORD XNetGetEthernetLinkStatus();
+DWORD XMPOverrideBackgroundMusic();
+DWORD XMPRestoreBackgroundMusic();
 
 #ifdef __cplusplus
 }

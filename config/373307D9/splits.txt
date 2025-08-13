@@ -7015,7 +7015,7 @@ xdk/LIBCMT/_filwbuf.cpp:
 	.pdata      start:0x82304C30 end:0x82304C38
 	.text       start:0x829C1C60 end:0x829C1E18
 
-xdk/NUI/nuiapi/nuiskeleton.cpp:
+xdk/nuiapi/nuiskeleton.cpp:
 	.rdata      start:0x82141330 end:0x82141340
 	.rdata      start:0x82239B40 end:0x82239B50
 	.pdata      start:0x82304C38 end:0x82304CA8
@@ -7023,45 +7023,45 @@ xdk/NUI/nuiapi/nuiskeleton.cpp:
 	.data       start:0x82F1F650 end:0x82F1F66C
 	.data       start:0x8311C640 end:0x8311C650 rename:.bss
 
-xdk/NUI/nuiapi/identityapi.cpp:
+xdk/nuiapi/identityapi.cpp:
 	.pdata      start:0x82304CA8 end:0x82304CD0
 	.text       start:0x829C3660 end:0x829C3BB8
 
-xdk/NUI/nuiapi/nuidetroit.cpp:
+xdk/nuiapi/nuidetroit.cpp:
 	.rdata      start:0x82141340 end:0x82141384
 	.pdata      start:0x82304CD0 end:0x82304D88
 	.text       start:0x829C3BB8 end:0x829C6150
 	.data       start:0x82F1F66C end:0x82F1F67C
 	.data       start:0x8311C650 end:0x8311C880 rename:.bss
 
-xdk/NUI/nuiapi/nuidiagnostics.cpp:
+xdk/nuiapi/nuidiagnostics.cpp:
 	.text       start:0x829C6150 end:0x829C6160
 
-xdk/NUI/nuiapi/nuiimagecameraproperties.cpp:
+xdk/nuiapi/nuiimagecameraproperties.cpp:
 	.rdata      start:0x82141384 end:0x82141438
 	.pdata      start:0x82304D88 end:0x82304E30
 	.text       start:0x829C6160 end:0x829C8008
 
-xdk/NUI/nuiapi/nuiimagecamera.cpp:
+xdk/nuiapi/nuiimagecamera.cpp:
 	.rdata      start:0x82141438 end:0x82141750
 	.pdata      start:0x82304E30 end:0x82304ED8
 	.text       start:0x829C8008 end:0x829C9550
 	.data       start:0x82F1F67C end:0x82F1F6B4
 
-xdk/NUI/nuiapi/nuiruntime.cpp:
+xdk/nuiapi/nuiruntime.cpp:
 	.rdata      start:0x82141750 end:0x82141C2C
 	.pdata      start:0x82304ED8 end:0x823050C0
 	.text       start:0x829C9550 end:0x829D14F0
 	.data       start:0x82F1F6B4 end:0x82F1F8B0
 	.data       start:0x8311C880 end:0x8312B2A0 rename:.bss
 
-xdk/NUI/nuiapi/nuiwave.cpp:
+xdk/nuiapi/nuiwave.cpp:
 	.pdata      start:0x823050C0 end:0x823050E0
 	.text       start:0x829D14F0 end:0x829D17F8
 	.data       start:0x82F1F8B0 end:0x82F1F8FC
 	.data       start:0x8312B2A0 end:0x8312CDA0 rename:.bss
 
-xdk/NUI/nuiapi/nuifitnesslib.cpp:
+xdk/nuiapi/nuifitnesslib.cpp:
 	.rdata      start:0x82141C2C end:0x82141D74
 	.pdata      start:0x823050E0 end:0x82305138
 	.pdata      start:0x82321670 end:0x82321678
@@ -7070,127 +7070,127 @@ xdk/NUI/nuiapi/nuifitnesslib.cpp:
 	.text       start:0x82EE4DB0 end:0x82EE4DB8 rename:.text$yd
 	.data       start:0x8312CDA0 end:0x8312CF24 rename:.bss
 
-xdk/NUI/nuiapi/precomp.cpp:
+xdk/nuiapi/precomp.cpp:
 	.rdata      start:0x82141D74 end:0x82141EE8
 	.data       start:0x8312CF24 end:0x8312D02C rename:.bss
 
-xdk/NUI/nuiapi/identityprivateapi.cpp:
+xdk/nuiapi/identityprivateapi.cpp:
 	.rdata      start:0x82141EE8 end:0x82142180
 	.pdata      start:0x82305138 end:0x823053E0
 	.text       start:0x829D2388 end:0x829D9710
 	.data       start:0x8312D02C end:0x8312D038 rename:.bss
 
-xdk/NUI/nuiapi/nuitruecolor.cpp:
+xdk/nuiapi/nuitruecolor.cpp:
 	.rdata      start:0x82142180 end:0x8214218C
 	.pdata      start:0x823053E0 end:0x82305428
 	.text       start:0x829D9710 end:0x829D9EB0
 	.text       start:0x82EDDE10 end:0x82EDDE20 rename:.text$yc
 	.data       start:0x8312D040 end:0x8312D0A8 rename:.bss
 
-xdk/NUI/nuiapi/headtrackingapi.cpp:
+xdk/nuiapi/headtrackingapi.cpp:
 	.pdata      start:0x82305428 end:0x82305478
 	.text       start:0x829D9EB0 end:0x829DA598
 
-xdk/NUI/nuiapi/nuiheadposition.cpp:
+xdk/nuiapi/nuiheadposition.cpp:
 	.pdata      start:0x82305478 end:0x82305498
 	.text       start:0x829DA598 end:0x829DA7C0
 	.data       start:0x82F1F8FC end:0x82F1F918
 
-xdk/NUI/nuiapi/nuigesture.cpp:
+xdk/nuiapi/nuigesture.cpp:
 	.pdata      start:0x82305498 end:0x823054C8
 	.text       start:0x829DA7C0 end:0x829DAB88
 	.data       start:0x82F1F918 end:0x82F1F960
 
-xdk/NUI/nuiapi/nuixam.cpp:
+xdk/nuiapi/nuixam.cpp:
 	.pdata      start:0x823054C8 end:0x823054E0
 	.text       start:0x829DAB88 end:0x829DADB8
 
-xdk/NUI/nuiapi/waverecognizer.cpp:
+xdk/nuiapi/waverecognizer.cpp:
 	.pdata      start:0x823054E0 end:0x82305510
 	.text       start:0x829DADB8 end:0x829DB950
 
-xdk/NUI/nuiapi/nuiplayerengagement.cpp:
+xdk/nuiapi/nuiplayerengagement.cpp:
 	.rdata      start:0x8214218C end:0x821421A4
 	.pdata      start:0x82305510 end:0x82305520
 	.text       start:0x829DB950 end:0x829DBDF8
 
-xdk/NUI/nuiapi/caloriecounter.cpp:
+xdk/nuiapi/caloriecounter.cpp:
 	.rdata      start:0x821421A4 end:0x821421E8
 	.pdata      start:0x82305520 end:0x82305560
 	.text       start:0x829DBDF8 end:0x829DC410
 	.text       start:0x82EDDE20 end:0x82EDDE30 rename:.text$yc
 	.data       start:0x8312D0B0 end:0x8312D130 rename:.bss
 
-xdk/NUI/nuiapi/nuifitnessxam.cpp:
+xdk/nuiapi/nuifitnessxam.cpp:
 	.pdata      start:0x82305560 end:0x82305598
 	.text       start:0x829DC410 end:0x829DC7D8
 
-xdk/NUI/nuiapi/nuifitnesscommon.cpp:
+xdk/nuiapi/nuifitnesscommon.cpp:
 	.rdata      start:0x821421E8 end:0x821421EC
 	.pdata      start:0x82305598 end:0x823055C0
 	.text       start:0x829DC7D8 end:0x829DCA08
 
-xdk/NUI/nuiapi/identityrecognition.cpp:
+xdk/nuiapi/identityrecognition.cpp:
 	.pdata      start:0x823055C0 end:0x82305600
 	.text       start:0x829DCA08 end:0x829DD050
 	.data       start:0x82F1F960 end:0x82F1F988
 
-xdk/NUI/nuiapi/facedescriptor.cpp:
+xdk/nuiapi/facedescriptor.cpp:
 	.rdata      start:0x821421EC end:0x8214234C
 	.pdata      start:0x82305600 end:0x823056B0
 	.text       start:0x829DD050 end:0x829DE860
 
-xdk/NUI/nuiapi/identityhelper.cpp:
+xdk/nuiapi/identityhelper.cpp:
 	.rdata      start:0x8214234C end:0x821423B4
 	.pdata      start:0x823056B0 end:0x823056C8
 	.text       start:0x829DE860 end:0x829DEE30
 
-xdk/NUI/nuiapi/bodyheight.cpp:
+xdk/nuiapi/bodyheight.cpp:
 	.rdata      start:0x821423B4 end:0x82142414
 	.pdata      start:0x823056C8 end:0x82305720
 	.text       start:0x829DEE30 end:0x829DF9E8
 	.data       start:0x8312D130 end:0x8312D140 rename:.bss
 
-xdk/NUI/nuiapi/colorsignaturedescriptor.cpp:
+xdk/nuiapi/colorsignaturedescriptor.cpp:
 	.rdata      start:0x82142414 end:0x82142460
 	.pdata      start:0x82305720 end:0x823057A8
 	.text       start:0x829DF9E8 end:0x829E1B38
 
-xdk/NUI/nuiapi/datauploader.cpp:
+xdk/nuiapi/datauploader.cpp:
 	.rdata      start:0x82142460 end:0x8214248C
 	.pdata      start:0x823057A8 end:0x823057D0
 	.text       start:0x829E1B38 end:0x829E2198
 	.data       start:0x82F1F988 end:0x82F1FBF4
 
-xdk/NUI/nuiapi/identityxss.cpp:
+xdk/nuiapi/identityxss.cpp:
 	.pdata      start:0x823057D0 end:0x82305830
 	.text       start:0x829E2198 end:0x829E2C90
 
-xdk/NUI/nuiapi/sessioncache.cpp:
+xdk/nuiapi/sessioncache.cpp:
 	.pdata      start:0x82305830 end:0x823058D0
 	.text       start:0x829E2C90 end:0x829E3E18
 
-xdk/NUI/nuiapi/facerecognition.cpp:
+xdk/nuiapi/facerecognition.cpp:
 	.rdata      start:0x8214248C end:0x821424F0
 	.pdata      start:0x823058D0 end:0x82305918
 	.text       start:0x829E3E18 end:0x829E5368
 	.data       start:0x8312D140 end:0x8312D16C rename:.bss
 
-xdk/NUI/nuiapi/identitybiometric.cpp:
+xdk/nuiapi/identitybiometric.cpp:
 	.pdata      start:0x82305918 end:0x823059C0
 	.text       start:0x829E5368 end:0x829E73B0
 
-xdk/NUI/nuiapi/truecolor.cpp:
+xdk/nuiapi/truecolor.cpp:
 	.rdata      start:0x821424F0 end:0x82142514
 	.pdata      start:0x823059C0 end:0x82305A68
 	.text       start:0x829E73B0 end:0x829E8AF0
 
-xdk/NUI/nuiapi/common.cpp:
+xdk/nuiapi/common.cpp:
 	.rdata      start:0x82142514 end:0x82142540
 	.pdata      start:0x82305A68 end:0x82305A98
 	.text       start:0x829E8AF0 end:0x829E8D80
 
-xdk/NUI/nuiapi/headtrackingprivateapi.cpp:
+xdk/nuiapi/headtrackingprivateapi.cpp:
 	.rdata      start:0x82142540 end:0x82142568
 	.pdata      start:0x82305A98 end:0x82305B28
 	.text       start:0x829E8D80 end:0x829EAEF0
@@ -7198,32 +7198,32 @@ xdk/NUI/nuiapi/headtrackingprivateapi.cpp:
 	.data       start:0x82F1FBF4 end:0x82F1FC10
 	.data       start:0x8312D170 end:0x8312E240 rename:.bss
 
-xdk/NUI/nuiapi/headtracker.cpp:
+xdk/nuiapi/headtracker.cpp:
 	.rdata      start:0x82142568 end:0x82142670
 	.pdata      start:0x82305B28 end:0x82305B70
 	.text       start:0x829EAEF0 end:0x829EBA28
 	.text       start:0x82EDDE40 end:0x82EDDE70 rename:.text$yc
 	.data       start:0x8312E240 end:0x8312E260 rename:.bss
 
-xdk/NUI/nuiapi/anglefilter.cpp:
+xdk/nuiapi/anglefilter.cpp:
 	.text       start:0x829EBA28 end:0x829EBAD0
 
-xdk/NUI/nuiapi/detectorfactory.cpp:
+xdk/nuiapi/detectorfactory.cpp:
 	.text       start:0x829EBAD0 end:0x829EBB08
 
-xdk/NUI/nuiapi/image.cpp:
+xdk/nuiapi/image.cpp:
 	.pdata      start:0x82305B70 end:0x82305B78
 	.text       start:0x829EBB08 end:0x829EBF30
 	.text       start:0x82EDDE70 end:0x82EDDEF0 rename:.text$yc
 	.data       start:0x8312E260 end:0x8312E2A0 rename:.bss
 
-xdk/NUI/nuiapi/gesturemanager.cpp:
+xdk/nuiapi/gesturemanager.cpp:
 	.rdata      start:0x82142670 end:0x82142690
 	.pdata      start:0x82305B78 end:0x82305BA8
 	.text       start:0x829EBF30 end:0x829EC4F8
 	.data       start:0x8312E2A0 end:0x8312E2B0 rename:.bss
 
-xdk/NUI/nuiapi/techmanager.cpp:
+xdk/nuiapi/techmanager.cpp:
 	.rdata      start:0x82142690 end:0x821426C4
 	.pdata      start:0x82305BA8 end:0x82305BB8
 	.text       start:0x829EC4F8 end:0x829EC678
@@ -7231,38 +7231,38 @@ xdk/NUI/nuiapi/techmanager.cpp:
 	.text       start:0x82EE4DB8 end:0x82EE4DC8 rename:.text$yd
 	.data       start:0x82F1FC10 end:0x82F1FC84
 
-xdk/NUI/nuiapi/speedmeasurement.cpp:
+xdk/nuiapi/speedmeasurement.cpp:
 	.pdata      start:0x82305BB8 end:0x82305BF0
 	.text       start:0x829EC678 end:0x829ECCD0
 	.text       start:0x82EDDF00 end:0x82EDDF60 rename:.text$yc
 	.data       start:0x8312E2B0 end:0x8312E2E0 rename:.bss
 
-xdk/NUI/nuiapi/calorietables.cpp:
+xdk/nuiapi/calorietables.cpp:
 	.rdata      start:0x821426C4 end:0x82142AD8
 	.text       start:0x829ECCD0 end:0x829ECD60
 	.data       start:0x82F1FC84 end:0x82F1FC94
 
-xdk/NUI/nuiapi/facerecognitiondll.cpp:
+xdk/nuiapi/facerecognitiondll.cpp:
 	.rdata      start:0x82142AD8 end:0x82142AF8
 	.pdata      start:0x82305BF0 end:0x82305C48
 	.text       start:0x829ECD60 end:0x829ED300
 
-xdk/NUI/nuiapi/exposurerecipe.cpp:
+xdk/nuiapi/exposurerecipe.cpp:
 	.pdata      start:0x82305C48 end:0x82305C58
 	.text       start:0x829ED300 end:0x829ED668
 
-xdk/NUI/nuiapi/exposurecontrolsystem.cpp:
+xdk/nuiapi/exposurecontrolsystem.cpp:
 	.rdata      start:0x82142AF8 end:0x82142B40
 	.pdata      start:0x82305C58 end:0x82305CA0
 	.text       start:0x829ED668 end:0x829EE180
 	.data       start:0x82F1FC94 end:0x82F1FE00
 
-xdk/NUI/nuiapi/facedetector.cpp:
+xdk/nuiapi/facedetector.cpp:
 	.rdata      start:0x82142B40 end:0x82142B48
 	.pdata      start:0x82305CA0 end:0x82305CE0
 	.text       start:0x829EE180 end:0x829EE948
 
-xdk/NUI/nuiapi/illuminationestimation.cpp:
+xdk/nuiapi/illuminationestimation.cpp:
 	.rdata      start:0x82142B48 end:0x82142BE0
 	.pdata      start:0x82305CE0 end:0x82305D60
 	.pdata      start:0x82321678 end:0x82321680
@@ -7270,101 +7270,101 @@ xdk/NUI/nuiapi/illuminationestimation.cpp:
 	.text       start:0x82EDDF60 end:0x82EDDF88 rename:.text$yc
 	.data       start:0x8312E2E4 end:0x8312EF24 rename:.bss
 
-xdk/NUI/nuiapi/recipetable.cpp:
+xdk/nuiapi/recipetable.cpp:
 	.rdata      start:0x82142BE0 end:0x82142D30
 	.pdata      start:0x82305D60 end:0x82305D90
 	.text       start:0x829EFCE8 end:0x829F0318
 
-xdk/NUI/nuiapi/imagingpipelineinverter.cpp:
+xdk/nuiapi/imagingpipelineinverter.cpp:
 	.pdata      start:0x82305D90 end:0x82305DB0
 	.text       start:0x829F0318 end:0x829F09A8
 
-xdk/NUI/nuiapi/ldaregressor.cpp:
+xdk/nuiapi/ldaregressor.cpp:
 	.rdata      start:0x82142D30 end:0x82142E40
 	.pdata      start:0x82305DB0 end:0x82305E10
 	.text       start:0x829F09A8 end:0x829F1830
 
-xdk/NUI/nuiapi/lbp.cpp:
+xdk/nuiapi/lbp.cpp:
 	.rdata      start:0x82142E40 end:0x82142F50
 	.pdata      start:0x82305E10 end:0x82305E18
 	.text       start:0x829F1830 end:0x829F1B08
 
-xdk/NUI/nuiapi/gaussianfilter.cpp:
+xdk/nuiapi/gaussianfilter.cpp:
 	.pdata      start:0x82305E18 end:0x82305E30
 	.text       start:0x829F1B08 end:0x829F2560
 
-xdk/NUI/nuiapi/frontalfacedetection.cpp:
+xdk/nuiapi/frontalfacedetection.cpp:
 	.rdata      start:0x82142F50 end:0x8215E780
 	.pdata      start:0x82305E30 end:0x82305E80
 	.text       start:0x829F2560 end:0x829F29E0
 	.text       start:0x82EDDF88 end:0x82EDDFC8 rename:.text$yc
 
-xdk/NUI/nuiapi/multiposefacedetection.cpp:
+xdk/nuiapi/multiposefacedetection.cpp:
 	.rdata      start:0x8215E780 end:0x8215E7E0
 	.pdata      start:0x82305E80 end:0x82305ED0
 	.text       start:0x829F29E0 end:0x829F2F80
 	.text       start:0x82EDDFC8 end:0x82EDE008 rename:.text$yc
 	.data       start:0x8312EF50 end:0x8312EF80 rename:.bss
 
-xdk/NUI/nuiapi/commonutils.cpp:
+xdk/nuiapi/commonutils.cpp:
 	.pdata      start:0x82305ED0 end:0x82305ED8
 	.text       start:0x829F2F80 end:0x829F3000
 	.text       start:0x82EDE008 end:0x82EDE038 rename:.text$yc
 	.data       start:0x8312EF80 end:0x8312EFC4 rename:.bss
 
-xdk/NUI/nuiapi/gesturetech.cpp:
+xdk/nuiapi/gesturetech.cpp:
 	.pdata      start:0x82305ED8 end:0x82305EE0
 	.text       start:0x829F3000 end:0x829F3128
 
-xdk/NUI/nuiapi/gestureutils.cpp:
+xdk/nuiapi/gestureutils.cpp:
 	.rdata      start:0x8215E7E0 end:0x8215E870
 	.pdata      start:0x82305EE0 end:0x82305EF0
 	.text       start:0x829F3128 end:0x829F3690
 
-xdk/NUI/nuiapi/regprogress.cpp:
+xdk/nuiapi/regprogress.cpp:
 	.rdata      start:0x8215E870 end:0x8215E914
 	.pdata      start:0x82305EF0 end:0x82305F18
 	.text       start:0x829F3690 end:0x829F4010
 	.data       start:0x8312EFC4 end:0x8312EFCC rename:.bss
 
-xdk/NUI/nuiapi/posecontext.cpp:
+xdk/nuiapi/posecontext.cpp:
 	.rdata      start:0x8215E914 end:0x8215E960
 	.pdata      start:0x82305F18 end:0x82305F58
 	.text       start:0x829F4010 end:0x829F48D0
 	.data       start:0x8312EFCC end:0x8312EFD4 rename:.bss
 
-xdk/NUI/nuiapi/adaboosttriggerruntime.cpp:
+xdk/nuiapi/adaboosttriggerruntime.cpp:
 	.rdata      start:0x8215E960 end:0x8215E970
 	.pdata      start:0x82305F58 end:0x82305F80
 	.text       start:0x829F48D0 end:0x829F4C30
 	.data       start:0x8312EFD4 end:0x8312F000 rename:.bss
 
-xdk/NUI/nuiapi/facepipelinedetect.cpp:
+xdk/nuiapi/facepipelinedetect.cpp:
 	.pdata      start:0x82305F80 end:0x82305F88
 	.text       start:0x829F4C30 end:0x829F4CC8
 	.text       start:0x82EDE038 end:0x82EDE078 rename:.text$yc
 
-xdk/NUI/nuiapi/facepipelinerepresent.cpp:
+xdk/nuiapi/facepipelinerepresent.cpp:
 	.pdata      start:0x82305F88 end:0x82305F90
 	.text       start:0x829F4CC8 end:0x829F4DF0
 	.text       start:0x82EDE078 end:0x82EDE0A8 rename:.text$yc
 	.data       start:0x8312F000 end:0x8312F020 rename:.bss
 
-xdk/NUI/nuiapi/facepipelinedetectparts.cpp:
+xdk/nuiapi/facepipelinedetectparts.cpp:
 	.rdata      start:0x8215E970 end:0x82164C18
 	.pdata      start:0x82305F90 end:0x82305FA0
 	.text       start:0x829F4DF0 end:0x829F4F38
 
-xdk/NUI/nuiapi/controlmethod.cpp:
+xdk/nuiapi/controlmethod.cpp:
 	.rdata      start:0x82164C18 end:0x82164C1C
 	.pdata      start:0x82305FA0 end:0x82305FB8
 	.text       start:0x829F4F38 end:0x829F5188
 
-xdk/NUI/nuiapi/imageanalysis.cpp:
+xdk/nuiapi/imageanalysis.cpp:
 	.pdata      start:0x82305FB8 end:0x82305FE8
 	.text       start:0x829F5188 end:0x829F5708
 
-xdk/NUI/nuiapi/sceneestimation.cpp:
+xdk/nuiapi/sceneestimation.cpp:
 	.rdata      start:0x82164C1C end:0x82164D70
 	.pdata      start:0x82305FE8 end:0x82306020
 	.pdata      start:0x82321680 end:0x82321688
@@ -7372,105 +7372,105 @@ xdk/NUI/nuiapi/sceneestimation.cpp:
 	.text       start:0x82EDE0A8 end:0x82EDE0D0 rename:.text$yc
 	.data       start:0x8312F020 end:0x8312F024 rename:.bss
 
-xdk/NUI/nuiapi/frontaldetector.cpp:
+xdk/nuiapi/frontaldetector.cpp:
 	.rdata      start:0x82164D70 end:0x82164EC0
 	.pdata      start:0x82306020 end:0x82306050
 	.text       start:0x829F5F88 end:0x829F6DE0
 	.text       start:0x82EDE0D0 end:0x82EDE2C8 rename:.text$yc
 	.data       start:0x8312F090 end:0x8312F130 rename:.bss
 
-xdk/NUI/nuiapi/multiposedetector.cpp:
+xdk/nuiapi/multiposedetector.cpp:
 	.rdata      start:0x82164EC0 end:0x82165200
 	.pdata      start:0x82306050 end:0x82306090
 	.text       start:0x829F6DE0 end:0x829F9318
 	.text       start:0x82EDE2C8 end:0x82EDE4E0 rename:.text$yc
 	.data       start:0x8312F1A0 end:0x8312F8B8 rename:.bss
 
-xdk/NUI/nuiapi/rf.cpp:
+xdk/nuiapi/rf.cpp:
 	.pdata      start:0x82306090 end:0x823060A8
 	.text       start:0x829F9318 end:0x829F94B0
 
-xdk/NUI/nuiapi/featureconverter.cpp:
+xdk/nuiapi/featureconverter.cpp:
 	.pdata      start:0x823060A8 end:0x823060B8
 	.text       start:0x829F94B0 end:0x829F9810
 
-xdk/NUI/nuiapi/featureconverterseated.cpp:
+xdk/nuiapi/featureconverterseated.cpp:
 	.pdata      start:0x823060B8 end:0x823060C8
 	.text       start:0x829F9810 end:0x829F9B70
 
-xdk/NUI/nuiapi/contextmapping.cpp:
+xdk/nuiapi/contextmapping.cpp:
 	.rdata      start:0x82165200 end:0x821655F8
 	.pdata      start:0x823060C8 end:0x82306148
 	.pdata      start:0x82321688 end:0x82321690
 	.text       start:0x829F9B70 end:0x829FB2E0
 	.text       start:0x82EDE4E0 end:0x82EDE508 rename:.text$yc
 
-xdk/NUI/nuiapi/skeletonpcafeatureconverter.cpp:
+xdk/nuiapi/skeletonpcafeatureconverter.cpp:
 	.pdata      start:0x82306148 end:0x82306158
 	.text       start:0x829FB2E0 end:0x829FB650
 
-xdk/NUI/nuiapi/skeletonpcafeatureconverterseated.cpp:
+xdk/nuiapi/skeletonpcafeatureconverterseated.cpp:
 	.pdata      start:0x82306158 end:0x82306168
 	.text       start:0x829FB650 end:0x829FB9C0
 
-xdk/NUI/nuiapi/packfilereader.cpp:
+xdk/nuiapi/packfilereader.cpp:
 	.pdata      start:0x82306168 end:0x82306180
 	.text       start:0x829FB9C0 end:0x829FBEB0
 
-xdk/NUI/nuiapi/gesturedetector.cpp:
+xdk/nuiapi/gesturedetector.cpp:
 	.rdata      start:0x821655F8 end:0x82165630
 	.pdata      start:0x82306180 end:0x82306210
 	.text       start:0x829FBEB0 end:0x829FD038
 	.data       start:0x8312F8B8 end:0x8312F9B0 rename:.bss
 
-xdk/NUI/nuiapi/facedetectionsoftcascade.cpp:
+xdk/nuiapi/facedetectionsoftcascade.cpp:
 	.rdata      start:0x82165630 end:0x82165868
 	.pdata      start:0x82306210 end:0x82306248
 	.text       start:0x829FD038 end:0x829FD350
 	.text       start:0x82EDE508 end:0x82EDE548 rename:.text$yc
 
-xdk/NUI/nuiapi/facefeatureextractorlbp.cpp:
+xdk/nuiapi/facefeatureextractorlbp.cpp:
 	.pdata      start:0x82306248 end:0x82306250
 	.text       start:0x829FD350 end:0x829FD570
 	.text       start:0x82EDE548 end:0x82EDE608 rename:.text$yc
 
-xdk/NUI/nuiapi/facephotorectlbp.cpp:
+xdk/nuiapi/facephotorectlbp.cpp:
 	.pdata      start:0x82306250 end:0x82306268
 	.text       start:0x829FD570 end:0x829FDE18
 
-xdk/NUI/nuiapi/facegeomrecteyes.cpp:
+xdk/nuiapi/facegeomrecteyes.cpp:
 	.rdata      start:0x82165868 end:0x82165874
 	.pdata      start:0x82306268 end:0x82306270
 	.text       start:0x829FDE18 end:0x829FE1E8
 	.text       start:0x82EDE608 end:0x82EDE628 rename:.text$yc
 	.data       start:0x82F1FE00 end:0x82F1FE38
 
-xdk/NUI/nuiapi/facepartsdetectionneuralnet.cpp:
+xdk/nuiapi/facepartsdetectionneuralnet.cpp:
 	.rdata      start:0x82165874 end:0x821658E4
 	.pdata      start:0x82306270 end:0x823062B0
 	.text       start:0x829FE1E8 end:0x829FE918
 
-xdk/NUI/nuiapi/multiposedatabase.cpp:
+xdk/nuiapi/multiposedatabase.cpp:
 	.pdata      start:0x823062B0 end:0x823062C8
 	.text       start:0x829FE918 end:0x829FECB0
 
-xdk/NUI/nuiapi/multiposeclassifier.cpp:
+xdk/nuiapi/multiposeclassifier.cpp:
 	.pdata      start:0x823062C8 end:0x823062D0
 	.text       start:0x829FECB0 end:0x829FEEE8
 
-xdk/NUI/nuiapi/randomforest.cpp:
+xdk/nuiapi/randomforest.cpp:
 	.pdata      start:0x823062D0 end:0x82306310
 	.text       start:0x829FEEE8 end:0x829FF560
 
-xdk/NUI/nuiapi/regression.cpp:
+xdk/nuiapi/regression.cpp:
 	.pdata      start:0x82306310 end:0x82306318
 	.text       start:0x829FF560 end:0x829FF5E0
 
-xdk/NUI/nuiapi/doublylinkedlist.cpp:
+xdk/nuiapi/doublylinkedlist.cpp:
 	.pdata      start:0x82306318 end:0x82306340
 	.text       start:0x829FF5E0 end:0x829FF8F0
 
-xdk/NUI/nuiapi/classifierdata.cpp:
+xdk/nuiapi/classifierdata.cpp:
 	.rdata      start:0x821658E4 end:0x82165CB0
 	.pdata      start:0x82306340 end:0x823064E0
 	.pdata      start:0x82321690 end:0x82321698
@@ -7478,69 +7478,69 @@ xdk/NUI/nuiapi/classifierdata.cpp:
 	.text       start:0x82EDE628 end:0x82EDE690 rename:.text$yc
 	.data       start:0x8312F9B0 end:0x83133E50 rename:.bss
 
-xdk/NUI/nuiapi/vt_guids.cpp:
+xdk/nuiapi/vt_guids.cpp:
 	.rdata      start:0x82165CB0 end:0x82165D10
 
-xdk/NUI/nuiapi/facedetector_image.cpp:
+xdk/nuiapi/facedetector_image.cpp:
 	.pdata      start:0x823064E0 end:0x82306500
 	.text       start:0x82A032B8 end:0x82A03828
 	.text       start:0x82EDE690 end:0x82EDE750 rename:.text$yc
 	.data       start:0x83133E50 end:0x83133EF0 rename:.bss
 
-xdk/NUI/nuiapi/facedetector_detector.cpp:
+xdk/nuiapi/facedetector_detector.cpp:
 	.pdata      start:0x82306500 end:0x82306508
 	.text       start:0x82A03828 end:0x82A03FE0
 	.text       start:0x82EDE750 end:0x82EDE948 rename:.text$yc
 	.data       start:0x83133EF0 end:0x83133F90 rename:.bss
 
-xdk/NUI/nuiapi/vt_image.cpp:
+xdk/nuiapi/vt_image.cpp:
 	.rdata      start:0x82165D10 end:0x82165D1C
 	.pdata      start:0x82306508 end:0x82306530
 	.text       start:0x82A03FE0 end:0x82A04478
 
-xdk/NUI/nuiapi/neuralnet_classifier.cpp:
+xdk/nuiapi/neuralnet_classifier.cpp:
 	.rdata      start:0x82165D1C end:0x82166050
 	.pdata      start:0x82306530 end:0x82306588
 	.text       start:0x82A04478 end:0x82A04CA0
 	.data       start:0x83133F90 end:0x83133F98 rename:.bss
 
-xdk/NUI/nuiapi/vt_filter2.cpp:
+xdk/nuiapi/vt_filter2.cpp:
 	.pdata      start:0x82306588 end:0x82306698
 	.text       start:0x82A04CA0 end:0x82A07440
 
-xdk/NUI/nuiapi/binarytree.cpp:
+xdk/nuiapi/binarytree.cpp:
 	.pdata      start:0x82306698 end:0x823066C0
 	.text       start:0x82A07440 end:0x82A07968
 
-xdk/NUI/nuiapi/muscletracking.cpp:
+xdk/nuiapi/muscletracking.cpp:
 	.rdata      start:0x82166050 end:0x821664E4
 	.pdata      start:0x823066C0 end:0x82306710
 	.text       start:0x82A07968 end:0x82A09990
 	.data       start:0x82F1FE38 end:0x82F1FE50
 	.data       start:0x83133F98 end:0x83138A90 rename:.bss
 
-xdk/NUI/nuiapi/vt_memshare.cpp:
+xdk/nuiapi/vt_memshare.cpp:
 	.pdata      start:0x82306710 end:0x82306728
 	.text       start:0x82A09990 end:0x82A09BC0
 
-xdk/NUI/nuiapi/neuralnet.cpp:
+xdk/nuiapi/neuralnet.cpp:
 	.rdata      start:0x821664E4 end:0x82166500
 	.pdata      start:0x82306728 end:0x82306788
 	.text       start:0x82A09BC0 end:0x82A0B660
 
-xdk/NUI/nuiapi/vt_kernel.cpp:
+xdk/nuiapi/vt_kernel.cpp:
 	.rdata      start:0x82166500 end:0x82166508
 	.pdata      start:0x82306788 end:0x823067C8
 	.text       start:0x82A0B660 end:0x82A0BBD0
 
-xdk/NUI/nuiapi/vt_mathutils.cpp:
+xdk/nuiapi/vt_mathutils.cpp:
 	.rdata      start:0x82166508 end:0x82166520
 	.text       start:0x82A0BBD0 end:0x82A0BC10
 
-xdk/NUI/nuiapi/vt_imgmath.cpp:
+xdk/nuiapi/vt_imgmath.cpp:
 	.text       start:0x82A0BC10 end:0x82A0BC68
 
-xdk/NUI/nuiaudio/nuiaudio.cpp:
+xdk/nuiaudio/nuiaudio.cpp:
 	.rdata      start:0x82166520 end:0x82166620
 	.pdata      start:0x823067C8 end:0x82306868
 	.text       start:0x82A0BC68 end:0x82A0E038
@@ -7548,99 +7548,99 @@ xdk/NUI/nuiaudio/nuiaudio.cpp:
 	.text       start:0x82EE4DC8 end:0x82EE4E00 rename:.text$yd
 	.data       start:0x82F1FE50 end:0x82F20050
 
-xdk/NUI/nuiaudio/meclib.cpp:
+xdk/nuiaudio/meclib.cpp:
 	.rdata      start:0x82166620 end:0x82166668
 	.pdata      start:0x82306868 end:0x823068F0
 	.text       start:0x82A0E038 end:0x82A11470
 
-xdk/NUI/nuiaudio/mecio.cpp:
+xdk/nuiaudio/mecio.cpp:
 	.rdata      start:0x82166668 end:0x82166744
 	.pdata      start:0x823068F0 end:0x82306948
 	.text       start:0x82A11470 end:0x82A12D18
 	.data       start:0x82F20050 end:0x82F20090
 	.data       start:0x83138A90 end:0x83138AA4 rename:.bss
 
-xdk/NUI/nuiaudio/echocncl.cpp:
+xdk/nuiaudio/echocncl.cpp:
 	.rdata      start:0x82166744 end:0x82166754
 	.pdata      start:0x82306948 end:0x82306988
 	.text       start:0x82A12D18 end:0x82A14450
 
-xdk/NUI/nuiaudio/noiseest2.cpp:
+xdk/nuiaudio/noiseest2.cpp:
 	.rdata      start:0x82166754 end:0x82166790
 	.pdata      start:0x82306988 end:0x823069A0
 	.text       start:0x82A14450 end:0x82A15C80
 
-xdk/NUI/nuiaudio/beamformer.cpp:
+xdk/nuiaudio/beamformer.cpp:
 	.rdata      start:0x82166790 end:0x821667A4
 	.pdata      start:0x823069A0 end:0x823069C0
 	.text       start:0x82A15C80 end:0x82A173D0
 	.data       start:0x83138AA4 end:0x83138AA8 rename:.bss
 
-xdk/NUI/nuiaudio/msrnoisesuppressor.cpp:
+xdk/nuiaudio/msrnoisesuppressor.cpp:
 	.pdata      start:0x823069C0 end:0x823069E0
 	.text       start:0x82A173D0 end:0x82A17878
 
-xdk/NUI/nuiaudio/aes.cpp:
+xdk/nuiaudio/aes.cpp:
 	.rdata      start:0x821667A4 end:0x821667AC
 	.pdata      start:0x823069E0 end:0x82306A20
 	.text       start:0x82A17878 end:0x82A18DC8
 
-xdk/NUI/nuiaudio/gain.cpp:
+xdk/nuiaudio/gain.cpp:
 	.pdata      start:0x82306A20 end:0x82306A38
 	.text       start:0x82A18DC8 end:0x82A19618
 
-xdk/NUI/nuiaudio/mecprocess.cpp:
+xdk/nuiaudio/mecprocess.cpp:
 	.rdata      start:0x821FFE50 end:0x821FFF60
 	.pdata      start:0x82306A38 end:0x82306A50
 	.text       start:0x82A19618 end:0x82A19D90
 	.data       start:0x83138AB0 end:0x8315AA30 rename:.bss
 
-xdk/NUI/nuiaudio/constanttoneremover.cpp:
+xdk/nuiaudio/constanttoneremover.cpp:
 	.rdata      start:0x821667AC end:0x82166930
 	.rdata      start:0x82166940 end:0x82166950
 	.pdata      start:0x82306A50 end:0x82306A68
 	.text       start:0x82A19D90 end:0x82A1A590
 
-xdk/NUI/nuiaudio/downsample.cpp:
+xdk/nuiaudio/downsample.cpp:
 	.pdata      start:0x82306A68 end:0x82306A90
 	.text       start:0x82A1A590 end:0x82A1B598
 
-xdk/NUI/nuiaudio/params.cpp:
+xdk/nuiaudio/params.cpp:
 	.rdata      start:0x82166930 end:0x82166940
 	.pdata      start:0x82306A90 end:0x82306A98
 	.text       start:0x82A1B598 end:0x82A1B638
 	.data       start:0x82F20198 end:0x82F20220
 
-xdk/NUI/nuiaudio/aecvec.cpp:
+xdk/nuiaudio/aecvec.cpp:
 	.pdata      start:0x82306A98 end:0x82306AA0
 	.text       start:0x82A1B638 end:0x82A1B8E8
 
-xdk/NUI/nuiaudio/lms.cpp:
+xdk/nuiaudio/lms.cpp:
 	.pdata      start:0x82306AA0 end:0x82306AC0
 	.text       start:0x82A1B8E8 end:0x82A1C150
 
-xdk/NUI/nuiaudio/dbltalk.cpp:
+xdk/nuiaudio/dbltalk.cpp:
 	.rdata      start:0x82166950 end:0x82166954
 	.pdata      start:0x82306AC0 end:0x82306AD8
 	.text       start:0x82A1C150 end:0x82A1C828
 
-xdk/NUI/nuiaudio/qwidoassl.cpp:
+xdk/nuiaudio/qwidoassl.cpp:
 	.rdata      start:0x82166954 end:0x82166970
 	.pdata      start:0x82306AD8 end:0x82306B10
 	.text       start:0x82A1C828 end:0x82A1DDD8
 
-xdk/NUI/nuiaudio/beamformertbl.cpp:
+xdk/nuiaudio/beamformertbl.cpp:
 	.rdata      start:0x82166970 end:0x821BAB4C
 
-xdk/NUI/nuiaudio/qprocessing.cpp:
+xdk/nuiaudio/qprocessing.cpp:
 	.pdata      start:0x82306B10 end:0x82306B18
 	.text       start:0x82A1DDD8 end:0x82A1EB20
 
-xdk/NUI/nuiaudio/qdsp.cpp:
+xdk/nuiaudio/qdsp.cpp:
 	.pdata      start:0x82306B18 end:0x82306B40
 	.text       start:0x82A1EB20 end:0x82A1EFE0
 
-xdk/NUI/nuispeech/xspeechapi.cpp:
+xdk/nuispeech/xspeechapi.cpp:
 	.rdata      start:0x821BAB4C end:0x821BB0E0
 	.pdata      start:0x82306B40 end:0x82306E40
 	.pdata      start:0x82321698 end:0x823216A0
@@ -7650,28 +7650,28 @@ xdk/NUI/nuispeech/xspeechapi.cpp:
 	.data       start:0x82F20220 end:0x82F203A8
 	.data       start:0x8315AA30 end:0x8315B578 rename:.bss
 
-xdk/NUI/nuispeech/xboxcom.cpp:
+xdk/nuispeech/xboxcom.cpp:
 	.pdata      start:0x82306E40 end:0x82306E98
 	.text       start:0x82A24BB8 end:0x82A25400
 
-xdk/NUI/nuispeech/speechlib.cpp:
+xdk/nuispeech/speechlib.cpp:
 	.pdata      start:0x82306E98 end:0x82306EC0
 	.text       start:0x82A25400 end:0x82A256A0
 
-xdk/NUI/nuispeech/eventhandler.cpp:
+xdk/nuispeech/eventhandler.cpp:
 	.rdata      start:0x821BB0E0 end:0x821BB100
 	.pdata      start:0x82306EC0 end:0x82306F30
 	.text       start:0x82A256A0 end:0x82A26100
 	.data       start:0x82F203B8 end:0x82F203BC
 
-xdk/NUI/nuispeech/etxspeechevent.cpp:
+xdk/nuispeech/etxspeechevent.cpp:
 	.rdata      start:0x821BB100 end:0x821BB108
 	.pdata      start:0x82306F30 end:0x82306FD8
 	.text       start:0x82A26100 end:0x82A27008
 	.data       start:0x82F203BC end:0x82F203C0
 	.data       start:0x8315B598 end:0x8315B5D8 rename:.bss
 
-xdk/NUI/nuispeech/datacollection.cpp:
+xdk/nuispeech/datacollection.cpp:
 	.rdata      start:0x821BB108 end:0x821BB174
 	.pdata      start:0x82306FD8 end:0x82307198
 	.pdata      start:0x823216A0 end:0x823216A8
@@ -7681,23 +7681,23 @@ xdk/NUI/nuispeech/datacollection.cpp:
 	.data       start:0x82F203C0 end:0x82F20644
 	.data       start:0x8315B5D8 end:0x8315B600 rename:.bss
 
-xdk/NUI/nuispeech/voiceinput.cpp:
+xdk/nuispeech/voiceinput.cpp:
 	.pdata      start:0x82307198 end:0x823071E8
 	.text       start:0x82A2A078 end:0x82A2AB80
 	.data       start:0x8315B600 end:0x8315B620 rename:.bss
 
-xdk/NUI/nuispeech/adaptation.cpp:
+xdk/nuispeech/adaptation.cpp:
 	.rdata      start:0x821BB174 end:0x821BB190
 	.pdata      start:0x823071E8 end:0x82307218
 	.text       start:0x82A2AB80 end:0x82A2B040
 	.data       start:0x82F20644 end:0x82F2093C
 	.data       start:0x8315B620 end:0x8315B628 rename:.bss
 
-xdk/NUI/nuispeech/xboxmem.cpp:
+xdk/nuispeech/xboxmem.cpp:
 	.pdata      start:0x82307218 end:0x82307220
 	.text       start:0x82A2B040 end:0x82A2B188
 
-xdk/NUI/nuispeech/sapi.cpp:
+xdk/nuispeech/sapi.cpp:
 	.rdata      start:0x821BB190 end:0x821BCE10
 	.pdata      start:0x82307220 end:0x82307D40
 	.pdata      start:0x823216A8 end:0x823216B8
@@ -7707,14 +7707,14 @@ xdk/NUI/nuispeech/sapi.cpp:
 	.data       start:0x82F2093C end:0x82F20990
 	.data       start:0x8315B628 end:0x8315B660 rename:.bss
 
-xdk/NUI/nuispeech/msasrx.cpp:
+xdk/nuispeech/msasrx.cpp:
 	.rdata      start:0x821BCE10 end:0x821BD118
 	.rdata      start:0x822A84D0 end:0x822A8B30 rename:.rdata$r
 	.pdata      start:0x82307D40 end:0x82307DA8
 	.text       start:0x82A36CA8 end:0x82A37478
 	.data       start:0x82F20990 end:0x82F20F34
 
-xdk/NUI/nuispeech/srdrv1.cpp:
+xdk/nuispeech/srdrv1.cpp:
 	.rdata      start:0x821BD118 end:0x821BEC84
 	.rdata      start:0x822A8B30 end:0x822AAFA4 rename:.rdata$r
 	.pdata      start:0x82307DA8 end:0x82308268
@@ -7722,14 +7722,14 @@ xdk/NUI/nuispeech/srdrv1.cpp:
 	.data       start:0x82F20F34 end:0x82F22A18
 	.data       start:0x8315B660 end:0x8315B668 rename:.bss
 
-xdk/NUI/nuispeech/xboxmodule.cpp:
+xdk/nuispeech/xboxmodule.cpp:
 	.rdata      start:0x821BEC84 end:0x821BEDF4
 	.pdata      start:0x82308268 end:0x823082F8
 	.text       start:0x82A3C898 end:0x82A3D610
 	.data       start:0x82F22A18 end:0x82F22A78
 	.data       start:0x8315B668 end:0x8315B6FC rename:.bss
 
-xdk/NUI/nuispeech/xboxreg.cpp:
+xdk/nuispeech/xboxreg.cpp:
 	.rdata      start:0x821BEDF4 end:0x821BEF04
 	.pdata      start:0x823082F8 end:0x823083A0
 	.text       start:0x82A3D610 end:0x82A3EE00
@@ -7737,152 +7737,152 @@ xdk/NUI/nuispeech/xboxreg.cpp:
 	.data       start:0x82F22A78 end:0x82F22AB4
 	.data       start:0x8315B700 end:0x8315B70C rename:.bss
 
-xdk/NUI/nuispeech/databuffer.cpp:
+xdk/nuispeech/databuffer.cpp:
 	.pdata      start:0x823083A0 end:0x823083B8
 	.text       start:0x82A3EE00 end:0x82A3F028
 
-xdk/NUI/nuispeech/contentpackage.cpp:
+xdk/nuispeech/contentpackage.cpp:
 	.rdata      start:0x821BEF04 end:0x821BEFA0
 	.pdata      start:0x823083B8 end:0x82308418
 	.text       start:0x82A3F028 end:0x82A3FA80
 	.data       start:0x82F22AB4 end:0x82F22ACC
 
-xdk/NUI/nuispeech/inputbuffer.cpp:
+xdk/nuispeech/inputbuffer.cpp:
 	.pdata      start:0x82308418 end:0x82308448
 	.text       start:0x82A3FA80 end:0x82A3FEB0
 
-xdk/NUI/nuispeech/lexicon.cpp:
+xdk/nuispeech/lexicon.cpp:
 	.rdata      start:0x821BEFA0 end:0x821BF2AC
 	.pdata      start:0x82308448 end:0x823084B0
 	.text       start:0x82A3FEB0 end:0x82A41210
 
-xdk/NUI/nuispeech/dict.cpp:
+xdk/nuispeech/dict.cpp:
 	.rdata      start:0x821BF2AC end:0x821BFB80
 	.pdata      start:0x823084B0 end:0x82308708
 	.text       start:0x82A41210 end:0x82A478F0
 
-xdk/NUI/nuispeech/vendorlx.cpp:
+xdk/nuispeech/vendorlx.cpp:
 	.rdata      start:0x821BFB80 end:0x821BFD5C
 	.pdata      start:0x82308708 end:0x82308760
 	.text       start:0x82A478F0 end:0x82A487F8
 
-xdk/NUI/nuispeech/phoneconv.cpp:
+xdk/nuispeech/phoneconv.cpp:
 	.rdata      start:0x821BFD5C end:0x821BFE98
 	.pdata      start:0x82308760 end:0x823087C0
 	.text       start:0x82A487F8 end:0x82A497E8
 
-xdk/NUI/nuispeech/objecttokencategory.cpp:
+xdk/nuispeech/objecttokencategory.cpp:
 	.rdata      start:0x821BFE98 end:0x821C0074
 	.pdata      start:0x823087C0 end:0x82308848
 	.text       start:0x82A497E8 end:0x82A4B130
 
-xdk/NUI/nuispeech/objecttokenenumbuilder.cpp:
+xdk/nuispeech/objecttokenenumbuilder.cpp:
 	.rdata      start:0x821C0074 end:0x821C0088
 	.pdata      start:0x82308848 end:0x823088C0
 	.text       start:0x82A4B130 end:0x82A4C0F0
 
-xdk/NUI/nuispeech/regdatakey.cpp:
+xdk/nuispeech/regdatakey.cpp:
 	.rdata      start:0x821C0088 end:0x821C00CC
 	.pdata      start:0x823088C0 end:0x82308958
 	.text       start:0x82A4C0F0 end:0x82A4CE58
 
-xdk/NUI/nuispeech/spphrase.cpp:
+xdk/nuispeech/spphrase.cpp:
 	.rdata      start:0x821C00CC end:0x821C015C
 	.pdata      start:0x82308958 end:0x82308BC0
 	.text       start:0x82A4CE58 end:0x82A52C58
 
-xdk/NUI/nuispeech/spresmgr.cpp:
+xdk/nuispeech/spresmgr.cpp:
 	.pdata      start:0x82308BC0 end:0x82308BE8
 	.text       start:0x82A52C58 end:0x82A532D8
 
-xdk/NUI/nuispeech/taskmgr.cpp:
+xdk/nuispeech/taskmgr.cpp:
 	.rdata      start:0x821C015C end:0x821C0228
 	.pdata      start:0x82308BE8 end:0x82308D80
 	.text       start:0x82A532D8 end:0x82A55980
 
-xdk/NUI/nuispeech/nullconv.cpp:
+xdk/nuispeech/nullconv.cpp:
 	.pdata      start:0x82308D80 end:0x82308D90
 	.text       start:0x82A55980 end:0x82A55B00
 
-xdk/NUI/nuispeech/objecttoken.cpp:
+xdk/nuispeech/objecttoken.cpp:
 	.rdata      start:0x821C0228 end:0x821C0390
 	.pdata      start:0x82308D90 end:0x82308E28
 	.text       start:0x82A55B00 end:0x82A57C88
 
-xdk/NUI/nuispeech/wavstream.cpp:
+xdk/nuispeech/wavstream.cpp:
 	.rdata      start:0x821C0390 end:0x821C04A4
 	.pdata      start:0x82308E28 end:0x82308FF0
 	.text       start:0x82A57C88 end:0x82A5C100
 	.data       start:0x8315B718 end:0x8315B720 rename:.bss
 
-xdk/NUI/nuispeech/recognizer.cpp:
+xdk/nuispeech/recognizer.cpp:
 	.rdata      start:0x821C04A4 end:0x821C0728
 	.pdata      start:0x82308FF0 end:0x823091A0
 	.text       start:0x82A5C100 end:0x82A5E600
 
-xdk/NUI/nuispeech/cfgengine.cpp:
+xdk/nuispeech/cfgengine.cpp:
 	.rdata      start:0x821C0728 end:0x821C0990
 	.pdata      start:0x823091A0 end:0x82309218
 	.text       start:0x82A5E600 end:0x82A60410
 
-xdk/NUI/nuispeech/backend.cpp:
+xdk/nuispeech/backend.cpp:
 	.rdata      start:0x821C0990 end:0x821C0A70
 	.pdata      start:0x82309218 end:0x82309498
 	.text       start:0x82A60410 end:0x82A68330
 
-xdk/NUI/nuispeech/semanticinterpretationms.cpp:
+xdk/nuispeech/semanticinterpretationms.cpp:
 	.rdata      start:0x821C0A70 end:0x821C15D8
 	.text       start:0x82A68330 end:0x82A68340
 
-xdk/NUI/nuispeech/semanticinterpretationw3c.cpp:
+xdk/nuispeech/semanticinterpretationw3c.cpp:
 	.rdata      start:0x821C15D8 end:0x821C1930
 
-xdk/NUI/nuispeech/srrecomaster.cpp:
+xdk/nuispeech/srrecomaster.cpp:
 	.rdata      start:0x821C1930 end:0x821C2328
 	.pdata      start:0x82309498 end:0x82309878
 	.text       start:0x82A68340 end:0x82A705A8
 	.data       start:0x82F22ACC end:0x82F22AD0
 
-xdk/NUI/nuispeech/cfgenginebase.cpp:
+xdk/nuispeech/cfgenginebase.cpp:
 	.rdata      start:0x821C2328 end:0x821C2434
 	.pdata      start:0x82309878 end:0x82309A48
 	.text       start:0x82A705A8 end:0x82A74D30
 	.data       start:0x8315B720 end:0x8315B72C rename:.bss
 
-xdk/NUI/nuispeech/srrecoinstctxt.cpp:
+xdk/nuispeech/srrecoinstctxt.cpp:
 	.rdata      start:0x821C2434 end:0x821C25A4
 	.pdata      start:0x82309A48 end:0x82309A98
 	.text       start:0x82A74D30 end:0x82A755B8
 
-xdk/NUI/nuispeech/srrecoinstgrammar.cpp:
+xdk/nuispeech/srrecoinstgrammar.cpp:
 	.rdata      start:0x821C25A4 end:0x821C2898
 	.pdata      start:0x82309A98 end:0x82309B08
 	.text       start:0x82A755B8 end:0x82A76AA8
 
-xdk/NUI/nuispeech/srevent.cpp:
+xdk/nuispeech/srevent.cpp:
 	.pdata      start:0x82309B08 end:0x82309B28
 	.text       start:0x82A76AA8 end:0x82A76D50
 
-xdk/NUI/nuispeech/srtask.cpp:
+xdk/nuispeech/srtask.cpp:
 	.rdata      start:0x821C2898 end:0x821C2958
 	.pdata      start:0x82309B28 end:0x82309C98
 	.text       start:0x82A76D50 end:0x82A78BB8
 
-xdk/NUI/nuispeech/spnotify.cpp:
+xdk/nuispeech/spnotify.cpp:
 	.pdata      start:0x82309C98 end:0x82309CE0
 	.text       start:0x82A78BB8 end:0x82A78FA0
 
-xdk/NUI/nuispeech/semanticinterpretation.cpp:
+xdk/nuispeech/semanticinterpretation.cpp:
 	.rdata      start:0x821C2958 end:0x821C2CC0
 	.pdata      start:0x82309CE0 end:0x82309DE0
 	.text       start:0x82A78FA0 end:0x82A7BB20
 
-xdk/NUI/nuispeech/srrecoinst.cpp:
+xdk/nuispeech/srrecoinst.cpp:
 	.rdata      start:0x821C2CC0 end:0x821C2CDC
 	.pdata      start:0x82309DE0 end:0x82309E50
 	.text       start:0x82A7BB20 end:0x82A7C990
 
-xdk/NUI/nuispeech/globals.cpp:
+xdk/nuispeech/globals.cpp:
 	.pdata      start:0x82309E50 end:0x82309E58
 	.pdata      start:0x823216B8 end:0x823216C8
 	.text       start:0x82A7C990 end:0x82A7CA00
@@ -7890,194 +7890,194 @@ xdk/NUI/nuispeech/globals.cpp:
 	.text       start:0x82EE4E38 end:0x82EE4E88 rename:.text$yd
 	.data       start:0x82F22AD0 end:0x82F22AF0
 
-xdk/NUI/nuispeech/recoext.cpp:
+xdk/nuispeech/recoext.cpp:
 	.rdata      start:0x821C2CDC end:0x821C2CEC
 	.pdata      start:0x82309E58 end:0x82309FA8
 	.text       start:0x82A7CA00 end:0x82A7E950
 
-xdk/NUI/nuispeech/guid.cpp:
+xdk/nuispeech/guid.cpp:
 	.rdata      start:0x821C2CEC end:0x821C2E6C
 
-xdk/NUI/nuispeech/spenginepronunciation.cpp:
+xdk/nuispeech/spenginepronunciation.cpp:
 	.pdata      start:0x82309FA8 end:0x82309FB8
 	.text       start:0x82A7E950 end:0x82A7EF08
 
-xdk/NUI/nuispeech/lochand.cpp:
+xdk/nuispeech/lochand.cpp:
 	.rdata      start:0x821C2E6C end:0x821C2FC4
 	.pdata      start:0x82309FB8 end:0x8230A108
 	.text       start:0x82A7EF08 end:0x82A81430
 	.data       start:0x8315B734 end:0x8315B736 rename:.bss
 
-xdk/NUI/nuispeech/textnormmultiresult.cpp:
+xdk/nuispeech/textnormmultiresult.cpp:
 	.rdata      start:0x821C2FC4 end:0x821C3888
 	.pdata      start:0x8230A108 end:0x8230A4B0
 	.text       start:0x82A81430 end:0x82A87718
 
-xdk/NUI/nuispeech/lochand_deu.cpp:
+xdk/nuispeech/lochand_deu.cpp:
 	.rdata      start:0x821C3888 end:0x821C3964
 	.pdata      start:0x8230A4B0 end:0x8230A520
 	.text       start:0x82A87718 end:0x82A88280
 
-xdk/NUI/nuispeech/lochand_esp.cpp:
+xdk/nuispeech/lochand_esp.cpp:
 	.pdata      start:0x8230A520 end:0x8230A538
 	.text       start:0x82A88280 end:0x82A88408
 
-xdk/NUI/nuispeech/lochand_jpn.cpp:
+xdk/nuispeech/lochand_jpn.cpp:
 	.rdata      start:0x821C3964 end:0x821C3998
 	.pdata      start:0x8230A538 end:0x8230A598
 	.text       start:0x82A88408 end:0x82A896E0
 
-xdk/NUI/nuispeech/formatdisp.cpp:
+xdk/nuispeech/formatdisp.cpp:
 	.pdata      start:0x8230A598 end:0x8230A5D0
 	.text       start:0x82A896E0 end:0x82A8AC48
 
-xdk/NUI/nuispeech/lochand_addttspron.cpp:
+xdk/nuispeech/lochand_addttspron.cpp:
 	.rdata      start:0x821C3998 end:0x821C39A8
 	.text       start:0x82A8AC48 end:0x82A8AC68
 
-xdk/NUI/nuispeech/vendconv.cpp:
+xdk/nuispeech/vendconv.cpp:
 	.rdata      start:0x821C39A8 end:0x821C3A00
 	.pdata      start:0x8230A5D0 end:0x8230A630
 	.text       start:0x82A8AC68 end:0x82A8BA48
 
-xdk/NUI/nuispeech/sapilib.cpp:
+xdk/nuispeech/sapilib.cpp:
 	.rdata      start:0x821C3A00 end:0x821C3A60
 
-xdk/NUI/nuispeech/vendconv_jpn.cpp:
+xdk/nuispeech/vendconv_jpn.cpp:
 	.rdata      start:0x821C3A60 end:0x821C50F0
 	.pdata      start:0x8230A630 end:0x8230A650
 	.text       start:0x82A8BA48 end:0x82A8CA40
 
-xdk/NUI/nuispeech/grphlts.cpp:
+xdk/nuispeech/grphlts.cpp:
 	.rdata      start:0x821C50F0 end:0x821C5120
 	.pdata      start:0x8230A650 end:0x8230A6F0
 	.text       start:0x82A8CA40 end:0x82A8E4B0
 	.data       start:0x8315B736 end:0x8315B73C rename:.bss
 
-xdk/NUI/nuispeech/ltscart.cpp:
+xdk/nuispeech/ltscart.cpp:
 	.rdata      start:0x821C5120 end:0x821C5138
 	.pdata      start:0x8230A6F0 end:0x8230A740
 	.text       start:0x82A8E4B0 end:0x82A8F5F0
 
-xdk/NUI/nuispeech/ltslx.cpp:
+xdk/nuispeech/ltslx.cpp:
 	.rdata      start:0x821C5138 end:0x821C5200
 	.pdata      start:0x8230A740 end:0x8230A7D8
 	.text       start:0x82A8F5F0 end:0x82A90BF0
 
-xdk/NUI/nuispeech/engine.cpp:
+xdk/nuispeech/engine.cpp:
 	.rdata      start:0x821C5200 end:0x821C6884
 	.pdata      start:0x8230A7D8 end:0x8230AB78
 	.text       start:0x82A90BF0 end:0x82A9E660
 	.data       start:0x8315B73C end:0x8315B748 rename:.bss
 
-xdk/NUI/nuispeech/alternates.cpp:
+xdk/nuispeech/alternates.cpp:
 	.rdata      start:0x821C6884 end:0x821C6904
 	.pdata      start:0x8230AB78 end:0x8230AB90
 	.text       start:0x82A9E660 end:0x82A9E9B8
 
-xdk/NUI/nuispeech/objshare.cpp:
+xdk/nuispeech/objshare.cpp:
 	.pdata      start:0x8230AB90 end:0x8230AB98
 	.text       start:0x82A9E9B8 end:0x82A9EA28
 
-xdk/NUI/nuispeech/train.cpp:
+xdk/nuispeech/train.cpp:
 	.rdata      start:0x821C6904 end:0x821C6924
 	.pdata      start:0x8230AB98 end:0x8230ABB8
 	.text       start:0x82A9EA28 end:0x82A9EBB8
 
-xdk/NUI/nuispeech/ctools.cpp:
+xdk/nuispeech/ctools.cpp:
 	.pdata      start:0x8230ABB8 end:0x8230ABE8
 	.text       start:0x82A9EBB8 end:0x82A9EF88
 
-xdk/NUI/nuispeech/lochand_fra.cpp:
+xdk/nuispeech/lochand_fra.cpp:
 	.pdata      start:0x8230ABE8 end:0x8230ABF0
 	.text       start:0x82A9EF88 end:0x82A9F010
 
-xdk/NUI/nuispeech/xboxscript.cpp:
+xdk/nuispeech/xboxscript.cpp:
 	.rdata      start:0x821C6924 end:0x821C69A8
 	.pdata      start:0x8230ABF0 end:0x8230AC88
 	.text       start:0x82A9F010 end:0x82AA0458
 	.data       start:0x82F22AF0 end:0x82F22B00
 
-xdk/NUI/nuispeech/regdata.cpp:
+xdk/nuispeech/regdata.cpp:
 	.rdata      start:0x821C69A8 end:0x821D5938
 	.data       start:0x82F22B00 end:0x82F22B40
 
-xdk/NUI/nuispeech/spinthlp.cpp:
+xdk/nuispeech/spinthlp.cpp:
 	.rdata      start:0x821D5938 end:0x821D5B2C
 	.pdata      start:0x8230AC88 end:0x8230ACE8
 	.text       start:0x82AA0458 end:0x82AA12D8
 
-xdk/NUI/nuispeech/xboxutil.cpp:
+xdk/nuispeech/xboxutil.cpp:
 	.rdata      start:0x821D5B2C end:0x821D5B60
 	.pdata      start:0x8230ACE8 end:0x8230AD78
 	.text       start:0x82AA12D8 end:0x82AA1DC8
 
-xdk/NUI/nuispeech/langutils.cpp:
+xdk/nuispeech/langutils.cpp:
 	.text       start:0x82AA1DC8 end:0x82AA1DF0
 
-xdk/NUI/nuispeech/huffd.cpp:
+xdk/nuispeech/huffd.cpp:
 	.pdata      start:0x8230AD78 end:0x8230ADA8
 	.text       start:0x82AA1DF0 end:0x82AA2320
 
-xdk/NUI/nuispeech/objecttokenattribparser.cpp:
+xdk/nuispeech/objecttokenattribparser.cpp:
 	.rdata      start:0x821D5B60 end:0x821D5B88
 	.pdata      start:0x8230ADA8 end:0x8230AE30
 	.text       start:0x82AA2320 end:0x82AA2E28
 
-xdk/NUI/nuispeech/mmio.cpp:
+xdk/nuispeech/mmio.cpp:
 	.pdata      start:0x8230AE30 end:0x8230AEB0
 	.text       start:0x82AA2E28 end:0x82AA3F50
 	.data       start:0x8315B758 end:0x8315B784 rename:.bss
 
-xdk/NUI/nuispeech/mmioriff.cpp:
+xdk/nuispeech/mmioriff.cpp:
 	.pdata      start:0x8230AEB0 end:0x8230AEC8
 	.text       start:0x82AA3F50 end:0x82AA42A8
 
-xdk/NUI/nuispeech/streamproxy.cpp:
+xdk/nuispeech/streamproxy.cpp:
 	.rdata      start:0x821D5B88 end:0x821D5B98
 
-xdk/NUI/nuispeech/recoctxt.cpp:
+xdk/nuispeech/recoctxt.cpp:
 	.rdata      start:0x821D5B98 end:0x821D5F38
 	.pdata      start:0x8230AEC8 end:0x8230B078
 	.text       start:0x82AA42A8 end:0x82AA7060
 
-xdk/NUI/nuispeech/sapi_init.cpp:
+xdk/nuispeech/sapi_init.cpp:
 	.rdata      start:0x821D5F38 end:0x821D609C
 	.pdata      start:0x8230B078 end:0x8230B080
 	.text       start:0x82AA7060 end:0x82AA7278
 
-xdk/NUI/nuispeech/category.cpp:
+xdk/nuispeech/category.cpp:
 	.rdata      start:0x821D609C end:0x821D60C4
 	.pdata      start:0x8230B080 end:0x8230B0D0
 	.text       start:0x82AA7278 end:0x82AA7B20
 
-xdk/NUI/nuispeech/spresult.cpp:
+xdk/nuispeech/spresult.cpp:
 	.rdata      start:0x821D60C4 end:0x821D6138
 	.pdata      start:0x8230B0D0 end:0x8230B218
 	.text       start:0x82AA7B20 end:0x82AAAB30
 
-xdk/NUI/nuispeech/cfggrammar.cpp:
+xdk/nuispeech/cfggrammar.cpp:
 	.rdata      start:0x821D6138 end:0x821D64AC
 	.pdata      start:0x8230B218 end:0x8230B310
 	.text       start:0x82AAAB30 end:0x82AADBB8
 
-xdk/NUI/nuispeech/cfggrammarbase.cpp:
+xdk/nuispeech/cfggrammarbase.cpp:
 	.rdata      start:0x821D64AC end:0x821D6520
 	.pdata      start:0x8230B310 end:0x8230B3B0
 	.text       start:0x82AADBB8 end:0x82AAF100
 
-xdk/NUI/nuispeech/cfgtransparser.cpp:
+xdk/nuispeech/cfgtransparser.cpp:
 	.rdata      start:0x821D6520 end:0x821D6600
 	.pdata      start:0x8230B3B0 end:0x8230B570
 	.text       start:0x82AAF100 end:0x82AB4ED8
 	.data       start:0x82F22B40 end:0x82F22B4C
 
-xdk/NUI/nuispeech/basegrammar.cpp:
+xdk/nuispeech/basegrammar.cpp:
 	.rdata      start:0x821D6600 end:0x821D6714
 	.pdata      start:0x8230B570 end:0x8230B5B8
 	.text       start:0x82AB4ED8 end:0x82AB61E0
 
-xdk/NUI/nuispeech/sharedgrammardata.cpp:
+xdk/nuispeech/sharedgrammardata.cpp:
 	.rdata      start:0x821D6714 end:0x821D6730
 	.pdata      start:0x8230B5B8 end:0x8230B5D0
 	.pdata      start:0x823216C8 end:0x823216D0
@@ -8088,122 +8088,122 @@ xdk/NUI/nuispeech/sharedgrammardata.cpp:
 	.data       start:0x82F22B4C end:0x82F22B60
 	.data       start:0x8315B784 end:0x8315B7A0 rename:.bss
 
-xdk/NUI/nuispeech/cfglexicon.cpp:
+xdk/nuispeech/cfglexicon.cpp:
 	.rdata      start:0x821D6730 end:0x821D6790
 	.pdata      start:0x8230B5D0 end:0x8230B720
 	.text       start:0x82AB65E8 end:0x82AB8650
 
-xdk/NUI/nuispeech/grammaroptimization.cpp:
+xdk/nuispeech/grammaroptimization.cpp:
 	.text       start:0x82AB8650 end:0x82AB8698
 
-xdk/NUI/nuispeech/sraudio.cpp:
+xdk/nuispeech/sraudio.cpp:
 	.rdata      start:0x821D6790 end:0x821D69C8
 	.pdata      start:0x8230B720 end:0x8230B800
 	.text       start:0x82AB8698 end:0x82AB9ED8
 
-xdk/NUI/nuispeech/quickstring.cpp:
+xdk/nuispeech/quickstring.cpp:
 	.pdata      start:0x8230B800 end:0x8230B820
 	.text       start:0x82AB9ED8 end:0x82ABA1D0
 
-xdk/NUI/nuispeech/resultheader.cpp:
+xdk/nuispeech/resultheader.cpp:
 	.rdata      start:0x821D69C8 end:0x821D6A30
 	.pdata      start:0x8230B820 end:0x8230B888
 	.text       start:0x82ABA1D0 end:0x82ABAEB0
 
-xdk/NUI/nuispeech/qstring.cpp:
+xdk/nuispeech/qstring.cpp:
 	.pdata      start:0x8230B888 end:0x8230B898
 	.text       start:0x82ABAEB0 end:0x82ABB030
 
-xdk/NUI/nuispeech/xmodelfile.cpp:
+xdk/nuispeech/xmodelfile.cpp:
 	.pdata      start:0x8230B898 end:0x8230B8C0
 	.text       start:0x82ABB030 end:0x82ABB4A0
 
-xdk/NUI/nuispeech/sharemap.cpp:
+xdk/nuispeech/sharemap.cpp:
 	.pdata      start:0x8230B8C0 end:0x8230B8E0
 	.text       start:0x82ABB4A0 end:0x82ABB7A8
 
-xdk/NUI/nuispeech/wordparsing.cpp:
+xdk/nuispeech/wordparsing.cpp:
 	.rdata      start:0x821D6A30 end:0x821D6BA0
 	.pdata      start:0x8230B8E0 end:0x8230B920
 	.text       start:0x82ABB7A8 end:0x82ABBC10
 
-xdk/NUI/nuispeech/ctransducer.cpp:
+xdk/nuispeech/ctransducer.cpp:
 	.rdata      start:0x821D6BA0 end:0x821D7320
 	.pdata      start:0x8230B920 end:0x8230BC20
 	.text       start:0x82ABBC10 end:0x82AC2E68
 
-xdk/NUI/nuispeech/argparser.cpp:
+xdk/nuispeech/argparser.cpp:
 	.rdata      start:0x821D7320 end:0x821D7328
 	.pdata      start:0x8230BC20 end:0x8230BC60
 	.text       start:0x82AC2E68 end:0x82AC3338
 
-xdk/NUI/nuispeech/compattriblex.cpp:
+xdk/nuispeech/compattriblex.cpp:
 	.rdata      start:0x821D7328 end:0x821D7440
 	.pdata      start:0x8230BC60 end:0x8230BDC8
 	.text       start:0x82AC3338 end:0x82AC5AC8
 
-xdk/NUI/nuispeech/attributestring.cpp:
+xdk/nuispeech/attributestring.cpp:
 	.pdata      start:0x8230BDC8 end:0x8230BDF0
 	.text       start:0x82AC5AC8 end:0x82AC5DF0
 
-xdk/NUI/nuispeech/ctransducernetwork.cpp:
+xdk/nuispeech/ctransducernetwork.cpp:
 	.rdata      start:0x821D7440 end:0x821D7628
 	.pdata      start:0x8230BDF0 end:0x8230BFE8
 	.text       start:0x82AC5DF0 end:0x82ACA650
 	.data       start:0x82F22B60 end:0x82F22B68
 
-xdk/NUI/nuispeech/cm_funcs.cpp:
+xdk/nuispeech/cm_funcs.cpp:
 	.pdata      start:0x8230BFE8 end:0x8230C010
 	.text       start:0x82ACA650 end:0x82ACAA70
 
-xdk/NUI/nuispeech/agreementelement.cpp:
+xdk/nuispeech/agreementelement.cpp:
 	.rdata      start:0x821D7628 end:0x821D762C
 	.pdata      start:0x8230C010 end:0x8230C050
 	.text       start:0x82ACAA70 end:0x82ACB008
 
-xdk/NUI/nuispeech/parsetreenode.cpp:
+xdk/nuispeech/parsetreenode.cpp:
 	.pdata      start:0x8230C050 end:0x8230C080
 	.text       start:0x82ACB008 end:0x82ACB408
 
-xdk/NUI/nuispeech/ppt.cpp:
+xdk/nuispeech/ppt.cpp:
 	.rdata      start:0x821D762C end:0x821D7680
 	.pdata      start:0x8230C080 end:0x8230C200
 	.text       start:0x82ACB408 end:0x82ACF878
 	.data       start:0x8315B7B0 end:0x8315B7B4 rename:.bss
 
-xdk/NUI/nuispeech/cfile.cpp:
+xdk/nuispeech/cfile.cpp:
 	.pdata      start:0x8230C200 end:0x8230C238
 	.text       start:0x82ACF878 end:0x82ACFCB0
 
-xdk/NUI/nuispeech/cwordparsingfsm.cpp:
+xdk/nuispeech/cwordparsingfsm.cpp:
 	.rdata      start:0x821D7680 end:0x821D7B08
 	.pdata      start:0x8230C238 end:0x8230C358
 	.text       start:0x82ACFCB0 end:0x82AD1E88
 	.data       start:0x8315B7B8 end:0x8315B7BC rename:.bss
 
-xdk/NUI/nuispeech/catlex.cpp:
+xdk/nuispeech/catlex.cpp:
 	.rdata      start:0x821D7B08 end:0x821D7B60
 	.pdata      start:0x8230C358 end:0x8230C390
 	.text       start:0x82AD1E88 end:0x82AD2380
 
-xdk/NUI/nuispeech/wordparse.cpp:
+xdk/nuispeech/wordparse.cpp:
 	.rdata      start:0x821D7B60 end:0x821D7CFC
 	.pdata      start:0x8230C390 end:0x8230C398
 	.text       start:0x82AD2380 end:0x82AD2440
 	.data       start:0x82F22B68 end:0x82F22C28
 
-xdk/NUI/nuispeech/wordparse_jpn.cpp:
+xdk/nuispeech/wordparse_jpn.cpp:
 	.rdata      start:0x821D7CFC end:0x821D7D48
 	.pdata      start:0x8230C398 end:0x8230C3A8
 	.text       start:0x82AD2440 end:0x82AD27F0
 	.data       start:0x82F22C28 end:0x82F22C48
 
-xdk/NUI/nuispeech/inputtape.cpp:
+xdk/nuispeech/inputtape.cpp:
 	.rdata      start:0x821D7D48 end:0x821D7EA8
 	.pdata      start:0x8230C3A8 end:0x8230C488
 	.text       start:0x82AD27F0 end:0x82AD4290
 
-xdk/NUI/nuispeech/phone.cpp:
+xdk/nuispeech/phone.cpp:
 	.rdata      start:0x821D7EA8 end:0x821D7F4C
 	.rdata      start:0x822AAFA4 end:0x822AB094 rename:.rdata$r
 	.pdata      start:0x8230C488 end:0x8230C558
@@ -8211,27 +8211,27 @@ xdk/NUI/nuispeech/phone.cpp:
 	.data       start:0x82F22C48 end:0x82F22D08
 	.data       start:0x8315B7C8 end:0x8315B7C9 rename:.bss
 
-xdk/NUI/nuispeech/nxtarg.cpp:
+xdk/nuispeech/nxtarg.cpp:
 	.pdata      start:0x8230C558 end:0x8230C560
 	.text       start:0x82AD6820 end:0x82AD68B0
 
-xdk/NUI/nuispeech/fibonacci.cpp:
+xdk/nuispeech/fibonacci.cpp:
 	.pdata      start:0x8230C560 end:0x8230C590
 	.text       start:0x82AD68B0 end:0x82AD6F88
 
-xdk/NUI/nuispeech/bgthread.cpp:
+xdk/nuispeech/bgthread.cpp:
 	.pdata      start:0x8230C590 end:0x8230C5B8
 	.text       start:0x82AD6F88 end:0x82AD7368
 
-xdk/NUI/nuispeech/mllr_stub.cpp:
+xdk/nuispeech/mllr_stub.cpp:
 	.text       start:0x82AD7368 end:0x82AD7400
 
-xdk/NUI/nuispeech/srfrontend.cpp:
+xdk/nuispeech/srfrontend.cpp:
 	.rdata      start:0x821D7F4C end:0x821D7FF4
 	.pdata      start:0x8230C5B8 end:0x8230C648
 	.text       start:0x82AD7400 end:0x82AD8558
 
-xdk/NUI/nuispeech/search.cpp:
+xdk/nuispeech/search.cpp:
 	.rdata      start:0x821D7FF4 end:0x821D9294
 	.rdata      start:0x822AB094 end:0x822AB264 rename:.rdata$r
 	.pdata      start:0x8230C648 end:0x8230CA78
@@ -8239,14 +8239,14 @@ xdk/NUI/nuispeech/search.cpp:
 	.data       start:0x82F22D08 end:0x82F22E18
 	.data       start:0x8315B7C9 end:0x8315B7F1 rename:.bss
 
-xdk/NUI/nuispeech/slm.cpp:
+xdk/nuispeech/slm.cpp:
 	.rdata      start:0x821D9294 end:0x821D92D0
 	.rdata      start:0x822AB264 end:0x822AB2F4 rename:.rdata$r
 	.pdata      start:0x8230CA78 end:0x8230CB00
 	.text       start:0x82AE9B88 end:0x82AEA860
 	.data       start:0x82F22E18 end:0x82F22E54
 
-xdk/NUI/nuispeech/cfglm5.cpp:
+xdk/nuispeech/cfglm5.cpp:
 	.rdata      start:0x821D92D0 end:0x821D97CC
 	.rdata      start:0x822AB2F4 end:0x822AB454 rename:.rdata$r
 	.pdata      start:0x8230CB00 end:0x8230CD18
@@ -8254,29 +8254,29 @@ xdk/NUI/nuispeech/cfglm5.cpp:
 	.data       start:0x82F22E54 end:0x82F22EE8
 	.data       start:0x8315B7F1 end:0x8315B7F8 rename:.bss
 
-xdk/NUI/nuispeech/mllr_align.cpp:
+xdk/nuispeech/mllr_align.cpp:
 	.rdata      start:0x821D97CC end:0x821D9938
 	.pdata      start:0x8230CD18 end:0x8230CE18
 	.text       start:0x82AF0210 end:0x82AF29D0
 
-xdk/NUI/nuispeech/history.cpp:
+xdk/nuispeech/history.cpp:
 	.pdata      start:0x8230CE18 end:0x8230CE40
 	.text       start:0x82AF29D0 end:0x82AF2D00
 
-xdk/NUI/nuispeech/acousticmodel.cpp:
+xdk/nuispeech/acousticmodel.cpp:
 	.rdata      start:0x821D9938 end:0x821D9AA0
 	.pdata      start:0x8230CE40 end:0x8230CEA8
 	.text       start:0x82AF2D00 end:0x82AF4758
 	.data       start:0x82F22EE8 end:0x82F22F30
 
-xdk/NUI/nuispeech/mru.cpp:
+xdk/nuispeech/mru.cpp:
 	.pdata      start:0x8230CEA8 end:0x8230CEE0
 	.text       start:0x82AF4758 end:0x82AF4DD0
 
-xdk/NUI/nuispeech/codebook.cpp:
+xdk/nuispeech/codebook.cpp:
 	.text       start:0x82AF4DD0 end:0x82AF4F08
 
-xdk/NUI/nuispeech/femanager.cpp:
+xdk/nuispeech/femanager.cpp:
 	.rdata      start:0x821D9AA0 end:0x821DA1C8
 	.pdata      start:0x8230CEE0 end:0x8230D160
 	.pdata      start:0x823216D0 end:0x823216D8
@@ -8285,24 +8285,24 @@ xdk/NUI/nuispeech/femanager.cpp:
 	.text       start:0x82EE4EE0 end:0x82EE4EE8 rename:.text$yd
 	.data       start:0x8315B7F8 end:0x8315B824 rename:.bss
 
-xdk/NUI/nuispeech/lattice.cpp:
+xdk/nuispeech/lattice.cpp:
 	.rdata      start:0x821DA1C8 end:0x821DA658
 	.pdata      start:0x8230D160 end:0x8230D390
 	.text       start:0x82AF8858 end:0x82B03680
 	.data       start:0x8315B824 end:0x8315B82A rename:.bss
 
-xdk/NUI/nuispeech/confumat.cpp:
+xdk/nuispeech/confumat.cpp:
 	.pdata      start:0x8230D390 end:0x8230D3B0
 	.text       start:0x82B03680 end:0x82B038F0
 
-xdk/NUI/nuispeech/csscompiler.cpp:
+xdk/nuispeech/csscompiler.cpp:
 	.rdata      start:0x821DA658 end:0x821DA68C
 	.rdata      start:0x822AB454 end:0x822AB4A8 rename:.rdata$r
 	.pdata      start:0x8230D3B0 end:0x8230D3B8
 	.text       start:0x82B038F0 end:0x82B039C8
 	.data       start:0x82F22F30 end:0x82F22F54
 
-xdk/NUI/nuispeech/main.cpp:
+xdk/nuispeech/main.cpp:
 	.rdata      start:0x821DA68C end:0x821DA90C
 	.rdata      start:0x822AB4A8 end:0x822AB6A4 rename:.rdata$r
 	.pdata      start:0x8230D3B8 end:0x8230D470
@@ -8312,7 +8312,7 @@ xdk/NUI/nuispeech/main.cpp:
 	.data       start:0x82F22F54 end:0x82F230A4
 	.data       start:0x8315B82A end:0x8315B82B rename:.bss
 
-xdk/NUI/nuispeech/topic.cpp:
+xdk/nuispeech/topic.cpp:
 	.rdata      start:0x821DA90C end:0x821DA990
 	.rdata      start:0x822AB6A4 end:0x822AB6F8 rename:.rdata$r
 	.pdata      start:0x8230D470 end:0x8230D520
@@ -8320,83 +8320,83 @@ xdk/NUI/nuispeech/topic.cpp:
 	.data       start:0x82F230A4 end:0x82F230C8
 	.data       start:0x8315B82C end:0x8315B82E rename:.bss
 
-xdk/NUI/nuispeech/phonedec.cpp:
+xdk/nuispeech/phonedec.cpp:
 	.rdata      start:0x821DA990 end:0x821DA99C
 	.pdata      start:0x8230D520 end:0x8230D588
 	.text       start:0x82B07638 end:0x82B08B40
 
-xdk/NUI/nuispeech/phrase.cpp:
+xdk/nuispeech/phrase.cpp:
 	.rdata      start:0x821DA99C end:0x821DA9AC
 	.pdata      start:0x8230D588 end:0x8230D5E0
 	.text       start:0x82B08B40 end:0x82B0A1B0
 	.data       start:0x8315B82E end:0x8315B830 rename:.bss
 
-xdk/NUI/nuispeech/sentence.cpp:
+xdk/nuispeech/sentence.cpp:
 	.rdata      start:0x821DA9AC end:0x821DA9E4
 	.pdata      start:0x8230D5E0 end:0x8230D650
 	.text       start:0x82B0A1B0 end:0x82B0B580
 	.data       start:0x8315B830 end:0x8315B831 rename:.bss
 
-xdk/NUI/nuispeech/speaker.cpp:
+xdk/nuispeech/speaker.cpp:
 	.pdata      start:0x8230D650 end:0x8230D668
 	.text       start:0x82B0B580 end:0x82B0B768
 	.data       start:0x8315B831 end:0x8315B832 rename:.bss
 
-xdk/NUI/nuispeech/lcid2cp.cpp:
+xdk/nuispeech/lcid2cp.cpp:
 	.pdata      start:0x8230D668 end:0x8230D670
 	.text       start:0x82B0B768 end:0x82B0B890
 
-xdk/NUI/nuispeech/clm.cpp:
+xdk/nuispeech/clm.cpp:
 	.rdata      start:0x821DA9E4 end:0x821DA9F4
 	.rdata      start:0x822AB6F8 end:0x822AB70C rename:.rdata$r
 	.pdata      start:0x8230D670 end:0x8230D680
 	.text       start:0x82B0B890 end:0x82B0B9A8
 
-xdk/NUI/nuispeech/memtrans.cpp:
+xdk/nuispeech/memtrans.cpp:
 	.rdata      start:0x821DA9F4 end:0x821DAA00
 	.pdata      start:0x8230D680 end:0x8230D6E0
 	.text       start:0x82B0B9A8 end:0x82B0C340
 
-xdk/NUI/nuispeech/readam.cpp:
+xdk/nuispeech/readam.cpp:
 	.rdata      start:0x821DAA00 end:0x821DAA30
 	.rdata      start:0x822AB70C end:0x822AB758 rename:.rdata$r
 	.pdata      start:0x8230D6E0 end:0x8230D730
 	.text       start:0x82B0C340 end:0x82B0E1D8
 	.data       start:0x82F230C8 end:0x82F230F8
 
-xdk/NUI/nuispeech/altutils.cpp:
+xdk/nuispeech/altutils.cpp:
 	.pdata      start:0x8230D730 end:0x8230D7B8
 	.text       start:0x82B0E1D8 end:0x82B0FEA0
 
-xdk/NUI/nuispeech/adapt_lm.cpp:
+xdk/nuispeech/adapt_lm.cpp:
 	.pdata      start:0x8230D7B8 end:0x8230D7D8
 	.text       start:0x82B0FEA0 end:0x82B102B0
 	.data       start:0x8315B832 end:0x8315B833 rename:.bss
 
-xdk/NUI/nuispeech/ltree_pe.cpp:
+xdk/nuispeech/ltree_pe.cpp:
 	.pdata      start:0x8230D7D8 end:0x8230D7F8
 	.text       start:0x82B102B0 end:0x82B10CB8
 
-xdk/NUI/nuispeech/amcoll.cpp:
+xdk/nuispeech/amcoll.cpp:
 	.pdata      start:0x8230D7F8 end:0x8230D810
 	.text       start:0x82B10CB8 end:0x82B11010
 
-xdk/NUI/nuispeech/ugtfilter.cpp:
+xdk/nuispeech/ugtfilter.cpp:
 	.pdata      start:0x8230D810 end:0x8230D828
 	.text       start:0x82B11010 end:0x82B11680
 
-xdk/NUI/nuispeech/mvwec.cpp:
+xdk/nuispeech/mvwec.cpp:
 	.pdata      start:0x8230D828 end:0x8230D880
 	.text       start:0x82B11680 end:0x82B12D78
 
-xdk/NUI/nuispeech/pptser.cpp:
+xdk/nuispeech/pptser.cpp:
 	.rdata      start:0x821DAA30 end:0x821DAA9C
 	.rdata      start:0x822AB758 end:0x822AB7EC rename:.rdata$r
 	.pdata      start:0x8230D880 end:0x8230D8E0
 	.text       start:0x82B12D78 end:0x82B14970
 	.data       start:0x82F230F8 end:0x82F2314C
 
-xdk/NUI/nuispeech/fewrap.cpp:
+xdk/nuispeech/fewrap.cpp:
 	.rdata      start:0x821DAA9C end:0x821DAAC8
 	.rdata      start:0x822AB7EC end:0x822AB8BC rename:.rdata$r
 	.pdata      start:0x8230D8E0 end:0x8230D960
@@ -8404,147 +8404,147 @@ xdk/NUI/nuispeech/fewrap.cpp:
 	.data       start:0x82F2314C end:0x82F2319C
 	.data       start:0x8315B833 end:0x8315B838 rename:.bss
 
-xdk/NUI/nuispeech/filter.cpp:
+xdk/nuispeech/filter.cpp:
 	.pdata      start:0x8230D960 end:0x8230D968
 	.text       start:0x82B16968 end:0x82B16A38
 
-xdk/NUI/nuispeech/srgrammar.cpp:
+xdk/nuispeech/srgrammar.cpp:
 	.rdata      start:0x821DAAC8 end:0x821DAB90
 	.pdata      start:0x8230D968 end:0x8230DAA8
 	.text       start:0x82B16A38 end:0x82B19698
 
-xdk/NUI/nuispeech/spphrasealt.cpp:
+xdk/nuispeech/spphrasealt.cpp:
 	.pdata      start:0x8230DAA8 end:0x8230DAD0
 	.text       start:0x82B19698 end:0x82B19970
 
-xdk/NUI/nuispeech/tidarray.cpp:
+xdk/nuispeech/tidarray.cpp:
 	.pdata      start:0x8230DAD0 end:0x8230DAE8
 	.text       start:0x82B19970 end:0x82B19D00
 
-xdk/NUI/nuispeech/wordparserenx.cpp:
+xdk/nuispeech/wordparserenx.cpp:
 	.rdata      start:0x821DAB90 end:0x821DAD54
 	.pdata      start:0x8230DAE8 end:0x8230DB30
 	.text       start:0x82B19D00 end:0x82B1A270
 
-xdk/NUI/nuispeech/prime.cpp:
+xdk/nuispeech/prime.cpp:
 	.text       start:0x82B1A270 end:0x82B1A2F8
 
-xdk/NUI/nuispeech/shareabletransducernetwork.cpp:
+xdk/nuispeech/shareabletransducernetwork.cpp:
 	.rdata      start:0x821DAD54 end:0x821DADDC
 	.pdata      start:0x8230DB30 end:0x8230DB58
 	.text       start:0x82B1A2F8 end:0x82B1A4A8
 
-xdk/NUI/nuispeech/matchinstance.cpp:
+xdk/nuispeech/matchinstance.cpp:
 	.text       start:0x82B1A4A8 end:0x82B1A4F0
 
-xdk/NUI/nuispeech/frdargv.cpp:
+xdk/nuispeech/frdargv.cpp:
 	.pdata      start:0x8230DB58 end:0x8230DB70
 	.text       start:0x82B1A4F0 end:0x82B1A810
 
-xdk/NUI/nuispeech/string.cpp:
+xdk/nuispeech/string.cpp:
 	.text       start:0x82B1A810 end:0x82B1A858
 
-xdk/NUI/nuispeech/lexschemadecoder.cpp:
+xdk/nuispeech/lexschemadecoder.cpp:
 	.pdata      start:0x8230DB70 end:0x8230DBC0
 	.text       start:0x82B1A858 end:0x82B1ADC0
 
-xdk/NUI/nuispeech/attributepronunciation.cpp:
+xdk/nuispeech/attributepronunciation.cpp:
 	.pdata      start:0x8230DBC0 end:0x8230DC50
 	.text       start:0x82B1ADC0 end:0x82B1B8C0
 
-xdk/NUI/nuispeech/xboxheap.cpp:
+xdk/nuispeech/xboxheap.cpp:
 	.pdata      start:0x8230DC50 end:0x8230DC80
 	.text       start:0x82B1B8C0 end:0x82B1BD98
 
-xdk/NUI/nuispeech/cruxword.cpp:
+xdk/nuispeech/cruxword.cpp:
 	.rdata      start:0x821DADDC end:0x821DADE8
 	.rdata      start:0x822AB8BC end:0x822AB908 rename:.rdata$r
 	.pdata      start:0x8230DC80 end:0x8230DCC0
 	.text       start:0x82B1BD98 end:0x82B1C880
 	.data       start:0x82F2319C end:0x82F231C0
 
-xdk/NUI/nuispeech/dict_r.cpp:
+xdk/nuispeech/dict_r.cpp:
 	.pdata      start:0x8230DCC0 end:0x8230DCE8
 	.text       start:0x82B1C880 end:0x82B1CF00
 
-xdk/NUI/nuispeech/cclassmodel.cpp:
+xdk/nuispeech/cclassmodel.cpp:
 	.rdata      start:0x821DADE8 end:0x821DAE0C
 	.rdata      start:0x822AB908 end:0x822AB99C rename:.rdata$r
 	.pdata      start:0x8230DCE8 end:0x8230DD08
 	.text       start:0x82B1CF00 end:0x82B1D2B8
 	.data       start:0x82F231C0 end:0x82F23210
 
-xdk/NUI/nuispeech/prondict.cpp:
+xdk/nuispeech/prondict.cpp:
 	.pdata      start:0x8230DD08 end:0x8230DD38
 	.text       start:0x82B1D2B8 end:0x82B1DB58
 
-xdk/NUI/nuispeech/cvocab.cpp:
+xdk/nuispeech/cvocab.cpp:
 	.text       start:0x82B1DB58 end:0x82B1DB68
 
-xdk/NUI/nuispeech/cfsmstate.cpp:
+xdk/nuispeech/cfsmstate.cpp:
 	.rdata      start:0x821DAE0C end:0x821DAE88
 	.pdata      start:0x8230DD38 end:0x8230DDB0
 	.text       start:0x82B1DB68 end:0x82B1E8E8
 
-xdk/NUI/nuispeech/csymbol.cpp:
+xdk/nuispeech/csymbol.cpp:
 	.rdata      start:0x821DAE88 end:0x821DB0B8
 	.pdata      start:0x8230DDB0 end:0x8230DE68
 	.text       start:0x82B1E8E8 end:0x82B1F8A8
 
-xdk/NUI/nuispeech/inputtapejpn.cpp:
+xdk/nuispeech/inputtapejpn.cpp:
 	.pdata      start:0x8230DE68 end:0x8230DE88
 	.text       start:0x82B1F8A8 end:0x82B1FBC8
 
-xdk/NUI/nuispeech/inputtapechx.cpp:
+xdk/nuispeech/inputtapechx.cpp:
 	.pdata      start:0x8230DE88 end:0x8230DEA8
 	.text       start:0x82B1FBC8 end:0x82B1FF30
 
-xdk/NUI/nuispeech/adapt.cpp:
+xdk/nuispeech/adapt.cpp:
 	.rdata      start:0x821DB0B8 end:0x821DB108
 	.pdata      start:0x8230DEA8 end:0x8230DF00
 	.text       start:0x82B1FF30 end:0x82B20AE0
 
-xdk/NUI/nuispeech/admllr.cpp:
+xdk/nuispeech/admllr.cpp:
 	.rdata      start:0x821DB108 end:0x821DB120
 	.pdata      start:0x8230DF00 end:0x8230E088
 	.text       start:0x82B20AE0 end:0x82B25178
 
-xdk/NUI/nuispeech/adfb.cpp:
+xdk/nuispeech/adfb.cpp:
 	.pdata      start:0x8230E088 end:0x8230E108
 	.text       start:0x82B25178 end:0x82B270F8
 
-xdk/NUI/nuispeech/adcls.cpp:
+xdk/nuispeech/adcls.cpp:
 	.rdata      start:0x821DB120 end:0x821DB13C
 	.pdata      start:0x8230E108 end:0x8230E148
 	.text       start:0x82B270F8 end:0x82B280E0
 
-xdk/NUI/nuispeech/featureextractor.cpp:
+xdk/nuispeech/featureextractor.cpp:
 	.rdata      start:0x821DB13C end:0x821DB178
 	.pdata      start:0x8230E148 end:0x8230E1A8
 	.text       start:0x82B280E0 end:0x82B29090
 
-xdk/NUI/nuispeech/classlibrary.cpp:
+xdk/nuispeech/classlibrary.cpp:
 	.pdata      start:0x8230E1A8 end:0x8230E1B8
 	.text       start:0x82B29090 end:0x82B291A0
 
-xdk/NUI/nuispeech/streamcoder.cpp:
+xdk/nuispeech/streamcoder.cpp:
 	.rdata      start:0x821DB178 end:0x821DB1DC
 	.pdata      start:0x8230E1B8 end:0x8230E210
 	.text       start:0x82B291A0 end:0x82B29A10
 
-xdk/NUI/nuispeech/fetype.cpp:
+xdk/nuispeech/fetype.cpp:
 	.rdata      start:0x821DB1DC end:0x821DB2FC
 	.pdata      start:0x823216D8 end:0x823216E0
 	.text       start:0x82EDEBD0 end:0x82EDED10 rename:.text$yc
 	.data       start:0x82F23210 end:0x82F23338
 	.data       start:0x8315B86C end:0x8315B870 rename:.bss
 
-xdk/NUI/nuispeech/definition.cpp:
+xdk/nuispeech/definition.cpp:
 	.rdata      start:0x821DB2FC end:0x821DB304
 	.pdata      start:0x8230E210 end:0x8230E268
 	.text       start:0x82B29A10 end:0x82B2A188
 
-xdk/NUI/nuispeech/fecommon.cpp:
+xdk/nuispeech/fecommon.cpp:
 	.pdata      start:0x8230E268 end:0x8230E2D0
 	.pdata      start:0x823216E0 end:0x823216F0
 	.text       start:0x82B2A188 end:0x82B2A868
@@ -8553,53 +8553,53 @@ xdk/NUI/nuispeech/fecommon.cpp:
 	.data       start:0x82F23338 end:0x82F23360
 	.data       start:0x8315B870 end:0x8315B8B8 rename:.bss
 
-xdk/NUI/nuispeech/wfstdecoder.cpp:
+xdk/nuispeech/wfstdecoder.cpp:
 	.pdata      start:0x8230E2D0 end:0x8230E330
 	.text       start:0x82B2A868 end:0x82B2B6B0
 	.data       start:0x8315B8BC end:0x8315B8BE rename:.bss
 
-xdk/NUI/nuispeech/aptvtln.cpp:
+xdk/nuispeech/aptvtln.cpp:
 	.rdata      start:0x821DB304 end:0x821DB314
 	.pdata      start:0x8230E330 end:0x8230E360
 	.text       start:0x82B2B6B0 end:0x82B2CA10
 
-xdk/NUI/nuispeech/transform.cpp:
+xdk/nuispeech/transform.cpp:
 	.rdata      start:0x821DB314 end:0x821DB32C
 	.rdata      start:0x822AB99C end:0x822AB9C4 rename:.rdata$r
 	.pdata      start:0x8230E360 end:0x8230E3A8
 	.text       start:0x82B2CA10 end:0x82B2D0A8
 
-xdk/NUI/nuispeech/phrasestat.cpp:
+xdk/nuispeech/phrasestat.cpp:
 	.rdata      start:0x821DB32C end:0x821DB3A0
 	.pdata      start:0x8230E3A8 end:0x8230E400
 	.text       start:0x82B2D0A8 end:0x82B2DB78
 	.data       start:0x8315B8BE end:0x8315B8C0 rename:.bss
 
-xdk/NUI/nuispeech/qsort.cpp:
+xdk/nuispeech/qsort.cpp:
 	.pdata      start:0x8230E400 end:0x8230E408
 	.text       start:0x82B2DB78 end:0x82B2DD48
 
-xdk/NUI/nuispeech/wdphnnet.cpp:
+xdk/nuispeech/wdphnnet.cpp:
 	.pdata      start:0x8230E408 end:0x8230E438
 	.text       start:0x82B2DD48 end:0x82B2EE10
 
-xdk/NUI/nuispeech/accuracybeams.cpp:
+xdk/nuispeech/accuracybeams.cpp:
 	.pdata      start:0x8230E438 end:0x8230E440
 	.text       start:0x82B2EE10 end:0x82B2F3B0
 	.data       start:0x82F23360 end:0x82F233E4
 
-xdk/NUI/nuispeech/searchstate.cpp:
+xdk/nuispeech/searchstate.cpp:
 	.pdata      start:0x8230E440 end:0x8230E470
 	.text       start:0x82B2F3B0 end:0x82B2FB88
 
-xdk/NUI/nuispeech/ltree_rc.cpp:
+xdk/nuispeech/ltree_rc.cpp:
 	.rdata      start:0x821DB3A0 end:0x821DB3A8
 	.rdata      start:0x822AB9C4 end:0x822ABA10 rename:.rdata$r
 	.pdata      start:0x8230E470 end:0x8230E498
 	.text       start:0x82B2FB88 end:0x82B30410
 	.data       start:0x82F233E4 end:0x82F23410
 
-xdk/NUI/nuispeech/cfginst.cpp:
+xdk/nuispeech/cfginst.cpp:
 	.rdata      start:0x821DB3A8 end:0x821DB430
 	.rdata      start:0x822ABA10 end:0x822ABB0C rename:.rdata$r
 	.pdata      start:0x8230E498 end:0x8230E5E8
@@ -8607,7 +8607,7 @@ xdk/NUI/nuispeech/cfginst.cpp:
 	.data       start:0x82F23410 end:0x82F23484
 	.data       start:0x8315B8C4 end:0x8315B8C5 rename:.bss
 
-xdk/NUI/nuispeech/cstatebuilder.cpp:
+xdk/nuispeech/cstatebuilder.cpp:
 	.rdata      start:0x821DB430 end:0x821DB480
 	.rdata      start:0x822ABB0C end:0x822ABBB0 rename:.rdata$r
 	.pdata      start:0x8230E5E8 end:0x8230E6F0
@@ -8615,106 +8615,106 @@ xdk/NUI/nuispeech/cstatebuilder.cpp:
 	.data       start:0x82F23484 end:0x82F234D4
 	.data       start:0x8315B8C5 end:0x8315B8C8 rename:.bss
 
-xdk/NUI/nuispeech/mvwcore.cpp:
+xdk/nuispeech/mvwcore.cpp:
 	.rdata      start:0x821DB480 end:0x821DB4A0
 	.pdata      start:0x8230E6F0 end:0x8230E798
 	.text       start:0x82B36AF8 end:0x82B39810
 	.data       start:0x8315B8CC end:0x8315B8D0 rename:.bss
 
-xdk/NUI/nuispeech/adtr.cpp:
+xdk/nuispeech/adtr.cpp:
 	.pdata      start:0x8230E798 end:0x8230E7A0
 	.text       start:0x82B39810 end:0x82B399D0
 
-xdk/NUI/nuispeech/mathlineq.cpp:
+xdk/nuispeech/mathlineq.cpp:
 	.pdata      start:0x8230E7A0 end:0x8230E7D0
 	.text       start:0x82B399D0 end:0x82B3A318
 
-xdk/NUI/nuispeech/mkadd.cpp:
+xdk/nuispeech/mkadd.cpp:
 	.pdata      start:0x8230E7D0 end:0x8230E7E0
 	.text       start:0x82B3A318 end:0x82B3A560
 
-xdk/NUI/nuispeech/confidence.cpp:
+xdk/nuispeech/confidence.cpp:
 	.rdata      start:0x821DB4A0 end:0x821DB5A0
 	.pdata      start:0x8230E7E0 end:0x8230E828
 	.text       start:0x82B3A560 end:0x82B3B6D8
 
-xdk/NUI/nuispeech/wavestream.cpp:
+xdk/nuispeech/wavestream.cpp:
 	.rdata      start:0x821DB5A0 end:0x821DB5C8
 	.pdata      start:0x8230E828 end:0x8230E848
 	.text       start:0x82B3B6D8 end:0x82B3C208
 
-xdk/NUI/nuispeech/packetstream.cpp:
+xdk/nuispeech/packetstream.cpp:
 	.rdata      start:0x821DB5C8 end:0x821DB688
 	.pdata      start:0x8230E848 end:0x8230E8F8
 	.text       start:0x82B3C208 end:0x82B3DC30
 
-xdk/NUI/nuispeech/fixpt_mmsedenoisefc.cpp:
+xdk/nuispeech/fixpt_mmsedenoisefc.cpp:
 	.rdata      start:0x821DB688 end:0x821DB6E8
 	.pdata      start:0x8230E8F8 end:0x8230E990
 	.text       start:0x82B3DC30 end:0x82B3F110
 
-xdk/NUI/nuispeech/fixpt_staticfc.cpp:
+xdk/nuispeech/fixpt_staticfc.cpp:
 	.rdata      start:0x821DB6E8 end:0x821DBA60
 	.pdata      start:0x8230E990 end:0x8230E9A8
 	.text       start:0x82B3F110 end:0x82B3F980
 
-xdk/NUI/nuispeech/fixpt_spdetc0fc.cpp:
+xdk/nuispeech/fixpt_spdetc0fc.cpp:
 	.rdata      start:0x821DBA60 end:0x821DBC10
 	.pdata      start:0x8230E9A8 end:0x8230E9E0
 	.text       start:0x82B3F980 end:0x82B40668
 
-xdk/NUI/nuispeech/fixpt_agnfc.cpp:
+xdk/nuispeech/fixpt_agnfc.cpp:
 	.rdata      start:0x821DBC10 end:0x821DBCC4
 	.pdata      start:0x8230E9E0 end:0x8230EA00
 	.text       start:0x82B40668 end:0x82B40B00
 
-xdk/NUI/nuispeech/fixpt_normalizefc.cpp:
+xdk/nuispeech/fixpt_normalizefc.cpp:
 	.rdata      start:0x821DBCC4 end:0x821DBDB8
 	.pdata      start:0x8230EA00 end:0x8230EA48
 	.text       start:0x82B40B00 end:0x82B41428
 
-xdk/NUI/nuispeech/fixpt_normalizesc.cpp:
+xdk/nuispeech/fixpt_normalizesc.cpp:
 	.rdata      start:0x821DBDB8 end:0x821DBDF4
 	.pdata      start:0x8230EA48 end:0x8230EA98
 	.text       start:0x82B41428 end:0x82B421D8
 
-xdk/NUI/nuispeech/fixpt_mergefc.cpp:
+xdk/nuispeech/fixpt_mergefc.cpp:
 	.rdata      start:0x821DBDF4 end:0x821DBE2C
 	.pdata      start:0x8230EA98 end:0x8230EAA8
 	.text       start:0x82B421D8 end:0x82B42618
 
-xdk/NUI/nuispeech/fixpt_deltafc.cpp:
+xdk/nuispeech/fixpt_deltafc.cpp:
 	.rdata      start:0x821DBE2C end:0x821DBE3C
 	.pdata      start:0x8230EAA8 end:0x8230EAB8
 	.text       start:0x82B42618 end:0x82B427C8
 
-xdk/NUI/nuispeech/windowedbuffer.cpp:
+xdk/nuispeech/windowedbuffer.cpp:
 	.pdata      start:0x8230EAB8 end:0x8230EB08
 	.text       start:0x82B427C8 end:0x82B435A0
 
-xdk/NUI/nuispeech/streamconverter.cpp:
+xdk/nuispeech/streamconverter.cpp:
 	.rdata      start:0x821DBE3C end:0x821DBE4C
 	.pdata      start:0x8230EB08 end:0x8230EB28
 	.text       start:0x82B435A0 end:0x82B43D00
 
-xdk/NUI/nuispeech/ccepfilter.cpp:
+xdk/nuispeech/ccepfilter.cpp:
 	.rdata      start:0x821DBE4C end:0x821DBE54
 	.pdata      start:0x8230EB28 end:0x8230EB38
 	.text       start:0x82B43D00 end:0x82B442C0
 
-xdk/NUI/nuispeech/definitionbinary.cpp:
+xdk/nuispeech/definitionbinary.cpp:
 	.rdata      start:0x821DBE54 end:0x821DBE98
 	.pdata      start:0x8230EB38 end:0x8230EC18
 	.text       start:0x82B442C0 end:0x82B468E0
 
-xdk/NUI/nuispeech/predictorset.cpp:
+xdk/nuispeech/predictorset.cpp:
 	.pdata      start:0x8230EC18 end:0x8230EC38
 	.text       start:0x82B468E0 end:0x82B46C20
 
-xdk/NUI/nuispeech/configxbox.cpp:
+xdk/nuispeech/configxbox.cpp:
 	.rdata      start:0x821DBE98 end:0x821EC25C
 
-xdk/NUI/nuispeech/gmclassifier.cpp:
+xdk/nuispeech/gmclassifier.cpp:
 	.rdata      start:0x821EC25C end:0x821EC354
 	.pdata      start:0x8230EC38 end:0x8230ECB8
 	.text       start:0x82B46C20 end:0x82B48D00
@@ -8722,151 +8722,151 @@ xdk/NUI/nuispeech/gmclassifier.cpp:
 	.data       start:0x82F234D4 end:0x82F234F0
 	.data       start:0x8315B8D0 end:0x8315B8D4 rename:.bss
 
-xdk/NUI/nuispeech/proptree.cpp:
+xdk/nuispeech/proptree.cpp:
 	.pdata      start:0x8230ECB8 end:0x8230ED20
 	.text       start:0x82B48D00 end:0x82B49948
 
-xdk/NUI/nuispeech/map.cpp:
+xdk/nuispeech/map.cpp:
 	.rdata      start:0x821EC354 end:0x821EC360
 	.rdata      start:0x822ABBB0 end:0x822ABBFC rename:.rdata$r
 	.pdata      start:0x8230ED20 end:0x8230ED38
 	.text       start:0x82B49948 end:0x82B49AA0
 	.data       start:0x82F234F0 end:0x82F23B00
 
-xdk/NUI/nuispeech/trihash.cpp:
+xdk/nuispeech/trihash.cpp:
 	.pdata      start:0x8230ED38 end:0x8230ED50
 	.text       start:0x82B49AA0 end:0x82B49D90
 
-xdk/NUI/nuispeech/cw_read.cpp:
+xdk/nuispeech/cw_read.cpp:
 	.pdata      start:0x8230ED50 end:0x8230ED98
 	.text       start:0x82B49D90 end:0x82B4A4D0
 
-xdk/NUI/nuispeech/trigramstore.cpp:
+xdk/nuispeech/trigramstore.cpp:
 	.pdata      start:0x8230ED98 end:0x8230EDA0
 	.text       start:0x82B4A4D0 end:0x82B4A4F8
 
-xdk/NUI/nuispeech/syllable.cpp:
+xdk/nuispeech/syllable.cpp:
 	.pdata      start:0x8230EDA0 end:0x8230EDC8
 	.text       start:0x82B4A4F8 end:0x82B4A938
 
-xdk/NUI/nuispeech/word.cpp:
+xdk/nuispeech/word.cpp:
 	.rdata      start:0x821EC360 end:0x821EC410
 	.pdata      start:0x8230EDC8 end:0x8230EDF0
 	.text       start:0x82B4A938 end:0x82B4AE80
 	.data       start:0x8315B8E0 end:0x8315B8E1 rename:.bss
 
-xdk/NUI/nuispeech/pronunciation.cpp:
+xdk/nuispeech/pronunciation.cpp:
 	.pdata      start:0x8230EDF0 end:0x8230EE00
 	.text       start:0x82B4AE80 end:0x82B4B098
 	.data       start:0x8315B8E1 end:0x8315B8E4 rename:.bss
 
-xdk/NUI/nuispeech/wfstnetwork.cpp:
+xdk/nuispeech/wfstnetwork.cpp:
 	.pdata      start:0x8230EE00 end:0x8230EE08
 	.text       start:0x82B4B098 end:0x82B4B240
 
-xdk/NUI/nuispeech/conflib.cpp:
+xdk/nuispeech/conflib.cpp:
 	.pdata      start:0x8230EE08 end:0x8230EE28
 	.text       start:0x82B4B240 end:0x82B4B590
 	.data       start:0x8315B8EC end:0x8315B8F0 rename:.bss
 
-xdk/NUI/nuispeech/mvwev.cpp:
+xdk/nuispeech/mvwev.cpp:
 	.pdata      start:0x8230EE28 end:0x8230EE50
 	.text       start:0x82B4B590 end:0x82B4CEA8
 
-xdk/NUI/nuispeech/ngtree.cpp:
+xdk/nuispeech/ngtree.cpp:
 	.pdata      start:0x8230EE50 end:0x8230EEB8
 	.text       start:0x82B4CEA8 end:0x82B4DBF8
 
-xdk/NUI/nuispeech/pptchk.cpp:
+xdk/nuispeech/pptchk.cpp:
 	.pdata      start:0x8230EEB8 end:0x8230EED0
 	.text       start:0x82B4DBF8 end:0x82B4E978
 
-xdk/NUI/nuispeech/cvocab3.cpp:
+xdk/nuispeech/cvocab3.cpp:
 	.rdata      start:0x821EC410 end:0x821EC480
 	.pdata      start:0x8230EED0 end:0x8230EF50
 	.text       start:0x82B4E978 end:0x82B4F318
 
-xdk/NUI/nuispeech/cvocab2.cpp:
+xdk/nuispeech/cvocab2.cpp:
 	.rdata      start:0x821EC480 end:0x821EC4F4
 	.pdata      start:0x8230EF50 end:0x8230EFD8
 	.text       start:0x82B4F318 end:0x82B4FEA0
 
-xdk/NUI/nuispeech/cactionclause.cpp:
+xdk/nuispeech/cactionclause.cpp:
 	.rdata      start:0x821EC4F4 end:0x821EC560
 	.pdata      start:0x8230EFD8 end:0x8230F018
 	.text       start:0x82B4FEA0 end:0x82B50720
 
-xdk/NUI/nuispeech/binarystream.cpp:
+xdk/nuispeech/binarystream.cpp:
 	.rdata      start:0x821EC560 end:0x821ECA98
 
-xdk/NUI/nuispeech/adwt.cpp:
+xdk/nuispeech/adwt.cpp:
 	.pdata      start:0x8230F018 end:0x8230F030
 	.text       start:0x82B50720 end:0x82B50998
 
-xdk/NUI/nuispeech/admap.cpp:
+xdk/nuispeech/admap.cpp:
 	.pdata      start:0x8230F030 end:0x8230F058
 	.text       start:0x82B50998 end:0x82B50CB0
 
-xdk/NUI/nuispeech/wfsttoken.cpp:
+xdk/nuispeech/wfsttoken.cpp:
 	.text       start:0x82B50CB0 end:0x82B50CC0
 
-xdk/NUI/nuispeech/ccepcodec16.cpp:
+xdk/nuispeech/ccepcodec16.cpp:
 	.pdata      start:0x8230F058 end:0x8230F088
 	.text       start:0x82B50CC0 end:0x82B51798
 
-xdk/NUI/nuispeech/fixpt_fecommon.cpp:
+xdk/nuispeech/fixpt_fecommon.cpp:
 	.text       start:0x82B51798 end:0x82B519D8
 
-xdk/NUI/nuispeech/fixpt_integerlog2.cpp:
+xdk/nuispeech/fixpt_integerlog2.cpp:
 	.pdata      start:0x8230F088 end:0x8230F090
 	.text       start:0x82B519D8 end:0x82B51B18
 
-xdk/NUI/nuispeech/fixpt_mfcc.cpp:
+xdk/nuispeech/fixpt_mfcc.cpp:
 	.rdata      start:0x821ECA98 end:0x821ECAB8
 	.pdata      start:0x8230F090 end:0x8230F0A0
 	.text       start:0x82B51B18 end:0x82B51F38
 
-xdk/NUI/nuispeech/fixpt_filterbank.cpp:
+xdk/nuispeech/fixpt_filterbank.cpp:
 	.rdata      start:0x821ECAB8 end:0x821ECAF0
 	.pdata      start:0x8230F0A0 end:0x8230F0C0
 	.text       start:0x82B51F38 end:0x82B52828
 
-xdk/NUI/nuispeech/fixpt_integerfft.cpp:
+xdk/nuispeech/fixpt_integerfft.cpp:
 	.rdata      start:0x821ECAF0 end:0x821ECB00
 	.pdata      start:0x8230F0C0 end:0x8230F0D0
 	.text       start:0x82B52828 end:0x82B52E70
 
-xdk/NUI/nuispeech/fixpt_hammingwindow.cpp:
+xdk/nuispeech/fixpt_hammingwindow.cpp:
 	.rdata      start:0x821ECB00 end:0x821ECB10
 	.pdata      start:0x8230F0D0 end:0x8230F0E0
 	.text       start:0x82B52E70 end:0x82B531D0
 
-xdk/NUI/nuispeech/fixpt_preemphasis.cpp:
+xdk/nuispeech/fixpt_preemphasis.cpp:
 	.pdata      start:0x8230F0E0 end:0x8230F0E8
 	.text       start:0x82B531D0 end:0x82B532D8
 
-xdk/NUI/nuispeech/map_r.cpp:
+xdk/nuispeech/map_r.cpp:
 	.pdata      start:0x8230F0E8 end:0x8230F0F8
 	.text       start:0x82B532D8 end:0x82B53580
 
-xdk/NUI/nuispeech/mlpclassifier.cpp:
+xdk/nuispeech/mlpclassifier.cpp:
 	.rdata      start:0x821ECB10 end:0x821ECB38
 	.pdata      start:0x8230F0F8 end:0x8230F130
 	.text       start:0x82B53580 end:0x82B53C18
 
-xdk/NUI/nuispeech/cvocab1.cpp:
+xdk/nuispeech/cvocab1.cpp:
 	.rdata      start:0x821ECB38 end:0x821ECB98
 	.pdata      start:0x8230F130 end:0x8230F1C8
 	.text       start:0x82B53C18 end:0x82B56100
 
-xdk/NUI/nuispeech/hash.cpp:
+xdk/nuispeech/hash.cpp:
 	.rdata      start:0x821ECB98 end:0x821ED810
 
-xdk/NUI/nuispeech/trie.cpp:
+xdk/nuispeech/trie.cpp:
 	.pdata      start:0x8230F1C8 end:0x8230F230
 	.text       start:0x82B56100 end:0x82B56F00
 
-xdk/NUI/nuispeech/fevq16.cpp:
+xdk/nuispeech/fevq16.cpp:
 	.pdata      start:0x8230F230 end:0x8230F240
 	.text       start:0x82B56F00 end:0x82B571B8
 
@@ -11435,7 +11435,7 @@ xdk/LIBCMT/rmtmp.cpp:
 	.data       start:0x82F49C40 end:0x82F49C68
 	.data       start:0x83176C50 end:0x83176C54 rename:.bss
 
-xdk/NUI/nuifitnessapi/nuifitnessapi.cpp:
+xdk/nuifitnessapi/nuifitnessapi.cpp:
 	.pdata      start:0x8231EFA8 end:0x8231EFB0
 	.text       start:0x82E61690 end:0x82E61778
 
@@ -12211,11 +12211,11 @@ xdk/LIBCMT/constpow.cpp:
 xdk/LIBCMT/matherr.cpp:
 	.data       start:0x82F1F634 end:0x82F1F650
 
-xdk/NUI/nuiaudio/knobs.cpp:
+xdk/nuiaudio/knobs.cpp:
 	.data       start:0x82F20090 end:0x82F20198
 	.data       start:0x83138AA8 end:0x83138AB0 rename:.bss
 
-xdk/NUI/nuispeech/xspeech_pch.cpp:
+xdk/nuispeech/xspeech_pch.cpp:
 	.data       start:0x82F203A8 end:0x82F203B8
 	.data       start:0x8315B578 end:0x8315B598 rename:.bss
 
@@ -12254,163 +12254,163 @@ xdk/LIBCMT/ncommode.cpp:
 xdk/LIBCMT/txtmode.cpp:
 	.data       start:0x8311C63C end:0x8311C640 rename:.bss
 
-xdk/NUI/nuiapi/idApiprecomp.cpp:
+xdk/nuiapi/idApiprecomp.cpp:
 	.data       start:0x8312D038 end:0x8312D040 rename:.bss
 
-xdk/NUI/nuiapi/pchwave.cpp:
+xdk/nuiapi/pchwave.cpp:
 	.data       start:0x8312D0A8 end:0x8312D0AC rename:.bss
 
-xdk/NUI/nuiapi/NuiFitnessPreComp.cpp:
+xdk/nuiapi/NuiFitnessPreComp.cpp:
 	.data       start:0x8312D0AC end:0x8312D0B0 rename:.bss
 
-xdk/NUI/nuiapi/ht_precomp.cpp:
+xdk/nuiapi/ht_precomp.cpp:
 	.data       start:0x8312D16C end:0x8312D170 rename:.bss
 
-xdk/NUI/nuiapi/recogLibPrecomp.cpp:
+xdk/nuiapi/recogLibPrecomp.cpp:
 	.data       start:0x8312E2E0 end:0x8312E2E4 rename:.bss
 
-xdk/NUI/nuiapi/common_precomp.cpp:
+xdk/nuiapi/common_precomp.cpp:
 	.data       start:0x8312EF24 end:0x8312EF50 rename:.bss
 
-xdk/NUI/nuiapi/frontal_precomp.cpp:
+xdk/nuiapi/frontal_precomp.cpp:
 	.data       start:0x8312F024 end:0x8312F090 rename:.bss
 
-xdk/NUI/nuiapi/multipose_precomp.cpp:
+xdk/nuiapi/multipose_precomp.cpp:
 	.data       start:0x8312F130 end:0x8312F1A0 rename:.bss
 
-xdk/NUI/nuispeech/xboxutil_pch.cpp:
+xdk/nuispeech/xboxutil_pch.cpp:
 	.data       start:0x8315B6FC end:0x8315B700 rename:.bss
 
-xdk/NUI/nuispeech/xboxmodule_pch.cpp:
+xdk/nuispeech/xboxmodule_pch.cpp:
 	.data       start:0x8315B70C end:0x8315B710 rename:.bss
 
-xdk/NUI/nuispeech/spsapi_pch.cpp:
+xdk/nuispeech/spsapi_pch.cpp:
 	.data       start:0x8315B710 end:0x8315B718 rename:.bss
 
-xdk/NUI/nuispeech/spsrx_pch.cpp:
+xdk/nuispeech/spsrx_pch.cpp:
 	.data       start:0x8315B72C end:0x8315B730 rename:.bss
 
-xdk/NUI/nuispeech/spsreng_pch.cpp:
+xdk/nuispeech/spsreng_pch.cpp:
 	.data       start:0x8315B730 end:0x8315B734 rename:.bss
 
-xdk/NUI/nuispeech/DataCollectionContentPackage.cpp:
+xdk/nuispeech/DataCollectionContentPackage.cpp:
 	.data       start:0x8315B748 end:0x8315B74C rename:.bss
 
-xdk/NUI/nuispeech/sapiSharedLib_pch.cpp:
+xdk/nuispeech/sapiSharedLib_pch.cpp:
 	.data       start:0x8315B74C end:0x8315B750 rename:.bss
 
-xdk/NUI/nuispeech/sapiSR_pch.cpp:
+xdk/nuispeech/sapiSR_pch.cpp:
 	.data       start:0x8315B750 end:0x8315B754 rename:.bss
 
-xdk/NUI/nuispeech/sapiAudioEx_pch.cpp:
+xdk/nuispeech/sapiAudioEx_pch.cpp:
 	.data       start:0x8315B754 end:0x8315B758 rename:.bss
 
-xdk/NUI/nuispeech/sapiFrontend_pch.cpp:
+xdk/nuispeech/sapiFrontend_pch.cpp:
 	.data       start:0x8315B7A0 end:0x8315B7A4 rename:.bss
 
-xdk/NUI/nuispeech/nutil_pch.cpp:
+xdk/nuispeech/nutil_pch.cpp:
 	.data       start:0x8315B7A4 end:0x8315B7A8 rename:.bss
 
-xdk/NUI/nuispeech/LocHand_pch.cpp:
+xdk/nuispeech/LocHand_pch.cpp:
 	.data       start:0x8315B7A8 end:0x8315B7AC rename:.bss
 
-xdk/NUI/nuispeech/Transducer_pch.cpp:
+xdk/nuispeech/Transducer_pch.cpp:
 	.data       start:0x8315B7AC end:0x8315B7B0 rename:.bss
 
-xdk/NUI/nuispeech/stdafx.cpp:
+xdk/nuispeech/stdafx.cpp:
 	.data       start:0x8315B7B4 end:0x8315B7B8 rename:.bss
 
-xdk/NUI/nuispeech/srlocesp_pch.cpp:
+xdk/nuispeech/srlocesp_pch.cpp:
 	.data       start:0x8315B7BC end:0x8315B7C0 rename:.bss
 
-xdk/NUI/nuispeech/srlocita_pch.cpp:
+xdk/nuispeech/srlocita_pch.cpp:
 	.data       start:0x8315B7C0 end:0x8315B7C4 rename:.bss
 
-xdk/NUI/nuispeech/srlocjpn_pch.cpp:
+xdk/nuispeech/srlocjpn_pch.cpp:
 	.data       start:0x8315B7C4 end:0x8315B7C8 rename:.bss
 
-xdk/NUI/nuispeech/tracetag.cpp:
+xdk/nuispeech/tracetag.cpp:
 	.data       start:0x8315B82B end:0x8315B82C rename:.bss
 
-xdk/NUI/nuispeech/ulm_pch.cpp:
+xdk/nuispeech/ulm_pch.cpp:
 	.data       start:0x8315B838 end:0x8315B83C rename:.bss
 
-xdk/NUI/nuispeech/srlocfra_pch.cpp:
+xdk/nuispeech/srlocfra_pch.cpp:
 	.data       start:0x8315B83C end:0x8315B840 rename:.bss
 
-xdk/NUI/nuispeech/srlocfrc_pch.cpp:
+xdk/nuispeech/srlocfrc_pch.cpp:
 	.data       start:0x8315B840 end:0x8315B844 rename:.bss
 
-xdk/NUI/nuispeech/srlocenu_pch.cpp:
+xdk/nuispeech/srlocenu_pch.cpp:
 	.data       start:0x8315B844 end:0x8315B848 rename:.bss
 
-xdk/NUI/nuispeech/xboxscript_pch.cpp:
+xdk/nuispeech/xboxscript_pch.cpp:
 	.data       start:0x8315B848 end:0x8315B84C rename:.bss
 
-xdk/NUI/nuispeech/SpCommonUtils_pch.cpp:
+xdk/nuispeech/SpCommonUtils_pch.cpp:
 	.data       start:0x8315B84C end:0x8315B850 rename:.bss
 
-xdk/NUI/nuispeech/CompAttribLex_pch.cpp:
+xdk/nuispeech/CompAttribLex_pch.cpp:
 	.data       start:0x8315B850 end:0x8315B854 rename:.bss
 
-xdk/NUI/nuispeech/LocHandWPFSM_pch.cpp:
+xdk/nuispeech/LocHandWPFSM_pch.cpp:
 	.data       start:0x8315B854 end:0x8315B858 rename:.bss
 
-xdk/NUI/nuispeech/lm_pch.cpp:
+xdk/nuispeech/lm_pch.cpp:
 	.data       start:0x8315B858 end:0x8315B85C rename:.bss
 
-xdk/NUI/nuispeech/phone_pch.cpp:
+xdk/nuispeech/phone_pch.cpp:
 	.data       start:0x8315B85C end:0x8315B860 rename:.bss
 
-xdk/NUI/nuispeech/lmutil_pch.cpp:
+xdk/nuispeech/lmutil_pch.cpp:
 	.data       start:0x8315B860 end:0x8315B864 rename:.bss
 
-xdk/NUI/nuispeech/mllr_pch.cpp:
+xdk/nuispeech/mllr_pch.cpp:
 	.data       start:0x8315B864 end:0x8315B868 rename:.bss
 
-xdk/NUI/nuispeech/fecore_pch.cpp:
+xdk/nuispeech/fecore_pch.cpp:
 	.data       start:0x8315B868 end:0x8315B86C rename:.bss
 
-xdk/NUI/nuispeech/decode_pch.cpp:
+xdk/nuispeech/decode_pch.cpp:
 	.data       start:0x8315B8B8 end:0x8315B8BC rename:.bss
 
-xdk/NUI/nuispeech/cfglm_pch.cpp:
+xdk/nuispeech/cfglm_pch.cpp:
 	.data       start:0x8315B8C0 end:0x8315B8C4 rename:.bss
 
-xdk/NUI/nuispeech/mllr_align_pch.cpp:
+xdk/nuispeech/mllr_align_pch.cpp:
 	.data       start:0x8315B8C8 end:0x8315B8CC rename:.bss
 
-xdk/NUI/nuispeech/altcomp_pch.cpp:
+xdk/nuispeech/altcomp_pch.cpp:
 	.data       start:0x8315B8D4 end:0x8315B8D8 rename:.bss
 
-xdk/NUI/nuispeech/srec_pch.cpp:
+xdk/nuispeech/srec_pch.cpp:
 	.data       start:0x8315B8D8 end:0x8315B8DC rename:.bss
 
-xdk/NUI/nuispeech/speaker_pch.cpp:
+xdk/nuispeech/speaker_pch.cpp:
 	.data       start:0x8315B8DC end:0x8315B8E0 rename:.bss
 
-xdk/NUI/nuispeech/sr_nls_pch.cpp:
+xdk/nuispeech/sr_nls_pch.cpp:
 	.data       start:0x8315B8E4 end:0x8315B8E8 rename:.bss
 
-xdk/NUI/nuispeech/hmm_pch.cpp:
+xdk/nuispeech/hmm_pch.cpp:
 	.data       start:0x8315B8E8 end:0x8315B8EC rename:.bss
 
-xdk/NUI/nuispeech/dict_pch.cpp:
+xdk/nuispeech/dict_pch.cpp:
 	.data       start:0x8315B8F0 end:0x8315B8F4 rename:.bss
 
-xdk/NUI/nuispeech/cvocab_pch.cpp:
+xdk/nuispeech/cvocab_pch.cpp:
 	.data       start:0x8315B8F4 end:0x8315B904 rename:.bss
 
-xdk/NUI/nuispeech/multi.cpp:
+xdk/nuispeech/multi.cpp:
 	.data       start:0x8315B904 end:0x8315B908 rename:.bss
 
-xdk/NUI/nuispeech/substate.cpp:
+xdk/nuispeech/substate.cpp:
 	.data       start:0x8315B908 end:0x8315B910 rename:.bss
 
-xdk/NUI/nuispeech/order.cpp:
+xdk/nuispeech/order.cpp:
 	.data       start:0x8315B910 end:0x8315B918 rename:.bss
 
-xdk/NUI/nuispeech/maketrie.cpp:
+xdk/nuispeech/maketrie.cpp:
 	.data       start:0x8315B918 end:0x8315B920 rename:.bss
 
 xdk/ST/stex.cpp:
@@ -12521,7 +12521,7 @@ xdk/xonline/pch.cpp:
 xdk/xparty/precomp.cpp:
 	.data       start:0x831628B4 end:0x831667C8 rename:.bss
 
-xdk/NUI/nuifitnessapi/NuiFitnessPreComp.cpp:
+xdk/nuifitnessapi/NuiFitnessPreComp.cpp:
 	.data       start:0x83176C54 end:0x83176C58 rename:.bss
 
 xdk/xaudio2/precomp.cpp:

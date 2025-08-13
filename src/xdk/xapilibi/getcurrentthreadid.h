@@ -1,10 +1,11 @@
 #pragma once
+#include "../win_types.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-unsigned int GetCurrentThreadId(void);
+DWORD GetCurrentThreadId();
 
 #ifdef __cplusplus
 }

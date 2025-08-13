@@ -1,4 +1,5 @@
 #pragma once
+#include "../win_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,7 +46,7 @@ enum XC_LOCALE {
     XC_LOCALE_RUSSIAN_FEDERATION = 37
 };
 
-unsigned long XGetLocale();
+DWORD XGetLocale();
 
 #ifdef __cplusplus
 }

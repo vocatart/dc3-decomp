@@ -1,4 +1,5 @@
 #pragma once
+#include "../win_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,7 +21,7 @@ enum XC_LANGUAGE {
     XC_LANGUAGE_RUSSIAN = 12
 };
 
-unsigned long XTLGetLanguage();
+DWORD XTLGetLanguage();
 
 #ifdef __cplusplus
 }

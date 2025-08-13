@@ -5,8 +5,7 @@
 extern "C" {
 #endif
 
-int XNetRandom(unsigned char *, unsigned int);
-DWORD XNetGetEthernetLinkStatus();
+DWORD XEnableScreenSaver(BOOL);
 
 #ifdef __cplusplus
 }

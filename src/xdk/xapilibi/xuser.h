@@ -1,4 +1,5 @@
 #pragma once
+#include "../win_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,10 +25,20 @@ enum _XPRIVILEGE_TYPE {
     XPRIVILEGE_SHARE_CONTENT_OUTSIDE_LIVE = 0x00d3,
     XPRIVILEGE_INTERNET_BROWSING = 0x00d9,
 };
-
 typedef _XPRIVILEGE_TYPE XPRIVILEGE_TYPE;
 
-unsigned int XUserCheckPrivilege(unsigned int, XPRIVILEGE_TYPE, int *);
+enum _XUSER_SIGNIN_STATE {
+    eXUserSigninState_NotSignedIn = 0x0000,
+    eXUserSigninState_SignedInLocally = 0x0001,
+    eXUserSigninState_SignedInToLive = 0x0002,
+};
+typedef _XUSER_SIGNIN_STATE XUSER_SIGNIN_STATE;
+typedef unsigned long long XUID;
+
+DWORD XUserCheckPrivilege(DWORD, XPRIVILEGE_TYPE, BOOL *);
+XUSER_SIGNIN_STATE XUserGetSigninState(DWORD);
+DWORD XUserGetXUID(DWORD, XUID *);
+void XUserSetContext(DWORD, DWORD, DWORD);
 
 #ifdef __cplusplus
 }
