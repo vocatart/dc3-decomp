@@ -1,5 +1,6 @@
 #pragma once
 #include "xapilibi/bgdownload.h"
+#include "xapilibi/createevent.h"
 #include "xapilibi/getcurrentthreadid.h"
 #include "xapilibi/getlocale.h"
 #include "xapilibi/getlang.h"

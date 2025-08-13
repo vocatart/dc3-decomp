@@ -3,6 +3,7 @@
 #include "obj/Msg.h"
 #include "obj/Object.h"
 #include "os/User.h"
+#include "os/socialpostapi.h"
 
 enum DiskError {
     kNoDiskError,
@@ -39,7 +40,8 @@ class PlatformMgr : public Hmx::Object {
 private:
     bool mHasXSocialPhotoPost; // 0x2c
     bool mHasXSocialLinkPost; // 0x2d
-    int padding[8]; // 0x30
+    XOVERLAPPED mOverlapped; // 0x30
+    int unk4c; // 0x4c - ptr to something
     int mSigninMask; // 0x50
     int mSigninChangeMask; // 0x54
     bool mGuideShowing; // 0x58
