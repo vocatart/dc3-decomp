@@ -5,6 +5,22 @@
 extern "C" {
 #endif
 
+struct XUSER_ACHIEVEMENT { /* Size=0x8 */
+    /* 0x0000 */ DWORD dwUserIndex;
+    /* 0x0004 */ DWORD dwAchievementId;
+};
+
+struct _XOVERLAPPED { /* Size=0x1c */
+    unsigned int InternalLow;
+    unsigned int InternalHigh;
+    unsigned int InternalContext;
+    void *hEvent;
+    void (*pCompletionRoutine)(unsigned int, unsigned int, _XOVERLAPPED *);
+    unsigned int dwCompletionContext;
+    unsigned int dwExtendedError;
+};
+typedef _XOVERLAPPED XOVERLAPPED;
+
 enum _XPRIVILEGE_TYPE {
     XPRIVILEGE_MULTIPLAYER_SESSIONS = 0x00fe,
     XPRIVILEGE_COMMUNICATIONS = 0x00fc,
@@ -39,6 +55,7 @@ DWORD XUserCheckPrivilege(DWORD, XPRIVILEGE_TYPE, BOOL *);
 XUSER_SIGNIN_STATE XUserGetSigninState(DWORD);
 DWORD XUserGetXUID(DWORD, XUID *);
 void XUserSetContext(DWORD, DWORD, DWORD);
+DWORD XUserWriteAchievements(DWORD, XUSER_ACHIEVEMENT *, XOVERLAPPED *);
 
 #ifdef __cplusplus
 }
