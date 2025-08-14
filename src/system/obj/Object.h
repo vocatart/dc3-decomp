@@ -175,6 +175,15 @@ namespace Hmx {
         static Object *NewObject(Symbol);
         static bool RegisteredFactory(Symbol);
         static void RegisterFactory(Symbol, ObjectFunc *);
+
+        /** Create a new Object derivative based on its entry in the factory list. */
+        template <class T>
+        static T *New() {
+            T *obj = dynamic_cast<T *>(Hmx::Object::NewObject(T::StaticClassName()));
+            if (!obj)
+                MILO_FAIL("Couldn't instantiate class %s", T::StaticClassName());
+            return obj;
+        }
     };
 
 }

@@ -631,7 +631,7 @@
             "system/os/HolmesClient_NetSocket.cpp": "MISSING",
             "system/os/HolmesKeyboard.cpp": "MISSING",
             "system/os/HolmesUtl.cpp": "MISSING",
-            "system/os/Joypad.cpp": "MISSING",
+            "system/os/Joypad.cpp": "NonMatching",
             "system/os/JoypadClient.cpp": "MISSING",
             "system/os/JoypadMsgs.cpp": "MISSING",
             "system/os/Joypad_Xbox.cpp": "MISSING",
