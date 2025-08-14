@@ -1,6 +1,7 @@
 #include "beatmatch/GemListInterface.h"
 #include "midi/DisplayEvents.h"
 #include "midi/MidiParser.h"
+#include "midi/MidiParserMgr.h"
 #include "obj/Data.h"
 #include "obj/Dir.h"
 #include "obj/ObjMacros.h"
@@ -513,7 +514,7 @@ BEGIN_PROPSYNCS(MidiParser)
     SYNC_PROP(use_realtime_gaps, mProcess.useRealtimeGaps)
     SYNC_PROP(variable_blend_pct, mProcess.variableBlendPct)
     SYNC_PROP_SET(index, GetIndex(), SetIndex(_val.Int()))
-    // SYNC_PROP_SET(song_name, TheMidiParserMgr->GetSongName(), )
+    SYNC_PROP_SET(song_name, TheMidiParserMgr->GetSongName(), )
 END_PROPSYNCS
 
 void MidiParser::PrintEvents() { mEvents->Print(TheDebug); }

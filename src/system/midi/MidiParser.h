@@ -146,6 +146,8 @@ public:
     virtual bool SyncProperty(DataNode &, DataArray *, int, PropOp);
     virtual void SetTypeDef(DataArray *);
 
+    DataEventList *Events() const { return mEvents; }
+    Symbol TrackName() const { return mTrackName; }
     void Clear();
     void Reset(float);
     void Poll();
@@ -155,6 +157,7 @@ public:
 
     static void Init();
     static void ClearManagedParsers();
+    static std::list<MidiParser *> &Parsers() { return sParsers; }
 
     NEW_OBJ(MidiParser);
 };
