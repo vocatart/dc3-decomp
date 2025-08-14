@@ -1,9 +1,12 @@
 #pragma once
 #include "xapilibi/bgdownload.h"
 #include "xapilibi/createevent.h"
+#include "xapilibi/filetimetosystemtime.h"
 #include "xapilibi/getcurrentthreadid.h"
 #include "xapilibi/getlocale.h"
 #include "xapilibi/getlang.h"
+#include "xapilibi/gettime.h"
+#include "xapilibi/gettimezoneinformation.h"
 #include "xapilibi/nuiapithunk.h"
 #include "xapilibi/scrnsavr.h"
 #include "xapilibi/sleep.h"
