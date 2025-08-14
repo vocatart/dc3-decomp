@@ -467,7 +467,7 @@
             "system/meta/StorePurchaser.cpp": "MISSING",
             "system/meta/StreamPlayer.cpp": "MISSING",
 
-            "system/midi/DataEventList.cpp": "MISSING",
+            "system/midi/DataEventList.cpp": "NonMatching",
             "system/midi/DisplayEvents.cpp": "MISSING",
             "system/midi/MidiParser.cpp": "MISSING",
             "system/midi/MidiParserMgr.cpp": "MISSING",
