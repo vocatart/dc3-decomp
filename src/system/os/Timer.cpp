@@ -1,6 +1,9 @@
 #include "os/Timer.h"
 #include "os/Debug.h"
 #include "ppcintrinsics.h"
+#include "xdk/XAPILIB.h"
+
+// void Timer::Sleep(int ms) { Sleep(ms); } needs to use the XDK Sleep
 
 void Timer::SetLastMs(float ms) {
     mLastMs = ms;

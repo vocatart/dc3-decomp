@@ -73,6 +73,7 @@ public:
     void PollUntilLoaded(Loader *, Loader *);
     Loader *GetLoader(const FilePath &) const;
     Loader *ForceGetLoader(const FilePath &);
+    void Poll();
 };
 
 extern LoadMgr TheLoadMgr;

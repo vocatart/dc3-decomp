@@ -30,7 +30,8 @@ public:
         i = 0;
         return true;
     }
-    virtual int Truncate(int) { return 0; }
+    virtual bool GetFileHandle(void *&) = 0;
+    virtual bool Truncate(int) { return 0; }
 
     static int sOpenCount;
     static const int MaxFileNameLen;
