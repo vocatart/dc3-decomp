@@ -3,7 +3,7 @@
 #include "obj/ObjMacros.h"
 #include "obj/Object.h"
 #include "utl/Loader.h"
-#include "os/ThreadCall_Win.h"
+#include "os/ThreadCall.h"
 
 bool Content::Contains(const char *str) { return strstr(str, Root()) != nullptr; }
 bool ContentMgr::RefreshDone() const { return mState == kDiscoveryEnumerating; }

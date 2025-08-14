@@ -147,13 +147,18 @@ namespace Hmx {
         int RefCount() const;
         void RemovePropertySink(Hmx::Object *, DataArray *);
         bool HasPropertySink(Hmx::Object *, DataArray *);
-        void RemoveSink(Hmx::Object *, Symbol);
+        void RemoveSink(Hmx::Object *, Symbol = Symbol());
         void SaveType(BinStream &);
         void SaveRest(BinStream &);
         void ClearAllTypeProps();
         bool HasTypeProps() const;
-        void
-        AddSink(Hmx::Object *, Symbol, Symbol = Symbol(), SinkMode = kHandle, bool = true);
+        void AddSink(
+            Hmx::Object *,
+            Symbol = Symbol(),
+            Symbol = Symbol(),
+            SinkMode = kHandle,
+            bool = true
+        );
         void AddPropertySink(Hmx::Object *, DataArray *, Symbol);
         void MergeSinks(Hmx::Object *);
         DataNode PropertyArray(Symbol);

@@ -14,6 +14,8 @@ public:
     ObjPtr(const ObjPtr &p) : ObjRefConcrete(p), mOwner(p.mOwner) {}
     virtual ~ObjPtr() {}
     virtual Hmx::Object *RefOwner() const { return mOwner; }
+
+    void operator=(T *obj) { SetObjConcrete(obj); }
 };
 
 // ObjOwnerPtr size: 0x14

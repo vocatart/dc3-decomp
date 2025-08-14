@@ -1,5 +1,6 @@
 #pragma once
 #include "xapilibi/bgdownload.h"
+#include "xapilibi/closehandle.h"
 #include "xapilibi/createevent.h"
 #include "xapilibi/filetimetosystemtime.h"
 #include "xapilibi/getcurrentthreadid.h"
@@ -9,8 +10,10 @@
 #include "xapilibi/gettimezoneinformation.h"
 #include "xapilibi/nuiapithunk.h"
 #include "xapilibi/scrnsavr.h"
+#include "xapilibi/setevent.h"
 #include "xapilibi/sleep.h"
 #include "xapilibi/uiapithunk.h"
+#include "xapilibi/waitforsingleobject.h"
 #include "xapilibi/xuser.h"
 #include "xapilibi/xusergetsignininfo.h"
 

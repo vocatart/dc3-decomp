@@ -22,7 +22,15 @@ namespace {
     Hmx::Object *gJoypadMsgSource; // 0x290
 }
 
-JoypadData::JoypadData() : mButtons(0), mNewPressed(0), mNewReleased(0) {
+JoypadData::JoypadData()
+    : mButtons(0), mNewPressed(0), mNewReleased(0), mUser(nullptr), mConnected(false),
+      mVibrateEnabled(true), unk4a(0), unk4b(0), unk4c(0), mNumAnalogSticks(0),
+      mTranslateSticks(false), mIgnoreButtonMask(0), mGreenCymbalMask(0),
+      mYellowCymbalMask(0), mBlueCymbalMask(0), mSecondaryPedalMask(0), mCymbalMask(0),
+      mIsDrum(false), mType(kJoypadNone), mControllerType(), mDistFromRest(0),
+      mHasGreenCymbal(false), mHasYellowCymbal(false), mHasBlueCymbal(false),
+      mHasSecondaryPedal(false), unk84(0), unk94(0), unk9c(0), unka0(0), unka4(0),
+      unka8(0), unkac(0), unkc0(0), unkd8(0) {
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
             mSticks[i][j] = 0;
@@ -89,6 +97,12 @@ int JoypadData::GetVelocityBucket(Symbol axis) const {
     return FloatToBucket(ax);
 }
 
+void JoypadTerminateCommon() {
+    gJoypadLibInitialized = false;
+    RELEASE(gJoypadMsgSource);
+    // RELEASE(gKeyboardExporter);
+}
+
 void JoypadSubscribe(Hmx::Object *obj) {
     if (gJoypadMsgSource) {
         gJoypadMsgSource->AddSink(obj, Symbol());
@@ -106,17 +120,13 @@ JoypadData *JoypadGetPadData(int pad_num) {
     return &gJoypadData[pad_num];
 }
 
-bool JoypadVibrate(int pad) {
-    return false;
-    // return JoypadGetPadData(pad)->mVibrateEnabled;
-}
+bool JoypadVibrate(int pad) { return JoypadGetPadData(pad)->mVibrateEnabled; }
 
 bool JoypadIsConnectedPadNum(int padNum) {
-    return false;
-    // if (padNum == -1)
-    //     return false;
-    // else
-    //     return gJoypadData[padNum].mConnected;
+    if (padNum == -1)
+        return false;
+    else
+        return gJoypadData[padNum].mConnected;
 }
 
 namespace {
@@ -141,6 +151,23 @@ namespace {
         return JoypadIsConnectedPadNum(arr->Int(1));
     }
 
+    DataNode OnJoypadIsButtonDownPadNum(DataArray *arr) {
+        int pad = arr->Int(1);
+        MILO_ASSERT((0) <= (pad) && (pad) < (kNumJoypads), 0x7F);
+        int ret = gJoypadData[pad].mButtons & 1 << arr->Int(2);
+        return ret != 0;
+    }
+
+    DataNode OnJoypadStageKitRaw(DataArray *arr) {
+        arr->Int(2);
+        arr->Int(1);
+        return 1;
+    }
+
+    DataNode OnJoypadIsCalbertGuitar(DataArray *arr) {
+        return JoypadIsCalbertGuitar(arr->Int(1)) != 0;
+    }
+
     DataNode DataJoypadReset(DataArray *) {
         JoypadReset();
         return 0;
@@ -154,7 +181,7 @@ void JoypadInitCommon(DataArray *joypad_config) {
     joypad_config->FindData("threshold", thresh, true);
     joypad_config->FindData("keepalive_ms", gKeepaliveThresholdMs, true);
     for (int i = 0; i < 4; i++) {
-        // gJoypadData[i].unk60 = thresh;
+        gJoypadData[i].mDistFromRest = thresh;
         gJoypadDisabled[i] = false;
     }
 
@@ -172,7 +199,8 @@ void JoypadInitCommon(DataArray *joypad_config) {
     DataRegisterFunc("joypad_set_vibrate", OnJoypadSetVibrate);
     DataRegisterFunc("joypad_controller_type_padnum", OnJoypadControllerTypePadNum);
     DataRegisterFunc("joypad_is_connected_padnum", OnJoypadIsConnectedPadNum);
-    // DataRegisterFunc("joypad_is_button_down", OnJoypadIsButtonDownPadNum);
-    // DataRegisterFunc("joypad_is_calbert_guitar", OnJoypadIsCalbertGuitar);
+    DataRegisterFunc("joypad_is_button_down", OnJoypadIsButtonDownPadNum);
+    DataRegisterFunc("joypad_stage_kit_raw", OnJoypadStageKitRaw);
+    DataRegisterFunc("joypad_is_calbert_guitar", OnJoypadIsCalbertGuitar);
     gJoypadLibInitialized = true;
 }
