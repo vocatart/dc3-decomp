@@ -1,4 +1,5 @@
 #pragma once
+#include "utl/MemMgr.h"
 #include <vector>
 
 /** The map of measures for the current song. */
@@ -62,6 +63,8 @@ public:
      * @returns The equivalent tick value of the supplied MBT.
      */
     int MeasureBeatTickToTick(int measure, int beat, int tick) const;
+
+    MEM_OVERLOAD(MeasureMap, 0x18);
 
 private:
     /** The collection of measure markers. */

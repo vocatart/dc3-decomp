@@ -49,6 +49,8 @@ public:
      * overwritten in ChunkStream. */
     virtual Platform GetPlatform() const { return kPlatformNone; }
 
+    bool LittleEndian() const { return mLittleEndian; }
+
     void Read(void *, int);
     void ReadEndian(void *, int);
 
