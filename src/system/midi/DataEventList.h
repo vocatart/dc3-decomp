@@ -1,5 +1,6 @@
 #pragma once
 #include "obj/Data.h"
+#include "utl/MemMgr.h"
 #include "utl/TextStream.h"
 #include <vector>
 
@@ -61,6 +62,8 @@ public:
 
     int CurIndex() const { return mCurIndex; }
     int Size() const { return mSize; }
+
+    MEM_OVERLOAD(DataEventList, 0x15);
 
     int mCurIndex; // 0x0
     int mSize; // 0x4

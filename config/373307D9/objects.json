@@ -469,7 +469,7 @@
 
             "system/midi/DataEventList.cpp": "NonMatching",
             "system/midi/DisplayEvents.cpp": "MISSING",
-            "system/midi/MidiParser.cpp": "MISSING",
+            "system/midi/MidiParser.cpp": "NonMatching",
             "system/midi/MidiParserMgr.cpp": "MISSING",
             "system/midi/MidiReader.cpp": "NonMatching",
             "system/midi/MidiReceiver.cpp": "NonMatching",
