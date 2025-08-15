@@ -704,7 +704,7 @@
 
             "system/rndobj/AmbientOcclusion.cpp": "MISSING",
             "system/rndobj/Anim.cpp": "NonMatching",
-            "system/rndobj/AnimFilter.cpp": "MISSING",
+            "system/rndobj/AnimFilter.cpp": "NonMatching",
             "system/rndobj/BaseMaterial.cpp": "MISSING",
             "system/rndobj/Bitmap.cpp": "MISSING",
             "system/rndobj/BoxMap.cpp": "MISSING",

@@ -139,10 +139,10 @@ public:
     enum Action {
     };
     enum SubdirAction {
-        kMerge,
-        kReplace,
-        kKeep,
-        kIgnore
+        kMergeMerge,
+        kMergeReplace,
+        kMergeKeep,
+        kMergeIgnore
     };
     enum Subdirs {
         kNoSubdirs,

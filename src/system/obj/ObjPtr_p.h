@@ -10,13 +10,22 @@ class ObjPtr : public ObjRefConcrete<T> {
 private:
     Hmx::Object *mOwner; // 0x10
 public:
-    ObjPtr(Hmx::Object *owner, T *ptr) : ObjRefConcrete<T>(ptr), mOwner(owner) {}
+    ObjPtr(Hmx::Object *owner, T *ptr = nullptr)
+        : ObjRefConcrete<T>(ptr), mOwner(owner) {}
     ObjPtr(const ObjPtr &p) : ObjRefConcrete(p), mOwner(p.mOwner) {}
     virtual ~ObjPtr() {}
     virtual Hmx::Object *RefOwner() const { return mOwner; }
 
     void operator=(T *obj) { SetObjConcrete(obj); }
+    void operator=(const ObjPtr &p) { CopyRef(p); }
+    T *Ptr() const { return mObject; }
 };
+
+template <class T1>
+BinStream &operator>>(BinStream &bs, ObjPtr<T1> &ptr) {
+    ptr.Load(bs, true, nullptr);
+    return bs;
+}
 
 // ObjOwnerPtr size: 0x14
 template <class T>
@@ -24,7 +33,8 @@ class ObjOwnerPtr : public ObjRefConcrete<T> {
 private:
     ObjRefOwner *mOwner; // 0x10
 public:
-    ObjOwnerPtr(ObjRefOwner *owner, T *ptr) : ObjRefConcrete<T>(ptr), mOwner(owner) {
+    ObjOwnerPtr(ObjRefOwner *owner, T *ptr = nullptr)
+        : ObjRefConcrete<T>(ptr), mOwner(owner) {
         MILO_ASSERT(owner, 0xC8);
     }
     ObjOwnerPtr(const ObjOwnerPtr &o) : ObjRefConcrete(o.mObject), mOwner(o.mOwner) {

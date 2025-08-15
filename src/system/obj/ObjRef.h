@@ -147,3 +147,13 @@ public:
     T1 *operator->() const { return mObject; }
     operator T1 *() const { return mObject; }
 };
+
+#include "utl/BinStream.h"
+
+template <class T1>
+BinStream &operator<<(BinStream &bs, const ObjRefConcrete<T1, class ObjectDir> &f) {
+    MILO_ASSERT(f.RefOwner(), 0x4D1);
+    const char *objName = f ? f->Name() : "";
+    bs << objName;
+    return bs;
+}

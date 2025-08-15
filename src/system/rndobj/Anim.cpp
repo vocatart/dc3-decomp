@@ -1,9 +1,12 @@
 #include "rndobj/Anim.h"
 #include "math/Easing.h"
+#include "obj/Data.h"
+#include "obj/DataUtl.h"
 #include "obj/ObjMacros.h"
 #include "obj/Msg.h"
 #include "obj/ObjPtr_p.h"
 #include "obj/ObjRef.h"
+#include "obj/Object.h"
 #include "obj/Task.h"
 #include "os/Debug.h"
 #include "utl/BinStream.h"
@@ -115,8 +118,8 @@ AnimTask::AnimTask(
     float fpu,
     bool loop,
     float blend,
-    Hmx::Object *,
-    EaseType,
+    Hmx::Object *listener,
+    EaseType easeType,
     float,
     bool
 )
@@ -177,3 +180,137 @@ Task *RndAnimatable::Animate(
     TheTaskMgr.Start(taskPtr, Units(), delay);
     return taskPtr;
 }
+
+DataNode RndAnimatable::OnAnimate(DataArray *arr) {
+    float local_blend = 0.0f;
+    float animTaskStart = StartFrame();
+    float animTaskEnd = EndFrame();
+    bool animTaskLoop = Loop();
+    float p = FramesPerUnit();
+    TaskUnits local_units = Units();
+    float local_delay = 0.0f;
+    const char *local_name = nullptr;
+    bool local_wait = false;
+    bool local_wrap = false;
+    float local_ease_power = 2;
+    EaseType local_ease = kEaseLinear;
+    Hmx::Object *local_listener = nullptr;
+
+    static Symbol blend("blend");
+    static Symbol range("range");
+    static Symbol loop("loop");
+    static Symbol dest("dest");
+    static Symbol period("period");
+    static Symbol delay("delay");
+    static Symbol units("units");
+    static Symbol name("name");
+    static Symbol wait("wait");
+    static Symbol wrap("wrap");
+    static Symbol ease_power("ease_power");
+    static Symbol ease("ease");
+    static Symbol listener("listener");
+
+    arr->FindData(blend, local_blend, false);
+    arr->FindData(delay, local_delay, false);
+    arr->FindData(units, (int &)local_units, false);
+    arr->FindData(name, local_name, false);
+    arr->FindData(wait, local_wait, false);
+    arr->FindData(wrap, local_wrap, false);
+    arr->FindData(ease_power, local_ease_power, false);
+    arr->FindData(ease, (int &)local_ease, false);
+
+    if (arr->FindArray(listener, false)) {
+        local_listener = arr->FindArray(listener, false)->Obj<Hmx::Object>(1);
+    }
+    DataArray *rangeArr = arr->FindArray(range, false);
+    if (rangeArr) {
+        animTaskStart = rangeArr->Float(1);
+        animTaskEnd = rangeArr->Float(2);
+        animTaskLoop = false;
+    }
+    DataArray *loopArr = arr->FindArray(loop, false);
+    if (loopArr) {
+        if (loopArr->Size() > 1)
+            animTaskStart = loopArr->Float(1);
+        else
+            animTaskStart = StartFrame();
+        if (loopArr->Size() > 2)
+            animTaskEnd = loopArr->Float(2);
+        else
+            animTaskEnd = EndFrame();
+        animTaskLoop = true;
+    }
+    DataArray *destArr = arr->FindArray(dest, false);
+    if (destArr) {
+        animTaskStart = GetFrame();
+        animTaskEnd = destArr->Float(1);
+        animTaskLoop = false;
+    }
+    DataArray *periodArr = arr->FindArray(period, false);
+    if (periodArr) {
+        p = periodArr->Float(1);
+        MILO_ASSERT(p, 0x1C5);
+        p = std::fabs(animTaskEnd - animTaskStart) / p;
+    }
+    AnimTask *task = new AnimTask(
+        this,
+        animTaskStart,
+        animTaskEnd,
+        p,
+        animTaskLoop,
+        local_blend,
+        local_listener,
+        local_ease,
+        local_ease_power,
+        local_wait
+    );
+    ObjPtr<AnimTask> taskPtr(nullptr, task);
+    if (local_name && taskPtr) {
+        MILO_ASSERT(DataThis(), 0x1CD);
+        taskPtr->SetName(local_name, DataThis()->DataDir());
+    }
+    if (local_wait) {
+        if (taskPtr->BlendTask()) {
+            if (taskPtr->BlendTask()->Anim()->GetRate() != GetRate()) {
+                MILO_NOTIFY("%s: need same rate to wait", Name());
+            } else
+                local_delay = taskPtr->BlendTask()->TimeUntilEnd();
+        }
+    }
+    static Symbol trigger_anim_task("trigger_anim_task");
+    if (Property(trigger_anim_task, false)
+        && Property(trigger_anim_task, true)->Int() != 0) {
+        TheTaskMgr.Start(taskPtr, local_units, local_delay);
+    }
+
+    return taskPtr;
+}
+
+BEGIN_HANDLERS(RndAnimatable)
+    HANDLE_ACTION(set_frame, SetFrame(_msg->Float(2), 1.0f))
+    HANDLE_EXPR(frame, mFrame)
+    HANDLE_ACTION(set_key, SetKey(_msg->Float(2)))
+    HANDLE_EXPR(end_frame, EndFrame())
+    HANDLE_EXPR(start_frame, StartFrame())
+    HANDLE(animate, OnAnimate)
+    HANDLE_ACTION(stop_animation, StopAnimation())
+    HANDLE_EXPR(is_animating, IsAnimating())
+    HANDLE(convert_frames, OnConvertFrames)
+    HANDLE(list_flow_labels, OnListFlowLabels)
+END_HANDLERS
+
+BEGIN_LOADS(RndAnimatable)
+    LOAD_REVS(bs)
+    int gRev = bsrev.mRev;
+    int gAltRev = bsrev.mAltRev;
+    ASSERT_REVS(4, 0)
+    if (gRev > 1)
+        bs >> mFrame;
+    if (gRev > 3) {
+        bs >> (int &)mRate;
+    } else if (gRev > 2) {
+        bool rate;
+        bsrev >> rate;
+        mRate = (Rate)(!rate);
+    }
+END_LOADS

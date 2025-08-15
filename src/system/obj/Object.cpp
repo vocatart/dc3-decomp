@@ -157,30 +157,9 @@ DataArray *Hmx::Object::ObjectDef(Symbol s) {
     return SystemConfig(sref, s);
 }
 
-static const unsigned short gRevs[4] = { 2, 0, 0, 0 };
-
 void Hmx::Object::LoadType(BinStream &bs) {
-    int revs;
-    bs >> revs;
-    BinStreamRev bsrev(bs, revs);
-    if (bsrev.mRev > 2) {
-        MILO_FAIL(
-            "%s can't load new %s version %d > %d",
-            PathName(this),
-            ClassName(),
-            bsrev.mRev,
-            gRevs[0]
-        );
-    }
-    if (bsrev.mAltRev > 0) {
-        MILO_FAIL(
-            "%s can't load new %s alt version %d > %d",
-            PathName(this),
-            ClassName(),
-            bsrev.mAltRev,
-            gRevs[2]
-        );
-    }
+    LOAD_REVS(bs)
+    ASSERT_REVS(2, 0)
     Symbol s;
     bs >> s;
     SetType(s);
@@ -661,7 +640,7 @@ void Hmx::Object::LoadRest(BinStream &bs) {
         RELEASE(mTypeProps);
     }
     if (bsrev.mRev > 0) {
-        bsrev.mBinStream >> mNote;
+        bsrev >> mNote;
     }
 }
 

@@ -256,6 +256,14 @@ const char *PathName(const class Hmx::Object *obj);
 // END SYNCPROPERTY MACROS
 // -----------------------------------------------------------------------------
 
+// BEGIN SAVE MACRO
+// ------------------------------------------------------------------------------------
+
+#define SAVE_SUPERCLASS(parent) parent::Save(bs);
+
+// END SAVE MACRO
+// --------------------------------------------------------------------------------------
+
 // BEGIN COPY MACROS
 // -----------------------------------------------------------------------------------
 
@@ -288,6 +296,59 @@ const char *PathName(const class Hmx::Object *obj);
 #define END_COPYS }
 
 // END COPY MACROS
+// -------------------------------------------------------------------------------------
+
+// BEGIN LOAD MACROS
+// -----------------------------------------------------------------------------------
+
+#define BEGIN_LOADS(objType) void objType::Load(BinStream &bs) {
+#define LOAD_REVS(bs)                                                                    \
+    int revs;                                                                            \
+    bs >> revs;                                                                          \
+    BinStreamRev bsrev(bs, revs);
+// int gRev = bs.mRev;
+// int gAltRev = bs.mAltRev;
+
+#define ASSERT_REVS(rev1, rev2)                                                          \
+    static const unsigned short gRevs[4] = { rev1, 0, rev2, 0 };                         \
+    if (bsrev.mRev > rev1) {                                                             \
+        MILO_FAIL(                                                                       \
+            "%s can't load new %s version %d > %d",                                      \
+            PathName(this),                                                              \
+            ClassName(),                                                                 \
+            bsrev.mRev,                                                                  \
+            gRevs[0]                                                                     \
+        );                                                                               \
+    }                                                                                    \
+    if (bsrev.mAltRev > rev2) {                                                          \
+        MILO_FAIL(                                                                       \
+            "%s can't load new %s alt version %d > %d",                                  \
+            PathName(this),                                                              \
+            ClassName(),                                                                 \
+            bsrev.mAltRev,                                                               \
+            gRevs[2]                                                                     \
+        );                                                                               \
+    }
+
+#define LOAD_SUPERCLASS(parent) parent::Load(bs);
+
+#define LOAD_BITFIELD(type, name)                                                        \
+    {                                                                                    \
+        type bs_name;                                                                    \
+        bs >> bs_name;                                                                   \
+        name = bs_name;                                                                  \
+    }
+
+#define LOAD_BITFIELD_ENUM(type, name, enum_name)                                        \
+    {                                                                                    \
+        type bs_name;                                                                    \
+        bs >> bs_name;                                                                   \
+        name = (enum_name)bs_name;                                                       \
+    }
+
+#define END_LOADS }
+
+// END LOAD MACROS
 // -------------------------------------------------------------------------------------
 
 #define NEW_OBJ(objType)                                                                 \

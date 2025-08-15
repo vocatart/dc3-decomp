@@ -169,6 +169,12 @@ inline int packRevs(unsigned short alt, unsigned short rev) {
     return (rev & ~0xFFFF0000) | (alt << 0x10);
 }
 
+#define BSREV_READ(obj)                                                                  \
+    BinStreamRev &operator>>(obj &x) {                                                   \
+        mBinStream >> x;                                                                 \
+        return *this;                                                                    \
+    }
+
 class BinStreamRev {
 public:
     BinStreamRev(BinStream &bs, int revs)
@@ -177,6 +183,17 @@ public:
     BinStreamRev &operator>>(bool &);
     operator BinStream &() const { return mBinStream; }
     void PushRev(Hmx::Object *obj) { mBinStream.PushRev(packRevs(mAltRev, mRev), obj); }
+
+    BSREV_READ(Symbol);
+    BSREV_READ(String);
+    BSREV_READ(int)
+    BSREV_READ(uint)
+    BSREV_READ(s16)
+    BSREV_READ(u16)
+    BSREV_READ(u32)
+    BSREV_READ(u64)
+    BSREV_READ(f32)
+    BSREV_READ(f64)
 
     int mRev;
     int mAltRev;
