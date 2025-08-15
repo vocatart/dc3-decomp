@@ -195,3 +195,17 @@ BinStream &operator<<(BinStream &bs, const std::vector<T, Allocator> &vec) {
     }
     return bs;
 }
+
+template <class T, class Allocator>
+BinStream &operator>>(BinStream &bs, std::vector<T, Allocator> &vec) {
+    unsigned int length;
+    bs >> length;
+    vec.resize(length);
+
+    for (typename std::vector<T, Allocator>::iterator it = vec.begin(); it != vec.end();
+         it++) {
+        bs >> *it;
+    }
+
+    return bs;
+}

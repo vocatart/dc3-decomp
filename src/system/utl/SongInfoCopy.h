@@ -1,4 +1,5 @@
 #pragma once
+#include "utl/MemMgr.h"
 #include "utl/SongInfoAudioType.h"
 #include "utl/BinStream.h"
 #include <vector>
@@ -28,6 +29,8 @@ public:
     virtual const std::vector<int> &GetCores() const = 0;
     virtual int NumExtraMidiFiles() const = 0;
     virtual const char *GetExtraMidiFile(int) const = 0;
+
+    MEM_OVERLOAD(SongInfo, 0x1C);
 };
 
 class SongInfoCopy : public SongInfo {
