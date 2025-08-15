@@ -703,7 +703,7 @@
             "system/rnddx9/Utl.cpp": "MISSING",
 
             "system/rndobj/AmbientOcclusion.cpp": "MISSING",
-            "system/rndobj/Anim.cpp": "MISSING",
+            "system/rndobj/Anim.cpp": "NonMatching",
             "system/rndobj/AnimFilter.cpp": "MISSING",
             "system/rndobj/BaseMaterial.cpp": "MISSING",
             "system/rndobj/Bitmap.cpp": "MISSING",

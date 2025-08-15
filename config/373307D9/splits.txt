@@ -3122,7 +3122,7 @@ system/rndobj/Mesh.cpp:
 	.text       start:0x82639738 end:0x826465E8
 	.text       start:0x82EDCCA0 end:0x82EDCCB0 rename:.text$yc
 	.text       start:0x82EE2818 end:0x82EE2858 rename:.text$yd
-	.data       start:0x82F13CB4 end:0x82F13E84
+	.data       start:0x82F13CB4 end:0x82F13DC8
 	.data       start:0x830A1AD4 end:0x830A1C94 rename:.bss
 
 system/rndobj/Trans.cpp:
@@ -3138,7 +3138,7 @@ system/rndobj/Anim.cpp:
 	.pdata      start:0x822D6918 end:0x822D6C58
 	.text       start:0x8264C618 end:0x82650278
 	.text       start:0x82EE2858 end:0x82EE2898 rename:.text$yd
-	.data       start:0x82F13E84 end:0x82F13EF4
+	.data       start:0x82F13DC8 end:0x82F13EF4
 	.data       start:0x830A1CA4 end:0x830A1D60 rename:.bss
 
 system/rndobj/Env.cpp:

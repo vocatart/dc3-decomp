@@ -156,16 +156,19 @@ const char *PathName(const class Hmx::Object *obj);
 
 // for propsyncs that do NOT use size or get - aka, any combo of set, insert, remove, and
 // handle is used
-#define SYNC_PROP_MODIFY(symbol, member, func)                                           \
-    if (sym == symbol) {                                                                 \
-        bool synced = PropSync(member, _val, _prop, _i + 1, _op);                        \
-        if (!synced)                                                                     \
-            return false;                                                                \
-        else {                                                                           \
-            if (!(_op & (kPropSize | kPropGet))) {                                       \
-                func;                                                                    \
+#define SYNC_PROP_MODIFY(s, member, func)                                                \
+    {                                                                                    \
+        _NEW_STATIC_SYMBOL(s)                                                            \
+        if (sym == _s) {                                                                 \
+            bool synced = PropSync(member, _val, _prop, _i + 1, _op);                    \
+            if (!synced)                                                                 \
+                return false;                                                            \
+            else {                                                                       \
+                if (!(_op & (kPropSize | kPropGet))) {                                   \
+                    func;                                                                \
+                }                                                                        \
+                return true;                                                             \
             }                                                                            \
-            return true;                                                                 \
         }                                                                                \
     }
 
