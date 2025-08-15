@@ -1,5 +1,4 @@
-#ifndef RNDOBJ_SIVIDEO_H
-#define RNDOBJ_SIVIDEO_H
+#pragma once
 #include "utl/BinStream.h"
 
 class SIVideo {
@@ -19,5 +18,3 @@ public:
     unsigned int mBpp; // 0xc
     char *mData; // 0x10
 };
-
-#endif

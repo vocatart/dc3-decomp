@@ -1,17 +1,12 @@
 #include "rndobj/SIVideo.h"
-// #include "os/Debug.h"
+#include "os/Debug.h"
 #include "utl/MemMgr.h"
 
 void SIVideo::Reset() {
     mMagic = mWidth = mHeight = mBpp = 0;
     if (mData) {
-        MemFree(
-            mData,
-            "E:\\lazer_dev0_build\\system\\src\\rndobj\\SIVideo.cpp",
-            22,
-            __FUNCTION__
-        );
-        mData = 0;
+        MemFree(mData, __FILE__, 22);
+        mData = nullptr;
     }
 }
 
@@ -28,7 +23,7 @@ char *SIVideo::Frame(int i) {
 void SIVideo::Load(BinStream &bs, bool load_data) {
     int magic, dump, unused;
     bs >> magic;
-    if (magic != 'SIV_') {
+    if (magic != 0x5349565FU) { // "SIV_"
         mMagic = magic;
         bs >> mWidth;
         bs >> mHeight;
@@ -41,25 +36,19 @@ void SIVideo::Load(BinStream &bs, bool load_data) {
     } else {
         uint x;
         bs >> x;
-        // if (x > 1)
-        //     MILO_FAIL("Can't load new SIVideo.\n");
+        if (x > 1)
+            MILO_FAIL("Can't load new SIVideo.\n");
         bs >> mMagic;
         bs >> mWidth;
         bs >> mHeight;
         bs >> mBpp;
     }
     if (mData) {
-        // _MemFree(mData);
-        // mData = 0;
+        MemFree(mData, __FILE__, 0x41);
+        mData = nullptr;
     }
     if (!load_data) {
-        mData = (char *)MemAlloc(
-            mHeight * FrameSize(),
-            "E:\\lazer_dev0_build\\system\\src\\rndobj\\SIVideo.cpp",
-            70,
-            __FUNCTION__,
-            0
-        );
+        mData = (char *)MemAlloc(mHeight * FrameSize(), __FILE__, 70, "SIVideo_buf");
         bs.Read(mData, mHeight * FrameSize());
     }
 }
