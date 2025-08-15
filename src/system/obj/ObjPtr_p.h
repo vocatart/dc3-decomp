@@ -1,6 +1,7 @@
 #pragma once
 #include "obj/ObjRef.h"
 #include "os/Debug.h"
+#include "utl/BinStream.h"
 #include <cstddef>
 #include <vector>
 
@@ -72,8 +73,18 @@ class ObjPtrVec : public ObjRefOwner {
 
 public:
     ObjPtrVec(Hmx::Object *owner, EraseMode, ObjListMode);
+    virtual ~ObjPtrVec() {}
     bool remove(T1 *);
     void push_back(T1 *);
+    // void Set(iterator, T1*);
+
+    // see Draw.cpp for this
+    void operator=(const ObjPtrVec &other) {
+        if (this != &other) {
+            mNodes.clear();
+        }
+        mNodes.reserve(other.mNodes.size());
+    }
 
 private:
     std::vector<Node> mNodes; // 0x4
@@ -81,6 +92,9 @@ private:
     EraseMode mEraseMode; // 0x14
     ObjListMode mListMode; // 0x18
 };
+
+template <class T1>
+BinStream &operator<<(BinStream &bs, const ObjPtrVec<T1, ObjectDir> &vec);
 
 // ObjPtrList size: 0x14
 template <class T1, class T2 = class ObjectDir>

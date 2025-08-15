@@ -177,3 +177,15 @@ inline BinStream &operator>>(BinStream &bs, Transform &tf) {
     bs >> tf.m >> tf.v;
     return bs;
 }
+
+class Plane {
+public:
+    Plane() {}
+    Plane(const Vector3 &v1, const Vector3 &v2) { Set(v1, v2); }
+
+    void Set(const Vector3 &, const Vector3 &);
+    float Dot(const Vector3 &vec) const { return a * vec.x + b * vec.y + c * vec.z + d; }
+    Vector3 On() const;
+
+    float a, b, c, d;
+};

@@ -1,0 +1,101 @@
+#pragma once
+#include "obj/Data.h"
+#include "rndobj/Highlight.h"
+#include "rndobj/Trans.h"
+#include "math/Geo.h"
+#include "math/Mtx.h"
+#include "math/Sphere.h"
+#include "utl/MemMgr.h"
+
+class RndCam;
+
+/**
+ * @brief An object that is drawable.
+ * Original _objects description:
+ * "Base class for drawable objects. Draw objects either
+ * render polys or determine rendering state."
+ */
+class RndDrawable : public virtual RndHighlightable {
+public:
+    struct Collision {
+        Collision() {}
+        Collision(RndDrawable *o, float d, const Plane &p)
+            : object(o), distance(d), plane(p) {}
+        RndDrawable *object; // offset 0x0, size 0x4
+        float distance; // offset 0x4, size 0x4
+        Plane plane; // offset 0x10, size 0x10
+    };
+
+    virtual ~RndDrawable() {}
+    OBJ_CLASSNAME(Draw);
+    OBJ_SET_TYPE(Draw);
+    virtual DataNode Handle(DataArray *, bool);
+    virtual bool SyncProperty(DataNode &, DataArray *, int, PropOp);
+    virtual void Save(BinStream &);
+    virtual void Copy(const Hmx::Object *, Hmx::Object::CopyType);
+    virtual void Load(BinStream &);
+    /** "Calculates the bounding sphere for the object." */
+    virtual void UpdateSphere() { mSphere.Zero(); }
+    virtual float GetDistanceToPlane(const Plane &, Vector3 &) { return 0.0f; }
+    virtual bool MakeWorldSphere(Sphere &, bool) { return 0; }
+    virtual RndCam *CamOverride() { return 0; }
+    virtual void Mats(std::list<class RndMat *> &, bool) {}
+    virtual void Draw();
+    virtual void DrawShowing() {}
+    virtual bool DrawShowingBudget(float);
+    /** Get the list of this Object's children that are drawable. */
+    virtual void ListDrawChildren(std::list<RndDrawable *> &) {}
+    virtual RndDrawable *CollideShowing(const Segment &, float &, Plane &) { return 0; }
+    virtual int CollidePlane(const Plane &);
+    virtual void CollideList(const Segment &, std::list<Collision> &);
+    virtual void DrawPreClear() {}
+    virtual void UpdatePreClearState() {}
+    virtual void Highlight();
+
+    OBJ_MEM_OVERLOAD(0x25);
+
+    void SetShowing(bool);
+    RndDrawable *Collide(const Segment &, float &, Plane &);
+
+    static void DumpLoad(BinStream &bs);
+
+protected:
+    RndDrawable();
+
+    /** Handler to copy another RndDrawable's sphere to this one's.
+     * @param [in] arr The supplied DataArray.
+     * Expected DataArray contents:
+     *     Node 2: the other RndDrawable.
+     * Example usage: {$this copy_sphere other_obj}
+     */
+    DataNode OnCopySphere(const DataArray *arr);
+    /** Handler to retrieve this RndDrawable's sphere properties.
+     * @param [in] arr The supplied DataArray.
+     * Expected DataArray contents:
+     *     Nodes 2-5: vars to house this sphere's center X/Y/Z coordinates and radius.
+     * Example usage: {$this get_sphere $x $y $z $radius}
+     */
+    DataNode OnGetSphere(const DataArray *arr);
+    /** Handler to set whether or not this RndDrawable is showing.
+     * @param [in] arr The supplied DataArray.
+     * Expected DataArray contents:
+     *     Node 2: a boolean for showing or hiding.
+     * Example usage: {$this set_showing TRUE}
+     */
+    DataNode OnSetShowing(const DataArray *arr);
+    /** Handler to get whether or not this RndDrawable is showing.
+     * @returns True if showing, false if not.
+     * Example usage: {$this showing}
+     */
+    DataNode OnShowing(const DataArray *);
+    /** Handler to zero this RndDrawable's sphere.
+     * Example usage: {$this zero_sphere}
+     */
+    DataNode OnZeroSphere(const DataArray *);
+    DataNode OnGetDrawChildren(const DataArray *);
+
+    bool mShowing; // 0x8
+    Sphere mSphere; // 0xc
+    float mOrder; // 0x20
+    ObjPtrVec<RndTransformable> mClipPlanes; // 0x24
+};

@@ -716,7 +716,7 @@
             "system/rndobj/DOFProc.cpp": "MISSING",
             "system/rndobj/DOFProc_NG.cpp": "MISSING",
             "system/rndobj/Dir.cpp": "MISSING",
-            "system/rndobj/Draw.cpp": "MISSING",
+            "system/rndobj/Draw.cpp": "NonMatching",
             "system/rndobj/Enter.cpp": "MISSING",
             "system/rndobj/Env.cpp": "MISSING",
             "system/rndobj/Env_NG.cpp": "MISSING",
