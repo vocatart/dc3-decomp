@@ -70,7 +70,10 @@ namespace Hmx {
             y.Set(0.0f, 1.0f, 0.0f);
             z.Set(0.0f, 0.0f, 1.0f);
         }
-        Matrix3 &operator=(const Matrix3 &mtx);
+        Matrix3 &operator=(const Matrix3 &mtx) {
+            memcpy(this, &mtx, sizeof(*this));
+            return *this;
+        }
         Vector3 &operator[](int i) { return *(&x + i); }
 
         bool operator==(const Matrix3 &mtx) const {
@@ -147,7 +150,10 @@ public:
     Transform(const Hmx::Matrix3 &mtx, const Vector3 &vec) : m(mtx), v(vec) {}
 
     Transform(const Transform &tf);
-    Transform &operator=(const Transform &tf);
+    Transform &operator=(const Transform &tf) {
+        memcpy(this, &tf, sizeof(*this));
+        return *this;
+    }
 
     void Reset() {
         m.Identity();
@@ -189,3 +195,5 @@ public:
 
     float a, b, c, d;
 };
+
+void MultiplyInverse(const Transform &, const Transform &, Transform &);

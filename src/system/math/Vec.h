@@ -1,5 +1,6 @@
 #pragma once
 // #include "os/Debug.h"
+#include "os/Debug.h"
 #include "utl/BinStream.h"
 #include "utl/TextStream.h"
 
@@ -127,8 +128,16 @@ public:
         return *this;
     }
 
-    const float &operator[](int i) const { return *(&x + i); }
-    float &operator[](int i) { return *(&x + i); }
+    const float &operator[](int i) const {
+        MILO_ASSERT((0) <= (i) && (i) < (3), 0x122);
+        return *(&x + i);
+    }
+
+    float &operator[](int i) {
+        MILO_ASSERT((0) <= (i) && (i) < (3), 0x127);
+        return *(&x + i);
+    }
+
     bool operator==(const Vector3 &v) const { return x == v.x && y == v.y && z == v.z; }
     bool IsZero() const { return x == 0 && y == 0 && z == 0; }
     bool operator!=(const Vector3 &v) const { return x != v.x || y != v.y || z != v.z; }
