@@ -33,6 +33,7 @@ public:
     virtual ~ObjOwnerPtr() {}
     virtual Hmx::Object *RefOwner() const { return mObject->RefOwner(); }
     virtual void Replace(Hmx::Object *obj) { mOwner->Replace(this, obj); }
+    void operator=(T *obj) { SetObjConcrete(obj); }
 };
 
 enum EraseMode {

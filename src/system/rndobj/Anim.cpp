@@ -1,8 +1,11 @@
 #include "rndobj/Anim.h"
+#include "math/Easing.h"
 #include "obj/ObjMacros.h"
 #include "obj/Msg.h"
+#include "obj/ObjPtr_p.h"
 #include "obj/ObjRef.h"
 #include "obj/Task.h"
+#include "os/Debug.h"
 #include "utl/BinStream.h"
 
 static TaskUnits gRateUnits[6] = { kTaskSeconds, kTaskBeats,           kTaskUISeconds,
@@ -107,18 +110,41 @@ AnimTask::~AnimTask() { TheTaskMgr.QueueTaskDelete(mBlendTask); }
 
 AnimTask::AnimTask(
     RndAnimatable *anim,
-    float,
-    float,
-    float,
-    bool,
-    float,
+    float start,
+    float end,
+    float fpu,
+    bool loop,
+    float blend,
     Hmx::Object *,
     EaseType,
     float,
     bool
 )
-    : mAnim(this, nullptr), mAnimTarget(this, nullptr), unk54(this, nullptr),
-      mBlendTask(this, nullptr) {}
+    : mAnim(this, nullptr), unk40(this, nullptr), mAnimTarget(this, nullptr),
+      mBlendTask(this, nullptr), mBlendPeriod(blend), mLoop(loop) {
+    MILO_ASSERT(anim, 0x1DF);
+    mMin = Min(start, end);
+    mMax = Max(start, end);
+
+    Hmx::Object *target = anim->AnimTarget();
+    if (target) {
+        for (ObjRef::iterator it = target->Refs().begin(); it != target->Refs().end();
+             ++it) {
+            Hmx::Object *owner = it->RefOwner();
+            if (owner && owner->ClassName() == StaticClassName()) {
+                AnimTask *task = static_cast<AnimTask *>(owner);
+                mBlendTask = task;
+                MILO_ASSERT(mBlendTask != this, 0x231);
+                break;
+            }
+        }
+    }
+    if (mBlendPeriod && mBlendTask) {
+        mBlendTask->mBlending = true;
+    }
+    mAnim = anim;
+    mAnimTarget = anim->AnimTarget();
+}
 
 bool AnimTask::Replace(ObjRef *ref, Hmx::Object *o) {
     if (ref == &mAnim) {
@@ -133,4 +159,21 @@ bool AnimTask::Replace(ObjRef *ref, Hmx::Object *o) {
         return true;
     } else
         return Hmx::Object::Replace(ref, o);
+}
+
+Task *RndAnimatable::Animate(
+    float blend, bool wait, float delay, Hmx::Object *o, EaseType e, float f4, bool b5
+) {
+    AnimTask *task = new AnimTask(
+        this, StartFrame(), EndFrame(), FramesPerUnit(), Loop(), blend, o, e, f4, b5
+    );
+    ObjPtr<AnimTask> taskPtr(nullptr, task);
+    if (wait && task->BlendTask()) {
+        delay += task->BlendTask()->TimeUntilEnd();
+    }
+    if (delay == 0) {
+        SetFrame(StartFrame(), 1);
+    }
+    TheTaskMgr.Start(taskPtr, Units(), delay);
+    return taskPtr;
 }

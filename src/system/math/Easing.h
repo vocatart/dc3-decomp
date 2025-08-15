@@ -37,3 +37,7 @@ enum EaseType {
     kEaseHalfQuarterStairstep = 33,
     kEaseQuarterHalfStairstep = 34
 };
+
+float EaseLinear(float, float, float);
+
+typedef float EaseFunc(float, float, float);

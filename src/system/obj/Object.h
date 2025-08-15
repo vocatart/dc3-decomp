@@ -134,6 +134,7 @@ namespace Hmx {
                 return Symbol();
         }
         // ObjRef *Refs() const { return (ObjRef *)&mRefs; }
+        const ObjRef &Refs() const { return mRefs; }
         void SetNote(const char *note) { mNote = note; }
         DataArray *TypeDef() const { return mTypeDef; }
         ObjectDir *Dir() const { return mDir; }

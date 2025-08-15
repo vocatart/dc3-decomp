@@ -142,23 +142,29 @@ public:
 
     /** The animatable this task should be animating. */
     ObjOwnerPtr<RndAnimatable> mAnim; // 0x2c
-    ObjPtr<Hmx::Object> mAnimTarget; // 0x40
-    ObjPtr<AnimTask> unk54; // 0x54
+    ObjPtr<Hmx::Object> unk40; // 0x40
+    ObjPtr<Hmx::Object> mAnimTarget; // 0x54
     /** The anim task to blend into. */
     ObjPtr<AnimTask> mBlendTask; // 0x68
-    // /** Whether or not this animation should blend into another. */
-    // bool mBlending; // 0x40
-    // /** The time it takes to blend into mBlendTask. */
-    // float mBlendTime; // 0x44
-    // float mBlendPeriod; // 0x48
-    // /** Start animation frame. */
-    // float mMin; // 0x4c
-    // /** End animation frame. */
-    // float mMax; // 0x50
-    // /** Multiplier to speed of animation. */
-    // float mScale; // 0x54
-    // /** "Amount to offset frame for animation" */
-    // float mOffset; // 0x58
-    // /** Whether or not the animation should loop. */
-    // bool mLoop; // 0x5c
+    /** Whether or not this animation should blend into another. */
+    bool mBlending; // 0x7c
+    /** The time it takes to blend into mBlendTask. */
+    float mBlendTime; // 0x80
+    float mBlendPeriod; // 0x84
+    /** Start animation frame. */
+    float mMin; // 0x88
+    /** End animation frame. */
+    float mMax; // 0x8c
+    /** Multiplier to speed of animation. */
+    float mScale; // 0x90
+    /** "Amount to offset frame for animation" */
+    float mOffset; // 0x94
+    /** Whether or not the animation should loop. */
+    bool mLoop; // 0x98
+    float unk9c;
+    EaseFunc *mEaseFunc; // 0xa0
+    float unka4;
+    bool unka8;
+    float unkac;
+    bool unkb0;
 };
