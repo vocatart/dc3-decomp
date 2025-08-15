@@ -2,6 +2,7 @@
 #include "os/System.h" /* IWYU pragma: keep */
 #include "obj/PropSync_p.h" /* IWYU pragma: keep */
 #include "obj/MessageTimer.h" /* IWYU pragma: keep */
+#include "utl/BinStream.h"
 #include "utl/Symbol.h"
 
 namespace Hmx {
@@ -305,27 +306,27 @@ const char *PathName(const class Hmx::Object *obj);
 #define LOAD_REVS(bs)                                                                    \
     int revs;                                                                            \
     bs >> revs;                                                                          \
-    BinStreamRev bsrev(bs, revs);
-// int gRev = bs.mRev;
-// int gAltRev = bs.mAltRev;
+    int gRev = getHmxRev(revs);                                                          \
+    int gAltRev = getAltRev(revs);                                                       \
+    BinStreamRev bsrev(bs, gRev, gAltRev);
 
 #define ASSERT_REVS(rev1, rev2)                                                          \
     static const unsigned short gRevs[4] = { rev1, 0, rev2, 0 };                         \
-    if (bsrev.mRev > rev1) {                                                             \
+    if (gRev > rev1) {                                                                   \
         MILO_FAIL(                                                                       \
             "%s can't load new %s version %d > %d",                                      \
             PathName(this),                                                              \
             ClassName(),                                                                 \
-            bsrev.mRev,                                                                  \
+            gRev,                                                                        \
             gRevs[0]                                                                     \
         );                                                                               \
     }                                                                                    \
-    if (bsrev.mAltRev > rev2) {                                                          \
+    if (gAltRev > rev2) {                                                                \
         MILO_FAIL(                                                                       \
             "%s can't load new %s alt version %d > %d",                                  \
             PathName(this),                                                              \
             ClassName(),                                                                 \
-            bsrev.mAltRev,                                                               \
+            gAltRev,                                                                     \
             gRevs[2]                                                                     \
         );                                                                               \
     }

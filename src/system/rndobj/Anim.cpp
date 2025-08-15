@@ -301,8 +301,6 @@ END_HANDLERS
 
 BEGIN_LOADS(RndAnimatable)
     LOAD_REVS(bs)
-    int gRev = bsrev.mRev;
-    int gAltRev = bsrev.mAltRev;
     ASSERT_REVS(4, 0)
     if (gRev > 1)
         bs >> mFrame;

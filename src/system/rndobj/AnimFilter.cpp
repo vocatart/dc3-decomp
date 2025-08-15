@@ -113,7 +113,7 @@ void RndAnimFilter::Load(BinStream &bs) {
     bs >> mOffset;
     bs >> mStart;
     bs >> mEnd;
-    if (bsrev.mRev > 0) {
+    if (gRev > 0) {
         bs >> (int &)mType;
         bs >> mPeriod;
     } else {
@@ -121,7 +121,7 @@ void RndAnimFilter::Load(BinStream &bs) {
         bsrev >> b;
         mType = (RndAnimFilter::Type)(b);
     }
-    if (bsrev.mRev > 1) {
+    if (gRev > 1) {
         bs >> mSnap >> mJitter;
     }
 }

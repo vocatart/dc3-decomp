@@ -77,6 +77,7 @@ public:
     bool remove(T1 *);
     void push_back(T1 *);
     // void Set(iterator, T1*);
+    bool Load(BinStream &, bool, ObjectDir *);
 
     // see Draw.cpp for this
     void operator=(const ObjPtrVec &other) {
@@ -95,6 +96,12 @@ private:
 
 template <class T1>
 BinStream &operator<<(BinStream &bs, const ObjPtrVec<T1, ObjectDir> &vec);
+
+template <class T1>
+BinStream &operator>>(BinStream &bs, ObjPtrVec<T1, ObjectDir> &vec) {
+    vec.Load(bs, true, nullptr);
+    return bs;
+}
 
 // ObjPtrList size: 0x14
 template <class T1, class T2 = class ObjectDir>

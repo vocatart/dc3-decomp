@@ -126,3 +126,25 @@ BEGIN_PROPSYNCS(RndDrawable)
     SYNC_PROP(sphere, mSphere)
     SYNC_PROP(clip_planes, mClipPlanes)
 END_PROPSYNCS
+
+BEGIN_LOADS(RndDrawable)
+    LOAD_REVS(bs)
+    ASSERT_REVS(4, 0)
+    if (gLoadingProxyFromDisk) {
+        bool dummy;
+        bs >> dummy;
+    } else {
+        bsrev >> mShowing;
+    }
+    if (gRev > 0)
+        bs >> mSphere;
+    if (gRev > 2) {
+        if (gLoadingProxyFromDisk) {
+            float dummy;
+            bs >> dummy;
+        } else
+            bs >> mOrder;
+    }
+    if (gRev > 3)
+        bs >> mClipPlanes;
+END_LOADS
