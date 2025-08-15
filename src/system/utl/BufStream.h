@@ -11,6 +11,7 @@ public:
     virtual EofType Eof() { return (EofType)(mSize - mTell == 0); }
     virtual bool Fail() { return mFail; }
     virtual const char *Name() const;
+    virtual int Size();
 
     void DeleteChecksum();
     void StartChecksum(const char *);
