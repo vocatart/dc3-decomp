@@ -21,7 +21,6 @@ public:
     virtual void Save(BinStream &);
     virtual void Copy(const Hmx::Object *, Hmx::Object::CopyType);
     virtual void Load(BinStream &);
-    virtual ~RndAnimFilter() {}
     virtual bool Loop() { return mType >= kLoop; }
     virtual void SetFrame(float, float);
     virtual float StartFrame();
