@@ -785,7 +785,7 @@
             "system/rndobj/Utl.cpp": "MISSING",
             "system/rndobj/VelocityBuffer.cpp": "MISSING",
             "system/rndobj/Watcher.cpp": "MISSING",
-            "system/rndobj/Wind.cpp": "MISSING",
+            "system/rndobj/Wind.cpp": "NonMatching",
             "system/rndobj/wordwrap.cpp": "MISSING",
 
             "system/synth/ADSR.cpp": "MISSING",

@@ -45,6 +45,7 @@ public:
     virtual Hmx::Object *RefOwner() const { return mObject->RefOwner(); }
     virtual void Replace(Hmx::Object *obj) { mOwner->Replace(this, obj); }
     void operator=(T *obj) { SetObjConcrete(obj); }
+    T *Ptr() const { return mObject; }
 };
 
 enum EraseMode {

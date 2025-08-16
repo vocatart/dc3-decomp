@@ -80,6 +80,10 @@ inline bool PropSync(Symbol &sym, DataNode &node, DataArray *prop, int i, PropOp
 }
 
 #include "obj/ObjPtr_p.h"
+
+template <class T>
+bool PropSync(ObjPtr<T> &, DataNode &, DataArray *, int, PropOp);
+
 template <class T>
 bool PropSync(ObjPtrVec<T, ObjectDir> &, DataNode &, DataArray *, int, PropOp);
 

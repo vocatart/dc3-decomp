@@ -133,7 +133,7 @@ public:
     }
 
     BinStream &operator<<(bool b) {
-        unsigned char uc = (b) ? 1 : 0;
+        unsigned char uc = b;
         Write(&uc, 1);
         return *this;
     }
