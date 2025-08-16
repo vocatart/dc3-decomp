@@ -73,6 +73,7 @@ public:
     void PollUntilLoaded(Loader *, Loader *);
     Loader *GetLoader(const FilePath &) const;
     Loader *ForceGetLoader(const FilePath &);
+    Loader *AddLoader(const FilePath &, LoaderPos);
     void Poll();
 };
 
@@ -89,7 +90,7 @@ public:
     virtual bool IsLoaded() const;
     virtual void PollLoading();
 
-    const char *GetBuffer(int *);
+    char *GetBuffer(int *);
     int GetSize();
 
     void AllocBuffer();
