@@ -773,7 +773,7 @@
             "system/rndobj/SoftParticleBuffer.cpp": "MISSING",
             "system/rndobj/SoftParticles.cpp": "MISSING",
             "system/rndobj/Spline.cpp": "MISSING",
-            "system/rndobj/Tex.cpp": "MISSING",
+            "system/rndobj/Tex.cpp": "NonMatching",
             "system/rndobj/TexBlendController.cpp": "MISSING",
             "system/rndobj/TexBlender.cpp": "MISSING",
             "system/rndobj/TexProc.cpp": "MISSING",

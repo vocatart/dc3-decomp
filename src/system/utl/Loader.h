@@ -77,3 +77,38 @@ public:
 };
 
 extern LoadMgr TheLoadMgr;
+
+class FileLoader;
+typedef void (FileLoader::*FileLoaderStateFunc)(void);
+
+class FileLoader : public Loader {
+public:
+    FileLoader(const FilePath &, const char *, LoaderPos, int, bool, bool, BinStream *);
+    virtual ~FileLoader();
+    virtual const char *DebugText();
+    virtual bool IsLoaded() const;
+    virtual void PollLoading();
+
+    const char *GetBuffer(int *);
+    int GetSize();
+
+    void AllocBuffer();
+    void OpenFile();
+    void LoadFile();
+    void DoneLoading();
+    void LoadStream();
+
+    File *mFile; // 0x18
+    BinStream *mStream; // 0x1c
+    const char *mBuffer; // 0x20
+    int mBufLen; // 0x24
+    bool mAccessed; // 0x28
+    bool mTemp; // 0x29
+    bool mWarn; // 0x2a
+    int mFlags; // 0x2c
+    class String mFilename; // 0x30
+
+    int unk3c; // 0x3c
+    int unk40; // 0x40
+    FileLoaderStateFunc mState; // 0x44
+};

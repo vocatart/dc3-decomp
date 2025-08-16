@@ -1,4 +1,6 @@
 #pragma once
+#include "os/File.h"
+#include "utl/BinStream.h"
 #include "utl/Str.h"
 
 class FilePath : public String {
@@ -21,12 +23,18 @@ public:
     static FilePath &Root() { return sRoot; }
 };
 
-// inline TextStream &operator<<(TextStream &ts, FilePath &fp) {
-//     return ts << fp.FilePathRelativeToRoot();
-//     // return ts; // commented out to get RndTex::Print to match
-// }
+inline TextStream &operator<<(TextStream &ts, FilePath &fp) {
+    return ts << FileRelativePath(FilePath::Root().c_str(), fp.c_str());
+}
 
 // inline void ResetRoot(const char *path) { FilePath::sRoot.Set(FileRoot(), path); }
+
+inline BinStream &operator<<(BinStream &bs, const FilePath &fp) {
+    bs << FileRelativePath(FilePath::Root().c_str(), fp.c_str());
+    return bs;
+    //       pcVar1 = FileRelativePath(FilePath::sRoot.c_str(),*(this + 0x68));
+    //   this_00 = BinStream::operator<<(param_1,pcVar1);
+}
 
 // inline BinStream &operator>>(BinStream &bs, FilePath &fp) {
 //     char buf[0x100];

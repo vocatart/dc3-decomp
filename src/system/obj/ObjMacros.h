@@ -38,16 +38,15 @@ const char *PathName(const class Hmx::Object *obj);
                 SystemConfig("objects", StaticClassName(), "types");                      \
             DataArray *found = types->FindArray(classname, false);                        \
             if (found) {                                                                  \
-                def = found;                                                              \
+                SetTypeDef(found);                                                        \
             } else {                                                                      \
                 MILO_NOTIFY(                                                              \
                     "%s:%s couldn't find type %s", ClassName(), PathName(this), classname \
                 );                                                                        \
-                def = nullptr;                                                            \
+                SetTypeDef(nullptr);                                                      \
             }                                                                             \
         } else                                                                            \
-            def = nullptr;                                                                \
-        SetTypeDef(def);                                                                  \
+            SetTypeDef(nullptr);                                                          \
     }
 
 // END SET TYPE MACRO
