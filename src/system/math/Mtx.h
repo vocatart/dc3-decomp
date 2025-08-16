@@ -197,3 +197,4 @@ public:
 };
 
 void MultiplyInverse(const Transform &, const Transform &, Transform &);
+void Multiply(const Transform &, const Transform &, Transform &);

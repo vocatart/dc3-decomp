@@ -710,7 +710,7 @@
             "system/rndobj/BoxMap.cpp": "MISSING",
             "system/rndobj/Cam.cpp": "MISSING",
             "system/rndobj/CamAnim.cpp": "MISSING",
-            "system/rndobj/ColorXfm.cpp": "MISSING",
+            "system/rndobj/ColorXfm.cpp": "NonMatching",
             "system/rndobj/Console.cpp": "MISSING",
             "system/rndobj/CubeTex.cpp": "MISSING",
             "system/rndobj/DOFProc.cpp": "MISSING",
