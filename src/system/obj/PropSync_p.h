@@ -27,7 +27,7 @@ bool PropSync(Transform &, DataNode &, DataArray *, int, PropOp);
 inline bool PropSync(float &f, DataNode &node, DataArray *prop, int i, PropOp op) {
     MILO_ASSERT(i == prop->Size() && op <= kPropInsert, 0x17);
     if (op == kPropGet)
-        node = DataNode(f);
+        node = f;
     else
         f = node.Float();
     return true;
@@ -37,7 +37,7 @@ inline bool
 PropSync(unsigned char &uc, DataNode &node, DataArray *prop, int i, PropOp op) {
     MILO_ASSERT(i == prop->Size() && op <= kPropInsert, 0x21);
     if (op == kPropGet)
-        node = DataNode(uc);
+        node = uc;
     else
         uc = node.Int();
     return true;
@@ -46,7 +46,7 @@ PropSync(unsigned char &uc, DataNode &node, DataArray *prop, int i, PropOp op) {
 inline bool PropSync(int &iref, DataNode &node, DataArray *prop, int i, PropOp op) {
     MILO_ASSERT(i == prop->Size() && op <= kPropInsert, 0x2C);
     if (op == kPropGet)
-        node = DataNode(iref);
+        node = iref;
     else
         iref = node.Int();
     return true;
@@ -55,7 +55,7 @@ inline bool PropSync(int &iref, DataNode &node, DataArray *prop, int i, PropOp o
 inline bool PropSync(short &s, DataNode &node, DataArray *prop, int i, PropOp op) {
     MILO_ASSERT(i == prop->Size() && op <= kPropInsert, 0x36);
     if (op == kPropGet)
-        node = DataNode(s);
+        node = s;
     else
         s = node.Int();
     return true;
@@ -64,7 +64,7 @@ inline bool PropSync(short &s, DataNode &node, DataArray *prop, int i, PropOp op
 inline bool PropSync(bool &b, DataNode &node, DataArray *prop, int i, PropOp op) {
     MILO_ASSERT(i == prop->Size() && op <= kPropInsert, 0x40);
     if (op == kPropGet)
-        node = DataNode(b);
+        node = b;
     else
         b = node.Int() != 0;
     return true;
@@ -73,7 +73,7 @@ inline bool PropSync(bool &b, DataNode &node, DataArray *prop, int i, PropOp op)
 inline bool PropSync(Symbol &sym, DataNode &node, DataArray *prop, int i, PropOp op) {
     MILO_ASSERT(i == prop->Size() && op <= kPropInsert, 0x4A);
     if (op == kPropGet)
-        node = DataNode(sym);
+        node = sym;
     else
         sym = node.Str();
     return true;
@@ -83,6 +83,9 @@ inline bool PropSync(Symbol &sym, DataNode &node, DataArray *prop, int i, PropOp
 
 template <class T>
 bool PropSync(ObjPtr<T> &, DataNode &, DataArray *, int, PropOp);
+
+template <class T>
+bool PropSync(ObjOwnerPtr<T> &, DataNode &, DataArray *, int, PropOp);
 
 template <class T>
 bool PropSync(ObjPtrList<T, ObjectDir> &, DataNode &, DataArray *, int, PropOp);
@@ -97,7 +100,7 @@ bool PropSync(ObjList<T> &objList, DataNode &node, DataArray *prop, int i, PropO
         return false;
     else if (i == prop->Size()) {
         MILO_ASSERT(op == kPropSize, 0x1A6);
-        node = DataNode((int)objList.size());
+        node = objList.size();
         return true;
     } else {
         int count = prop->Int(i++);

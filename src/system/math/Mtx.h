@@ -4,7 +4,20 @@
 #include "utl/BinStream.h"
 
 namespace Hmx {
+    class Matrix2 {
+    private:
+        static Matrix2 sID;
+
+    public:
+        Matrix2(const Vector2 &v1, const Vector2 &v2) : x(v1), y(v2) {}
+        Vector2 x;
+        Vector2 y;
+    };
+
     class Matrix3 {
+    private:
+        static Matrix3 sID;
+
     public:
         Vector3 x;
         Vector3 y;
@@ -13,11 +26,11 @@ namespace Hmx {
         // all of these are weak
         Matrix3() {}
 
-        Matrix3(const Matrix3 &mtx) {
-            x = mtx.x;
-            y = mtx.y;
-            z = mtx.z;
-        }
+        // Matrix3(const Matrix3 &mtx) {
+        //     x = mtx.x;
+        //     y = mtx.y;
+        //     z = mtx.z;
+        // }
 
         Matrix3(const Vector3 &v1, const Vector3 &v2, const Vector3 &v3)
             : x(v1), y(v2), z(v3) {}
@@ -83,6 +96,21 @@ namespace Hmx {
         bool operator!=(const Matrix3 &mtx) const {
             return x != mtx.x || y != mtx.y || z != mtx.z;
         }
+
+        static const Hmx::Matrix3 &ID() { return sID; }
+    };
+
+    class Matrix4 {
+    private:
+        static Matrix4 sID;
+
+    public:
+        Matrix4(const Vector4 &v1, const Vector4 &v2, const Vector4 &v3, const Vector4 &v4)
+            : x(v1), y(v2), z(v3), w(v4) {}
+        Vector4 x;
+        Vector4 y;
+        Vector4 z;
+        Vector4 w;
     };
 
     class Quat {
@@ -140,6 +168,9 @@ inline BinStream &operator>>(BinStream &bs, Hmx::Quat &q) {
 }
 
 class Transform {
+private:
+    static Transform sID;
+
 public:
     class Hmx::Matrix3 m;
     class Vector3 v;
@@ -199,6 +230,22 @@ public:
     float a, b, c, d;
 };
 
+class Frustum {
+    // total size: 0x60
+public:
+    void Set(float, float, float, float);
+
+    class Plane front; // offset 0x0, size 0x10
+    class Plane back; // offset 0x10, size 0x10
+    class Plane left; // offset 0x20, size 0x10
+    class Plane right; // offset 0x30, size 0x10
+    class Plane top; // offset 0x40, size 0x10
+    class Plane bottom; // offset 0x50, size 0x10
+};
+
 void Normalize(const Hmx::Matrix3 &, Hmx::Matrix3 &);
 void MultiplyInverse(const Transform &, const Transform &, Transform &);
 void Multiply(const Transform &, const Transform &, Transform &);
+
+void Transpose(const Hmx::Matrix4 &, Hmx::Matrix4 &);
+void Multiply(const Frustum &, const Transform &, Frustum &);

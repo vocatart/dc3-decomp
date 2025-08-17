@@ -182,6 +182,11 @@ public:
     }
 
     // Vector4(const Vector4 &);
+
+    const float &operator[](int i) const {
+        MILO_ASSERT((0) <= (i) && (i) < (4), 0x1AC);
+        return *(&x + i);
+    }
 };
 
 inline BinStream &operator>>(BinStream &bs, Vector4 &vec) {

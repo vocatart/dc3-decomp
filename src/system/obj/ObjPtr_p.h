@@ -60,6 +60,7 @@ enum ObjListMode {
 // ObjPtrVec size: 0x1c
 template <class T1, class T2 = class ObjectDir>
 class ObjPtrVec : public ObjRefOwner {
+private:
     // Node size: 0x14
     struct Node : public ObjRefConcrete<T1, T2> {
         Node(ObjRefOwner *owner) : ObjRefConcrete<T1>(nullptr), mOwner(owner) {}
@@ -76,6 +77,9 @@ class ObjPtrVec : public ObjRefOwner {
     virtual Hmx::Object *RefOwner() const { return mOwner; }
     virtual bool Replace(ObjRef *, Hmx::Object *);
 
+protected:
+    void ReplaceNode(Node *, Hmx::Object *);
+
 public:
     // this derives off of std::vector<Node>::iterator in some way
     class iterator {
@@ -85,6 +89,9 @@ public:
 
     public:
         iterator(Base base) : it(base) {}
+
+        Node &operator*() const { return *it; }
+        Node *operator->() const { return &(*it); }
     };
     // ditto
     class const_iterator {
@@ -114,10 +121,24 @@ public:
     const_iterator begin() const { return const_iterator(mNodes.begin()); }
     const_iterator end() const { return const_iterator(mNodes.end()); }
 
+    iterator erase(iterator);
+    iterator insert(const_iterator, T1 *);
+    const_iterator find(const Hmx::Object *) const;
+
+    template <class S>
+    void sort(const S &);
+
     bool remove(T1 *);
     void push_back(T1 *);
-    void Set(iterator, T1 *);
+    void swap(int, int);
     bool Load(BinStream &, bool, ObjectDir *);
+
+    void Set(iterator it, T1 *obj) {
+        if (!obj && mListMode == 0) {
+            erase(it);
+        } else
+            it->SetObjConcrete(obj);
+    }
 
     // see Draw.cpp for this
     void operator=(const ObjPtrVec &other) {
@@ -225,6 +246,9 @@ public:
     iterator end() const { return iterator(0); }
     iterator erase(iterator);
     iterator insert(iterator, Hmx::Object *);
+
+    typedef bool SortFunc(T1 *, T1 *);
+    void sort(SortFunc *func);
 
     void operator=(const ObjPtrList &list);
     bool remove(T1 *);
