@@ -186,16 +186,11 @@ public:
     operator BinStream &() const { return mBinStream; }
     void PushRev(Hmx::Object *obj) { mBinStream.PushRev(packRevs(mAltRev, mRev), obj); }
 
-    BSREV_READ(Symbol);
-    BSREV_READ(String);
-    BSREV_READ(int)
-    BSREV_READ(uint)
-    BSREV_READ(s16)
-    BSREV_READ(u16)
-    BSREV_READ(u32)
-    BSREV_READ(u64)
-    BSREV_READ(f32)
-    BSREV_READ(f64)
+    template <class T>
+    BinStreamRev &operator>>(T &t) {
+        mBinStream >> t;
+        return *this;
+    }
 
     int mRev;
     int mAltRev;
