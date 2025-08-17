@@ -19,7 +19,4 @@ public:
     virtual void Exit();
     /** Get the list of this Object's children that are pollable. */
     virtual void ListPollChildren(std::list<RndPollable *> &) const {}
-
-protected:
-    RndPollable() {}
 };

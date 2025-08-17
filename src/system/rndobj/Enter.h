@@ -7,7 +7,4 @@ public:
     OBJ_CLASSNAME(Enterable);
     OBJ_SET_TYPE(Enterable);
     virtual DataNode Handle(DataArray *, bool);
-
-protected:
-    RndEnterable() {}
 };

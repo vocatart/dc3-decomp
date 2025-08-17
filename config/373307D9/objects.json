@@ -752,7 +752,7 @@
             "system/rndobj/PartAnim.cpp": "MISSING",
             "system/rndobj/PartLauncher.cpp": "MISSING",
             "system/rndobj/Poll.cpp": "NonMatching",
-            "system/rndobj/PollAnim.cpp": "MISSING",
+            "system/rndobj/PollAnim.cpp": "NonMatching",
             "system/rndobj/PostProc.cpp": "MISSING",
             "system/rndobj/PostProcMgr.cpp": "MISSING",
             "system/rndobj/PostProc_NG.cpp": "MISSING",

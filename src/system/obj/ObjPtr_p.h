@@ -185,6 +185,7 @@ public:
 
     void operator=(const ObjPtrList &list);
     bool remove(T1 *);
+    bool Load(BinStream &, bool, ObjectDir *, bool);
 
 private:
     void Link(iterator, Node *);
@@ -193,3 +194,9 @@ private:
 
 template <class T1>
 BinStream &operator<<(BinStream &bs, const ObjPtrList<T1, ObjectDir> &list);
+
+template <class T1>
+BinStream &operator>>(BinStream &bs, ObjPtrList<T1, ObjectDir> &list) {
+    list.Load(bs, true, nullptr, true);
+    return bs;
+}
