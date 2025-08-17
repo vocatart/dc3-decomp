@@ -175,6 +175,8 @@ public:
     bool operator!=(const Transform &tf) const { return m != tf.m || v != tf.v; }
 };
 
+TextStream &operator<<(TextStream &, const Transform &);
+
 inline BinStream &operator<<(BinStream &bs, const Transform &tf) {
     bs << tf.m << tf.v;
     return bs;
@@ -197,5 +199,6 @@ public:
     float a, b, c, d;
 };
 
+void Normalize(const Hmx::Matrix3 &, Hmx::Matrix3 &);
 void MultiplyInverse(const Transform &, const Transform &, Transform &);
 void Multiply(const Transform &, const Transform &, Transform &);

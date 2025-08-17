@@ -1,11 +1,50 @@
 #include "rndobj/Trans.h"
+#include "Trans.h"
 #include "math/Mtx.h"
+#include "obj/Object.h"
+#include "os/System.h"
 #include "rndobj/Utl.h"
 #include "obj/Data.h"
 #include "obj/ObjMacros.h"
 #include "os/Debug.h"
 #include "utl/BinStream.h"
 #include "math/Rot.h"
+
+void RndTransformable::Print() {
+    TheDebug << "   localXfm: " << mLocalXfm << "\n";
+    TheDebug << "   worldXfm: " << mWorldXfm << "\n";
+    TheDebug << "   constraint: ";
+    if (mConstraint == kConstraintNone) {
+        TheDebug << "None";
+    } else if (mConstraint == kConstraintLocalRotate) {
+        TheDebug << "LocalRotate";
+    } else if (mConstraint == kConstraintLookAtTarget) {
+        TheDebug << "LookAtTarget";
+    } else if (mConstraint == kConstraintShadowTarget) {
+        TheDebug << "ShadowTarget";
+    } else if (mConstraint == kConstraintParentWorld) {
+        TheDebug << "ParentWorld";
+    } else if (mConstraint == kConstraintBillboardZ) {
+        TheDebug << "BillboardZ";
+    } else if (mConstraint == kConstraintBillboardXZ) {
+        TheDebug << "BillboardXZ";
+    } else if (mConstraint == kConstraintBillboardXYZ) {
+        TheDebug << "BillboardXYZ";
+    } else if (mConstraint == kConstraintFastBillboardXYZ) {
+        TheDebug << "FastBillboardXYZ";
+    }
+    TheDebug << "\n";
+    TheDebug << "   preserveScale: " << mPreserveScale << "\n";
+    TheDebug << "   parent: " << mParent << "\n";
+}
+
+void RndTransformable::GetLocalRot(Vector3 &v) const {
+    Hmx::Matrix3 m;
+    m = mLocalXfm.m;
+    Normalize(m, m);
+    MakeEuler(m, v);
+    v *= RAD2DEG;
+}
 
 void RndTransformable::SetDirty_Force() {
     mDirty = true;
@@ -36,9 +75,7 @@ void RndTransformable::Save(BinStream &bs) {
     bs << mLocalXfm;
     bs << mWorldXfm;
     bs << mConstraint;
-    bs << mTarget;
-    bs << mPreserveScale;
-    bs << mParent;
+    bs << mTarget << mPreserveScale << mParent;
 }
 
 DataNode RndTransformable::OnGetLocalPos(const DataArray *da) {
@@ -202,6 +239,80 @@ DataNode RndTransformable::OnGetChildren(const DataArray *da) {
     return ret;
 }
 
+bool RndTransformable::Replace(ObjRef *ref, Hmx::Object *obj) {
+    if (&mParent == ref) {
+        SetTransParent(dynamic_cast<RndTransformable *>(obj), false);
+        return true;
+    } else
+        return Hmx::Object::Replace(ref, obj);
+}
+
+void RndTransformable::ComputeLocalXfm(const Transform &tf) {
+    if (mParent) {
+        Transform tf60;
+        MultiplyInverse(tf, WorldXfm(), tf60);
+        mLocalXfm = tf60;
+    } else {
+        mLocalXfm = tf;
+    }
+    SetDirty();
+}
+
+DataNode RndTransformable::OnCopyWorldTransFrom(const DataArray *a) {
+    RndTransformable *t = a->Obj<RndTransformable>(2);
+    SetWorldXfm(t->WorldXfm());
+    return 0;
+}
+
+DataNode RndTransformable::OnCopyWorldPosFrom(const DataArray *a) {
+    RndTransformable *t = a->Obj<RndTransformable>(2);
+    SetWorldPos(t->WorldXfm().v);
+    return 0;
+}
+
+DataNode RndTransformable::OnGetWorldForward(const DataArray *da) {
+    *da->Var(2) = WorldXfm().m.y.x;
+    *da->Var(3) = WorldXfm().m.y.y;
+    *da->Var(4) = WorldXfm().m.y.z;
+    return 0;
+}
+
+DataNode RndTransformable::OnGetWorldRight(const DataArray *da) {
+    *da->Var(2) = WorldXfm().m.x.x;
+    *da->Var(3) = WorldXfm().m.x.y;
+    *da->Var(4) = WorldXfm().m.x.z;
+    return 0;
+}
+
+DataNode RndTransformable::OnGetWorldUp(const DataArray *da) {
+    *da->Var(2) = WorldXfm().m.z.x;
+    *da->Var(3) = WorldXfm().m.z.y;
+    *da->Var(4) = WorldXfm().m.z.z;
+    return 0;
+}
+
+DataNode RndTransformable::OnGetWorldPos(const DataArray *da) {
+    *da->Var(2) = WorldXfm().v.x;
+    *da->Var(3) = WorldXfm().v.y;
+    *da->Var(4) = WorldXfm().v.z;
+    return 0;
+}
+
+DataNode RndTransformable::OnGetWorldRot(const DataArray *da) {
+    Vector3 v20;
+    MakeEuler(WorldXfm().m, v20);
+    v20 *= RAD2DEG;
+    *da->Var(2) = v20.x;
+    *da->Var(3) = v20.y;
+    *da->Var(4) = v20.z;
+    return 0;
+}
+
+DataNode RndTransformable::OnSetLocalRotIndex(const DataArray *a) {
+    SetLocalRotIndex(a->Int(2), a->Float(3));
+    return 0;
+}
+
 RndTransformable::RndTransformable()
     : mParent(this), mTarget(this), mConstraint(kConstraintNone), mPreserveScale(false),
       mDirty(true) {
@@ -218,3 +329,76 @@ RndTransformable::~RndTransformable() {
         cur->SetDirty();
     }
 }
+
+BEGIN_PROPSYNCS(RndTransformable)
+    SYNC_PROP_SET(
+        trans_parent, mParent.Ptr(), SetTransParent(_val.Obj<RndTransformable>(), true)
+    )
+    SYNC_PROP_SET(
+        trans_constraint,
+        mConstraint,
+        SetTransConstraint((Constraint)_val.Int(), mTarget, mPreserveScale)
+    )
+    SYNC_PROP_SET(
+        trans_target,
+        mTarget.Ptr(),
+        SetTransConstraint(mConstraint, _val.Obj<RndTransformable>(), mPreserveScale)
+    )
+    SYNC_PROP_SET(
+        preserve_scale,
+        mPreserveScale,
+        SetTransConstraint(mConstraint, mTarget, _val.Int())
+    )
+    SYNC_PROP_MODIFY(local_xfm, mLocalXfm, SetDirty())
+    SYNC_PROP_MODIFY(world_xfm, mWorldXfm, ComputeLocalXfm(mWorldXfm))
+    if (ClassName() == StaticClassName()) {
+        SYNC_SUPERCLASS(Hmx::Object)
+    }
+END_PROPSYNCS
+
+void RndTransformable::Init() {
+    REGISTER_OBJ_FACTORY(RndTransformable);
+    DataArray *cfg = SystemConfig("rnd");
+    cfg->FindData("shadow_plane", sShadowPlane, true);
+}
+
+BEGIN_HANDLERS(RndTransformable)
+    HANDLE(copy_local_to, OnCopyLocalTo)
+    HANDLE(copy_world_trans_from, OnCopyWorldTransFrom)
+    HANDLE(copy_world_pos_from, OnCopyWorldPosFrom)
+    HANDLE(set_constraint, OnSetTransConstraint)
+    HANDLE(set_local_rot, OnSetLocalRot)
+    HANDLE(set_local_rot_index, OnSetLocalRotIndex)
+    HANDLE(set_local_rot_mat, OnSetLocalRotMat)
+    HANDLE(set_local_pos, OnSetLocalPos)
+    HANDLE(set_local_pos_index, OnSetLocalPosIndex)
+    HANDLE(get_local_rot, OnGetLocalRot)
+    HANDLE(get_local_rot_index, OnGetLocalRotIndex)
+    HANDLE(get_local_pos, OnGetLocalPos)
+    HANDLE(get_local_pos_index, OnGetLocalPosIndex)
+    HANDLE(set_local_scale, OnSetLocalScale)
+    HANDLE(set_local_scale_index, OnSetLocalScaleIndex)
+    HANDLE(get_local_scale, OnGetLocalScale)
+    HANDLE(get_local_scale_index, OnGetLocalScaleIndex)
+    HANDLE_ACTION(normalize_local, Normalize(mLocalXfm.m, mLocalXfm.m))
+    HANDLE(get_world_forward, OnGetWorldForward)
+    HANDLE(get_world_right, OnGetWorldRight)
+    HANDLE(get_world_up, OnGetWorldUp)
+    HANDLE(get_world_pos, OnGetWorldPos)
+    HANDLE(get_world_rot, OnGetWorldRot)
+    HANDLE_ACTION(
+        set_trans_parent,
+        SetTransParent(
+            _msg->Obj<RndTransformable>(2), _msg->Size() > 3 ? _msg->Int(3) != 0 : false
+        )
+    )
+    HANDLE_EXPR(trans_parent, mParent.Ptr())
+    HANDLE_ACTION(reset_xfm, DirtyLocalXfm().Reset())
+    HANDLE_ACTION(
+        distribute_children, DistributeChildren(_msg->Int(2) != 0, _msg->Float(3))
+    )
+    HANDLE(get_children, OnGetChildren)
+    if (ClassName() == StaticClassName()) {
+        HANDLE_SUPERCLASS(Hmx::Object)
+    }
+END_HANDLERS

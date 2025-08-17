@@ -10,6 +10,7 @@ float GetXAngle(const Hmx::Matrix3 &);
 float GetYAngle(const Hmx::Matrix3 &);
 float GetZAngle(const Hmx::Matrix3 &);
 
+void MakeEuler(const Hmx::Matrix3 &, Vector3 &);
 void MakeEulerScale(const Hmx::Matrix3 &, Vector3 &, Vector3 &);
 void MakeScale(const Hmx::Matrix3 &, Vector3 &);
 void MakeRotMatrix(const Vector3 &, const Hmx::Matrix3 &, bool);

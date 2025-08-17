@@ -1,4 +1,6 @@
 #pragma once
+#include "obj/Data.h"
+#include "obj/ObjMacros.h"
 #include "rndobj/Highlight.h"
 #include "utl/MemMgr.h"
 
@@ -62,10 +64,10 @@ public:
 
     const Transform &LocalXfm() const { return mLocalXfm; }
 
-    // Transform &DirtyLocalXfm() {
-    //     SetDirty();
-    //     return mLocalXfm;
-    // }
+    Transform &DirtyLocalXfm() {
+        SetDirty();
+        return mLocalXfm;
+    }
 
     void SetLocalXfm(const Transform &tf) {
         mLocalXfm = tf;
@@ -82,19 +84,30 @@ public:
         SetDirty();
     }
 
+    const Transform &WorldXfm() { return !mDirty ? mWorldXfm : WorldXfm_Force(); }
+
     void GetLocalRot(Vector3 &) const;
     void SetWorldXfm(const Transform &);
     void SetWorldPos(const Vector3 &);
     void SetTransConstraint(Constraint, RndTransformable *, bool);
+    void SetTransParent(RndTransformable *, bool);
     void SetLocalRot(Vector3);
     void SetLocalRotIndex(int, float);
+    void ComputeLocalXfm(const Transform &tf);
+    void DistributeChildren(bool, float);
+
+    static void Init();
+    NEW_OBJ(RndTransformable);
 
 private:
+    static Plane sShadowPlane;
+
     void SetDirty() {
         if (!mDirty)
             SetDirty_Force();
     }
     void SetDirty_Force();
+    const Transform &WorldXfm_Force();
 
     DataNode OnCopyLocalTo(const DataArray *);
     DataNode OnGetLocalPos(const DataArray *);
@@ -112,9 +125,13 @@ private:
     DataNode OnGetLocalScale(const DataArray *);
     DataNode OnGetLocalScaleIndex(const DataArray *);
     DataNode OnGetWorldForward(const DataArray *);
+    DataNode OnGetWorldRight(const DataArray *);
+    DataNode OnGetWorldUp(const DataArray *);
     DataNode OnGetWorldPos(const DataArray *);
     DataNode OnGetWorldRot(const DataArray *);
     DataNode OnGetChildren(const DataArray *);
+    DataNode OnCopyWorldTransFrom(const DataArray *);
+    DataNode OnCopyWorldPosFrom(const DataArray *);
 
 protected:
     RndTransformable();
