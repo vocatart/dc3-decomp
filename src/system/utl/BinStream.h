@@ -243,3 +243,17 @@ BinStream &operator>>(BinStream &bs, std::vector<T, Allocator> &vec) {
 
     return bs;
 }
+
+// BinStreamRev uses this for loading a vector of enums
+template <class E, class Allocator>
+BinStreamRev &operator>>(BinStreamRev &bs, std::vector<E, Allocator> &vec) {
+    unsigned int length;
+    bs >> length;
+    vec.resize(length);
+
+    for (typename std::vector<E, Allocator>::iterator it = vec.begin(); it != vec.end();
+         it++) {
+        bs >> (int &)*it;
+    }
+    return bs;
+}

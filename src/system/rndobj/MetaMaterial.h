@@ -78,7 +78,6 @@ enum MatPropEditAction {
 /** "MetaMaterials serve as Material templates" */
 class MetaMaterial : public BaseMaterial {
 public:
-    virtual ~MetaMaterial();
     OBJ_CLASSNAME(MetaMaterial);
     OBJ_SET_TYPE(MetaMaterial);
     virtual DataNode Handle(DataArray *, bool);
