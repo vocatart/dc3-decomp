@@ -85,6 +85,9 @@ template <class T>
 bool PropSync(ObjPtr<T> &, DataNode &, DataArray *, int, PropOp);
 
 template <class T>
+bool PropSync(ObjPtrList<T, ObjectDir> &, DataNode &, DataArray *, int, PropOp);
+
+template <class T>
 bool PropSync(ObjPtrVec<T, ObjectDir> &, DataNode &, DataArray *, int, PropOp);
 
 #include "obj/ObjList.h"

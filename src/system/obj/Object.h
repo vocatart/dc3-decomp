@@ -70,12 +70,13 @@ namespace Hmx {
     protected:
         ObjRef mRefs; // 0x4
         TypeProps *mTypeProps; // 0x10
+    private: // these were marked private in RB2
         DataArray *mTypeDef; // 0x14
         String mNote; // 0x18
         const char *mName; // 0x20
         ObjectDir *mDir; // 0x24
         MsgSinks *mSinks; // 0x28
-
+    protected:
         static Object *sDeleting;
 
         MsgSinks *GetOrAddSinks();
@@ -139,6 +140,7 @@ namespace Hmx {
         DataArray *TypeDef() const { return mTypeDef; }
         ObjectDir *Dir() const { return mDir; }
         const char *Name() const { return mName; }
+        const String &Note() const { return mNote; }
         const char *AllocHeapName() { return MemHeapName(MemFindAddrHeap(this)); }
         void AddRef(ObjRef *ref) { ref->AddRef(&mRefs); }
         void Release(ObjRef *ref) { ref->Release(&mRefs); }

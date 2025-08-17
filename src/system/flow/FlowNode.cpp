@@ -13,7 +13,7 @@ BEGIN_HANDLERS(FlowNode)
 END_HANDLERS
 
 BEGIN_PROPSYNCS(FlowNode)
-    SYNC_PROP_SET("comment", mNote, SetNote(_val.Str()))
+    SYNC_PROP_SET("comment", Note(), SetNote(_val.Str()))
     SYNC_PROP("debug_output", mDebugOutput)
     SYNC_PROP("debug_comment", mDebugComment)
     SYNC_SUPERCLASS(Hmx::Object)

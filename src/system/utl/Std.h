@@ -60,10 +60,10 @@ void RemoveSwap(std::vector<T *> &vec, T *obj) {
     }
 }
 
-// template <class T VECTOR_SIZE_PARAM>
-// inline bool VectorFind(const std::vector<T VECTOR_SIZE_ARG> &vec, const T &key) {
-//     return std::find(vec.begin(), vec.end(), key) != vec.end();
-// }
+template <class T>
+inline bool VectorFind(const std::vector<T> &vec, const T &key) {
+    return std::find(vec.begin(), vec.end(), key) != vec.end();
+}
 
 // template <class T>
 // inline bool ListFind(const std::list<T> &list, const T &key) {

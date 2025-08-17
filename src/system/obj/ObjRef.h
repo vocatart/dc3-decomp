@@ -135,7 +135,16 @@ public:
     virtual Hmx::Object *GetObj() const { return mObject; }
     virtual void Replace(Hmx::Object *obj) { SetObj(obj); }
 
-    void SetObjConcrete(T1 *);
+    void SetObjConcrete(T1 *obj) {
+        if (mObject) {
+            mObject->Release(this);
+        }
+        mObject = obj;
+        if (mObject) {
+            mObject->AddRef(this);
+        }
+    }
+
     void CopyRef(const ObjRefConcrete &);
     Hmx::Object *SetObj(Hmx::Object *root_obj) {
         T1 *obj = root_obj ? dynamic_cast<T1 *>(root_obj) : nullptr;

@@ -119,6 +119,8 @@ private:
         virtual void Replace(Hmx::Object *);
         virtual ObjRefOwner *Parent() const { return unk10; }
 
+        T1 *Obj() const { return mObject; }
+
         ObjRefOwner *unk10; // 0x10
         Node *next; // 0x14
         Node *prev; // 0x18
@@ -131,14 +133,12 @@ private:
     virtual Hmx::Object *RefOwner() const;
     virtual bool Replace(ObjRef *, Hmx::Object *);
 
-    Node *Unlink(Node *);
-
 public:
     class iterator {
     public:
         iterator() : mNode(0) {}
         iterator(Node *node) : mNode(node) {}
-        T1 *operator*() { return mNode->obj; }
+        T1 *operator*() { return mNode->Obj(); }
 
         iterator operator++() {
             mNode = mNode->next;
@@ -155,7 +155,7 @@ public:
         bool operator==(iterator it) { return mNode == it.mNode; }
         bool operator!() { return mNode == 0; }
 
-        struct Node *mNode;
+        struct Node *mNode; // 0x0
     };
 
     void clear() {
@@ -170,20 +170,26 @@ public:
 
     void push_back(T1 *obj) { insert(end(), obj); }
 
+    iterator find(const Hmx::Object *target) const {
+        for (iterator it = begin(); it != end(); ++it) {
+            if (*it == target)
+                return it;
+        }
+        return end();
+    }
+
     iterator begin() const { return iterator(mNodes); }
     iterator end() const { return iterator(0); }
     iterator erase(iterator);
     iterator insert(iterator, Hmx::Object *);
 
+    void operator=(const ObjPtrList &list);
     bool remove(T1 *);
+
+private:
+    void Link(iterator, Node *);
+    Node *Unlink(Node *);
 };
 
-// // ObjDirPtr size: 0x14
-// template <class T>
-// class ObjDirPtr : public ObjRefConcrete<T, ObjectDir> {
-//     DirLoader* mLoader; // 0x10
-// };
-
-// public: class ObjPtrList<class Hmx::Object, class ObjectDir>::iterator
-//      __cdecl ObjPtrList<class Hmx::Object, class ObjectDir>::insert(class
-//      ObjPtrList<class Hmx::Object, class ObjectDir>::iterator, class Hmx::Object *)
+template <class T1>
+BinStream &operator<<(BinStream &bs, const ObjPtrList<T1, ObjectDir> &list);

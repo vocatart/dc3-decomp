@@ -160,14 +160,13 @@ const char *PathName(const class Hmx::Object *obj);
     {                                                                                    \
         _NEW_STATIC_SYMBOL(s)                                                            \
         if (sym == _s) {                                                                 \
-            bool synced = PropSync(member, _val, _prop, _i + 1, _op);                    \
-            if (!synced)                                                                 \
-                return false;                                                            \
-            else {                                                                       \
+            if (PropSync(member, _val, _prop, _i + 1, _op)) {                            \
                 if (!(_op & (kPropSize | kPropGet))) {                                   \
                     func;                                                                \
                 }                                                                        \
                 return true;                                                             \
+            } else {                                                                     \
+                return false;                                                            \
             }                                                                            \
         }                                                                                \
     }

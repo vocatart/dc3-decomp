@@ -26,7 +26,6 @@ public:
         Plane plane; // offset 0x10, size 0x10
     };
 
-    virtual ~RndDrawable() {}
     OBJ_CLASSNAME(Draw);
     OBJ_SET_TYPE(Draw);
     virtual DataNode Handle(DataArray *, bool);
@@ -42,7 +41,7 @@ public:
     virtual void Mats(std::list<class RndMat *> &, bool) {}
     virtual void Draw();
     virtual void DrawShowing() {}
-    virtual bool DrawShowingBudget(float);
+    virtual void DrawShadow(const Transform &, float) {}
     /** Get the list of this Object's children that are drawable. */
     virtual void ListDrawChildren(std::list<RndDrawable *> &) {}
     virtual RndDrawable *CollideShowing(const Segment &, float &, Plane &) { return 0; }
@@ -55,6 +54,7 @@ public:
     OBJ_MEM_OVERLOAD(0x25);
 
     void SetShowing(bool);
+    bool Showing() const { return mShowing; }
     RndDrawable *Collide(const Segment &, float &, Plane &);
 
     static void DumpLoad(BinStream &bs);
