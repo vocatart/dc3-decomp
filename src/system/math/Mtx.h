@@ -107,6 +107,9 @@ namespace Hmx {
     public:
         Matrix4(const Vector4 &v1, const Vector4 &v2, const Vector4 &v3, const Vector4 &v4)
             : x(v1), y(v2), z(v3), w(v4) {}
+
+        Matrix4 &Zero();
+
         Vector4 x;
         Vector4 y;
         Vector4 z;
@@ -249,3 +252,5 @@ void Multiply(const Transform &, const Transform &, Transform &);
 
 void Transpose(const Hmx::Matrix4 &, Hmx::Matrix4 &);
 void Multiply(const Frustum &, const Transform &, Frustum &);
+
+void MakeRotMatrix(const Hmx::Quat &, Hmx::Matrix3 &);
