@@ -163,6 +163,7 @@ public:
     int StrTableSize() const { return mStringTable.Size(); }
     int HashTableUsedSize() const { return mHashTable.UsedSize(); }
     int StrTableUsedSize() const { return mStringTable.UsedSize(); }
+    KeylessHash<const char *, Entry> &HashTable() { return mHashTable; }
     const char *GetPathName() const { return mPathName; }
     const std::vector<ObjDirPtr<ObjectDir> > &SubDirs() const { return mSubDirs; }
     InlineDirType InlineProxyType() const { return mInlineProxyType; }
@@ -220,7 +221,27 @@ extern const char *kNotObjectMsg;
 template <class T>
 class ObjDirItr {
 private:
-    void Advance();
+    // needs work
+    void Advance() {
+        while (true) {
+            if (mEntry) {
+                mObj = dynamic_cast<T *>(mEntry->obj);
+                if (mObj)
+                    return;
+                mEntry = mSubDirs.front()->HashTable().Next(mEntry);
+            } else {
+                if (mSubDirs.empty()) {
+                    mObj = nullptr;
+                    return;
+                }
+                ObjectDir *dir = mSubDirs.back();
+                mSubDirs.pop_back();
+                if (dir) {
+                    mEntry = dir->HashTable().Next(mEntry);
+                }
+            }
+        }
+    }
     void RecurseSubdirs(ObjectDir *);
 
     ObjectDir::Entry *mEntry; // 0x0
@@ -228,8 +249,27 @@ private:
     std::list<ObjectDir *> mSubDirs; // 0x8
 
 public:
-    ObjDirItr(ObjectDir *, bool);
-    ObjDirItr &operator++();
+    ObjDirItr(ObjectDir *dir, bool recurse) {
+        if (dir) {
+            if (recurse) {
+                RecurseSubdirs(dir);
+            } else {
+                mSubDirs.push_back(dir);
+            }
+            mEntry = mSubDirs.front()->HashTable().Begin();
+            Advance();
+        } else {
+            mObj = nullptr;
+            mEntry = nullptr;
+        }
+    }
+    ObjDirItr &operator++() {
+        if (mEntry) {
+            mEntry = mSubDirs.front()->HashTable().Next(mEntry);
+            Advance();
+        }
+        return *this;
+    }
 
     operator T *() { return mObj; }
     T *operator->() { return mObj; }

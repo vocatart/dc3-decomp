@@ -172,6 +172,7 @@ public:
     }
 
     bool operator==(const Transform &tf) const { return m == tf.m && v == tf.v; }
+    bool operator!=(const Transform &tf) const { return m != tf.m || v != tf.v; }
 };
 
 inline BinStream &operator<<(BinStream &bs, const Transform &tf) {

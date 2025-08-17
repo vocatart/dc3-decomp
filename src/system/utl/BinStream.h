@@ -202,6 +202,21 @@ public:
     BinStream &mBinStream;
 };
 
+template <class E> // E is an enum type
+class BinStreamEnum {
+public:
+    BinStreamEnum(E e) : mEnum(e) {}
+    E &mEnum;
+};
+
+template <class E>
+BinStreamRev &operator>>(BinStreamRev &bs, BinStreamEnum<E> &e) {
+    int x;
+    bs.mBinStream >> x;
+    e.mEnum = (E)x;
+    return bs;
+}
+
 // Note: `Allocator` here is actually the size/capacity type parameter on Wii.
 // The name is based on Xbox 360 symbols, which show the allocator type instead.
 template <class T, class Allocator>

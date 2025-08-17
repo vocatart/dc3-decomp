@@ -4,13 +4,15 @@
 
 #define SYNC_MAT_PROP_EDIT_ACTION(s, idx)                                                \
     SYNC_PROP_SET(                                                                       \
-        s, unk1f8[idx], SetEditAction((MatProp)idx, (MatPropEditAction)_val.Int())       \
+        s,                                                                               \
+        mMatPropEditActions[idx],                                                        \
+        SetEditAction((MatProp)idx, (MatPropEditAction)_val.Int())                       \
     )
 
 #define SYNC_MAT_PROP(s, member, idx)                                                    \
     SYNC_PROP_SET(                                                                       \
         s##_edit_action,                                                                 \
-        unk1f8[idx],                                                                     \
+        mMatPropEditActions[idx],                                                        \
         SetEditAction((MatProp)idx, (MatPropEditAction)_val.Int())                       \
     )                                                                                    \
     SYNC_PROP(s, member)

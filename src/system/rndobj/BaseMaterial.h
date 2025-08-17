@@ -1,50 +1,12 @@
 #pragma once
 #include "math/Color.h"
+#include "obj/Data.h"
 #include "obj/ObjPtr_p.h"
 #include "obj/Object.h"
 #include "rndobj/CubeTex.h"
 #include "rndobj/Fur.h"
 #include "rndobj/Tex.h"
-
-enum MatProp {
-    kMatPropMax = 0x3F
-};
-
-enum MatPropEditAction {
-    /** "Use default value in Material; will be hidden in Material editor." */
-    kPropDefault = 0,
-    /** "Force value in Material; will be read-only in Material editor." */
-    kPropForce = 1,
-    /** "Allow property to be edited in Material" */
-    kPropEdit = 2
-};
-
-enum Blend {
-    /** "Don't show this material at all; just show the frame buffer" */
-    kBlendDest = 0,
-    /** "Don't blend this material at all" */
-    kBlendSrc = 1,
-    /** "Output is material + frame buffer" */
-    kBlendAdd = 2,
-    /** "Output is (material x mat alpha) + (frame buffer x (1 - mat alpha))" */
-    kBlendSrcAlpha = 3,
-    /** "Output is (material x mat alpha) + frame buffer" */
-    kBlendSrcAlphaAdd = 4,
-    /** "Output is frame buffer - material" */
-    kBlendSubtract = 5,
-    /** "Output is frame buffer x material" */
-    kBlendMultiply = 6,
-    /** "Output is material + (frame buffer x (1 - mat alpha)" */
-    kPreMultAlpha = 7,
-    /** "Lightens the frame buffer based on the lightness of the material" */
-    kScreen = 8,
-    /** "Compares the material and frame buffer and picks the lightest value, per channel"
-     */
-    kLighten = 9,
-    /** "Compares the material and frame buffer and picks the darkest value, per channel"
-     */
-    kDarken = 10
-};
+#include "utl/BinStream.h"
 
 enum Cull {
     /** "No culling.  User sees both front and back of polygon." */
@@ -116,6 +78,9 @@ enum ZMode {
 struct MatPerfSettings {
     MatPerfSettings()
         : mRecvProjLights(false), mRecvPointCubeTex(false), mPS3ForceTrilinear(false) {}
+    void Save(BinStream &) const;
+    void LoadOld(BinStreamRev &);
+    void Load(BinStream &);
 
     /** "Check this option to allow the material to receive projected lighting" */
     bool mRecvProjLights;
@@ -129,6 +94,35 @@ struct MatPerfSettings {
 // size 0x1f8
 class BaseMaterial : public Hmx::Object {
 public:
+    enum Blend {
+        /** "Don't show this material at all; just show the frame buffer" */
+        kBlendDest = 0,
+        /** "Don't blend this material at all" */
+        kBlendSrc = 1,
+        /** "Output is material + frame buffer" */
+        kBlendAdd = 2,
+        /** "Output is (material x mat alpha) + (frame buffer x (1 - mat alpha))" */
+        kBlendSrcAlpha = 3,
+        /** "Output is (material x mat alpha) + frame buffer" */
+        kBlendSrcAlphaAdd = 4,
+        /** "Output is frame buffer - material" */
+        kBlendSubtract = 5,
+        /** "Output is frame buffer x material" */
+        kBlendMultiply = 6,
+        /** "Output is material + (frame buffer x (1 - mat alpha)" */
+        kPreMultAlpha = 7,
+        /** "Lightens the frame buffer based on the lightness of the material" */
+        kScreen = 8,
+        /** "Compares the material and frame buffer and picks the lightest value, per
+         * channel"
+         */
+        kLighten = 9,
+        /** "Compares the material and frame buffer and picks the darkest value, per
+         * channel"
+         */
+        kDarken = 10
+    };
+
     virtual ~BaseMaterial();
     OBJ_CLASSNAME(BaseMaterial);
     OBJ_SET_TYPE(BaseMaterial);
@@ -138,8 +132,19 @@ public:
     virtual void Copy(const Hmx::Object *, Hmx::Object::CopyType);
     virtual void Load(BinStream &);
 
+    const DataNode *GetDefaultPropVal(Symbol);
+    BaseMaterial *NextPass() const { return mNextPass; }
+    bool IsNextPass(BaseMaterial *m);
+
 protected:
     BaseMaterial();
+    bool PropValDifferent(Symbol, BaseMaterial *);
+
+    DataNode OnIsDefaultPropVal(const DataArray *);
+    DataNode OnAllowedNextPass(const DataArray *);
+    DataNode OnAllowedNormalMap(const DataArray *);
+
+    static void SetDefaultMat(BaseMaterial *);
 
     /** "Base material color" */
     Hmx::Color mColor; // 0x2c

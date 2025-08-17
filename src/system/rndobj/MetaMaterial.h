@@ -1,6 +1,19 @@
 #pragma once
 #include "rndobj/BaseMaterial.h"
 
+enum MatProp {
+    kMatPropMax = 0x3F
+};
+
+enum MatPropEditAction {
+    /** "Use default value in Material; will be hidden in Material editor." */
+    kPropDefault = 0,
+    /** "Force value in Material; will be read-only in Material editor." */
+    kPropForce = 1,
+    /** "Allow property to be edited in Material" */
+    kPropEdit = 2
+};
+
 // size 0x204
 /** "MetaMaterials serve as Material templates" */
 class MetaMaterial : public BaseMaterial {
@@ -21,5 +34,5 @@ protected:
     int CalcApproxNumShaders();
     void SetEditAction(MatProp, MatPropEditAction);
 
-    std::vector<MatPropEditAction> unk1f8;
+    std::vector<MatPropEditAction> mMatPropEditActions; // 0x1f8
 };
