@@ -62,22 +62,61 @@ template <class T1, class T2 = class ObjectDir>
 class ObjPtrVec : public ObjRefOwner {
     // Node size: 0x14
     struct Node : public ObjRefConcrete<T1, T2> {
+        Node(ObjRefOwner *owner) : ObjRefConcrete<T1>(nullptr), mOwner(owner) {}
         virtual ~Node() {}
         virtual Hmx::Object *RefOwner() const;
         virtual void Replace(Hmx::Object *);
-        virtual ObjRefOwner *Parent() const { return unk10; }
+        virtual ObjRefOwner *Parent() const { return mOwner; }
 
-        ObjRefOwner *unk10; // 0x10
+        T1 *Obj() const { return mObject; }
+
+        /** The ObjPtrVec this Node belongs to. */
+        ObjRefOwner *mOwner; // 0x10
     };
     virtual Hmx::Object *RefOwner() const { return mOwner; }
     virtual bool Replace(ObjRef *, Hmx::Object *);
 
 public:
+    // this derives off of std::vector<Node>::iterator in some way
+    class iterator {
+    private:
+        typedef typename std::vector<Node>::iterator Base;
+        Base it;
+
+    public:
+        iterator(Base base) : it(base) {}
+    };
+    // ditto
+    class const_iterator {
+    private:
+        typedef typename std::vector<Node>::const_iterator Base;
+        Base it;
+
+    public:
+        const_iterator(Base base) : it(base) {}
+
+        const Node &operator*() const { return *it; }
+        const Node *operator->() const { return &(*it); }
+
+        const_iterator &operator++() {
+            ++it;
+            return *this;
+        }
+
+        bool operator!=(const const_iterator &other) const { return it != other.it; }
+    };
+
     ObjPtrVec(Hmx::Object *owner, EraseMode, ObjListMode);
     virtual ~ObjPtrVec() {}
+
+    iterator begin() { return iterator(mNodes.begin()); }
+    iterator end() { return iterator(mNodes.end()); }
+    const_iterator begin() const { return const_iterator(mNodes.begin()); }
+    const_iterator end() const { return const_iterator(mNodes.end()); }
+
     bool remove(T1 *);
     void push_back(T1 *);
-    // void Set(iterator, T1*);
+    void Set(iterator, T1 *);
     bool Load(BinStream &, bool, ObjectDir *);
 
     // see Draw.cpp for this
@@ -86,6 +125,10 @@ public:
             mNodes.clear();
         }
         mNodes.reserve(other.mNodes.size());
+        for (const_iterator it = other.begin(); it != other.end(); ++it) {
+            mNodes.push_back(Node(this));
+            Set(end(), *it);
+        }
     }
 
 private:
