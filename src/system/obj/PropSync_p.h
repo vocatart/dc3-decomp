@@ -1,5 +1,6 @@
 #pragma once
 #include "obj/Data.h"
+#include "math/Geo.h"
 #include "math/Vec.h"
 #include "math/Mtx.h"
 
@@ -21,7 +22,7 @@ bool PropSync(class Sphere &, DataNode &, DataArray *, int, PropOp);
 bool PropSync(Vector2 &, DataNode &, DataArray *, int, PropOp);
 bool PropSync(Vector3 &, DataNode &, DataArray *, int, PropOp);
 bool PropSync(Transform &, DataNode &, DataArray *, int, PropOp);
-// bool PropSync(Hmx::Rect &, DataNode &, DataArray *, int, PropOp);
+bool PropSync(Hmx::Rect &, DataNode &, DataArray *, int, PropOp);
 // bool PropSync(Box &, DataNode &, DataArray *, int, PropOp);
 
 inline bool PropSync(float &f, DataNode &node, DataArray *prop, int i, PropOp op) {

@@ -1,9 +1,10 @@
 #pragma once
-#include "obj/ObjRef.h"
 #include "os/Debug.h"
+#include "obj/ObjRef.h"
 #include "utl/BinStream.h"
-#include <cstddef>
 #include <vector>
+
+// TODO: need to be able to include "obj/Dir.h" here
 
 // ObjPtr size: 0x14
 template <class T>
@@ -252,7 +253,12 @@ public:
 
     void operator=(const ObjPtrList &list);
     bool remove(T1 *);
-    bool Load(BinStream &, bool, ObjectDir *, bool);
+    bool Load(BinStream &bs, bool, ObjectDir *, bool) {
+        clear();
+        int count;
+        bs >> count;
+        return false;
+    }
 
 private:
     void Link(iterator, Node *);

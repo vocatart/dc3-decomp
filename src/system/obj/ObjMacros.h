@@ -2,8 +2,8 @@
 #include "os/System.h" /* IWYU pragma: keep */
 #include "obj/PropSync_p.h" /* IWYU pragma: keep */
 #include "obj/MessageTimer.h" /* IWYU pragma: keep */
-#include "utl/BinStream.h"
-#include "utl/Symbol.h"
+#include "utl/BinStream.h" /* IWYU pragma: keep */
+#include "utl/Symbol.h" /* IWYU pragma: keep */
 
 namespace Hmx {
     class Object;

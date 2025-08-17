@@ -105,10 +105,16 @@ namespace Hmx {
         static Matrix4 sID;
 
     public:
+        Matrix4() {}
         Matrix4(const Vector4 &v1, const Vector4 &v2, const Vector4 &v3, const Vector4 &v4)
             : x(v1), y(v2), z(v3), w(v4) {}
 
         Matrix4 &Zero();
+        Matrix4 &operator=(const Matrix4 &mtx) {
+            memcpy(this, &mtx, sizeof(*this));
+            return *this;
+        }
+        static const Hmx::Matrix4 &ID() { return sID; }
 
         Vector4 x;
         Vector4 y;
@@ -250,6 +256,8 @@ void Normalize(const Hmx::Matrix3 &, Hmx::Matrix3 &);
 void MultiplyInverse(const Transform &, const Transform &, Transform &);
 void Multiply(const Transform &, const Transform &, Transform &);
 
+void Invert(const Transform &, Transform &);
+void Invert(const Hmx::Matrix4 &, Hmx::Matrix4 &);
 void Transpose(const Hmx::Matrix4 &, Hmx::Matrix4 &);
 void Multiply(const Frustum &, const Transform &, Frustum &);
 
