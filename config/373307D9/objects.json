@@ -747,7 +747,7 @@
             "system/rndobj/Movie.cpp": "MISSING",
             "system/rndobj/MultiMesh.cpp": "MISSING",
             "system/rndobj/MultiMeshProxy.cpp": "MISSING",
-            "system/rndobj/Overlay.cpp": "MISSING",
+            "system/rndobj/Overlay.cpp": "NonMatching",
             "system/rndobj/Part.cpp": "MISSING",
             "system/rndobj/PartAnim.cpp": "MISSING",
             "system/rndobj/PartLauncher.cpp": "MISSING",
