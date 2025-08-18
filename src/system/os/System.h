@@ -71,3 +71,5 @@ typedef void DiscErrorCallbackFunc(void);
 
 DiscErrorCallbackFunc *SetDiskErrorCallback(DiscErrorCallbackFunc *func);
 DiscErrorCallbackFunc *GetDiskErrorCallback();
+
+bool PlatformDebugBreak();

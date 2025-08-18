@@ -3498,7 +3498,7 @@ system/rndobj/CamAnim.cpp:
 	.pdata      start:0x822DE348 end:0x822DE498
 	.text       start:0x826EE538 end:0x826EFE90
 	.data       start:0x82F15B60 end:0x82F15BC8
-	.data       start:0x830E0254 end:0x830E154C rename:.bss
+	.data       start:0x830E0254 end:0x830E1548 rename:.bss
 
 system/rndobj/ColorXfm.cpp:
 	.rdata      start:0x820A9318 end:0x820A932C
@@ -3520,6 +3520,7 @@ system/rndobj/Console.cpp:
 	.pdata      start:0x822DE538 end:0x822DE740
 	.text       start:0x826F1618 end:0x826F4338
 	.data       start:0x82F15BC8 end:0x82F15C24
+	.data       start:0x830E1548 end:0x830E154C rename:.bss
 
 system/rndobj/DOFProc.cpp:
 	.rdata      start:0x820A9FB4 end:0x820AA218

@@ -18,6 +18,7 @@ public:
 
     MEM_OVERLOAD(RndOverlay, 0x13);
 
+    int NumLines() const { return mLines.size(); }
     void Clear();
     void SetLines(int);
     void SetTimeout(float);

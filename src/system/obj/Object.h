@@ -457,6 +457,10 @@ extern DataArray *SystemConfig(Symbol, Symbol, Symbol);
         }                                                                                \
     }
 
+#define HANDLE_MESSAGE(msg)                                                              \
+    if (sym == msg::Type())                                                              \
+    _HANDLE_CHECKED(OnMsg(msg(_msg)))
+
 #define HANDLE_FORWARD(func) _HANDLE_CHECKED(func(_msg, false))
 
 #define HANDLE_SUPERCLASS(parent) HANDLE_FORWARD(parent::Handle)
