@@ -1,5 +1,5 @@
 #pragma once
-// #include "obj/Dir.h" /* IWYU pragma: keep */
+#include "obj/Dir.h" /* IWYU pragma: keep */
 #include "utl/BinStream.h" /* IWYU pragma: keep */
 #include "os/Debug.h" /* IWYU pragma: keep */
 #include <cstddef> /* IWYU pragma: keep */
@@ -148,11 +148,35 @@ typename ObjPtrList<T1, T2>::iterator ObjPtrList<T1, T2>::find(const Hmx::Object
 }
 
 template <class T1, class T2>
-bool ObjPtrList<T1, T2>::Load(BinStream &bs, bool, ObjectDir *, bool) {
+bool ObjPtrList<T1, T2>::Load(BinStream &bs, bool print, ObjectDir *dir, bool b4) {
+    bool ret = true;
     clear();
     int count;
     bs >> count;
-    return false;
+    Hmx::Object *refOwner = mOwner ? mOwner->RefOwner() : nullptr;
+    if (!dir && refOwner)
+        dir = refOwner->Dir();
+    if (print) {
+        MILO_ASSERT(dir, 0x210);
+    }
+    while (count != 0U) {
+        char buf[0x80];
+        bs.ReadString(buf, 0x80);
+        if (dir) {
+            T1 *casted = dynamic_cast<T1 *>(dir->FindObject(buf, false, b4));
+            if (!casted && buf[0] != '\0') {
+                if (print)
+                    MILO_NOTIFY(
+                        "%s couldn't find %s in %s", PathName(refOwner), buf, PathName(dir)
+                    );
+                ret = false;
+            } else if (casted) {
+                push_back(casted);
+            }
+        }
+        count--;
+    }
+    return ret;
 }
 
 template <class T1>

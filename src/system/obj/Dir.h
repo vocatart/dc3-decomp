@@ -31,7 +31,7 @@ public:
         *this = o ? dynamic_cast<C *>(o) : nullptr;
     }
 
-    DirLoader *mLoader; // 0x10
+    class DirLoader *mLoader; // 0x10
 
     bool IsLoaded() const;
     ObjDirPtr &operator=(C *);
