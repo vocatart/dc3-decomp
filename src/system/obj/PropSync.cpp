@@ -1,4 +1,4 @@
-#include "obj/PropSync_p.h"
+#include "obj/PropSync.h"
 #include "os/Debug.h"
 #include "os/File.h"
 #include "utl/FilePath.h"

@@ -1,6 +1,6 @@
 #pragma once
 #include "obj/Data.h" /* IWYU pragma: keep */
-#include "obj/PropSync_p.h" /* IWYU pragma: keep */
+#include "obj/PropSync.h" /* IWYU pragma: keep */
 #include "obj/MessageTimer.h" /* IWYU pragma: keep */
 #include "utl/BinStream.h" /* IWYU pragma: keep */
 #include "utl/MemMgr.h" /* IWYU pragma: keep */

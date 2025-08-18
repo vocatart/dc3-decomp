@@ -257,5 +257,5 @@ private:
     static Symbol sCurrentExportEvent;
 };
 
-#include "obj/PropSync_p.h"
+#include "obj/PropSync.h"
 bool PropSync(MsgSinks &, DataNode &, DataArray *, int, PropOp);
