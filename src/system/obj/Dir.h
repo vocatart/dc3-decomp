@@ -1,7 +1,6 @@
 #pragma once
 #include "math/Mtx.h"
 #include "obj/DirLoader.h"
-#include "obj/ObjRef.h"
 #include "obj/Object.h"
 #include "os/Debug.h"
 #include "utl/BinStream.h"
@@ -46,6 +45,18 @@ public:
     void LoadInlinedFile(const FilePath &fp, BinStream &bs) {
         *this = nullptr;
         // there's more
+        mLoader = new DirLoader(
+            fp,
+            TheLoadMgr.GetLoaderPos() == kLoadStayBack
+                    || TheLoadMgr.GetLoaderPos() == kLoadFrontStayBack
+                ? kLoadFrontStayBack
+                : kLoadFront,
+            nullptr,
+            &bs,
+            nullptr,
+            false,
+            nullptr
+        );
     }
 };
 

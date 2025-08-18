@@ -1,19 +1,685 @@
 #pragma once
-#include "obj/ObjMacros.h"
-#include "obj/ObjPtr_p.h"
-#include "obj/ObjRef.h"
-#include "obj/Data.h"
-#include "obj/PropSync_p.h"
-#include "utl/BinStream.h"
-#include "utl/MemMgr.h"
-#include "utl/Symbol.h"
-#include <map>
+#include "obj/Data.h" /* IWYU pragma: keep */
+#include "obj/PropSync_p.h" /* IWYU pragma: keep */
+#include "obj/MessageTimer.h" /* IWYU pragma: keep */
+#include "utl/BinStream.h" /* IWYU pragma: keep */
+#include "utl/MemMgr.h" /* IWYU pragma: keep */
+#include "utl/Symbol.h" /* IWYU pragma: keep */
+#include <list> /* IWYU pragma: keep */
+#include <map> /* IWYU pragma: keep */
 
+// forward declarations
 class MsgSinks;
 namespace Hmx {
     class Object;
 }
+class ObjRef;
+class ObjRefOwner;
+class ObjectDir;
 
+// Object Ref/Ptr declarations
+// ObjRefOwner size: 0x4
+class ObjRefOwner {
+public:
+    ObjRefOwner() {}
+    virtual ~ObjRefOwner() {}
+    virtual Hmx::Object *RefOwner() const = 0;
+    virtual bool Replace(ObjRef *, Hmx::Object *) = 0;
+};
+
+// ObjRef size: 0xc
+class ObjRef {
+    friend class Hmx::Object;
+
+protected:
+    // seems to be a linked list of an Object's refs
+    ObjRef *next; // 0x4
+    ObjRef *prev; // 0x8
+
+    // i *think* this is good?
+    void AddRef(ObjRef *ref) {
+        next = ref;
+        prev = ref->prev;
+        ref->prev = this;
+        prev->next = this;
+    }
+
+    void Release(ObjRef *ref) {
+        prev->next = next;
+        next->prev = prev;
+        // do something with ref here
+    }
+
+public:
+    ObjRef() {}
+    ObjRef(const ObjRef &other) : next(other.next), prev(other.prev) {
+        prev->next = this;
+        next->prev = this;
+    }
+    virtual ~ObjRef() {}
+    virtual Hmx::Object *RefOwner() const { return nullptr; }
+    virtual bool IsDirPtr() { return false; }
+    virtual Hmx::Object *GetObj() const {
+        MILO_FAIL("calling get obj on abstract ObjRef");
+        return nullptr;
+    }
+    virtual void Replace(Hmx::Object *) {
+        MILO_FAIL("calling get obj on abstract ObjRef");
+    }
+    virtual ObjRefOwner *Parent() const { return nullptr; }
+
+    class iterator {
+    private:
+        ObjRef *curRef;
+
+    public:
+        iterator() : curRef(nullptr) {}
+        iterator(ObjRef *ref) : curRef(ref) {}
+        operator ObjRef *() const { return curRef; }
+        ObjRef *operator->() const { return curRef; }
+
+        iterator operator++() {
+            curRef = curRef->next;
+            return *this;
+        }
+
+        iterator operator++(int) {
+            iterator tmp = *this;
+            ++*this;
+            return tmp;
+        }
+
+        bool operator!=(iterator it) { return curRef != it.curRef; }
+        bool operator==(iterator it) { return curRef == it.curRef; }
+        bool operator!() { return curRef == nullptr; }
+    };
+
+    iterator begin() const { return iterator(next); }
+    iterator end() const { return iterator((ObjRef *)this); }
+
+    void Clear() { next = prev = this; }
+    void ReplaceList(Hmx::Object *obj) {
+        while (next != this) {
+            next->Replace(obj);
+            if (this == next) {
+                MILO_FAIL("ReplaceList stuck in infinite loop");
+            }
+        }
+    }
+    int RefCount() const {
+        int count = 0;
+        for (ObjRef::iterator it = begin(); it != end(); ++it) {
+            count++;
+        }
+        return count;
+    }
+
+    // per ObjectDir::HasDirPtrs, this is the way to iterate across refs
+    // for (ObjRef *it = mRefs.next; it != &mRefs; it = it->next) {
+};
+
+// ObjRefConcrete size: 0x10
+template <class T1, class T2 = class ObjectDir>
+class ObjRefConcrete : public ObjRef {
+protected:
+    T1 *mObject; // 0xc
+public:
+    ObjRefConcrete(T1 *obj);
+    ObjRefConcrete(const ObjRefConcrete &o);
+    virtual ~ObjRefConcrete();
+    virtual Hmx::Object *GetObj() const { return mObject; }
+    virtual void Replace(Hmx::Object *obj) { SetObj(obj); }
+
+    T1 *operator->() const { return mObject; }
+    operator T1 *() const { return mObject; }
+
+    void SetObjConcrete(T1 *obj);
+    void CopyRef(const ObjRefConcrete &);
+    Hmx::Object *SetObj(Hmx::Object *root_obj);
+    bool Load(BinStream &, bool, ObjectDir *);
+};
+
+template <class T1>
+BinStream &operator<<(BinStream &bs, const ObjRefConcrete<T1, class ObjectDir> &f);
+
+// ObjPtr size: 0x14
+template <class T>
+class ObjPtr : public ObjRefConcrete<T> {
+private:
+    Hmx::Object *mOwner; // 0x10
+public:
+    ObjPtr(Hmx::Object *owner, T *ptr = nullptr);
+    ObjPtr(const ObjPtr &p);
+    virtual ~ObjPtr();
+    virtual Hmx::Object *RefOwner() const { return mOwner; }
+
+    void operator=(T *obj) { SetObjConcrete(obj); }
+    void operator=(const ObjPtr &p) { CopyRef(p); }
+    T *Ptr() const { return mObject; }
+};
+
+template <class T1>
+BinStream &operator<<(BinStream &bs, const ObjPtr<T1> &ptr);
+
+template <class T1>
+BinStream &operator>>(BinStream &bs, ObjPtr<T1> &ptr);
+
+// ObjOwnerPtr size: 0x14
+template <class T>
+class ObjOwnerPtr : public ObjRefConcrete<T> {
+private:
+    ObjRefOwner *mOwner; // 0x10
+public:
+    ObjOwnerPtr(ObjRefOwner *owner, T *ptr = nullptr);
+    ObjOwnerPtr(const ObjOwnerPtr &o);
+    virtual ~ObjOwnerPtr();
+    virtual Hmx::Object *RefOwner() const;
+    virtual void Replace(Hmx::Object *obj) { mOwner->Replace(this, obj); }
+    void operator=(T *obj) { SetObjConcrete(obj); }
+    T *Ptr() const { return mObject; }
+};
+
+enum EraseMode {
+};
+
+enum ObjListMode {
+    kObjListNoNull,
+    kObjListAllowNull,
+    kObjListOwnerControl
+};
+
+// ObjPtrVec size: 0x1c
+template <class T1, class T2 = class ObjectDir>
+class ObjPtrVec : public ObjRefOwner {
+private:
+    // Node size: 0x14
+    struct Node : public ObjRefConcrete<T1, T2> {
+        Node(ObjRefOwner *owner) : ObjRefConcrete<T1>(nullptr), mOwner(owner) {}
+        virtual ~Node() {}
+        virtual Hmx::Object *RefOwner() const;
+        virtual void Replace(Hmx::Object *);
+        virtual ObjRefOwner *Parent() const { return mOwner; }
+
+        T1 *Obj() const { return mObject; }
+
+        /** The ObjPtrVec this Node belongs to. */
+        ObjRefOwner *mOwner; // 0x10
+    };
+    virtual Hmx::Object *RefOwner() const { return mOwner; }
+    virtual bool Replace(ObjRef *, Hmx::Object *);
+
+protected:
+    void ReplaceNode(Node *, Hmx::Object *);
+
+public:
+    // this derives off of std::vector<Node>::iterator in some way
+    class iterator {
+    private:
+        typedef typename std::vector<Node>::iterator Base;
+        Base it;
+
+    public:
+        iterator(Base base) : it(base) {}
+
+        Node &operator*() const { return *it; }
+        Node *operator->() const { return &(*it); }
+    };
+    // ditto
+    class const_iterator {
+    private:
+        typedef typename std::vector<Node>::const_iterator Base;
+        Base it;
+
+    public:
+        const_iterator(Base base) : it(base) {}
+
+        const Node &operator*() const { return *it; }
+        const Node *operator->() const { return &(*it); }
+
+        const_iterator &operator++() {
+            ++it;
+            return *this;
+        }
+
+        bool operator!=(const const_iterator &other) const { return it != other.it; }
+    };
+
+    ObjPtrVec(Hmx::Object *owner, EraseMode, ObjListMode);
+    virtual ~ObjPtrVec();
+
+    iterator begin() { return iterator(mNodes.begin()); }
+    iterator end() { return iterator(mNodes.end()); }
+    const_iterator begin() const { return const_iterator(mNodes.begin()); }
+    const_iterator end() const { return const_iterator(mNodes.end()); }
+
+    iterator erase(iterator);
+    iterator insert(const_iterator, T1 *);
+    const_iterator find(const Hmx::Object *) const;
+
+    template <class S>
+    void sort(const S &);
+
+    bool remove(T1 *);
+    void push_back(T1 *);
+    void swap(int, int);
+    bool Load(BinStream &, bool, ObjectDir *);
+
+    void Set(iterator it, T1 *obj);
+
+    // see Draw.cpp for this
+    void operator=(const ObjPtrVec &other);
+
+private:
+    std::vector<Node> mNodes; // 0x4
+    Hmx::Object *mOwner; // 0x10
+    EraseMode mEraseMode; // 0x14
+    ObjListMode mListMode; // 0x18
+};
+
+template <class T1>
+BinStream &operator<<(BinStream &bs, const ObjPtrVec<T1, ObjectDir> &vec);
+
+template <class T1>
+BinStream &operator>>(BinStream &bs, ObjPtrVec<T1, ObjectDir> &vec);
+
+// ObjPtrList size: 0x14
+template <class T1, class T2 = class ObjectDir>
+class ObjPtrList : public ObjRefOwner {
+public:
+    ObjPtrList(ObjRefOwner *, ObjListMode);
+    virtual ~ObjPtrList() { clear(); }
+
+private:
+    // Node size: 0x14
+    struct Node : public ObjRefConcrete<T1, T2> {
+        virtual ~Node() {}
+        virtual Hmx::Object *RefOwner() const;
+        virtual void Replace(Hmx::Object *);
+        virtual ObjRefOwner *Parent() const { return unk10; }
+
+        T1 *Obj() const { return mObject; }
+
+        ObjRefOwner *unk10; // 0x10
+        Node *next; // 0x14
+        Node *prev; // 0x18
+    };
+    int mSize; // 0x4
+    Node *mNodes; // 0x8
+    ObjRefOwner *mOwner; // 0xc
+    ObjListMode mListMode; // 0x10
+
+    virtual Hmx::Object *RefOwner() const;
+    virtual bool Replace(ObjRef *, Hmx::Object *);
+
+public:
+    class iterator {
+    public:
+        iterator() : mNode(0) {}
+        iterator(Node *node) : mNode(node) {}
+        T1 *operator*() { return mNode->Obj(); }
+
+        iterator operator++() {
+            mNode = mNode->next;
+            return *this;
+        }
+
+        iterator operator++(int) {
+            iterator tmp = *this;
+            ++*this;
+            return tmp;
+        }
+
+        bool operator!=(iterator it) { return mNode != it.mNode; }
+        bool operator==(iterator it) { return mNode == it.mNode; }
+        bool operator!() { return mNode == 0; }
+
+        struct Node *mNode; // 0x0
+    };
+
+    void clear() {
+        while (mSize != 0)
+            pop_back();
+    }
+
+    void pop_back();
+    void push_back(T1 *obj);
+    iterator find(const Hmx::Object *target) const;
+    iterator begin() const { return iterator(mNodes); }
+    iterator end() const { return iterator(0); }
+    iterator erase(iterator);
+    iterator insert(iterator, Hmx::Object *);
+
+    typedef bool SortFunc(T1 *, T1 *);
+    void sort(SortFunc *func);
+
+    void operator=(const ObjPtrList &list);
+    bool remove(T1 *);
+    bool Load(BinStream &bs, bool, ObjectDir *, bool);
+
+private:
+    void Link(iterator, Node *);
+    Node *Unlink(Node *);
+};
+
+template <class T1>
+BinStream &operator<<(BinStream &bs, const ObjPtrList<T1, ObjectDir> &list);
+
+template <class T1>
+BinStream &operator>>(BinStream &bs, ObjPtrList<T1, ObjectDir> &list);
+
+// Hmx::Object-centric macros
+/** Get this Object's path name.
+ * @param [in] obj The Object.
+ * @returns The Object's path name, or "NULL Object" if it doesn't exist.
+ */
+const char *PathName(const class Hmx::Object *obj);
+
+#define NULL_OBJ (Hmx::Object *)nullptr
+
+// BEGIN CLASSNAME MACRO -----------------------------------------------------------------
+#define OBJ_CLASSNAME(classname)                                                         \
+    virtual Symbol ClassName() const { return StaticClassName(); }                       \
+    static Symbol StaticClassName() {                                                    \
+        static Symbol name(#classname);                                                  \
+        return name;                                                                     \
+    }
+// END CLASSNAME MACRO -------------------------------------------------------------------
+
+// BEGIN SET TYPE MACRO ------------------------------------------------------------------
+extern DataArray *SystemConfig(Symbol, Symbol, Symbol);
+#define OBJ_SET_TYPE(classname)                                                           \
+    virtual void SetType(Symbol classname) {                                              \
+        DataArray *def;                                                                   \
+        if (!classname.Null()) {                                                          \
+            static DataArray *types =                                                     \
+                SystemConfig("objects", StaticClassName(), "types");                      \
+            DataArray *found = types->FindArray(classname, false);                        \
+            if (found) {                                                                  \
+                SetTypeDef(found);                                                        \
+            } else {                                                                      \
+                MILO_NOTIFY(                                                              \
+                    "%s:%s couldn't find type %s", ClassName(), PathName(this), classname \
+                );                                                                        \
+                SetTypeDef(nullptr);                                                      \
+            }                                                                             \
+        } else                                                                            \
+            SetTypeDef(nullptr);                                                          \
+    }
+// END SET TYPE MACRO --------------------------------------------------------------------
+
+// BEGIN HANDLE MACROS -------------------------------------------------------------------
+#define BEGIN_HANDLERS(objType)                                                          \
+    DataNode objType::Handle(DataArray *_msg, bool _warn) {                              \
+        Symbol sym = _msg->Sym(1);                                                       \
+        MessageTimer timer(                                                              \
+            (MessageTimer::Active()) ? static_cast<Hmx::Object *>(this) : 0, sym         \
+        );
+
+#define _NEW_STATIC_SYMBOL(str) static Symbol _s(#str);
+
+#define _HANDLE_CHECKED(expr)                                                            \
+    {                                                                                    \
+        DataNode result = expr;                                                          \
+        if (result.Type() != kDataUnhandled)                                             \
+            return result;                                                               \
+    }
+
+#define HANDLE(s, func)                                                                  \
+    {                                                                                    \
+        _NEW_STATIC_SYMBOL(s)                                                            \
+        if (sym == _s)                                                                   \
+            _HANDLE_CHECKED(func(_msg))                                                  \
+    }
+
+#define HANDLE_EXPR(s, expr)                                                             \
+    {                                                                                    \
+        _NEW_STATIC_SYMBOL(s)                                                            \
+        if (sym == _s)                                                                   \
+            return expr;                                                                 \
+    }
+
+#define HANDLE_ACTION(s, action)                                                         \
+    {                                                                                    \
+        _NEW_STATIC_SYMBOL(s)                                                            \
+        if (sym == _s) {                                                                 \
+            /* for style, require any side-actions to be performed via comma operator */ \
+            (action);                                                                    \
+            return 0;                                                                    \
+        }                                                                                \
+    }
+
+#define HANDLE_ARRAY(array)                                                              \
+    {                                                                                    \
+        /* this needs to be placed up here to match Hmx::Object::Handle */               \
+        DataArray *found;                                                                \
+        if (array && (found = array->FindArray(sym, false))) {                           \
+            _HANDLE_CHECKED(found->ExecuteScript(1, this, _msg, 2))                      \
+        }                                                                                \
+    }
+
+#define HANDLE_FORWARD(func) _HANDLE_CHECKED(func(_msg, false))
+
+#define HANDLE_SUPERCLASS(parent) HANDLE_FORWARD(parent::Handle)
+
+#define END_HANDLERS                                                                     \
+    if (_warn)                                                                           \
+        MILO_NOTIFY("%s unhandled msg: %s", PathName(this), sym);                        \
+    return DataNode(kDataUnhandled, 0);                                                  \
+    }
+// END HANDLE MACROS ---------------------------------------------------------------------
+
+// BEGIN SYNCPROPERTY MACROS -------------------------------------------------------------
+#define BEGIN_PROPSYNCS(objType)                                                         \
+    bool objType::SyncProperty(DataNode &_val, DataArray *_prop, int _i, PropOp _op) {   \
+        if (_i == _prop->Size())                                                         \
+            return true;                                                                 \
+        else {                                                                           \
+            Symbol sym = _prop->Sym(_i);
+
+#define BEGIN_CUSTOM_PROPSYNC(objType)                                                   \
+    bool PropSync(objType &o, DataNode &_val, DataArray *_prop, int _i, PropOp _op) {    \
+        if (_i == _prop->Size())                                                         \
+            return true;                                                                 \
+        else {                                                                           \
+            Symbol sym = _prop->Sym(_i);
+
+#define SYNC_PROP(s, member)                                                             \
+    {                                                                                    \
+        _NEW_STATIC_SYMBOL(s)                                                            \
+        if (sym == _s)                                                                   \
+            return PropSync(member, _val, _prop, _i + 1, _op);                           \
+    }
+
+// for propsyncs that do something extra if the prop op is specifically kPropSet
+#define SYNC_PROP_SET(s, member, func)                                                   \
+    {                                                                                    \
+        _NEW_STATIC_SYMBOL(s)                                                            \
+        if (sym == _s) {                                                                 \
+            if (_op == kPropSet) {                                                       \
+                func;                                                                    \
+            } else {                                                                     \
+                if (_op == (PropOp)0x40)                                                 \
+                    return false;                                                        \
+                _val = member;                                                           \
+            }                                                                            \
+            return true;                                                                 \
+        }                                                                                \
+    }
+
+// for propsyncs that do NOT use size or get - aka, any combo of set, insert, remove, and
+// handle is used
+#define SYNC_PROP_MODIFY(s, member, func)                                                \
+    {                                                                                    \
+        _NEW_STATIC_SYMBOL(s)                                                            \
+        if (sym == _s) {                                                                 \
+            if (PropSync(member, _val, _prop, _i + 1, _op)) {                            \
+                if (!(_op & (kPropSize | kPropGet))) {                                   \
+                    func;                                                                \
+                }                                                                        \
+                return true;                                                             \
+            } else {                                                                     \
+                return false;                                                            \
+            }                                                                            \
+        }                                                                                \
+    }
+
+#define SYNC_PROP_BITFIELD(symbol, mask_member, line_num)                                \
+    if (sym == symbol) {                                                                 \
+        _i++;                                                                            \
+        if (_i < _prop->Size()) {                                                        \
+            DataNode &node = _prop->Node(_i);                                            \
+            int res = 0;                                                                 \
+            switch (node.Type()) {                                                       \
+            case kDataInt:                                                               \
+                res = node.Int();                                                        \
+                break;                                                                   \
+            case kDataSymbol: {                                                          \
+                const char *bitstr = node.Sym().Str();                                   \
+                MILO_ASSERT_FMT(                                                         \
+                    strncmp("BIT_", bitstr, 4) == 0,                                     \
+                    "%s does not begin with BIT_",                                       \
+                    bitstr                                                               \
+                );                                                                       \
+                Symbol bitsym(bitstr + 4);                                               \
+                const Symbol &test = Symbol(bitsym);                                     \
+                DataArray *macro = DataGetMacro(test);                                   \
+                MILO_ASSERT_FMT(                                                         \
+                    macro, "PROPERTY_BITFIELD %s could not find macro %s", symbol, test  \
+                );                                                                       \
+                res = macro->Int(0);                                                     \
+                break;                                                                   \
+            }                                                                            \
+            default:                                                                     \
+                MILO_ASSERT(0, line_num);                                                 \
+                break;                                                                   \
+            }                                                                            \
+            MILO_ASSERT(_op <= kPropInsert, line_num);                                      \
+            if (_op == kPropGet) {                                                       \
+                int final = mask_member & res;                                           \
+                _val = DataNode(final > 0);                                              \
+            } else {                                                                     \
+                if (_val.Int() != 0)                                                     \
+                    mask_member |= res;                                                  \
+                else                                                                     \
+                    mask_member &= ~res;                                                 \
+            }                                                                            \
+            return true;                                                                 \
+        } else                                                                           \
+            return PropSync(mask_member, _val, _prop, _i, _op);                          \
+    }
+
+#define SYNC_PROP_MODIFY_STATIC(symbol, member, func)                                    \
+    { _NEW_STATIC_SYMBOL(symbol) SYNC_PROP_MODIFY(_s, member, func) }
+
+#define SYNC_PROP_BITFIELD_STATIC(symbol, mask_member, line_num)                         \
+    { _NEW_STATIC_SYMBOL(symbol) SYNC_PROP_BITFIELD(_s, mask_member, line_num) }
+
+#define SYNC_SUPERCLASS(parent)                                                          \
+    if (parent::SyncProperty(_val, _prop, _i, _op))                                      \
+        return true;
+
+#define END_PROPSYNCS                                                                    \
+    return false;                                                                        \
+    }                                                                                    \
+    }
+
+#define END_CUSTOM_PROPSYNC                                                              \
+    return false;                                                                        \
+    }                                                                                    \
+    }
+
+// END SYNCPROPERTY MACROS ---------------------------------------------------------------
+
+// BEGIN SAVE MACROS ---------------------------------------------------------------------
+#define SAVE_SUPERCLASS(parent) parent::Save(bs);
+// END SAVE MACRO ------------------------------------------------------------------------
+
+// BEGIN COPY MACROS ---------------------------------------------------------------------
+#define BEGIN_COPYS(objType)                                                             \
+    void objType::Copy(const Hmx::Object *o, Hmx::Object::CopyType ty) {
+#define COPY_SUPERCLASS(parent) parent::Copy(o, ty);
+
+#define COPY_VIRTUAL_SUPERCLASS(parent)                                                  \
+    if (ClassName() == StaticClassName())                                                \
+    COPY_SUPERCLASS(Hmx::Object)
+
+#define COPY_SUPERCLASS_FROM(parent, obj) parent::Copy(obj, ty);
+
+#define CREATE_COPY(objType) const objType *c = dynamic_cast<const objType *>(o);
+
+// copy macro where you specify the variable name (used in asserts in some copy methods)
+#define CREATE_COPY_AS(objType, var_name)                                                \
+    const objType *var_name = dynamic_cast<const objType *>(o);
+
+#define BEGIN_COPYING_MEMBERS if (c) {
+// copy macro where you specify the variable name (used in asserts in some copy methods)
+#define BEGIN_COPYING_MEMBERS_FROM(copy_name) if (copy_name) {
+#define COPY_MEMBER(mem) mem = c->mem;
+
+// copy macro where you specify the variable name (used in asserts in some copy methods)
+#define COPY_MEMBER_FROM(copy_name, member) member = copy_name->member;
+
+#define END_COPYING_MEMBERS }
+
+#define END_COPYS }
+// END COPY MACROS -----------------------------------------------------------------------
+
+// BEGIN LOAD MACROS  --------------------------------------------------------------------
+#define BEGIN_LOADS(objType) void objType::Load(BinStream &bs) {
+#define LOAD_REVS(bs)                                                                    \
+    int revs;                                                                            \
+    bs >> revs;                                                                          \
+    int gRev = getHmxRev(revs);                                                          \
+    int gAltRev = getAltRev(revs);                                                       \
+    BinStreamRev bsrev(bs, gRev, gAltRev);
+
+#define ASSERT_REVS(rev1, rev2)                                                          \
+    static const unsigned short gRevs[4] = { rev1, 0, rev2, 0 };                         \
+    if (gRev > rev1) {                                                                   \
+        MILO_FAIL(                                                                       \
+            "%s can't load new %s version %d > %d",                                      \
+            PathName(this),                                                              \
+            ClassName(),                                                                 \
+            gRev,                                                                        \
+            gRevs[0]                                                                     \
+        );                                                                               \
+    }                                                                                    \
+    if (gAltRev > rev2) {                                                                \
+        MILO_FAIL(                                                                       \
+            "%s can't load new %s alt version %d > %d",                                  \
+            PathName(this),                                                              \
+            ClassName(),                                                                 \
+            gAltRev,                                                                     \
+            gRevs[2]                                                                     \
+        );                                                                               \
+    }
+
+#define LOAD_SUPERCLASS(parent) parent::Load(bs);
+
+#define LOAD_BITFIELD(type, name)                                                        \
+    {                                                                                    \
+        type bs_name;                                                                    \
+        bs >> bs_name;                                                                   \
+        name = bs_name;                                                                  \
+    }
+
+#define LOAD_BITFIELD_ENUM(type, name, enum_name)                                        \
+    {                                                                                    \
+        type bs_name;                                                                    \
+        bs >> bs_name;                                                                   \
+        name = (enum_name)bs_name;                                                       \
+    }
+
+#define END_LOADS }
+// END LOAD MACROS -----------------------------------------------------------------------
+
+#define NEW_OBJ(objType)                                                                 \
+    static Hmx::Object *NewObject() { return new objType; }
+
+#define REGISTER_OBJ_FACTORY(objType)                                                    \
+    Hmx::Object::RegisterFactory(objType::StaticClassName(), objType::NewObject);
+
+// TypeProps implementation
 class TypeProps : public ObjRefOwner {
 private:
     DataArray *mMap; // 0x4
@@ -51,6 +717,7 @@ public:
 
 typedef Hmx::Object *ObjectFunc(void);
 
+// Hmx::Object implementation
 namespace Hmx {
 
     class Object : public ObjRefOwner {
@@ -206,4 +873,61 @@ inline TextStream &operator<<(TextStream &ts, const Hmx::Object *obj) {
     return ts;
 }
 
-#define NULL_OBJ (Hmx::Object *)nullptr
+// ObjList
+template <class T>
+class ObjList : public std::list<T> {
+private:
+    typedef typename std::list<T> Base;
+    Hmx::Object *mOwner;
+
+public:
+    ObjList(Hmx::Object *o) : mOwner(o) {}
+
+    Hmx::Object *Owner() { return mOwner; }
+
+    void resize(unsigned int ul) { Base::resize(ul, T(mOwner)); }
+
+    void push_front() { insert(begin(), T(mOwner)); }
+
+    void push_front(const T &t) {
+        push_front();
+        front() = t;
+    }
+
+    void push_back() { resize(size() + 1); }
+
+    void push_back(const T &t) {
+        push_back();
+        back() = t;
+    }
+
+    void operator=(const ObjList &oList) {
+        if (this != &oList) {
+            resize(oList.size());
+            Base::operator=((Base &)oList);
+        }
+    }
+};
+
+template <class T>
+BinStream &operator>>(BinStream &bs, ObjList<T> &oList) {
+    unsigned int length;
+    bs >> length;
+    oList.resize(length);
+
+    for (std::list<T>::iterator it = oList.begin(); it != oList.end(); ++it) {
+        bs >> *it;
+    }
+    return bs;
+}
+
+// ObjVersion
+struct ObjVersion {
+    ObjVersion(int i, Hmx::Object *o) : revs(i), obj(nullptr, o) {}
+    ~ObjVersion() {}
+
+    ObjPtr<Hmx::Object> obj;
+    int revs;
+};
+
+#include "ObjPtr_p.h"
