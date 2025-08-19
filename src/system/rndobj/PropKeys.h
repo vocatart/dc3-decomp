@@ -2,6 +2,8 @@
 #include "math/Color.h"
 #include "math/Mtx.h"
 #include "math/Vec.h"
+#include "obj/Data.h"
+#include "obj/Msg.h"
 #include "obj/Object.h"
 #include "os/Debug.h"
 #include "rndobj/Trans.h"
@@ -201,6 +203,15 @@ public:
     }
 
     void Print();
+    void SetPropExceptionID();
+    void SetInterpHandler(Symbol);
+    void SetProp(DataNode &);
+    void SetTarget(Hmx::Object *);
+    void ReSort();
+    void ChangeFrame(int idx, float new_frame, bool sort);
+
+    static ExceptionID PropExceptionID(Hmx::Object *, DataArray *);
+    static Message sInterpMessage;
 
 protected:
     /** The target object to animate properties on. */

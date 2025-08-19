@@ -98,6 +98,15 @@ Hmx::Object *ObjOwnerPtr<T>::RefOwner() const {
     return mObject->RefOwner();
 }
 
+// template <class T1>
+// BinStream &operator<<(BinStream &bs, const ObjOwnerPtr<T1> &ptr);
+
+template <class T1>
+BinStream &operator>>(BinStream &bs, ObjOwnerPtr<T1> &ptr) {
+    ptr.Load(bs, true, nullptr);
+    return bs;
+}
+
 // ------------------------------------------------
 // ObjPtrVec
 // ------------------------------------------------

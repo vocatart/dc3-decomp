@@ -14,6 +14,7 @@ public:
     Key() : value(T()), frame(0.0f) {}
     Key(const T &v, float f) : value(v), frame(f) {}
     bool operator<(const Key &k) const { return frame < k.frame; }
+
     T value;
     float frame;
 };

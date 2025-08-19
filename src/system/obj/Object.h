@@ -156,6 +156,7 @@ public:
     void operator=(T *obj) { SetObjConcrete(obj); }
     void operator=(const ObjPtr &p) { CopyRef(p); }
     T *Ptr() const { return mObject; }
+    Hmx::Object *Owner() const { return mOwner; }
 };
 
 template <class T1>
@@ -178,6 +179,12 @@ public:
     void operator=(T *obj) { SetObjConcrete(obj); }
     T *Ptr() const { return mObject; }
 };
+
+template <class T1>
+BinStream &operator<<(BinStream &bs, const ObjOwnerPtr<T1> &ptr);
+
+template <class T1>
+BinStream &operator>>(BinStream &bs, ObjOwnerPtr<T1> &ptr);
 
 enum EraseMode {
 };
@@ -937,7 +944,7 @@ public:
 
 void Interp(const ObjectStage &, const ObjectStage &, float, Hmx::Object *&);
 BinStream &operator<<(BinStream &, const ObjectStage &);
-BinStream &operator>>(BinStream &, ObjectStage &);
+BinStreamRev &operator>>(BinStreamRev &, ObjectStage &);
 
 // ObjVersion
 struct ObjVersion {

@@ -1,7 +1,12 @@
 #include "rndobj/PropKeys.h"
 #include "math/Rot.h"
 #include "math/Utl.h"
+#include "obj/Utl.h"
 #include "os/Debug.h"
+#include "utl/BinStream.h"
+
+Hmx::Object *ObjectStage::sOwner;
+Message PropKeys::sInterpMessage(gNullStr, 0, 0, 0, 0, 0);
 
 void PropKeys::Copy(const PropKeys *keys) {
     mInterpolation = keys->mInterpolation;
@@ -56,6 +61,52 @@ void PropKeys::Print() {
     }
 }
 
+PropKeys::ExceptionID PropKeys::PropExceptionID(Hmx::Object *o, DataArray *arr) {
+    if (o && arr) {
+        static Symbol rotation("rotation");
+        static Symbol scale("scale");
+        static Symbol position("position");
+        static Symbol event("event");
+        if (arr->Size() == 1) {
+            Symbol sym = arr->Sym(0);
+            if (sym == rotation && IsASubclass(o->ClassName(), "Trans")) {
+                return kTransQuat;
+            }
+            if (sym == scale && IsASubclass(o->ClassName(), "Trans")) {
+                return kTransScale;
+            }
+            if (sym == position && IsASubclass(o->ClassName(), "Trans")) {
+                return kTransPos;
+            }
+            if (sym == event && IsASubclass(o->ClassName(), "ObjectDir")) {
+                return kDirEvent;
+            }
+        }
+    }
+    return kNoException;
+}
+
+void PropKeys::SetPropExceptionID() {
+    if (!mInterpHandler.Null())
+        mPropExceptionID = kHandleInterp;
+    else {
+        if (mPropExceptionID != kMacro) {
+            mPropExceptionID = PropExceptionID(mTarget.Ptr(), mProp);
+            if (mPropExceptionID == kTransQuat || mPropExceptionID == kTransScale
+                || mPropExceptionID == kTransPos) {
+                if ((Hmx::Object *)mTrans != mTarget.Ptr()) {
+                    mTrans = dynamic_cast<RndTransformable *>(mTarget.Ptr());
+                }
+            }
+        }
+    }
+}
+
+void PropKeys::SetInterpHandler(Symbol sym) {
+    mInterpHandler = sym;
+    SetPropExceptionID();
+}
+
 PropKeys::~PropKeys() {
     if (mProp) {
         mProp->Release();
@@ -63,7 +114,163 @@ PropKeys::~PropKeys() {
     }
 }
 
+void PropKeys::SetProp(DataNode &node) {
+    if (node.Type() == kDataArray) {
+        DataArray *nodeArr = node.Array();
+        if (mProp) {
+            mProp->Release();
+            mProp = nullptr;
+        }
+        mProp = nodeArr->Clone(true, false, 0);
+
+    } else
+        MILO_NOTIFY("unknown prop set type");
+    SetPropExceptionID();
+}
+
+void PropKeys::SetTarget(Hmx::Object *o) {
+    if (mTarget.Ptr() != o) {
+        if ((mProp && GetPropertyVal(o, mProp, false))
+            || (mPropExceptionID == kTransQuat || mPropExceptionID == kTransScale
+                || mPropExceptionID == kTransPos || mPropExceptionID == kDirEvent)) {
+            if (o && mProp) {
+                mProp->Release();
+                mProp = nullptr;
+            }
+            mTarget = o;
+            SetPropExceptionID();
+        }
+    }
+}
+
+void PropKeys::Save(BinStream &bs) {
+    bs << mKeysType;
+    bs << mTarget;
+    bs << mProp;
+    bs << mInterpolation;
+    bs << mInterpHandler;
+    bs << mPropExceptionID;
+    bs << unk34;
+}
+
+BinStreamRev &operator>>(BinStreamRev &bs, ObjectStage &stage) {
+    ObjectDir *dir = nullptr;
+    if (bs.mRev > 8) {
+        ObjPtr<ObjectDir> ptr(stage.Owner());
+        bs >> ptr;
+    }
+    bs >> (ObjPtr<Hmx::Object> &)stage;
+    return bs;
+}
+
+BinStream &operator<<(BinStream &bs, const ObjectStage &stage) {
+    ObjPtr<ObjectDir> dirPtr(stage.Owner(), (stage.Ptr()) ? stage.Ptr()->Dir() : nullptr);
+    bs << dirPtr;
+    bs << ObjPtr<Hmx::Object>(stage);
+    return bs;
+}
+
 PropKeys::PropKeys(Hmx::Object *targetOwner, Hmx::Object *target)
     : mTarget(targetOwner, target), mProp(nullptr), mKeysType(kFloat),
       mInterpolation(kLinear), mPropExceptionID(kNoException), mTrans(nullptr),
       mLastKeyFrameIndex(-2), unk34(false) {}
+
+void PropKeys::Load(BinStreamRev &bs) {
+    if (bs.mRev < 7)
+        MILO_FAIL("PropKeys::Load should not be called before version 7");
+    else {
+        int iVal;
+        bs >> iVal;
+        mKeysType = (AnimKeysType)iVal;
+        bs >> mTarget;
+        bs >> mProp;
+
+        if (bs.mRev >= 8)
+            bs >> iVal;
+        else if (mKeysType == kObject || mKeysType == kBool)
+            iVal = 0;
+        else
+            iVal = 1;
+
+        if (bs.mRev < 11 && iVal == 4) {
+            mPropExceptionID = kMacro;
+            mInterpolation = kStep;
+        } else
+            mInterpolation = (Interpolation)iVal;
+
+        if (bs.mRev > 9) {
+            Symbol sym;
+            bs >> sym;
+            if (!sym.Null()) {
+                SetInterpHandler(sym);
+            }
+        }
+
+        if (bs.mRev > 10) {
+            bs >> iVal;
+            mPropExceptionID = (ExceptionID)iVal;
+        }
+
+        if (bs.mRev > 0xC) {
+            bs >> unk34;
+        }
+        SetPropExceptionID();
+    }
+}
+
+void PropKeys::ReSort() {
+    switch (mKeysType) {
+    case kFloat:
+        std::sort(AsFloatKeys()->begin(), AsFloatKeys()->end());
+        break;
+    case kColor:
+        std::sort(AsColorKeys()->begin(), AsColorKeys()->end());
+        break;
+    case kObject:
+        std::sort(AsObjectKeys()->begin(), AsObjectKeys()->end());
+        break;
+    case kBool:
+        std::sort(AsBoolKeys()->begin(), AsBoolKeys()->end());
+        break;
+    case kSymbol:
+        std::sort(AsSymbolKeys()->begin(), AsSymbolKeys()->end());
+        break;
+    case kVector3:
+        std::sort(AsVector3Keys()->begin(), AsVector3Keys()->end());
+        break;
+    case kQuat:
+        std::sort(AsQuatKeys()->begin(), AsQuatKeys()->end());
+        break;
+    }
+}
+
+void PropKeys::ChangeFrame(int idx, float new_frame, bool sort) {
+    switch (mKeysType) {
+    case kFloat:
+        (*AsFloatKeys())[idx].frame = new_frame;
+        break;
+    case kColor:
+        (*AsColorKeys())[idx].frame = new_frame;
+        break;
+    case kObject:
+        (*AsObjectKeys())[idx].frame = new_frame;
+        break;
+    case kBool:
+        (*AsBoolKeys())[idx].frame = new_frame;
+        break;
+    case kSymbol:
+        (*AsSymbolKeys())[idx].frame = new_frame;
+        break;
+    case kVector3:
+        (*AsVector3Keys())[idx].frame = new_frame;
+        break;
+    case kQuat:
+        (*AsQuatKeys())[idx].frame = new_frame;
+        break;
+    default:
+        MILO_NOTIFY("can not replace frame, unknown type");
+        break;
+    }
+    if (sort)
+        ReSort();
+}
