@@ -1,6 +1,8 @@
 #pragma once
+#include "math/Key.h"
 #include "obj/Data.h"
 #include "obj/Object.h"
+#include "obj/PropSync.h"
 
 // DO NOT try to include this header directly!
 // include obj/PropSync.h instead
@@ -60,33 +62,70 @@ inline bool PropSync(Symbol &sym, DataNode &node, DataArray *prop, int i, PropOp
     return true;
 }
 
-// #include "obj/Object.h"
 template <class T>
-class ObjPtr;
+bool PropSync(Key<T> &key, DataNode &node, DataArray *prop, int i, PropOp op) {
+    if (op == kPropUnknown0x40)
+        return false;
+    else if (i == prop->Size()) {
+        return true;
+    } else {
+        Symbol sym = prop->Sym(i++);
+        {
+            static Symbol frame("frame");
+            if (sym == frame)
+                return PropSync(key.frame, node, prop, i, op);
+        }
+        {
+            static Symbol value("value");
+            if (sym == value)
+                return PropSync(key.value, node, prop, i, op);
+        }
+    }
+    return false;
+}
+
+template <class T>
+bool PropSync(Keys<T, T> &keys, DataNode &node, DataArray *prop, int i, PropOp op) {
+    if (op == kPropUnknown0x40)
+        return false;
+    else if (i == prop->Size()) {
+        MILO_ASSERT(op == kPropSize || op == kPropInsert, 0x10A);
+        node = keys.NumKeys();
+        return true;
+    } else {
+        typename Keys<T, T>::iterator it = keys.begin() + prop->Int(i++);
+        if (i < prop->Size() || op & (kPropGet | kPropSet | kPropSize)) {
+            bool ret = PropSync(*it, node, prop, i, op);
+            if (op & kPropSet) {
+                std::sort(keys.begin(), keys.end());
+            }
+            return ret;
+        } else if (op == kPropRemove) {
+            keys.erase(it);
+            return true;
+        } else if (op == kPropInsert) {
+            Key<T> key;
+            if (PropSync(key, node, prop, i, kPropInsert)) {
+                keys.insert(it, key);
+                std::sort(keys.begin(), keys.end());
+                return true;
+            }
+        }
+        return false;
+    }
+}
 
 template <class T>
 bool PropSync(ObjPtr<T> &, DataNode &, DataArray *, int, PropOp);
 
 template <class T>
-class ObjOwnerPtr;
-
-template <class T>
 bool PropSync(ObjOwnerPtr<T> &, DataNode &, DataArray *, int, PropOp);
-
-template <class T1, class T2>
-class ObjPtrList;
 
 template <class T>
 bool PropSync(ObjPtrList<T, ObjectDir> &, DataNode &, DataArray *, int, PropOp);
 
-template <class T1, class T2>
-class ObjPtrVec;
-
 template <class T>
 bool PropSync(ObjPtrVec<T, ObjectDir> &, DataNode &, DataArray *, int, PropOp);
-
-template <class T>
-class ObjList;
 
 template <class T>
 bool PropSync(ObjList<T> &objList, DataNode &node, DataArray *prop, int i, PropOp op) {

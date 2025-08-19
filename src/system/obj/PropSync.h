@@ -39,6 +39,18 @@ bool PropSync(bool &b, DataNode &node, DataArray *prop, int i, PropOp op);
 bool PropSync(class Symbol &sym, DataNode &node, DataArray *prop, int i, PropOp op);
 
 template <class T>
+class Key;
+
+template <class T>
+bool PropSync(Key<T> &, DataNode &, DataArray *, int, PropOp);
+
+template <class T1, class T2>
+class Keys;
+
+template <class T>
+bool PropSync(Keys<T, T> &, DataNode &, DataArray *, int, PropOp);
+
+template <class T>
 class ObjPtr;
 
 template <class T>

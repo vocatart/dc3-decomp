@@ -21,6 +21,10 @@ public:
     virtual void UpdatedWorldXfm();
     virtual void Select(int);
 
+    float NearPlane() const { return mNearPlane; }
+    float FarPlane() const { return mFarPlane; }
+    float YFov() const { return mYFov; }
+
     void SetViewProj(const Hmx::Matrix4 &);
     Transform GetInvViewXfm();
     float WorldToScreen(const Vector3 &, Vector2 &) const;
