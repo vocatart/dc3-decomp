@@ -55,6 +55,13 @@ public:
      */
     void Remove(int idx) { erase(begin() + idx); }
 
+    int Remove(float start, float end) {
+        int startidx = KeyGreaterEq(start);
+        int endidx = KeyGreaterEq(end);
+        erase(begin() + startidx, begin() + endidx);
+        return startidx;
+    }
+
     /** Add a value to the keys at a given frame.
      * @param [in] val The value to add.
      * @param [in] frame The frame at which this value will be.
@@ -74,6 +81,17 @@ public:
         }
         return bound;
     }
+
+    /** Given a start and end frame, get the closest start and end indices of this vector.
+     * NOTE: if both the start and end frame are 0, they will be overwritten to the first
+     * and last frame, istart will become 0, and iend will become the last index of the
+     * vector.
+     * @param [in] fstart The start frame.
+     * @param [in] fend The end frame.
+     * @param [out] istart The index of the last key whose frame <= the start frame.
+     * @param [out] iend The index of the first key whose frame >= the end frame.
+     */
+    void FindBounds(float &fstart, float &fend, int &istart, int &iend);
 
     /** Get the value associated with the supplied frame.
      * @param [in] frame The keyframe to get a value from.
@@ -146,6 +164,46 @@ public:
             }
         }
     }
+
+    /** Get the index of the last possible keyframe KF, such that KF's frame <= the
+     * supplied frame.
+     * @param [in] frame The supplied frame.
+     * @returns The index of the keyframe that satisfies the condition above.
+     */
+    int KeyLessEq(float frame) const;
+
+    void KeysLessEq(float f, int &iref1, int &iref2) const {
+        iref2 = -1;
+        iref1 = -1;
+        if (empty() || f < front().frame)
+            return;
+        int i1 = 0;
+        int i2 = size();
+        while (i2 > i1 + 1) {
+            int i5 = (i1 + i2) >> 1;
+            const Key<T1> &cur = (*this)[i5];
+            if (f < cur.frame)
+                i2 = i5;
+            else
+                i1 = i5;
+        }
+        iref2 = i1;
+        iref1 = i1;
+        while (i1 - 1 >= 0 && (*this)[i1 - 1].frame == (*this)[i1].frame) {
+            i1--;
+            iref1 = i1;
+        }
+        while (i1 + 1 < size() && (*this)[i1 + 1].frame == (*this)[i1].frame) {
+            i1++;
+            iref2 = i1;
+        }
+    }
+
+    Key<T1 *> KeyNearest(float);
+    bool Linear(float f1, float &fref) const;
+    int ReverseKeyLessEq(const float &fref) const;
+    bool ReverseLinear(const float &fconst, float &fref) const;
+    T1 *Cross(float, float) const;
 };
 
 /** Scale keyframes by a supplied multiplier.

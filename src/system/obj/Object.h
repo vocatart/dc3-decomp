@@ -942,7 +942,12 @@ public:
     static Hmx::Object *sOwner;
 };
 
-void Interp(const ObjectStage &, const ObjectStage &, float, Hmx::Object *&);
+inline void
+Interp(const ObjectStage &stage1, const ObjectStage &stage2, float f, Hmx::Object *&obj) {
+    const ObjectStage &out = f < 1 ? stage1 : stage2;
+    obj = out.Ptr();
+}
+
 BinStream &operator<<(BinStream &, const ObjectStage &);
 BinStreamRev &operator>>(BinStreamRev &, ObjectStage &);
 

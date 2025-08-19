@@ -150,9 +150,7 @@ inline float Mod(float f1, float f2) {
     return tmp;
 }
 
-// inline float ModRange(float f1, float f2, float f3) {
-//     return Modulo(f3 - f1, f2 - f1) + f1;
-// }
+inline float ModRange(float f1, float f2, float f3) { return Mod(f3 - f1, f2 - f1) + f1; }
 
 inline float Interp(float a, float b, float t) { return t * (b - a) + a; }
 

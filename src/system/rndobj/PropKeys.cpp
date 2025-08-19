@@ -2,6 +2,7 @@
 #include "math/Rot.h"
 #include "math/Utl.h"
 #include "math/Vec.h"
+#include "obj/DataUtl.h"
 #include "obj/Utl.h"
 #include "os/Debug.h"
 #include "utl/BinStream.h"
@@ -238,6 +239,39 @@ void PropKeys::Save(BinStream &bs) {
     bs << unk34;
 }
 
+void ColorKeys::SetFrame(float frame, float f2, float f3) {
+    if (mProp && mTarget && size()) {
+        Hmx::Color col;
+        int idx = ColorAt(frame, col);
+        Multiply(col, f3, col);
+        mTarget->SetProperty(mProp, col.Pack());
+        mLastKeyFrameIndex = idx;
+    }
+}
+
+void BoolKeys::SetFrame(float frame, float f2, float f3) {
+    if (mProp && mTarget && size()) {
+        int idx = 0;
+        if (mPropExceptionID == kNoException) {
+            bool b;
+            idx = BoolAt(frame, b);
+            if (mInterpolation != kStep || mLastKeyFrameIndex != idx) {
+                mTarget->SetProperty(mProp, b);
+            }
+        } else if (mPropExceptionID == kHandleInterp) {
+            bool b;
+            idx = BoolAt(frame, b);
+            if (mLastKeyFrameIndex != idx) {
+                sInterpMessage.SetType(mInterpHandler);
+                sInterpMessage[0] = b;
+                sInterpMessage[1] = frame;
+                mTarget->Handle(sInterpMessage, true);
+            }
+        }
+        mLastKeyFrameIndex = idx;
+    }
+}
+
 BinStreamRev &operator>>(BinStreamRev &bs, ObjectStage &stage) {
     ObjectDir *dir = nullptr;
     if (bs.mRev > 8) {
@@ -335,6 +369,85 @@ void FloatKeys::SetFrame(float frame, float f2, float f3) {
     }
 }
 
+int ColorKeys::ColorAt(float frame, Hmx::Color &color) {
+    MILO_ASSERT(size(), 0x215);
+    color.Set(0, 0, 0);
+    int at = 0;
+    switch (mInterpolation) {
+    case kStep:
+        const Key<Hmx::Color> *prevstep;
+        const Key<Hmx::Color> *nextstep;
+        float refstep;
+        at = AtFrame(frame, prevstep, nextstep, refstep);
+        color = prevstep->value;
+        break;
+    case kLinear:
+        at = AtFrame(frame, color);
+        break;
+    case kEaseIn:
+        const Key<Hmx::Color> *prev5;
+        const Key<Hmx::Color> *next5;
+        float ref5;
+        AtFrame(frame, prev5, next5, ref5);
+        if (prev5)
+            Interp(prev5->value, next5->value, ref5 * ref5 * ref5, color);
+        break;
+    case kEaseOut:
+        const Key<Hmx::Color> *prev;
+        const Key<Hmx::Color> *next;
+        float ref;
+        AtFrame(frame, prev, next, ref);
+        ref = 1.0f - ref;
+        if (prev)
+            Interp(prev->value, next->value, -(ref * ref * ref - 1.0f), color);
+        break;
+    default:
+        break;
+    }
+    return at;
+}
+
+int ObjectKeys::ObjectAt(float frame, Hmx::Object *&obj) {
+    MILO_ASSERT(size(), 0x258);
+    return AtFrame(frame, obj);
+}
+
+void ObjectKeys::SetFrame(float frame, float blend, float) {
+    if (!mProp || !mTarget || !size())
+        return;
+    int idx = 0;
+    switch (mPropExceptionID) {
+    case kDirEvent:
+        break;
+    case kHandleInterp: {
+        const Key<ObjectStage> *prev;
+        const Key<ObjectStage> *next;
+        float ref = 0.0f;
+        idx = AtFrame(frame, prev, next, ref);
+        sInterpMessage.SetType(mInterpHandler);
+        sInterpMessage[0] = prev->value.Ptr();
+        sInterpMessage[1] = next->value.Ptr();
+        sInterpMessage[2] = ref;
+        sInterpMessage[3] = next->frame;
+        if (idx >= 1)
+            sInterpMessage[4] = (*this)[idx - 1].value.Ptr();
+        else
+            sInterpMessage[4] = 0;
+        mTarget->Handle(sInterpMessage, true);
+        break;
+    }
+    default: {
+        Hmx::Object *obj;
+        idx = ObjectAt(frame, obj);
+        if (mInterpolation != kStep || mLastKeyFrameIndex != idx) {
+            mTarget->SetProperty(mProp, obj);
+        }
+        break;
+    }
+    }
+    mLastKeyFrameIndex = idx;
+}
+
 int SymbolKeys::SymbolAt(float frame, Symbol &sym) {
     MILO_ASSERT(size(), 0x350);
     return AtFrame(frame, sym);
@@ -343,6 +456,74 @@ int SymbolKeys::SymbolAt(float frame, Symbol &sym) {
 void ObjectKeys::SetToCurrentVal(int i) {
     if (mPropExceptionID != kDirEvent) {
         (*this)[i].value = ObjectStage(mTarget->Property(mProp, true)->GetObj());
+    }
+}
+
+void SymbolKeys::SetFrame(float frame, float blend, float) {
+    if (mProp && mTarget && size()) {
+        int idx = 0;
+        switch (mPropExceptionID) {
+        case kHandleInterp: {
+            const Key<Symbol> *prev;
+            const Key<Symbol> *next;
+            float ref = 0.0f;
+            idx = AtFrame(frame, prev, next, ref);
+            sInterpMessage.SetType(mInterpHandler);
+            sInterpMessage[0] = prev->value;
+            sInterpMessage[1] = next->value;
+            sInterpMessage[2] = ref;
+            sInterpMessage[3] = next->frame;
+            if (idx >= 1)
+                sInterpMessage[4] = (*this)[idx - 1].value;
+            else
+                sInterpMessage[4] = 0;
+            mTarget->Handle(sInterpMessage, true);
+            break;
+        }
+        case kMacro: {
+            Symbol s;
+            idx = SymbolAt(frame, s);
+            if (mInterpolation != kStep || mLastKeyFrameIndex != idx) {
+                mTarget->SetProperty(mProp, DataGetMacro(s)->Int(0));
+            }
+            break;
+        }
+        default:
+            break;
+        }
+        switch (mInterpolation) {
+        case kStep: {
+            int loc8c = -1;
+            int loc90 = -1;
+            std::vector<Symbol> vec;
+            KeysLessEq(frame, loc8c, loc90);
+            if (loc8c != -1) {
+                int i = loc8c;
+                if (unk30) {
+                    MinEq(loc8c, unk2c + 1);
+                    i = loc8c;
+                }
+                for (; i <= loc90; i++) {
+                    Key<Symbol> &cur = (*this)[i];
+                    if (i < unk28 || i > unk2c) {
+                        mTarget->SetProperty(mProp, cur.value);
+                    }
+                }
+            }
+            unk28 = loc8c;
+            unk2c = loc90;
+            break;
+        }
+        case kLinear: {
+            Symbol s;
+            idx = SymbolAt(frame, s);
+            mTarget->SetProperty(mProp, s);
+            break;
+        }
+        default:
+            break;
+        }
+        mLastKeyFrameIndex = idx;
     }
 }
 

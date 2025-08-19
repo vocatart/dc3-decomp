@@ -14,27 +14,25 @@ public:
     ~ObjKeys() {}
     Hmx::Object *mOwner; // 0x8
 
-    void operator=(const ObjKeys &keys);
-    // {
-    //     Hmx::Object *oldowner = ObjectStage::sOwner;
-    //     if (this != &keys) {
-    //         resize(keys.size());
-    //         ObjKeys::const_iterator keysit = keys.begin();
-    //         for (ObjKeys::iterator it = begin(); it != end(); it++, keysit++) {
-    //             *it = *keysit;
-    //         }
-    //     }
-    //     ObjectStage::sOwner = oldowner;
-    // }
+    void operator=(const ObjKeys &keys) {
+        Hmx::Object *oldowner = ObjectStage::sOwner;
+        if (this != &keys) {
+            resize(keys.size());
+            ObjKeys::const_iterator keysit = keys.begin();
+            for (ObjKeys::iterator it = begin(); it != end(); it++, keysit++) {
+                *it = *keysit;
+            }
+        }
+        ObjectStage::sOwner = oldowner;
+    }
 
-    int Add(Hmx::Object *obj, float f, bool b);
-    // {
-    //     Hmx::Object *oldOwner = ObjectStage::sOwner;
-    //     ObjectStage::sOwner = mOwner;
-    //     int add = Keys<ObjectStage, Hmx::Object *>::Add(ObjectStage(obj), f, b);
-    //     ObjectStage::sOwner = oldOwner;
-    //     return add;
-    // }
+    int Add(Hmx::Object *obj, float f, bool b) {
+        Hmx::Object *oldOwner = ObjectStage::sOwner;
+        ObjectStage::sOwner = mOwner;
+        int add = Keys<ObjectStage, Hmx::Object *>::Add(obj, f, b);
+        ObjectStage::sOwner = oldOwner;
+        return add;
+    }
 };
 
 class PropKeys : public ObjRefOwner {
@@ -224,6 +222,7 @@ public:
     void Print();
 
     AnimKeysType KeysType() const { return mKeysType; }
+    void ResetLastKeyFrameIndex() { mLastKeyFrameIndex = -2; }
 
     static ExceptionID PropExceptionID(Hmx::Object *, DataArray *);
     static Message sInterpMessage;
@@ -276,6 +275,7 @@ public:
         Remove(idx);
         return size();
     }
+    virtual int RemoveRange(float start, float end) { return Remove(start, end); }
     virtual int NumKeys() { return size(); }
     virtual void SetToCurrentVal(int);
     virtual void Save(BinStream &bs) {
@@ -287,10 +287,7 @@ public:
         bs >> *this;
     }
     virtual void Copy(const PropKeys *);
-    virtual Keys<float, float> *AsFloatKeys() {
-        if (this)
-            return this;
-    }
+    virtual Keys<float, float> *AsFloatKeys() { return this ? this : nullptr; }
     virtual int FloatAt(float, float &);
 };
 
@@ -324,6 +321,7 @@ public:
         Remove(idx);
         return size();
     }
+    virtual int RemoveRange(float start, float end) { return Remove(start, end); }
     virtual int NumKeys() { return size(); }
     virtual void SetToCurrentVal(int);
     virtual void Save(BinStream &bs) {
@@ -335,10 +333,7 @@ public:
         bs >> *this;
     }
     virtual void Copy(const PropKeys *);
-    virtual Keys<Hmx::Color, Hmx::Color> *AsColorKeys() {
-        if (this)
-            return this;
-    }
+    virtual Keys<Hmx::Color, Hmx::Color> *AsColorKeys() { return this ? this : nullptr; }
     virtual int ColorAt(float, Hmx::Color &);
 };
 
@@ -373,6 +368,7 @@ public:
         Remove(idx);
         return size();
     }
+    virtual int RemoveRange(float start, float end) { return Remove(start, end); }
     virtual int NumKeys() { return size(); }
     virtual void SetToCurrentVal(int);
     virtual void Save(BinStream &bs) {
@@ -387,10 +383,7 @@ public:
         ObjectStage::sOwner = oldOwner;
     }
     virtual void Copy(const PropKeys *);
-    virtual ObjKeys *AsObjectKeys() {
-        if (this)
-            return this;
-    }
+    virtual ObjKeys *AsObjectKeys() { return this ? this : nullptr; }
     virtual int ObjectAt(float, Hmx::Object *&);
 };
 
@@ -425,6 +418,7 @@ public:
         Remove(idx);
         return size();
     }
+    virtual int RemoveRange(float start, float end) { return Remove(start, end); }
     virtual int NumKeys() { return size(); }
     virtual void SetToCurrentVal(int);
     virtual void Save(BinStream &bs) {
@@ -436,10 +430,7 @@ public:
         bs >> *this;
     }
     virtual void Copy(const PropKeys *);
-    virtual Keys<bool, bool> *AsBoolKeys() {
-        if (this)
-            return this;
-    }
+    virtual Keys<bool, bool> *AsBoolKeys() { return this ? this : nullptr; }
     virtual int BoolAt(float, bool &);
 };
 
@@ -473,6 +464,7 @@ public:
         Remove(idx);
         return size();
     }
+    virtual int RemoveRange(float start, float end) { return Remove(start, end); }
     virtual int NumKeys() { return size(); }
     virtual void SetToCurrentVal(int);
     virtual void Save(BinStream &bs) {
@@ -484,10 +476,7 @@ public:
         bs >> *this;
     }
     virtual void Copy(const PropKeys *);
-    virtual Keys<Hmx::Quat, Hmx::Quat> *AsQuatKeys() {
-        if (this)
-            return this;
-    }
+    virtual Keys<Hmx::Quat, Hmx::Quat> *AsQuatKeys() { return this ? this : nullptr; }
     virtual int QuatAt(float, Hmx::Quat &);
 
     Vector3 mVec; // 0x28
@@ -523,6 +512,7 @@ public:
         Remove(idx);
         return size();
     }
+    virtual int RemoveRange(float start, float end) { return Remove(start, end); }
     virtual int NumKeys() { return size(); }
     virtual void SetToCurrentVal(int);
     virtual void Save(BinStream &bs) {
@@ -534,10 +524,7 @@ public:
         bs >> *this;
     }
     virtual void Copy(const PropKeys *);
-    virtual Keys<Vector3, Vector3> *AsVector3Keys() {
-        if (this)
-            return this;
-    }
+    virtual Keys<Vector3, Vector3> *AsVector3Keys() { return this ? this : nullptr; }
     virtual int Vector3At(float, Vector3 &);
 };
 
@@ -575,6 +562,7 @@ public:
         Remove(idx);
         return size();
     }
+    virtual int RemoveRange(float start, float end) { return Remove(start, end); }
     virtual int NumKeys() { return size(); }
     virtual void SetToCurrentVal(int);
     virtual void Save(BinStream &bs) {
@@ -586,10 +574,7 @@ public:
         bs >> *this;
     }
     virtual void Copy(const PropKeys *);
-    virtual Keys<Symbol, Symbol> *AsSymbolKeys() {
-        if (this)
-            return this;
-    }
+    virtual Keys<Symbol, Symbol> *AsSymbolKeys() { return this ? this : nullptr; }
     virtual int SymbolAt(float, Symbol &);
 
     int unk28; // 0x28

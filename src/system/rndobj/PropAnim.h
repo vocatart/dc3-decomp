@@ -1,4 +1,5 @@
 #pragma once
+#include "obj/Data.h"
 #include "rndobj/Anim.h"
 #include "rndobj/PropKeys.h"
 
@@ -26,7 +27,8 @@ public:
     virtual float StartFrame();
     virtual float EndFrame();
     virtual void SetKey(float);
-    virtual DataNode OnListFlowLabels(DataArray *);
+
+    void AdvanceFrame(float);
 
     /** Get the PropKeys from our collection that has the supplied target and prop.
      * @param [in] obj The target object the PropKeys must have.
@@ -46,13 +48,19 @@ public:
 protected:
     RndPropAnim();
 
+    virtual DataNode OnListFlowLabels(DataArray *);
+
     /** A collection of PropKeys. */
     std::list<PropKeys *> mPropKeys; // 0x10
     float mLastFrame; // 0x18
     bool mInSetFrame; // 0x1c
     /** "Do I self loop on SetFrame" */
     bool mLoop; // 0x1d
-    Symbol unk20;
-    float unk24;
-    std::list<String> unk28;
+    // "fire flow labels in sync with the anim"
+    Symbol mFireFlowLabel; // 0x20
+    // "Scales all animation keyframe values by this #"
+    float mIntensity; // 0x24
+    // "the names of possible flow labels you can place on this timeline (i.e.
+    // 'footstep')"
+    std::list<String> mFlowLabels; // 0x28
 };

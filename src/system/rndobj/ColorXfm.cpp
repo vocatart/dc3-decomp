@@ -36,7 +36,8 @@ bool RndColorXfm::Load(BinStream &bs) {
 
 RndColorXfm::RndColorXfm()
     : mHue(0), mSaturation(0), mLightness(0), mContrast(0), mBrightness(0),
-      mLevelInLo(0, 0, 0, 1), mLevelOutLo(0, 0, 0, 1) {
+      mLevelInLo(0, 0, 0), mLevelInHi(1, 1, 1), mLevelOutLo(0, 0, 0),
+      mLevelOutHi(1, 1, 1) {
     Reset();
 }
 

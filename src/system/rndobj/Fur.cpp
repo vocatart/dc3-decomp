@@ -18,7 +18,7 @@ void RndFur::Save(BinStream &bs) {
 RndFur::RndFur()
     : mLayers(12), mThickness(3), mCurvature(2), mShellOut(1), mAlphaFalloff(0.5),
       mStretch(1), mSlide(1), mGravity(1), mFluidity(0.25), mRootsTint(0, 0, 0),
-      mFurDetail(this), mFurTiling(1), mWind(this) {}
+      mEndsTint(1, 1, 1), mFurDetail(this), mFurTiling(1), mWind(this) {}
 
 BEGIN_COPYS(RndFur)
     CREATE_COPY_AS(RndFur, m)
