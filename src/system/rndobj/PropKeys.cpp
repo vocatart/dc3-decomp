@@ -1,6 +1,7 @@
 #include "rndobj/PropKeys.h"
 #include "math/Rot.h"
 #include "math/Utl.h"
+#include "math/Vec.h"
 #include "obj/Utl.h"
 #include "os/Debug.h"
 #include "utl/BinStream.h"
@@ -109,8 +110,86 @@ void PropKeys::SetInterpHandler(Symbol sym) {
     SetPropExceptionID();
 }
 
+void QuatKeys::SetFrame(float frame, float f2, float f3) {
+    if (mProp && mTarget && size()) {
+        int idx = 0;
+        if (mPropExceptionID == kTransQuat) {
+            if (mTrans != mTarget) {
+                mTrans = dynamic_cast<RndTransformable *>(mTarget.Ptr());
+            }
+            Vector3 v48;
+            MakeScale(mTrans->LocalXfm().m, v48);
+            if (NearlyEqual(mVec, v48, 0.001f)) {
+                v48 = mVec;
+            } else
+                mVec = v48;
+            Hmx::Quat quat;
+            Hmx::Matrix3 mtx;
+            idx = QuatAt(frame, quat);
+            MakeRotMatrix(quat, mtx);
+            Scale(v48, mtx, mtx);
+            mTrans->SetLocalRot(mtx);
+        }
+        mLastKeyFrameIndex = idx;
+    }
+}
+
 void FloatKeys::SetToCurrentVal(int i) {
     (*this)[i].value = mTarget->Property(mProp, true)->Float();
+}
+
+void ColorKeys::SetToCurrentVal(int i) {
+    (*this)[i].value = Hmx::Color(mTarget->Property(mProp, true)->Int());
+}
+
+void BoolKeys::SetToCurrentVal(int i) {
+    (*this)[i].value = mTarget->Property(mProp, true)->Int();
+}
+
+void QuatKeys::SetToCurrentVal(int i) {
+    if (mPropExceptionID == kTransQuat) {
+        if (mTrans != mTarget) {
+            mTrans = dynamic_cast<RndTransformable *>(mTarget.Ptr());
+        }
+        Hmx::Matrix3 m38;
+        Normalize(mTrans->LocalXfm().m, m38);
+        Hmx::Quat q48;
+        Hmx::Quat q58(m38);
+        Normalize(q58, q48);
+        (*this)[i].value = q48;
+    }
+}
+
+void Vector3Keys::SetToCurrentVal(int i) {
+    switch (mPropExceptionID) {
+    case kTransScale: {
+        if (mTrans != mTarget) {
+            mTrans = dynamic_cast<RndTransformable *>(mTarget.Ptr());
+        }
+        Vector3 v28;
+        MakeScale(mTrans->LocalXfm().m, v28);
+        (*this)[i].value = v28;
+        break;
+    }
+    case kTransPos: {
+        if (mTrans != mTarget) {
+            mTrans = dynamic_cast<RndTransformable *>(mTarget.Ptr());
+        }
+        (*this)[i].value = mTrans->LocalXfm().v;
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void SymbolKeys::SetToCurrentVal(int i) {
+    if (mPropExceptionID == kMacro) {
+        if (0 < i) {
+            (*this)[i].value = (*this)[i - 1].value;
+        }
+    } else
+        (*this)[i].value = mTarget->Property(mProp, true)->Sym();
 }
 
 PropKeys::~PropKeys() {
@@ -224,6 +303,11 @@ void PropKeys::Load(BinStreamRev &bs) {
     }
 }
 
+int BoolKeys::BoolAt(float frame, bool &b) {
+    MILO_ASSERT(size(), 0x28A);
+    return AtFrame(frame, b);
+}
+
 void FloatKeys::SetFrame(float frame, float f2, float f3) {
     if (mProp && mTarget && size()) {
         int idx;
@@ -251,11 +335,67 @@ void FloatKeys::SetFrame(float frame, float f2, float f3) {
     }
 }
 
+int SymbolKeys::SymbolAt(float frame, Symbol &sym) {
+    MILO_ASSERT(size(), 0x350);
+    return AtFrame(frame, sym);
+}
+
+void ObjectKeys::SetToCurrentVal(int i) {
+    if (mPropExceptionID != kDirEvent) {
+        (*this)[i].value = ObjectStage(mTarget->Property(mProp, true)->GetObj());
+    }
+}
+
 void FloatKeys::Copy(const PropKeys *keys) {
     PropKeys::Copy(keys);
     clear();
     if (keys->KeysType() == mKeysType) {
         const FloatKeys *newKeys = dynamic_cast<const FloatKeys *>(keys);
+        insert(begin(), newKeys->begin(), newKeys->end());
+    }
+}
+
+void ColorKeys::Copy(const PropKeys *keys) {
+    PropKeys::Copy(keys);
+    clear();
+    if (keys->KeysType() == mKeysType) {
+        const ColorKeys *newKeys = dynamic_cast<const ColorKeys *>(keys);
+        insert(begin(), newKeys->begin(), newKeys->end());
+    }
+}
+
+void BoolKeys::Copy(const PropKeys *keys) {
+    PropKeys::Copy(keys);
+    clear();
+    if (keys->KeysType() == mKeysType) {
+        const BoolKeys *newKeys = dynamic_cast<const BoolKeys *>(keys);
+        insert(begin(), newKeys->begin(), newKeys->end());
+    }
+}
+
+void QuatKeys::Copy(const PropKeys *keys) {
+    PropKeys::Copy(keys);
+    clear();
+    if (keys->KeysType() == mKeysType) {
+        const QuatKeys *newKeys = dynamic_cast<const QuatKeys *>(keys);
+        insert(begin(), newKeys->begin(), newKeys->end());
+    }
+}
+
+void Vector3Keys::Copy(const PropKeys *keys) {
+    PropKeys::Copy(keys);
+    clear();
+    if (keys->KeysType() == mKeysType) {
+        const Vector3Keys *newKeys = dynamic_cast<const Vector3Keys *>(keys);
+        insert(begin(), newKeys->begin(), newKeys->end());
+    }
+}
+
+void SymbolKeys::Copy(const PropKeys *keys) {
+    PropKeys::Copy(keys);
+    clear();
+    if (keys->KeysType() == mKeysType) {
+        const SymbolKeys *newKeys = dynamic_cast<const SymbolKeys *>(keys);
         insert(begin(), newKeys->begin(), newKeys->end());
     }
 }
@@ -318,6 +458,87 @@ int FloatKeys::SetKey(float frame) {
             retVal = Add(0, frame, false);
         SetToCurrentVal(retVal);
         return retVal;
+    }
+}
+
+int ColorKeys::SetKey(float frame) {
+    if (!mProp || !mTarget.Ptr())
+        return -1;
+    else {
+        int retVal = PropKeys::SetKey(frame);
+        if (retVal < 0)
+            retVal = Add(Hmx::Color(0), frame, false);
+        SetToCurrentVal(retVal);
+        return retVal;
+    }
+}
+
+int BoolKeys::SetKey(float frame) {
+    if (!mProp || !mTarget.Ptr())
+        return -1;
+    else {
+        int retVal = PropKeys::SetKey(frame);
+        if (retVal < 0)
+            retVal = Add(true, frame, false);
+        SetToCurrentVal(retVal);
+        return retVal;
+    }
+}
+
+int QuatKeys::SetKey(float frame) {
+    if (!mProp || !mTarget.Ptr())
+        return -1;
+    else {
+        int retVal = PropKeys::SetKey(frame);
+        if (retVal < 0)
+            retVal = Add(Hmx::Quat(0, 0, 0, 0), frame, false);
+        SetToCurrentVal(retVal);
+        return retVal;
+    }
+}
+
+int Vector3Keys::SetKey(float frame) {
+    if (!mProp || !mTarget.Ptr())
+        return -1;
+    else {
+        int retVal = PropKeys::SetKey(frame);
+        if (retVal < 0)
+            retVal = Add(Vector3(0, 0, 0), frame, false);
+        SetToCurrentVal(retVal);
+        return retVal;
+    }
+}
+
+int SymbolKeys::SetKey(float frame) {
+    if (!mProp || !mTarget.Ptr())
+        return -1;
+    else {
+        int retVal = PropKeys::SetKey(frame);
+        if (retVal < 0)
+            retVal = Add(Symbol(), frame, false);
+        SetToCurrentVal(retVal);
+        return retVal;
+    }
+}
+
+int ObjectKeys::SetKey(float frame) {
+    if (!mProp || !mTarget.Ptr())
+        return -1;
+    else {
+        int retVal = PropKeys::SetKey(frame);
+        if (retVal < 0)
+            retVal = ObjKeys::Add(0, frame, false);
+        SetToCurrentVal(retVal);
+        return retVal;
+    }
+}
+
+void ObjectKeys::Copy(const PropKeys *keys) {
+    PropKeys::Copy(keys);
+    clear();
+    if (keys->KeysType() == mKeysType) {
+        const ObjectKeys *newKeys = dynamic_cast<const ObjectKeys *>(keys);
+        insert(begin(), newKeys->begin(), newKeys->end());
     }
 }
 

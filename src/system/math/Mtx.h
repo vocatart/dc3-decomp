@@ -263,3 +263,9 @@ void Transpose(const Hmx::Matrix4 &, Hmx::Matrix4 &);
 void Multiply(const Frustum &, const Transform &, Frustum &);
 
 void MakeRotMatrix(const Hmx::Quat &, Hmx::Matrix3 &);
+
+inline void Scale(const Vector3 &vec, const Hmx::Matrix3 &mtx, Hmx::Matrix3 &res) {
+    Scale(mtx.x, vec.x, res.x);
+    Scale(mtx.y, vec.y, res.y);
+    Scale(mtx.z, vec.z, res.z);
+}

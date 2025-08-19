@@ -10,11 +10,12 @@
 
 class ObjKeys : public Keys<ObjectStage, Hmx::Object *> {
 public:
-    // ObjKeys(Hmx::Object *o) : mOwner(o) {}
-    // Hmx::Object *mOwner; // 0x8
+    ObjKeys(Hmx::Object *o) : mOwner(o) {}
+    ~ObjKeys() {}
+    Hmx::Object *mOwner; // 0x8
 
-    // // fn_80632140
-    // void operator=(const ObjKeys &keys) {
+    void operator=(const ObjKeys &keys);
+    // {
     //     Hmx::Object *oldowner = ObjectStage::sOwner;
     //     if (this != &keys) {
     //         resize(keys.size());
@@ -26,7 +27,8 @@ public:
     //     ObjectStage::sOwner = oldowner;
     // }
 
-    // int Add(Hmx::Object *obj, float f, bool b) {
+    int Add(Hmx::Object *obj, float f, bool b);
+    // {
     //     Hmx::Object *oldOwner = ObjectStage::sOwner;
     //     ObjectStage::sOwner = mOwner;
     //     int add = Keys<ObjectStage, Hmx::Object *>::Add(ObjectStage(obj), f, b);
@@ -290,4 +292,307 @@ public:
             return this;
     }
     virtual int FloatAt(float, float &);
+};
+
+/** A collection of color keys to animate on its target object's properties. */
+class ColorKeys : public PropKeys, public Keys<Hmx::Color, Hmx::Color> {
+public:
+    ColorKeys(Hmx::Object *targetOwner, Hmx::Object *target)
+        : PropKeys(targetOwner, target) {
+        mKeysType = kColor;
+    }
+    virtual ~ColorKeys() {}
+    virtual float StartFrame() { return FirstFrame(); }
+    virtual float EndFrame() { return LastFrame(); }
+    virtual bool FrameFromIndex(int idx, float &f) {
+        if (idx >= size())
+            return false;
+        else
+            f = (*this)[idx].frame;
+        return true;
+    }
+    virtual void SetFrame(float, float, float);
+    virtual void CloneKey(int idx) {
+        if (!mProp || !mTarget)
+            return;
+        if (idx >= 0 && idx < size()) {
+            Add((*this)[idx].value, (*this)[idx].frame, false);
+        }
+    }
+    virtual int SetKey(float);
+    virtual int RemoveKey(int idx) {
+        Remove(idx);
+        return size();
+    }
+    virtual int NumKeys() { return size(); }
+    virtual void SetToCurrentVal(int);
+    virtual void Save(BinStream &bs) {
+        PropKeys::Save(bs);
+        bs << *this;
+    }
+    virtual void Load(BinStreamRev &bs) {
+        PropKeys::Load(bs);
+        bs >> *this;
+    }
+    virtual void Copy(const PropKeys *);
+    virtual Keys<Hmx::Color, Hmx::Color> *AsColorKeys() {
+        if (this)
+            return this;
+    }
+    virtual int ColorAt(float, Hmx::Color &);
+};
+
+/** A collection of Object keys to animate on its target object's properties. */
+class ObjectKeys : public PropKeys, public ObjKeys {
+public:
+    ObjectKeys(Hmx::Object *targetOwner, Hmx::Object *target)
+        : PropKeys(targetOwner, target), ObjKeys(targetOwner) {
+        mKeysType = kObject;
+        mInterpolation = kStep;
+    }
+    virtual ~ObjectKeys() {}
+    virtual float StartFrame() { return FirstFrame(); }
+    virtual float EndFrame() { return LastFrame(); }
+    virtual bool FrameFromIndex(int idx, float &f) {
+        if (idx >= size())
+            return false;
+        else
+            f = (*this)[idx].frame;
+        return true;
+    }
+    virtual void SetFrame(float, float, float);
+    virtual void CloneKey(int idx) {
+        if (!mProp || !mTarget)
+            return;
+        if (idx >= 0 && idx < size()) {
+            ObjKeys::Add((*this)[idx].value.Ptr(), (*this)[idx].frame, false);
+        }
+    }
+    virtual int SetKey(float);
+    virtual int RemoveKey(int idx) {
+        Remove(idx);
+        return size();
+    }
+    virtual int NumKeys() { return size(); }
+    virtual void SetToCurrentVal(int);
+    virtual void Save(BinStream &bs) {
+        PropKeys::Save(bs);
+        bs << *this;
+    }
+    virtual void Load(BinStreamRev &bs) {
+        PropKeys::Load(bs);
+        Hmx::Object *oldOwner = ObjectStage::sOwner;
+        ObjectStage::sOwner = mOwner;
+        bs >> *this;
+        ObjectStage::sOwner = oldOwner;
+    }
+    virtual void Copy(const PropKeys *);
+    virtual ObjKeys *AsObjectKeys() {
+        if (this)
+            return this;
+    }
+    virtual int ObjectAt(float, Hmx::Object *&);
+};
+
+/** A collection of bool keys to animate on its target object's properties. */
+class BoolKeys : public PropKeys, public Keys<bool, bool> {
+public:
+    BoolKeys(Hmx::Object *targetOwner, Hmx::Object *target)
+        : PropKeys(targetOwner, target) {
+        mKeysType = kBool;
+        mInterpolation = kStep;
+    }
+    virtual ~BoolKeys() {}
+    virtual float StartFrame() { return FirstFrame(); }
+    virtual float EndFrame() { return LastFrame(); }
+    virtual bool FrameFromIndex(int idx, float &f) {
+        if (idx >= size())
+            return false;
+        else
+            f = (*this)[idx].frame;
+        return true;
+    }
+    virtual void SetFrame(float, float, float);
+    virtual void CloneKey(int idx) {
+        if (!mProp || !mTarget)
+            return;
+        if (idx >= 0 && idx < size()) {
+            Add((*this)[idx].value, (*this)[idx].frame, false);
+        }
+    }
+    virtual int SetKey(float);
+    virtual int RemoveKey(int idx) {
+        Remove(idx);
+        return size();
+    }
+    virtual int NumKeys() { return size(); }
+    virtual void SetToCurrentVal(int);
+    virtual void Save(BinStream &bs) {
+        PropKeys::Save(bs);
+        bs << *this;
+    }
+    virtual void Load(BinStreamRev &bs) {
+        PropKeys::Load(bs);
+        bs >> *this;
+    }
+    virtual void Copy(const PropKeys *);
+    virtual Keys<bool, bool> *AsBoolKeys() {
+        if (this)
+            return this;
+    }
+    virtual int BoolAt(float, bool &);
+};
+
+/** A collection of quat keys to animate on its target object's properties. */
+class QuatKeys : public PropKeys, public Keys<Hmx::Quat, Hmx::Quat> {
+public:
+    QuatKeys(Hmx::Object *targetOwner, Hmx::Object *target)
+        : PropKeys(targetOwner, target), mVec(Vector3::ZeroVec()) {
+        mKeysType = kQuat;
+    }
+    virtual ~QuatKeys() {}
+    virtual float StartFrame() { return FirstFrame(); }
+    virtual float EndFrame() { return LastFrame(); }
+    virtual bool FrameFromIndex(int idx, float &f) {
+        if (idx >= size())
+            return false;
+        else
+            f = (*this)[idx].frame;
+        return true;
+    }
+    virtual void SetFrame(float, float, float);
+    virtual void CloneKey(int idx) {
+        if (!mProp || !mTarget)
+            return;
+        if (idx >= 0 && idx < size()) {
+            Add((*this)[idx].value, (*this)[idx].frame, false);
+        }
+    }
+    virtual int SetKey(float);
+    virtual int RemoveKey(int idx) {
+        Remove(idx);
+        return size();
+    }
+    virtual int NumKeys() { return size(); }
+    virtual void SetToCurrentVal(int);
+    virtual void Save(BinStream &bs) {
+        PropKeys::Save(bs);
+        bs << *this;
+    }
+    virtual void Load(BinStreamRev &bs) {
+        PropKeys::Load(bs);
+        bs >> *this;
+    }
+    virtual void Copy(const PropKeys *);
+    virtual Keys<Hmx::Quat, Hmx::Quat> *AsQuatKeys() {
+        if (this)
+            return this;
+    }
+    virtual int QuatAt(float, Hmx::Quat &);
+
+    Vector3 mVec; // 0x28
+};
+
+/** A collection of Vector3 keys to animate on its target object's properties. */
+class Vector3Keys : public PropKeys, public Keys<Vector3, Vector3> {
+public:
+    Vector3Keys(Hmx::Object *targetOwner, Hmx::Object *target)
+        : PropKeys(targetOwner, target) {
+        mKeysType = kVector3;
+    }
+    virtual ~Vector3Keys() {}
+    virtual float StartFrame() { return FirstFrame(); }
+    virtual float EndFrame() { return LastFrame(); }
+    virtual bool FrameFromIndex(int idx, float &f) {
+        if (idx >= size())
+            return false;
+        else
+            f = (*this)[idx].frame;
+        return true;
+    }
+    virtual void SetFrame(float, float, float);
+    virtual void CloneKey(int idx) {
+        if (!mProp || !mTarget)
+            return;
+        if (idx >= 0 && idx < size()) {
+            Add((*this)[idx].value, (*this)[idx].frame, false);
+        }
+    }
+    virtual int SetKey(float);
+    virtual int RemoveKey(int idx) {
+        Remove(idx);
+        return size();
+    }
+    virtual int NumKeys() { return size(); }
+    virtual void SetToCurrentVal(int);
+    virtual void Save(BinStream &bs) {
+        PropKeys::Save(bs);
+        bs << *this;
+    }
+    virtual void Load(BinStreamRev &bs) {
+        PropKeys::Load(bs);
+        bs >> *this;
+    }
+    virtual void Copy(const PropKeys *);
+    virtual Keys<Vector3, Vector3> *AsVector3Keys() {
+        if (this)
+            return this;
+    }
+    virtual int Vector3At(float, Vector3 &);
+};
+
+/** A collection of Symbol keys to animate on its target object's properties. */
+class SymbolKeys : public PropKeys, public Keys<Symbol, Symbol> {
+public:
+    SymbolKeys(Hmx::Object *targetOwner, Hmx::Object *target)
+        : PropKeys(targetOwner, target) {
+        mKeysType = kSymbol;
+        mInterpolation = kStep;
+        unk28 = -1;
+        unk2c = -1;
+        unk30 = 0;
+    }
+    virtual ~SymbolKeys() {}
+    virtual float StartFrame() { return FirstFrame(); }
+    virtual float EndFrame() { return LastFrame(); }
+    virtual bool FrameFromIndex(int idx, float &f) {
+        if (idx >= size())
+            return false;
+        else
+            f = (*this)[idx].frame;
+        return true;
+    }
+    virtual void SetFrame(float, float, float);
+    virtual void CloneKey(int idx) {
+        if (!mProp || !mTarget)
+            return;
+        if (idx >= 0 && idx < size()) {
+            Add((*this)[idx].value, (*this)[idx].frame, false);
+        }
+    }
+    virtual int SetKey(float);
+    virtual int RemoveKey(int idx) {
+        Remove(idx);
+        return size();
+    }
+    virtual int NumKeys() { return size(); }
+    virtual void SetToCurrentVal(int);
+    virtual void Save(BinStream &bs) {
+        PropKeys::Save(bs);
+        bs << *this;
+    }
+    virtual void Load(BinStreamRev &bs) {
+        PropKeys::Load(bs);
+        bs >> *this;
+    }
+    virtual void Copy(const PropKeys *);
+    virtual Keys<Symbol, Symbol> *AsSymbolKeys() {
+        if (this)
+            return this;
+    }
+    virtual int SymbolAt(float, Symbol &);
+
+    int unk28; // 0x28
+    int unk2c; // 0x2c
+    bool unk30; // 0x30
 };

@@ -36,3 +36,7 @@ public:
     static void Init(void);
     static void Terminate(void);
 };
+
+inline void Interp(const Symbol &s1, const Symbol &s2, float f, Symbol &s3) {
+    s3 = (f < 1.0f) ? s1 : s2;
+}

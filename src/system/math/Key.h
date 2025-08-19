@@ -69,7 +69,16 @@ public:
      * @param [out] val The retrieved value.
      * @returns The index in the vector where this keyframe resides.
      */
-    int AtFrame(float frame, T2 &val) const;
+    int AtFrame(float frame, T2 &val) const {
+        const Key<T1> *prev;
+        const Key<T1> *next;
+        float r;
+        int ret = AtFrame(frame, prev, next, r);
+        if (prev) {
+            Interp(prev->value, next->value, r, val);
+        }
+        return ret;
+    }
 
     /** Get the value associated with the supplied frame.
      * @param [in] frame The keyframe to get a value from.

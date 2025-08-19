@@ -3,6 +3,7 @@
 #include "os/Debug.h"
 #include "utl/BinStream.h"
 #include "utl/TextStream.h"
+#include <cmath>
 
 class Vector2 {
 public:
@@ -138,6 +139,8 @@ public:
         return *(&x + i);
     }
 
+    static const Vector3 &ZeroVec() { return sZero; }
+
     bool operator==(const Vector3 &v) const { return x == v.x && y == v.y && z == v.z; }
     bool IsZero() const { return x == 0 && y == 0 && z == 0; }
     bool operator!=(const Vector3 &v) const { return x != v.x || y != v.y || z != v.z; }
@@ -192,4 +195,13 @@ public:
 inline BinStream &operator>>(BinStream &bs, Vector4 &vec) {
     bs >> vec.x >> vec.y >> vec.z >> vec.w;
     return bs;
+}
+
+inline bool NearlyEqual(const Vector3 &v1, const Vector3 &v2, float max_diff) {
+    return std::fabs(v1.x - v2.x) < max_diff && std::fabs(v1.y - v2.y) < max_diff
+        && std::fabs(v1.z - v2.z) < max_diff;
+}
+
+inline void Scale(const Vector3 &v1, float f, Vector3 &dst) {
+    dst.Set(v1.x * f, v1.y * f, v1.z * f);
 }
