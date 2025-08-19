@@ -8,6 +8,8 @@
 Hmx::Object *ObjectStage::sOwner;
 Message PropKeys::sInterpMessage(gNullStr, 0, 0, 0, 0, 0);
 
+float CalcSpline(float, const float *);
+
 void PropKeys::Copy(const PropKeys *keys) {
     mInterpolation = keys->mInterpolation;
     mInterpHandler = keys->mInterpHandler;
@@ -105,6 +107,10 @@ void PropKeys::SetPropExceptionID() {
 void PropKeys::SetInterpHandler(Symbol sym) {
     mInterpHandler = sym;
     SetPropExceptionID();
+}
+
+void FloatKeys::SetToCurrentVal(int i) {
+    (*this)[i].value = mTarget->Property(mProp, true)->Float();
 }
 
 PropKeys::~PropKeys() {
@@ -215,6 +221,103 @@ void PropKeys::Load(BinStreamRev &bs) {
             bs >> unk34;
         }
         SetPropExceptionID();
+    }
+}
+
+void FloatKeys::SetFrame(float frame, float f2, float f3) {
+    if (mProp && mTarget && size()) {
+        int idx;
+        if (mPropExceptionID != kHandleInterp) {
+            float val;
+            idx = FloatAt(frame, val);
+            mTarget->SetProperty(mProp, val * f3);
+        } else {
+            const Key<float> *prev;
+            const Key<float> *next;
+            float ref = 0;
+            idx = AtFrame(frame, prev, next, ref);
+            sInterpMessage.SetType(mInterpHandler);
+            sInterpMessage[0] = prev->value * f3;
+            sInterpMessage[1] = next->value * f3;
+            sInterpMessage[2] = ref;
+            sInterpMessage[3] = next->frame;
+            if (idx >= 1)
+                sInterpMessage[4] = (*this)[idx - 1].value * f3;
+            else
+                sInterpMessage[4] = 0;
+            mTarget->Handle(sInterpMessage, true);
+        }
+        mLastKeyFrameIndex = idx;
+    }
+}
+
+void FloatKeys::Copy(const PropKeys *keys) {
+    PropKeys::Copy(keys);
+    clear();
+    if (keys->KeysType() == mKeysType) {
+        const FloatKeys *newKeys = dynamic_cast<const FloatKeys *>(keys);
+        insert(begin(), newKeys->begin(), newKeys->end());
+    }
+}
+
+int FloatKeys::FloatAt(float frame, float &fl) {
+    MILO_ASSERT(size(), 0x188);
+    fl = 0.0f;
+    float ref = 0.0f;
+    const Key<float> *prev;
+    const Key<float> *next;
+    int at = AtFrame(frame, prev, next, ref);
+    switch (mInterpolation) {
+    case kStep:
+        fl = prev->value;
+        break;
+    case kLinear:
+        Interp(prev->value, next->value, ref, fl);
+        break;
+    case kSpline:
+        if (size() < 3 || prev == next) {
+            Interp(prev->value, next->value, ref, fl);
+        } else {
+            float points[4];
+            points[1] = prev->value;
+            points[2] = next->value;
+            int idx = (prev - begin());
+            if (idx == 0) {
+                points[0] = prev->value;
+            } else {
+                points[0] = this->at(idx - 1).value;
+            }
+            if (idx == size() - 1) {
+                points[3] = next->value;
+            } else {
+                points[3] = this->at(idx + 1).value;
+            }
+            fl = CalcSpline(ref, points);
+        }
+        break;
+    case kHermite:
+        Interp(prev->value, next->value, ref * ref * (ref * -2.0f + 3.0f), fl);
+        break;
+    case kEaseIn:
+        Interp(prev->value, next->value, ref * ref * ref, fl);
+        break;
+    case kEaseOut:
+        ref = 1.0f - ref;
+        Interp(prev->value, next->value, -(ref * ref * ref - 1.0f), fl);
+        break;
+    }
+    return at;
+}
+
+int FloatKeys::SetKey(float frame) {
+    if (!mProp || !mTarget.Ptr())
+        return -1;
+    else {
+        int retVal = PropKeys::SetKey(frame);
+        if (retVal < 0)
+            retVal = Add(0, frame, false);
+        SetToCurrentVal(retVal);
+        return retVal;
     }
 }
 

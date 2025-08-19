@@ -50,6 +50,11 @@ public:
     /** Get the number of keyframes in this collection. */
     int NumKeys() const { return size(); }
 
+    /** Remove the key at the given index.
+     * @param [in] idx The index in the vector to remove.
+     */
+    void Remove(int idx) { erase(begin() + idx); }
+
     /** Add a value to the keys at a given frame.
      * @param [in] val The value to add.
      * @param [in] frame The frame at which this value will be.
@@ -65,6 +70,32 @@ public:
      * @returns The index in the vector where this keyframe resides.
      */
     int AtFrame(float frame, T2 &val) const;
+
+    /** Get the value associated with the supplied frame.
+     * @param [in] frame The keyframe to get a value from.
+     * @param [out] prev The previous key relative to the keyframe we want.
+     * @param [out] next The next key relative to the keyframe we want.
+     * @param [out] ref TODO: unknown
+     * @returns The index in the vector where this keyframe resides.
+     */
+    int
+    AtFrame(float frame, const Key<T1> *&prev, const Key<T1> *&next, float &ref) const;
+
+    /** Get the first frame of the keys. */
+    float FirstFrame() const {
+        if (size() != 0)
+            return front().frame;
+        else
+            return 0.0f;
+    }
+
+    /** Get the last frame of the keys. */
+    float LastFrame() const {
+        if (size() != 0)
+            return back().frame;
+        else
+            return 0.0f;
+    }
 };
 
 /** Scale keyframes by a supplied multiplier.

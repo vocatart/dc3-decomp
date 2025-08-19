@@ -202,13 +202,26 @@ public:
         return -1;
     }
 
-    void Print();
+    /** Set the property. The supplied node must contain a DataArray. */
+    void SetProp(DataNode &prop);
+    /** Set the target object. */
+    void SetTarget(Hmx::Object *target);
+    /** Set the prop exception ID. */
     void SetPropExceptionID();
-    void SetInterpHandler(Symbol);
-    void SetProp(DataNode &);
-    void SetTarget(Hmx::Object *);
+    /** Change the frame value of the keyframe at the supplied index.
+     * @param [in] idx The index of the keyframe to modify.
+     * @param [in] new_frame The new frame value.
+     * @param [in] resort If true, re-sort the keys after modifying the keyframe.
+     */
+    void ChangeFrame(int idx, float new_frame, bool resort);
+    /** Re-sort the keys in ascending frame order. */
     void ReSort();
-    void ChangeFrame(int idx, float new_frame, bool sort);
+    /** Set the interp handler. */
+    void SetInterpHandler(Symbol);
+    /** Print the keys member data and keyframes to the debug console. */
+    void Print();
+
+    AnimKeysType KeysType() const { return mKeysType; }
 
     static ExceptionID PropExceptionID(Hmx::Object *, DataArray *);
     static Message sInterpMessage;
@@ -229,4 +242,52 @@ protected:
     /** The index of the last keyframe that was modified. */
     unsigned int mLastKeyFrameIndex; // 0x30
     bool unk34; // 0x34
+};
+
+/** A collection of float keys to animate on its target object's properties. */
+class FloatKeys : public PropKeys, public Keys<float, float> {
+public:
+    FloatKeys(Hmx::Object *targetOwner, Hmx::Object *target)
+        : PropKeys(targetOwner, target) {
+        mKeysType = kFloat;
+    }
+    virtual ~FloatKeys() {}
+    virtual float StartFrame() { return FirstFrame(); }
+    virtual float EndFrame() { return LastFrame(); }
+    virtual bool FrameFromIndex(int idx, float &f) {
+        if (idx >= size())
+            return false;
+        else
+            f = (*this)[idx].frame;
+        return true;
+    }
+    virtual void SetFrame(float, float, float);
+    virtual void CloneKey(int idx) {
+        if (!mProp || !mTarget)
+            return;
+        if (idx >= 0 && idx < size()) {
+            Add((*this)[idx].value, (*this)[idx].frame, false);
+        }
+    }
+    virtual int SetKey(float);
+    virtual int RemoveKey(int idx) {
+        Remove(idx);
+        return size();
+    }
+    virtual int NumKeys() { return size(); }
+    virtual void SetToCurrentVal(int);
+    virtual void Save(BinStream &bs) {
+        PropKeys::Save(bs);
+        bs << *this;
+    }
+    virtual void Load(BinStreamRev &bs) {
+        PropKeys::Load(bs);
+        bs >> *this;
+    }
+    virtual void Copy(const PropKeys *);
+    virtual Keys<float, float> *AsFloatKeys() {
+        if (this)
+            return this;
+    }
+    virtual int FloatAt(float, float &);
 };
