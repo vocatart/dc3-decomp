@@ -925,6 +925,20 @@ BinStream &operator>>(BinStream &bs, ObjList<T> &oList) {
     return bs;
 }
 
+// ObjectStage
+class ObjectStage : public ObjPtr<Hmx::Object> {
+public:
+    ObjectStage() : ObjPtr<Hmx::Object>(sOwner) {}
+    ObjectStage(Hmx::Object *o) : ObjPtr<Hmx::Object>(sOwner, o) {}
+    virtual ~ObjectStage() {}
+
+    static Hmx::Object *sOwner;
+};
+
+void Interp(const ObjectStage &, const ObjectStage &, float, Hmx::Object *&);
+BinStream &operator<<(BinStream &, const ObjectStage &);
+BinStream &operator>>(BinStream &, ObjectStage &);
+
 // ObjVersion
 struct ObjVersion {
     ObjVersion(int i, Hmx::Object *o) : revs(i), obj(nullptr, o) {}

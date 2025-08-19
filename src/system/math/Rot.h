@@ -6,6 +6,12 @@
 #define RAD2DEG 57.29578f
 #define DEG2RAD 0.01745329238474369049f
 
+TextStream &operator<<(TextStream &ts, const Hmx::Quat &v);
+TextStream &operator<<(TextStream &ts, const Vector3 &v);
+TextStream &operator<<(TextStream &ts, const Vector2 &v);
+TextStream &operator<<(TextStream &ts, const Hmx::Matrix3 &m);
+TextStream &operator<<(TextStream &ts, const Transform &t);
+
 float GetXAngle(const Hmx::Matrix3 &);
 float GetYAngle(const Hmx::Matrix3 &);
 float GetZAngle(const Hmx::Matrix3 &);

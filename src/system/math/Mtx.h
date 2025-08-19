@@ -2,6 +2,7 @@
 #include "math/Vec.h"
 #include "math/Trig.h"
 #include "utl/BinStream.h"
+#include "utl/TextStream.h"
 
 namespace Hmx {
     class Matrix2 {
