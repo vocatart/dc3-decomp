@@ -17,6 +17,16 @@ public:
     void Save(BinStream &) const;
     bool Load(BinStream &);
 
+    float &Hue() { return mHue; }
+    float &Saturation() { return mSaturation; }
+    float &Lightness() { return mLightness; }
+    float &Contrast() { return mContrast; }
+    float &Brightness() { return mBrightness; }
+    Hmx::Color &LevelInLo() { return mLevelInLo; }
+    Hmx::Color &LevelInHi() { return mLevelInHi; }
+    Hmx::Color &LevelOutLo() { return mLevelOutLo; }
+    Hmx::Color &LevelOutHi() { return mLevelOutHi; }
+
 private:
     float mHue; // 0x0
     float mSaturation; // 0x4
