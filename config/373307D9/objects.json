@@ -756,7 +756,7 @@
             "system/rndobj/PostProc.cpp": "MISSING",
             "system/rndobj/PostProcMgr.cpp": "MISSING",
             "system/rndobj/PostProc_NG.cpp": "MISSING",
-            "system/rndobj/PropAnim.cpp": "MISSING",
+            "system/rndobj/PropAnim.cpp": "NonMatching",
             "system/rndobj/PropKeys.cpp": "NonMatching",
             "system/rndobj/Ribbon.cpp": "MISSING",
             "system/rndobj/Rnd.cpp": "MISSING",

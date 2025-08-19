@@ -20,14 +20,6 @@ namespace Hmx {
         Color(float r, float g, float b, float a) : red(r), green(g), blue(b), alpha(a) {}
         Color(int packed) : alpha(1.0f) { Unpack(packed); }
 
-        // copy ctor uses asm magic
-        Color(const Color &color) {
-            red = color.red;
-            green = color.green;
-            blue = color.blue;
-            alpha = color.alpha;
-        }
-
         void Set(float f1, float f2, float f3, float f4) {
             red = f1;
             green = f2;

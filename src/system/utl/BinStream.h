@@ -183,7 +183,7 @@ public:
         : mRev(getHmxRev(revs)), mAltRev(getAltRev(revs)), mBinStream(bs) {}
 
     BinStreamRev &operator>>(bool &);
-    operator BinStream &() const { return mBinStream; }
+
     void PushRev(Hmx::Object *obj) { mBinStream.PushRev(packRevs(mAltRev, mRev), obj); }
 
     template <class T>
