@@ -62,7 +62,18 @@ public:
      * create a new keyframe.
      * @returns The index in the vector corresponding to this new keyframe.
      */
-    int Add(const T1 &val, float frame, bool unique);
+    int Add(const T1 &val, float frame, bool unique) {
+        int bound = KeyGreaterEq(frame);
+        if (unique && bound != size() && (*this)[bound].frame == frame) {
+            (*this)[bound].value = val;
+        } else {
+            while (bound < size() && (*this)[bound].frame == frame) {
+                bound++;
+            }
+            insert(&(*this)[bound], Key<T1>(val, frame));
+        }
+        return bound;
+    }
 
     /** Get the value associated with the supplied frame.
      * @param [in] frame The keyframe to get a value from.
@@ -104,6 +115,36 @@ public:
             return back().frame;
         else
             return 0.0f;
+    }
+
+    /** Get the index of the first possible keyframe KF, such that KF's frame >= the
+     * supplied frame.
+     * @param [in] frame The supplied frame.
+     * @returns The index of the keyframe that satisfies the condition above.
+     */
+    int KeyGreaterEq(float frame) const {
+        if (empty() || (frame <= front().frame))
+            return 0;
+        else {
+            const Key<T1> &backKey = back();
+            if (frame > backKey.frame) {
+                return size();
+            } else {
+                int cnt = 0;
+                int threshold = size() - 1;
+                while (threshold > cnt + 1) {
+                    int newCnt = (cnt + threshold) >> 1;
+                    if (frame > (*this)[newCnt].frame)
+                        cnt = newCnt;
+                    else
+                        threshold = newCnt;
+                }
+                while (threshold > 1
+                       && (*this)[threshold - 1].frame == (*this)[threshold].frame)
+                    threshold--;
+                return threshold;
+            }
+        }
     }
 };
 
