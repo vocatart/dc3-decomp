@@ -1,5 +1,6 @@
 #pragma once
 #include "types.h"
+#include "rndobj/ShaderOptions.h"
 
 class RndShader {
 public:

@@ -766,7 +766,7 @@
             "system/rndobj/Set.cpp": "NonMatching",
             "system/rndobj/Shader.cpp": "MISSING",
             "system/rndobj/ShaderMgr.cpp": "MISSING",
-            "system/rndobj/ShaderOptions.cpp": "MISSING",
+            "system/rndobj/ShaderOptions.cpp": "NonMatching",
             "system/rndobj/ShaderProgram.cpp": "MISSING",
             "system/rndobj/ShadowMap.cpp": "MISSING",
             "system/rndobj/Shockwave.cpp": "MISSING",
