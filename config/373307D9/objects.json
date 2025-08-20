@@ -735,7 +735,7 @@
             "system/rndobj/Lit.cpp": "MISSING",
             "system/rndobj/LitAnim.cpp": "MISSING",
             "system/rndobj/Lit_NG.cpp": "MISSING",
-            "system/rndobj/Mat.cpp": "MISSING",
+            "system/rndobj/Mat.cpp": "NonMatching",
             "system/rndobj/MatAnim.cpp": "MISSING",
             "system/rndobj/Mat_NG.cpp": "MISSING",
             "system/rndobj/Mesh.cpp": "MISSING",

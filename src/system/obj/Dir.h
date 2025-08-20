@@ -162,6 +162,14 @@ public:
         return castedObj;
     }
 
+    template <class T>
+    T *New(const char *name) {
+        T *obj = Hmx::Object::New<T>();
+        if (name)
+            obj->SetName(name, this);
+        return obj;
+    }
+
     void SetCurViewport(ViewportId id, Hmx::Object *o) {
         mCurViewportID = id;
         mCurCam = o;

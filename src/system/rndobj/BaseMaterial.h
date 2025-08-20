@@ -123,7 +123,7 @@ public:
         kDarken = 10
     };
 
-    virtual ~BaseMaterial();
+    virtual ~BaseMaterial() {}
     OBJ_CLASSNAME(BaseMaterial);
     OBJ_SET_TYPE(BaseMaterial);
     virtual DataNode Handle(DataArray *, bool);
