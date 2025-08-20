@@ -30,7 +30,7 @@ MatPropEditAction RndMat::GetMetaMatPropAction(Symbol s) {
 bool RndMat::OnGetPropertyDisplay(PropDisplay display, Symbol s) {
     MILO_ASSERT(display == kPropDisplayHidden || display == kPropDisplayReadOnly, 0x357);
     if (mMetaMaterial) {
-        if (unk224)
+        if (mToggleDisplayAllProps)
             return display == kPropDisplayHidden;
         else
             return true;
@@ -218,7 +218,8 @@ MetaMaterial *RndMat::CreateMetaMaterial(bool notify) {
 }
 
 RndMat::RndMat()
-    : mMetaMaterial(this), unk20c(0), unk224(0), unk225(0), unk226(0), mDirty(3) {
+    : mMetaMaterial(this), unk20c(0), mToggleDisplayAllProps(0), unk225(0), unk226(0),
+      mDirty(3) {
     ResetColors(mColorMod, 3);
 }
 
@@ -244,3 +245,119 @@ BEGIN_COPYS(RndMat)
         UpdatePropertiesFromMetaMat();
     END_COPYING_MEMBERS
 END_COPYS
+
+BEGIN_HANDLERS(RndMat)
+    HANDLE(get_metamats_dir, OnGetMetaMaterialsDir)
+    HANDLE(get_metamats, OnGetMetaMaterials)
+    HANDLE_EXPR(prop_is_hidden, OnGetPropertyDisplay(kPropDisplayHidden, _msg->Sym(2)))
+    HANDLE_EXPR(
+        prop_is_read_only, OnGetPropertyDisplay(kPropDisplayReadOnly, _msg->Sym(2))
+    )
+    HANDLE_ACTION(
+        toggle_display_all_props, mToggleDisplayAllProps = !mToggleDisplayAllProps
+    )
+    HANDLE_ACTION(create_metamat, CreateMetaMaterial(true))
+    HANDLE_SUPERCLASS(BaseMaterial)
+END_HANDLERS
+
+bool RndMat::IsEditable(Symbol s) {
+    if (mMetaMaterial && !unk226) {
+        bool ret = mMetaMaterial->Property(s, true)->Int() == 2;
+        if (!ret) {
+            String str(s);
+            int len = str.length();
+            if (len > 12) {
+                str = str.substr(0, len - 12);
+            }
+            MILO_NOTIFY_ONCE(
+                "Unable to set property %s in Mat %s.  Not allowed by MetaMaterial %s.\n",
+                str.c_str(),
+                PathName(this),
+                PathName(mMetaMaterial)
+            );
+        }
+        return ret;
+    }
+    return true;
+}
+
+#define SYNC_MAT_PROP(s, member, dirty_flag)                                             \
+    {                                                                                    \
+        _NEW_STATIC_SYMBOL(s)                                                            \
+        if (sym == _s) {                                                                 \
+            Symbol action(#s "_edit_action");                                            \
+            if (!(_op & (kPropSize | kPropGet)) && !IsEditable(action)) {                \
+                return true;                                                             \
+            }                                                                            \
+            if (!PropSync(member, _val, _prop, _i + 1, _op))                             \
+                return false;                                                            \
+            if (!(_op & (kPropSize | kPropGet)))                                         \
+                mDirty |= dirty_flag;                                                    \
+            return true;                                                                 \
+        }                                                                                \
+    }
+
+BEGIN_PROPSYNCS(RndMat)
+    // clang-format off
+    SYNC_PROP_SET(metamaterial, mMetaMaterial.Ptr(),
+        mMetaMaterial = _val.Obj<MetaMaterial>();
+        UpdatePropertiesFromMetaMat();
+        unk225 = false;
+    )
+    // clang-format on
+    SYNC_MAT_PROP(intensify, mIntensify, 2)
+    SYNC_MAT_PROP(blend, (int &)mBlend, 2)
+    SYNC_MAT_PROP(color, mColor, 1)
+    SYNC_MAT_PROP(alpha, mColor.alpha, 1)
+    SYNC_MAT_PROP(use_environ, mUseEnviron, 2)
+    SYNC_MAT_PROP(z_mode, (int &)mZMode, 2)
+    SYNC_MAT_PROP(stencil_mode, (int &)mStencilMode, 2)
+    SYNC_MAT_PROP(tex_gen, (int &)mTexGen, 2)
+    SYNC_MAT_PROP(tex_wrap, (int &)mTexWrap, 2)
+    SYNC_MAT_PROP(tex_xfm, mTexXfm, 2)
+    SYNC_MAT_PROP(diffuse_tex, mDiffuseTex, 2)
+    SYNC_MAT_PROP(diffuse_tex2, mDiffuseTex2, 2)
+    SYNC_MAT_PROP(prelit, mPrelit, 2)
+    SYNC_MAT_PROP(alpha_cut, mAlphaCut, 2)
+    SYNC_PROP(alpha_threshold, mAlphaThreshold)
+    SYNC_MAT_PROP(alpha_write, mAlphaWrite, 2)
+    SYNC_PROP(force_alpha_write, mAlphaWrite)
+    SYNC_MAT_PROP(next_pass, mNextPass, 2)
+    SYNC_MAT_PROP(cull, (int &)mCull, 2)
+    SYNC_MAT_PROP(per_pixel_lit, mPerPixelLit, 2)
+    SYNC_MAT_PROP(emissive_multiplier, mEmissiveMultiplier, 2)
+    SYNC_MAT_PROP(specular_rgb, mSpecularRGB, 2)
+    SYNC_MAT_PROP(specular_power, mSpecularRGB.alpha, 2)
+    SYNC_MAT_PROP(specular2_rgb, mSpecular2RGB, 2)
+    SYNC_MAT_PROP(specular2_power, mSpecular2RGB.alpha, 2)
+    SYNC_MAT_PROP(normal_map, mNormalMap, 2)
+    SYNC_MAT_PROP(emissive_map, mEmissiveMap, 2)
+    SYNC_PROP_SET(
+        specular_map,
+        mSpecularMap.Ptr(),
+        if (IsEditable("specular_map_edit_action")) SetSpecularMap(_val.Obj<RndTex>())
+    )
+    SYNC_MAT_PROP(environ_map, mEnvironMap, 2)
+    SYNC_MAT_PROP(environ_map_falloff, mEnvironMapFalloff, 2)
+    SYNC_MAT_PROP(environ_map_specmask, mEnvironMapSpecMask, 2)
+    SYNC_MAT_PROP(de_normal, mDeNormal, 2)
+    SYNC_MAT_PROP(anisotropy, mAnisotropy, 2)
+    SYNC_MAT_PROP(norm_detail_tiling, mNormDetailTiling, 2)
+    SYNC_MAT_PROP(norm_detail_strength, mNormDetailStrength, 2)
+    SYNC_MAT_PROP(norm_detail_map, mNormDetailMap, 2)
+    SYNC_MAT_PROP(rim_rgb, mRimRGB, 2)
+    SYNC_MAT_PROP(rim_power, mRimRGB.alpha, 2)
+    SYNC_MAT_PROP(rim_map, mRimMap, 2)
+    SYNC_MAT_PROP(rim_light_under, mRimLightUnder, 2)
+    SYNC_MAT_PROP(refract_enabled, mRefractEnabled, 2)
+    SYNC_MAT_PROP(refract_strength, mRefractStrength, 2)
+    SYNC_MAT_PROP(refract_normal_map, mRefractNormalMap, 2)
+    SYNC_MAT_PROP(screen_aligned, mScreenAligned, 2)
+    SYNC_MAT_PROP(shader_variation, (int &)mShaderVariation, 2)
+    SYNC_MAT_PROP(point_lights, mPointLights, 2)
+    SYNC_MAT_PROP(fog, mFog, 2)
+    SYNC_MAT_PROP(fade_out, mFadeout, 2)
+    SYNC_MAT_PROP(color_adjust, mColorAdjust, 2)
+    SYNC_MAT_PROP(fur, mFur, 2)
+    // more...
+END_PROPSYNCS

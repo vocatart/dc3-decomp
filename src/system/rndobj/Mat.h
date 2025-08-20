@@ -63,7 +63,7 @@ protected:
     int unk20c;
     std::vector<Hmx::Color> mColorMod; // 0x210
     MatShaderOptions mShaderOptions; // 0x21c
-    bool unk224;
+    bool mToggleDisplayAllProps; // 0x224
     bool unk225;
     bool unk226;
     int mDirty; // 0x228
