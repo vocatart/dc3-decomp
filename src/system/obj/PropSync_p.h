@@ -116,13 +116,82 @@ bool PropSync(Keys<T, T> &keys, DataNode &node, DataArray *prop, int i, PropOp o
 }
 
 template <class T>
-bool PropSync(ObjPtr<T> &, DataNode &, DataArray *, int, PropOp);
+bool PropSync(T *&obj, DataNode &node, DataArray *prop, int i, PropOp op);
 
 template <class T>
-bool PropSync(ObjOwnerPtr<T> &, DataNode &, DataArray *, int, PropOp);
+bool PropSync(ObjPtr<T> &ptr, DataNode &node, DataArray *prop, int i, PropOp op) {
+    if (op == kPropUnknown0x40)
+        return false;
+    else {
+        MILO_ASSERT(i == prop->Size() && op <= kPropInsert, 0x133);
+        if (op == kPropGet)
+            node = ptr.Ptr();
+        else
+            ptr = dynamic_cast<T *>(node.GetObj());
+        return true;
+    }
+}
 
 template <class T>
-bool PropSync(ObjPtrList<T, ObjectDir> &, DataNode &, DataArray *, int, PropOp);
+bool PropSync(ObjOwnerPtr<T> &ptr, DataNode &node, DataArray *prop, int i, PropOp op) {
+    if (op == kPropUnknown0x40)
+        return false;
+    else {
+        MILO_ASSERT(op <= kPropInsert, 0x140);
+        if (op == kPropGet)
+            node = ptr.Ptr();
+        else
+            ptr = dynamic_cast<T *>(node.GetObj());
+        return true;
+    }
+}
+
+template <class T>
+bool PropSync(
+    ObjPtrList<T, ObjectDir> &ptr, DataNode &node, DataArray *prop, int i, PropOp op
+) {
+    if (op == kPropUnknown0x40)
+        return ptr.Mode() == kObjListNoNull;
+    else if (i == prop->Size()) {
+        MILO_ASSERT(op == kPropSize || op == kPropInsert, 0x154);
+        node = ptr.size();
+        return true;
+    } else {
+        typename ObjPtrList<T, ObjectDir>::iterator it = ptr.begin();
+        for (int cnt = prop->Int(i++); cnt > 0; cnt--)
+            it++;
+        MILO_ASSERT(i == prop->Size(), 0x15E);
+        switch (op) {
+        case kPropGet: {
+            T *item = *it;
+            return PropSync(item, node, prop, i, op);
+        }
+        case kPropSet: {
+            T *objToSet = nullptr;
+            if (PropSync(objToSet, node, prop, i, op)) {
+                ptr.Set(it, objToSet);
+                return true;
+            }
+            break;
+        }
+        case kPropRemove: {
+            ptr.erase(it);
+            return true;
+        }
+        case kPropInsert: {
+            T *objToInsert = 0;
+            if (PropSync(objToInsert, node, prop, i, op)) {
+                ptr.insert(it, objToInsert);
+                return true;
+            }
+            break;
+        }
+        default:
+            break;
+        }
+        return false;
+    }
+}
 
 template <class T>
 bool PropSync(ObjPtrVec<T, ObjectDir> &, DataNode &, DataArray *, int, PropOp);

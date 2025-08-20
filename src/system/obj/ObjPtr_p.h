@@ -1,5 +1,6 @@
 #pragma once
 #include "obj/Dir.h" /* IWYU pragma: keep */
+#include "obj/Object.h"
 #include "utl/BinStream.h" /* IWYU pragma: keep */
 #include "os/Debug.h" /* IWYU pragma: keep */
 #include <cstddef> /* IWYU pragma: keep */
@@ -52,6 +53,37 @@ BinStream &operator<<(BinStream &bs, const ObjRefConcrete<T1, class ObjectDir> &
     const char *objName = f ? f->Name() : "";
     bs << objName;
     return bs;
+}
+
+template <class T1, class T2>
+bool ObjRefConcrete<T1, T2>::Load(BinStream &bs, bool print, ObjectDir *dir) {
+    char buf[128];
+    bs.ReadString(buf, 128);
+    Hmx::Object *refOwner = RefOwner();
+    if (!dir && refOwner) {
+        dir = refOwner->Dir();
+    }
+    if (refOwner && dir) {
+        SetObj(dir->FindObject(buf, false, true));
+        if (!mObject && buf[0] != '\0') {
+            if (print) {
+                MILO_NOTIFY(
+                    "%s couldn't find %s in %s", PathName(refOwner), buf, PathName(dir)
+                );
+            }
+            return false;
+        }
+    } else {
+        if (mObject) {
+            Release(this);
+        }
+        mObject = nullptr;
+        if (buf[0] != '\0') {
+            if (print)
+                MILO_NOTIFY("No dir to find %s", buf);
+        }
+    }
+    return true;
 }
 
 // ------------------------------------------------
@@ -145,6 +177,11 @@ void ObjPtrList<T1, T2>::pop_back() {
 template <class T1, class T2>
 void ObjPtrList<T1, T2>::push_back(T1 *obj) {
     insert(end(), obj);
+}
+
+template <class T1, class T2>
+void ObjPtrList<T1, T2>::Set(iterator it, T1 *obj) {
+    it.mNode->SetObjConcrete(obj);
 }
 
 template <class T1, class T2>

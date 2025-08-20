@@ -336,12 +336,20 @@ public:
             return tmp;
         }
 
+        // iterator &operator=(T1 *obj) {
+        //     mNode->SetObjConcrete(obj);
+        //     return *this;
+        // }
+
         bool operator!=(iterator it) { return mNode != it.mNode; }
         bool operator==(iterator it) { return mNode == it.mNode; }
         bool operator!() { return mNode == 0; }
 
         struct Node *mNode; // 0x0
     };
+
+    ObjListMode Mode() const { return mListMode; }
+    int size() const { return mSize; }
 
     void clear() {
         while (mSize != 0)
@@ -354,7 +362,8 @@ public:
     iterator begin() const { return iterator(mNodes); }
     iterator end() const { return iterator(0); }
     iterator erase(iterator);
-    iterator insert(iterator, Hmx::Object *);
+    iterator insert(iterator, T1 *);
+    void Set(iterator it, T1 *obj);
 
     typedef bool SortFunc(T1 *, T1 *);
     void sort(SortFunc *func);

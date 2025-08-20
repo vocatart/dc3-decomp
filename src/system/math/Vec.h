@@ -205,3 +205,7 @@ inline bool NearlyEqual(const Vector3 &v1, const Vector3 &v2, float max_diff) {
 inline void Scale(const Vector3 &v1, float f, Vector3 &dst) {
     dst.Set(v1.x * f, v1.y * f, v1.z * f);
 }
+
+inline void Subtract(const Vector3 &v1, const Vector3 &v2, Vector3 &dst) {
+    dst.Set(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+}
