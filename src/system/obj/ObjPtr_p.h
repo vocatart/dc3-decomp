@@ -1,4 +1,5 @@
 #pragma once
+#include "Object.h"
 #include "obj/Dir.h" /* IWYU pragma: keep */
 #include "obj/Object.h"
 #include "utl/BinStream.h" /* IWYU pragma: keep */
@@ -169,6 +170,26 @@ void ObjPtrVec<T1, T2>::operator=(const ObjPtrVec &other) {
 // ------------------------------------------------
 
 template <class T1, class T2>
+ObjPtrList<T1, T2>::ObjPtrList(ObjRefOwner *owner, ObjListMode mode)
+    : mSize(0), mNodes(nullptr), mOwner(owner), mListMode(mode) {
+    if (mode == kObjListOwnerControl) {
+        MILO_ASSERT(owner, 0x103);
+    }
+}
+
+template <class T1, class T2>
+void ObjPtrList<T1, T2>::ReplaceNode(struct ObjPtrList::Node *node, Hmx::Object *obj) {
+    if (mListMode == kObjListOwnerControl) {
+        Replace(node, obj);
+    } else {
+        Hmx::Object *old = node->SetObj(obj);
+        if (!old && mListMode == kObjListNoNull) {
+            erase(node);
+        }
+    }
+}
+
+template <class T1, class T2>
 void ObjPtrList<T1, T2>::pop_back() {
     MILO_ASSERT(mNodes != NULL, 0x18B);
     erase(mNodes->prev);
@@ -185,8 +206,8 @@ void ObjPtrList<T1, T2>::Set(iterator it, T1 *obj) {
 }
 
 template <class T1, class T2>
-typename ObjPtrList<T1, T2>::iterator ObjPtrList<T1, T2>::find(const Hmx::Object *target
-) const {
+inline typename ObjPtrList<T1, T2>::iterator
+ObjPtrList<T1, T2>::find(const Hmx::Object *target) const {
     for (iterator it = begin(); it != end(); ++it) {
         if (*it == target)
             return it;

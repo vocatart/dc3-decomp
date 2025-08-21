@@ -3,11 +3,64 @@
 #include "obj/Object.h"
 #include "rndobj/Draw.h"
 #include "rndobj/Trans.h"
+#include "utl/BinStream.h"
 
 BoxMapLighting RndEnviron::sGlobalLighting;
 RndEnviron *RndEnviron::sCurrent;
 Vector3 RndEnviron::sCurrentPos;
 bool RndEnviron::sCurrentPosSet;
+
+bool RndEnviron::FogEnable() const { return mAmbientFogOwner->mFogEnable; }
+
+Transform RndEnviron::LRFadeRef() const {
+    Transform ret;
+    if (mFadeRef) {
+        ret = mFadeRef->WorldXfm();
+    } else {
+        ret.Reset();
+    }
+    return ret;
+}
+
+const Transform &RndEnviron::ColorXfm() const {
+    static Vector3 x(1, 0, 0);
+    static Vector3 y(0, 1, 0);
+    static Vector3 z(0, 0, 1);
+    static Transform ident(Hmx::Matrix3(x, y, z), Vector3(0, 0, 0));
+    if (mUseColorAdjust)
+        return mColorXfm.ColorXfm();
+    else
+        return ident;
+}
+
+void RndEnviron::Save(BinStream &bs) {
+    bs << 0x10;
+    SAVE_SUPERCLASS(Hmx::Object);
+    SAVE_SUPERCLASS(RndDrawable);
+    SAVE_SUPERCLASS(RndTransformable);
+    bs << mLightsReal << mLightsApprox;
+}
+
+bool RndEnviron::IsLightInList(const RndLight *light, const ObjPtrList<RndLight> &pList)
+    const {
+    if (light == nullptr)
+        return 0;
+    return pList.find(light) != pList.end();
+}
+
+bool RndEnviron::IsFake(RndLight *l) const { return IsLightInList(l, mLightsApprox); }
+bool RndEnviron::IsReal(RndLight *l) const { return IsLightInList(l, mLightsReal); }
+
+void RndEnviron::RemoveLight(RndLight *l) {
+    mLightsReal.remove(l);
+    mLightsApprox.remove(l);
+}
+
+void RndEnviron::OnRemoveAllLights() {
+    mLightsReal.clear();
+    mLightsApprox.clear();
+    mLightsOld.clear();
+}
 
 BEGIN_PROPSYNCS(RndEnviron)
     SYNC_PROP(lights_real, mLightsReal)

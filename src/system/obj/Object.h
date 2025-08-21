@@ -204,7 +204,7 @@ private:
         Node(ObjRefOwner *owner) : ObjRefConcrete<T1>(nullptr), mOwner(owner) {}
         virtual ~Node() {}
         virtual Hmx::Object *RefOwner() const;
-        virtual void Replace(Hmx::Object *);
+        virtual void Replace(Hmx::Object *obj);
         virtual ObjRefOwner *Parent() const { return mOwner; }
 
         T1 *Obj() const { return mObject; }
@@ -301,12 +301,15 @@ private:
     struct Node : public ObjRefConcrete<T1, T2> {
         virtual ~Node() {}
         virtual Hmx::Object *RefOwner() const;
-        virtual void Replace(Hmx::Object *);
-        virtual ObjRefOwner *Parent() const { return unk10; }
+        virtual void Replace(Hmx::Object *obj) {
+            ObjPtrList<T1, T2> *list = static_cast<ObjPtrList<T1, T2> *>(mOwner);
+            list->ReplaceNode(this, obj);
+        }
+        virtual ObjRefOwner *Parent() const { return mOwner; }
 
         T1 *Obj() const { return mObject; }
 
-        ObjRefOwner *unk10; // 0x10
+        ObjRefOwner *mOwner; // 0x10
         Node *next; // 0x14
         Node *prev; // 0x18
     };
@@ -317,6 +320,7 @@ private:
 
     virtual Hmx::Object *RefOwner() const;
     virtual bool Replace(ObjRef *, Hmx::Object *);
+    void ReplaceNode(Node *, Hmx::Object *);
 
 public:
     class iterator {

@@ -1,5 +1,6 @@
 #pragma once
 #include "BoxMap.h"
+#include "Lit.h"
 #include "os/Timer.h"
 #include "rndobj/ColorXfm.h"
 #include "rndobj/Draw.h"
@@ -28,8 +29,16 @@ public:
 
     OBJ_MEM_OVERLOAD(0x1B);
 
+    const Transform &ColorXfm() const;
+    bool FogEnable() const;
+    Transform LRFadeRef() const;
+    void RemoveLight(RndLight *);
+
 protected:
     RndEnviron();
+
+    bool IsLightInList(const RndLight *, const ObjPtrList<RndLight> &) const;
+    void OnRemoveAllLights();
 
     static BoxMapLighting sGlobalLighting;
     static RndEnviron *sCurrent;

@@ -26,6 +26,7 @@ public:
     Hmx::Color &LevelInHi() { return mLevelInHi; }
     Hmx::Color &LevelOutLo() { return mLevelOutLo; }
     Hmx::Color &LevelOutHi() { return mLevelOutHi; }
+    const Transform &ColorXfm() const { return mColorXfm; }
 
 private:
     float mHue; // 0x0

@@ -190,7 +190,7 @@ public:
 
     Transform(const Hmx::Matrix3 &mtx, const Vector3 &vec) : m(mtx), v(vec) {}
 
-    Transform(const Transform &tf);
+    // Transform(const Transform &tf);
     Transform &operator=(const Transform &tf) {
         memcpy(this, &tf, sizeof(*this));
         return *this;
