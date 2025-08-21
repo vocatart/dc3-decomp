@@ -9,6 +9,14 @@
 
 class RndCam;
 
+enum HighlightStyle {
+    kHighlightWireframe,
+    kHighlightSphere,
+    kHighlightNone,
+    kHighlightWireframeWithNormals,
+    kNumHighlightStyles
+};
+
 /**
  * @brief An object that is drawable.
  * Original _objects description:
@@ -58,9 +66,19 @@ public:
     RndDrawable *Collide(const Segment &, float &, Plane &);
 
     static void DumpLoad(BinStream &bs);
+    static HighlightStyle GetHighlightStyle() { return sHighlightStyle; }
+    static void SetHighlightStyle(HighlightStyle hs) { sHighlightStyle = hs; }
+    static float GetNormalDisplayLength() { return sNormalDisplayLength; }
+    static void SetNormalDisplayLength(float f) { sNormalDisplayLength = f; }
+    static bool GetForceSubpartSelection() { return sForceSubpartSelection; }
+    static void SetForceSubpartSelection(bool b) { sForceSubpartSelection = b; }
 
 protected:
     RndDrawable();
+
+    static HighlightStyle sHighlightStyle;
+    static float sNormalDisplayLength;
+    static bool sForceSubpartSelection;
 
     /** Handler to copy another RndDrawable's sphere to this one's.
      * @param [in] arr The supplied DataArray.

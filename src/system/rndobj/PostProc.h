@@ -78,6 +78,7 @@ public:
     void Interp(const RndPostProc *, const RndPostProc *, float);
 
     static RndPostProc *Current();
+    static DOFOverrideParams &DOFOverrides() { return sDOFOverride; }
     static void ResetDofProc();
     static void Init();
     static void Reset();

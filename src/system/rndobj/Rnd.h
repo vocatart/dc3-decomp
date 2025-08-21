@@ -121,6 +121,12 @@ public:
     RndPostProc *GetPostProcOverride();
     RndPostProc *GetSelectedPostProc();
     void CopyWorldCam(RndCam *);
+    void RegisterPostProcessor(PostProcessor *);
+    void UnregisterPostProcessor(PostProcessor *);
+    void SetPostProcOverride(RndPostProc *);
+    void SetPostProcBlacklightOverride(RndPostProc *);
+
+    static int sPostProcPanelCount;
 
 protected:
     virtual void DoWorldBegin();

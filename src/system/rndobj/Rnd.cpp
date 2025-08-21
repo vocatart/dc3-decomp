@@ -1,4 +1,5 @@
 #include "rndobj/Rnd.h"
+#include "rndobj/Draw.h"
 #include "rndobj/Utl.h"
 #include "obj/Data.h"
 #include "obj/Object.h"
@@ -12,6 +13,12 @@
 bool gNotifyKeepGoing;
 bool gFailKeepGoing;
 bool gFailRestartConsole;
+
+struct SortPostProc {
+    bool operator()(PostProcessor *p1, PostProcessor *p2) const {
+        return p1->Priority() < p2->Priority();
+    }
+};
 
 void Rnd::ShowConsole(bool show) { mConsole->SetShowing(show); }
 bool Rnd::ConsoleShowing() { return mConsole->Showing(); }
@@ -299,6 +306,87 @@ DataNode Rnd::OnScreenDumpUnique(const DataArray *da) {
 DataNode Rnd::OnScaleObject(const DataArray *da) {
     RndScaleObject(da->GetObj(2), da->Float(3), da->Float(4));
     return 0;
+}
+
+BEGIN_HANDLERS(Rnd)
+    HANDLE_ACTION(reset_postproc, RndPostProc::Reset())
+    HANDLE_ACTION(reset_dof_proc, RndPostProc::ResetDofProc())
+    HANDLE_ACTION(set_postproc_override, SetPostProcOverride(_msg->Obj<RndPostProc>(2)))
+    HANDLE_ACTION(
+        set_postproc_blacklight_override,
+        SetPostProcBlacklightOverride(_msg->Obj<RndPostProc>(2))
+    )
+    HANDLE_EXPR(get_postproc_override, GetPostProcOverride())
+    HANDLE_EXPR(get_selected_postproc, GetSelectedPostProc())
+    HANDLE_ACTION(
+        set_dof_depth_scale, RndPostProc::DOFOverrides().SetDepthScale(_msg->Float(2))
+    )
+    HANDLE_ACTION(
+        set_dof_depth_offset, RndPostProc::DOFOverrides().SetDepthOffset(_msg->Float(2))
+    )
+    HANDLE_ACTION(
+        set_dof_min_scale, RndPostProc::DOFOverrides().SetMinBlurScale(_msg->Float(2))
+    )
+    HANDLE_ACTION(
+        set_dof_min_offset, RndPostProc::DOFOverrides().SetMinBlurOffset(_msg->Float(2))
+    )
+    HANDLE_ACTION(
+        set_dof_max_scale, RndPostProc::DOFOverrides().SetMaxBlurScale(_msg->Float(2))
+    )
+    HANDLE_ACTION(
+        set_dof_max_offset, RndPostProc::DOFOverrides().SetMaxBlurOffset(_msg->Float(2))
+    )
+    HANDLE_ACTION(
+        set_dof_width_scale, RndPostProc::DOFOverrides().SetBlurWidthScale(_msg->Float(2))
+    )
+    HANDLE_ACTION(set_aspect, SetAspect((Aspect)_msg->Int(2)))
+    HANDLE_EXPR(aspect, mAspect)
+    HANDLE_EXPR(screen_width, mWidth)
+    HANDLE_EXPR(screen_height, mHeight)
+    HANDLE_EXPR(highlight_style, RndDrawable::GetHighlightStyle())
+    HANDLE_ACTION(
+        set_highlight_style, RndDrawable::SetHighlightStyle((HighlightStyle)_msg->Int(2))
+    )
+    HANDLE_EXPR(get_normal_display_length, RndDrawable::GetNormalDisplayLength())
+    HANDLE_ACTION(
+        set_normal_display_length, RndDrawable::SetNormalDisplayLength(_msg->Float(2))
+    )
+    HANDLE_EXPR(get_force_select_proxied_subparts, RndDrawable::GetForceSubpartSelection())
+    HANDLE_ACTION(
+        set_force_select_proxied_subparts,
+        RndDrawable::SetForceSubpartSelection(_msg->Int(2))
+    )
+    HANDLE_ACTION(set_sync, SetSync(_msg->Int(2)))
+    HANDLE_EXPR(get_sync, GetSync())
+    HANDLE_ACTION(set_shrink_to_safe, SetShrinkToSafeArea(_msg->Int(2)))
+    HANDLE(show_console, OnShowConsole)
+    HANDLE(toggle_timers, OnToggleTimers)
+    HANDLE(toggle_overlay_position, OnToggleOverlayPosition)
+    HANDLE(toggle_timers_verbose, OnToggleTimersVerbose)
+    HANDLE(toggle_overlay, OnToggleOverlay)
+    HANDLE_EXPR(show_safe_area, mShowSafeArea)
+    HANDLE_ACTION(set_show_safe_area, mShowSafeArea = _msg->Int(2))
+    HANDLE(show_overlay, OnShowOverlay)
+    HANDLE_EXPR(overlay_showing, RndOverlay::Find(_msg->Str(2), true)->Showing())
+    HANDLE(overlay_print, OnOverlayPrint)
+    // HANDLE_ACTION(hi_res_screen, TheHiResScreen.TakeShot("ur_hi", _msg->Int(2)))
+END_HANDLERS
+
+void Rnd::UnregisterPostProcessor(PostProcessor *proc) { mPostProcessors.remove(proc); }
+
+void PreClearCompilerHelper(ObjPtrList<RndDrawable> &list, RndDrawable *draw) {
+    for (ObjPtrList<RndDrawable>::iterator it = list.begin(); it != list.end(); ++it) {
+        if (*it == draw)
+            return;
+    }
+    list.push_back(draw);
+    list.sort(SortDraws);
+}
+
+void Rnd::RegisterPostProcessor(PostProcessor *proc) {
+    sPostProcPanelCount++;
+    mPostProcessors.push_back(proc);
+    mPostProcessors.sort(SortPostProc());
 }
 
 Rnd::Rnd()
