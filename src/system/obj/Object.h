@@ -293,7 +293,7 @@ BinStream &operator>>(BinStream &bs, ObjPtrVec<T1, ObjectDir> &vec);
 template <class T1, class T2 = class ObjectDir>
 class ObjPtrList : public ObjRefOwner {
 public:
-    ObjPtrList(ObjRefOwner *, ObjListMode);
+    ObjPtrList(ObjRefOwner *, ObjListMode = kObjListNoNull);
     virtual ~ObjPtrList() { clear(); }
 
 private:

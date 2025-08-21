@@ -718,7 +718,7 @@
             "system/rndobj/Dir.cpp": "MISSING",
             "system/rndobj/Draw.cpp": "NonMatching",
             "system/rndobj/Enter.cpp": "NonMatching",
-            "system/rndobj/Env.cpp": "MISSING",
+            "system/rndobj/Env.cpp": "NonMatching",
             "system/rndobj/Env_NG.cpp": "MISSING",
             "system/rndobj/EventTrigger.cpp": "MISSING",
             "system/rndobj/Flare.cpp": "MISSING",

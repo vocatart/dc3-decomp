@@ -9,8 +9,6 @@ class NgLight : public RndLight {
 public:
     OBJ_CLASSNAME(Light)
     OBJ_SET_TYPE(Light)
-    virtual DataNode Handle(DataArray *, bool);
-    virtual bool SyncProperty(DataNode &, DataArray *, int, PropOp);
     virtual void Copy(const Hmx::Object *, CopyType);
     virtual void Load(BinStream &);
     virtual ~NgLight();
