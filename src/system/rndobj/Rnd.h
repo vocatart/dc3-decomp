@@ -2,7 +2,9 @@
 #include "math/Color.h"
 #include "math/Geo.h"
 #include "math/Vec.h"
+#include "obj/Data.h"
 #include "obj/Object.h"
+#include "os/Keyboard.h"
 #include "rndobj/Console.h"
 #include "rndobj/CubeTex.h"
 #include "rndobj/Draw.h"
@@ -19,6 +21,15 @@ class RndMat;
 class RndTex;
 class UIPanel;
 
+class ModalKeyListener : public Hmx::Object {
+public:
+    // ModalKeyListener() {}
+    // virtual ~ModalKeyListener() {}
+    virtual DataNode Handle(DataArray *, bool);
+
+    DataNode OnMsg(const KeyboardKeyMsg &);
+};
+
 class Rnd : public Hmx::Object, public RndOverlay::Callback {
 public:
     enum Aspect {
@@ -26,6 +37,17 @@ public:
         kRegular,
         kWidescreen,
         kLetterbox
+    };
+    enum DefaultTextureType {
+        kDefaultTex_Black = 0,
+        kDefaultTex_White = 1,
+        kDefaultTex_WhiteTransparent = 2,
+        kDefaultTex_FlatNormal = 3,
+        kDefaultTex_Gradient = 4,
+        kDefaultTex_Hue = 5,
+        kDefaultTex_Error = 6,
+        kUnk7 = 7,
+        kDefaultTex_Max = 8
     };
 
     class CompressTextureCallback {};
@@ -82,13 +104,27 @@ public:
     virtual void PushClipPlanesInternal(ObjPtrVec<RndTransformable> &) {}
     virtual void PopClipPlanesInternal(ObjPtrVec<RndTransformable> &) {}
 
+    bool TimersShowing() { return mTimersOverlay->Showing(); }
+    void ShowConsole(bool);
+    bool ConsoleShowing();
+    void EndWorld();
+    void SetShowTimers(bool, bool);
+    void SetProcAndLock(bool);
+    bool ProcAndLock() const;
+    void ResetProcCounter();
+    bool GetEvenOddDisabled() const;
+    void SetEvenOddDisabled(bool);
+    void
+    DrawRectScreen(const Hmx::Rect &, const Hmx::Color &, RndMat *, const Hmx::Color *, const Hmx::Color *);
+    const Vector2 &
+    DrawStringScreen(const char *c, const Vector2 &v, const Hmx::Color &color, bool b4);
+    RndPostProc *GetPostProcOverride();
+    RndPostProc *GetSelectedPostProc();
+    void CopyWorldCam(RndCam *);
+
 protected:
     virtual void DoWorldBegin();
-
-private:
     virtual void DoWorldEnd();
-
-protected:
     virtual void DoPostProcess();
     virtual void DrawPreClear();
     virtual bool CanModal(Debug::ModalType) { return false; }
@@ -96,6 +132,33 @@ protected:
     virtual unsigned int GetDefaultTexBitmapOrder() const { return 0; }
 
     virtual float UpdateOverlay(RndOverlay *, float);
+
+    void UpdateRate();
+    void UpdateHeap();
+    float DrawTimers(float);
+
+    DataNode OnShowConsole(const DataArray *);
+    DataNode OnToggleTimers(const DataArray *);
+    DataNode OnToggleOverlayPosition(const DataArray *);
+    DataNode OnToggleTimersVerbose(const DataArray *);
+    DataNode OnToggleOverlay(const DataArray *);
+    DataNode OnShowOverlay(const DataArray *);
+    DataNode OnSetSphereTest(const DataArray *);
+    DataNode OnClearColorR(const DataArray *);
+    DataNode OnClearColorG(const DataArray *);
+    DataNode OnClearColorB(const DataArray *);
+    DataNode OnClearColorPacked(const DataArray *);
+    DataNode OnSetClearColor(const DataArray *);
+    DataNode OnSetClearColorPacked(const DataArray *);
+    DataNode OnScreenDump(const DataArray *);
+    DataNode OnScreenDumpUnique(const DataArray *);
+    DataNode OnScaleObject(const DataArray *);
+    DataNode OnReflect(const DataArray *);
+    DataNode OnToggleHeap(const DataArray *);
+    DataNode OnTestDrawGroups(const DataArray *);
+    DataNode OnOverlayPrint(const DataArray *);
+    DataNode OnToggleShowMetaMatErrors(const DataArray *);
+    DataNode OnToggleShowShaderErrors(const DataArray *);
 
     Hmx::Color mClearColor; // 0x30
     int mWidth; // 0x40
@@ -117,7 +180,7 @@ protected:
     RndCam *mWorldCamCopy; // 0xe4
     RndEnviron *mDefaultEnv; // 0xe8
     RndLight *mDefaultLit; // 0xec
-    RndTex *mDefaultTex[8]; // 0xf0 - 0x10c, inclusive
+    RndTex *mDefaultTex[kDefaultTex_Max]; // 0xf0 - 0x10c, inclusive
     RndCubeTex *unk110;
     RndCubeTex *unk114;
     float unk118;
@@ -156,3 +219,5 @@ protected:
     ProcessCmd mLastProcCmds; // 0x1d4
     std::list<CompressTexDesc *> unk1d8; // 0x1d8
 };
+
+extern Rnd &TheRnd;

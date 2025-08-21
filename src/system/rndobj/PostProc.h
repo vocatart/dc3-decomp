@@ -23,6 +23,10 @@ public:
     void SetEvenOddDisabled(bool);
     ProcessCmd ProcCommands();
 
+    void SetCount(int cnt) { mCount = cnt; }
+    bool ProcAndLock() const { return mProcAndLock; }
+    bool EvenOddDisabled() const { return mEvenOddDisabled; }
+
 private:
     unsigned int SetEmulateFPS(int);
 

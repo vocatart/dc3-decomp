@@ -119,3 +119,5 @@ bool FileReadOnly(const char *filepath);
 bool FileExists(const char *filepath, int, String *);
 bool FileIsLocal(const char *);
 bool FileIsDLC(const char *);
+
+String UniqueFilename(const char *c1, const char *c2);

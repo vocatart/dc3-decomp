@@ -9,3 +9,4 @@ void SetLocalScale(RndTransformable *, const Vector3 &);
 DataNode GetNormalMapTextures(ObjectDir *);
 
 void ResetColors(std::vector<Hmx::Color> &colors, int newNumColors);
+void RndScaleObject(Hmx::Object *, float, float);

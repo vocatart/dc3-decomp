@@ -19,6 +19,12 @@ public:
     MEM_OVERLOAD(RndOverlay, 0x13);
 
     int NumLines() const { return mLines.size(); }
+    bool Showing() const { return mShowing; }
+    void SetDumpCount(int dump_count) { mDumpCount = dump_count; }
+    void SetShowing(bool show) {
+        mShowing = show;
+        mTimer.Restart();
+    }
     void Clear();
     void SetLines(int);
     void SetTimeout(float);
