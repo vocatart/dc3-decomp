@@ -4,6 +4,7 @@
 #include "obj/Object.h"
 #include "utl/BinStream.h" /* IWYU pragma: keep */
 #include "os/Debug.h" /* IWYU pragma: keep */
+#include "utl/PoolAlloc.h"
 #include <cstddef> /* IWYU pragma: keep */
 
 // DO NOT try to include this header directly!
@@ -178,6 +179,16 @@ ObjPtrList<T1, T2>::ObjPtrList(ObjRefOwner *owner, ObjListMode mode)
 }
 
 template <class T1, class T2>
+void *ObjPtrList<T1, T2>::Node::operator new(unsigned int s) {
+    return PoolAlloc(s, s, __FILE__, 0x122, "ObjPtrList_node");
+}
+
+template <class T1, class T2>
+void ObjPtrList<T1, T2>::Node::operator delete(void *v) {
+    PoolFree(sizeof(v), v, __FILE__, 0x122, "ObjPtrList_node");
+}
+
+template <class T1, class T2>
 void ObjPtrList<T1, T2>::ReplaceNode(struct ObjPtrList::Node *node, Hmx::Object *obj) {
     if (mListMode == kObjListOwnerControl) {
         Replace(node, obj);
@@ -190,6 +201,21 @@ void ObjPtrList<T1, T2>::ReplaceNode(struct ObjPtrList::Node *node, Hmx::Object 
 }
 
 template <class T1, class T2>
+void ObjPtrList<T1, T2>::operator=(const ObjPtrList &other) {
+    if (this == &other)
+        return;
+    while (mSize > other.mSize)
+        pop_back();
+    Node *otherNodes = other.mNodes;
+    for (Node *n = mNodes; n != nullptr; n = n->next, otherNodes = otherNodes->next) {
+        *n = *otherNodes;
+    }
+    for (; otherNodes != nullptr; otherNodes = otherNodes->next) {
+        push_back(*otherNodes);
+    }
+}
+
+template <class T1, class T2>
 void ObjPtrList<T1, T2>::pop_back() {
     MILO_ASSERT(mNodes != NULL, 0x18B);
     erase(mNodes->prev);
@@ -198,6 +224,18 @@ void ObjPtrList<T1, T2>::pop_back() {
 template <class T1, class T2>
 void ObjPtrList<T1, T2>::push_back(T1 *obj) {
     insert(end(), obj);
+}
+
+template <class T1, class T2>
+typename ObjPtrList<T1, T2>::iterator
+ObjPtrList<T1, T2>::insert(typename ObjPtrList<T1, T2>::iterator it, T1 *obj) {
+    if (mListMode == kObjListNoNull) {
+        MILO_ASSERT(obj, 0x177);
+    }
+    Node *node = new Node();
+    node->SetObjConcrete(obj);
+    Link(it, node);
+    return node;
 }
 
 template <class T1, class T2>

@@ -1,9 +1,11 @@
 #include "rndobj/Env.h"
 #include "BoxMap.h"
 #include "obj/Object.h"
+#include "os/Debug.h"
 #include "rndobj/Draw.h"
 #include "rndobj/Trans.h"
 #include "utl/BinStream.h"
+#include "utl/Std.h"
 
 BoxMapLighting RndEnviron::sGlobalLighting;
 RndEnviron *RndEnviron::sCurrent;
@@ -101,6 +103,144 @@ BEGIN_PROPSYNCS(RndEnviron)
     SYNC_SUPERCLASS(RndTransformable)
     SYNC_SUPERCLASS(Hmx::Object)
 END_PROPSYNCS
+
+BEGIN_COPYS(RndEnviron)
+    COPY_SUPERCLASS(Hmx::Object)
+    COPY_SUPERCLASS(RndDrawable)
+    COPY_SUPERCLASS(RndTransformable)
+    if (ty != kCopyFromMax) {
+        CREATE_COPY(RndEnviron)
+        BEGIN_COPYING_MEMBERS
+            COPY_MEMBER(mLightsReal)
+            COPY_MEMBER(mLightsApprox)
+            COPY_MEMBER(mLightsOld)
+            COPY_MEMBER(mFadeOut)
+            COPY_MEMBER(mFadeStart)
+            COPY_MEMBER(mFadeEnd)
+            COPY_MEMBER(mFadeMax)
+            COPY_MEMBER(mFadeRef)
+            COPY_MEMBER(mLRFade)
+            COPY_MEMBER(mUseColorAdjust)
+            COPY_MEMBER(mColorXfm)
+            COPY_MEMBER(mAnimateFromPreset)
+            COPY_MEMBER(mAOEnabled)
+            COPY_MEMBER(mAOStrength)
+            COPY_MEMBER(mIntensityRate)
+            COPY_MEMBER(mExposure)
+            COPY_MEMBER(mWhitePoint)
+            COPY_MEMBER(mUseToneMapping)
+            if (ty != kCopyShallow) {
+                mAmbientFogOwner = this;
+                mAmbientColor = c->mAmbientFogOwner->mAmbientColor;
+                mFogColor = c->mAmbientFogOwner->mFogColor;
+                mFogStart = c->mAmbientFogOwner->mFogStart;
+                mFogEnd = c->mAmbientFogOwner->mFogEnd;
+                mFogEnable = c->mAmbientFogOwner->mFogEnable;
+            } else {
+                COPY_MEMBER(mAmbientFogOwner)
+            }
+        END_COPYING_MEMBERS
+    }
+END_COPYS
+
+bool RndEnviron::IsValidRealLight(const RndLight *l) const {
+    bool ret = false;
+    RndLight::Type ty = l->GetType();
+    if (ty == RndLight::kPoint || ty == RndLight::kFakeSpot)
+        ret = true;
+    return ret;
+}
+
+void RndEnviron::AddLight(RndLight *l) {
+    if (IsLightInList(l, mLightsReal) || IsLightInList(l, mLightsApprox)) {
+        MILO_NOTIFY("%s already in %s", l->Name(), Name());
+    } else {
+        if (IsValidRealLight(l))
+            mLightsReal.push_back(l);
+        else
+            mLightsApprox.push_back(l);
+    }
+}
+
+void RndEnviron::ReclassifyLights() {
+    if (!mLightsOld.empty()) {
+        for (ObjPtrList<RndLight>::iterator it = mLightsOld.begin();
+             it != mLightsOld.end();
+             ++it) {
+            AddLight(*it);
+        }
+        mLightsOld.clear();
+    }
+}
+
+void RndEnviron::Select(const Vector3 *v) {
+    sCurrent = this;
+    sCurrentPosSet = v;
+    if (v) {
+        sCurrentPos = *v;
+    } else {
+        sCurrentPos.Zero();
+    }
+    ReclassifyLights();
+}
+
+DataNode RndEnviron::OnAllowableLights_Real(const DataArray *da) {
+    DataArrayPtr ptr;
+    for (ObjDirItr<RndLight> it(Dir(), true); it != nullptr; ++it) {
+        if (!IsLightInList(it, mLightsReal) && !IsLightInList(it, mLightsApprox)
+            && IsValidRealLight(it) == 1U) {
+            ptr->Insert(ptr->Size(), &*it);
+        }
+    }
+    static DataNode &milo_prop_path = DataVariable("milo_prop_path");
+    if (milo_prop_path.Type() == kDataArray) {
+        if (milo_prop_path.Array()->Size() == 2) {
+            ptr->Insert(
+                ptr->Size(), *NextItr(mLightsReal.begin(), milo_prop_path.Array()->Int(1))
+            );
+        }
+    }
+    return ptr;
+}
+
+DataNode RndEnviron::OnAllowableLights_Approx(const DataArray *da) {
+    DataArrayPtr ptr;
+    for (ObjDirItr<RndLight> it(Dir(), true); it != 0; ++it) {
+        if (!IsLightInList(it, mLightsReal) && !IsLightInList(it, mLightsApprox)) {
+            ptr->Insert(ptr->Size(), &*it);
+        }
+    }
+    static DataNode &milo_prop_path = DataVariable("milo_prop_path");
+    if (milo_prop_path.Type() == kDataArray) {
+        if (milo_prop_path.Array()->Size() == 2) {
+            ptr->Insert(
+                ptr->Size(),
+                *NextItr(mLightsApprox.begin(), milo_prop_path.Array()->Int(1))
+            );
+        }
+    }
+    return ptr;
+}
+
+BEGIN_HANDLERS(RndEnviron)
+    HANDLE_ACTION(remove_all_lights, OnRemoveAllLights())
+    HANDLE_ACTION(toggle_ao, mAOEnabled = !mAOEnabled)
+    HANDLE_ACTION(remove_light, RemoveLight(_msg->Obj<RndLight>(2)))
+    HANDLE(allowable_lights_real, OnAllowableLights_Real)
+    HANDLE(allowable_lights_approx, OnAllowableLights_Approx)
+    HANDLE_ACTION(select, Select(nullptr))
+    HANDLE_SUPERCLASS(RndDrawable)
+    HANDLE_SUPERCLASS(RndTransformable)
+    HANDLE_SUPERCLASS(Hmx::Object)
+END_HANDLERS
+
+RndEnviron::~RndEnviron() {
+    if (sCurrent == this) {
+        sCurrent = nullptr;
+        sCurrentPosSet = nullptr;
+        sCurrentPos.Zero();
+    }
+}
 
 RndEnviron::RndEnviron()
     : mLightsReal(this), mLightsApprox(this), mLightsOld(this), mAmbientColor(0, 0, 0, 1),

@@ -132,6 +132,8 @@ public:
 
     T1 *operator->() const { return mObject; }
     operator T1 *() const { return mObject; }
+    void operator=(T1 *obj) { SetObjConcrete(obj); }
+    void operator=(const ObjRefConcrete &o) { SetObjConcrete(o); }
 
     void SetObjConcrete(T1 *obj);
     void CopyRef(const ObjRefConcrete &);
@@ -299,6 +301,7 @@ public:
 private:
     // Node size: 0x14
     struct Node : public ObjRefConcrete<T1, T2> {
+        Node() : ObjRefConcrete(nullptr) {}
         virtual ~Node() {}
         virtual Hmx::Object *RefOwner() const;
         virtual void Replace(Hmx::Object *obj) {
@@ -307,7 +310,11 @@ private:
         }
         virtual ObjRefOwner *Parent() const { return mOwner; }
 
+        static void *operator new(unsigned int);
+        static void operator delete(void *);
+
         T1 *Obj() const { return mObject; }
+        void operator=(const Node &n) { SetObjConcrete(n.mObject); }
 
         ObjRefOwner *mOwner; // 0x10
         Node *next; // 0x14

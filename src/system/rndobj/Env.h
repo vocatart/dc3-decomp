@@ -1,6 +1,7 @@
 #pragma once
 #include "BoxMap.h"
 #include "Lit.h"
+#include "obj/Data.h"
 #include "os/Timer.h"
 #include "rndobj/ColorXfm.h"
 #include "rndobj/Draw.h"
@@ -22,8 +23,8 @@ public:
     virtual void Highlight();
     virtual void Select(const Vector3 *);
     virtual void UpdateApproxLighting(const Vector3 *);
-    virtual int NumLights_Real() const;
-    virtual int NumLights_Approx() const;
+    virtual int NumLights_Real() const { return mLightsReal.size(); }
+    virtual int NumLights_Approx() const { return mLightsApprox.size(); }
     virtual bool IsFake(RndLight *) const;
     virtual bool IsReal(RndLight *) const;
 
@@ -33,12 +34,17 @@ public:
     bool FogEnable() const;
     Transform LRFadeRef() const;
     void RemoveLight(RndLight *);
+    void AddLight(RndLight *);
+    bool IsValidRealLight(const RndLight *l) const;
 
 protected:
     RndEnviron();
 
     bool IsLightInList(const RndLight *, const ObjPtrList<RndLight> &) const;
     void OnRemoveAllLights();
+    void ReclassifyLights();
+    DataNode OnAllowableLights_Real(const DataArray *);
+    DataNode OnAllowableLights_Approx(const DataArray *);
 
     static BoxMapLighting sGlobalLighting;
     static RndEnviron *sCurrent;

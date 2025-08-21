@@ -34,7 +34,7 @@ public:
     // float Range() const { return mRange; }
     // float FalloffStart() const { return mFalloffStart; }
     const Hmx::Color &GetColor() const { return mColorOwner->mColor; }
-    // Type GetType() const { return mType; }
+    Type GetType() const { return mType; }
     void SetShowing(bool b) { mShowing = b; }
     float Intensity() const;
     void SetProjectedBlend(int i) { mProjectedBlend = i; }

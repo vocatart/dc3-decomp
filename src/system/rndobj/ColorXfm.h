@@ -28,6 +28,11 @@ public:
     Hmx::Color &LevelOutHi() { return mLevelOutHi; }
     const Transform &ColorXfm() const { return mColorXfm; }
 
+    RndColorXfm &operator=(const RndColorXfm &c) {
+        memcpy(this, &c, sizeof(*this));
+        return *this;
+    }
+
 private:
     float mHue; // 0x0
     float mSaturation; // 0x4
