@@ -350,6 +350,7 @@ public:
 
     ObjListMode Mode() const { return mListMode; }
     int size() const { return mSize; }
+    bool empty() const { return mSize == 0; }
 
     void clear() {
         while (mSize != 0)

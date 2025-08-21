@@ -4,6 +4,7 @@
 #include "math/Color.h"
 #include "rndobj/Tex.h"
 #include "rndobj/Draw.h"
+#include "utl/MemMgr.h"
 
 class RndLight : public RndTransformable {
 public:
@@ -21,7 +22,6 @@ public:
     virtual void Save(BinStream &);
     virtual void Copy(const Hmx::Object *, CopyType);
     virtual void Load(BinStream &);
-    virtual ~RndLight() {}
     virtual bool Replace(ObjRef *, Hmx::Object *);
     virtual void SetColor(const Hmx::Color &c);
     virtual void SetLightType(Type);
@@ -49,6 +49,8 @@ public:
     Transform Projection();
 
     static const char *TypeToStr(Type);
+
+    OBJ_MEM_OVERLOAD(0x1A);
 
 protected:
     RndLight();
