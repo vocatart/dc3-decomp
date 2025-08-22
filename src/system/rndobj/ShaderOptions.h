@@ -11,7 +11,7 @@ enum ShaderType {
     kShaderTypeDownsample4x = 4,
     kShaderTypeDownsampleDepth = 5,
     kShaderTypeDrawRect = 6,
-    kShaderTypeError = 7,
+    kErrorShader = 7, // kErrorShader
     kShaderTypeFur = 8,
     kShaderTypeLineNoz = 9,
     kShaderTypeLine = 10,
@@ -19,7 +19,7 @@ enum ShaderType {
     kShaderTypeMultimesh = 12,
     kShaderTypeMultimeshBB = 13,
     kShaderTypeParticles = 14,
-    kShaderTypePostProcError = 15,
+    kPostprocessErrorShader = 15, // kPostprocessErrorShader
     kShaderTypePostProcess = 16,
     kShaderTypeShadowmap = 17,
     kShaderTypeStandard = 18,

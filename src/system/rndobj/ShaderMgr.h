@@ -38,6 +38,7 @@ public:
     virtual RndMat *DrawHighlightMat() { return mDrawHighlightMat; }
     virtual RndMat *DrawRectMat() { return mDrawRectMat; }
 
+    bool CacheShaders() const { return mCacheShaders; }
     void UpdateCache(const Transform &, int);
     void SetMeshInfo(int, bool);
     void SetShaderErrorDisplay(bool);
@@ -100,3 +101,5 @@ protected:
     bool unk6e;
     bool unk6f;
 };
+
+extern RndShaderMgr &TheShaderMgr;

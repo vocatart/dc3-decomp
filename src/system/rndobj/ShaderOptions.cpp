@@ -17,7 +17,7 @@ void InitShaderOptions() {
     sShaderTypes[kShaderTypeDownsample] = "downsample";
     sShaderTypes[kShaderTypeDownsample4x] = "downsample_4x";
     sShaderTypes[kShaderTypeDrawRect] = "drawrect";
-    sShaderTypes[kShaderTypeError] = "error";
+    sShaderTypes[kErrorShader] = "error";
     sShaderTypes[kShaderTypeFur] = "fur";
     sShaderTypes[kShaderTypeLineNoz] = "line_noz";
     sShaderTypes[kShaderTypeLine] = "line";
@@ -25,7 +25,7 @@ void InitShaderOptions() {
     sShaderTypes[kShaderTypeMultimeshBB] = "multimesh_bb";
     sShaderTypes[kShaderTypeMultimesh] = "multimesh";
     sShaderTypes[kShaderTypeParticles] = "particles";
-    sShaderTypes[kShaderTypePostProcError] = "postproc_error";
+    sShaderTypes[kPostprocessErrorShader] = "postproc_error";
     sShaderTypes[kShaderTypePostProcess] = "postprocess";
     sShaderTypes[kShaderTypeShadowmap] = "shadowmap";
     sShaderTypes[kShaderTypeStandard] = "standard";
@@ -62,7 +62,7 @@ ShaderType ShaderTypeFromName(const char *name) {
     }
     for (int i = 0; i < DIM(sShaderErrors); i++) {
         if (streq(name, sShaderErrors[i])) {
-            return kShaderTypeError;
+            return kErrorShader;
         }
     }
     MILO_FAIL("Shader type name %s not found\n", name);
@@ -102,7 +102,7 @@ bool IsPostProcShaderType(ShaderType s) {
     case kShaderTypeDownsampleDepth:
     case kShaderTypeDrawRect:
         return false;
-    case kShaderTypeError:
+    case kErrorShader:
         return true;
     case kShaderTypeFur:
     case kShaderTypeLineNoz:
@@ -113,7 +113,7 @@ bool IsPostProcShaderType(ShaderType s) {
     case kShaderTypeMultimeshBB:
     case kShaderTypeParticles:
         return true;
-    case kShaderTypePostProcError:
+    case kPostprocessErrorShader:
     case kShaderTypePostProcess:
     case kShaderTypeShadowmap:
         return false;
