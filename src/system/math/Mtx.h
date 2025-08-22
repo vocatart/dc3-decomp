@@ -4,6 +4,8 @@
 #include "utl/BinStream.h"
 #include "utl/TextStream.h"
 
+class Transform;
+
 namespace Hmx {
     class Matrix2 {
     private:
@@ -107,6 +109,7 @@ namespace Hmx {
 
     public:
         Matrix4() {}
+        Matrix4(const Transform &);
         Matrix4(const Vector4 &v1, const Vector4 &v2, const Vector4 &v3, const Vector4 &v4)
             : x(v1), y(v2), z(v3), w(v4) {}
 

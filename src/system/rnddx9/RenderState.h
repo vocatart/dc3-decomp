@@ -38,3 +38,5 @@ public:
     void SetStencilOp(StencilOp fail, StencilOp zfail, StencilOp pass);
     void Init(void);
 };
+
+extern RndRenderState TheRenderState;
