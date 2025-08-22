@@ -722,7 +722,7 @@
             "system/rndobj/Env_NG.cpp": "MISSING",
             "system/rndobj/EventTrigger.cpp": "MISSING",
             "system/rndobj/Flare.cpp": "MISSING",
-            "system/rndobj/Font.cpp": "MISSING",
+            "system/rndobj/Font.cpp": "NonMatching",
             "system/rndobj/Font3d.cpp": "MISSING",
             "system/rndobj/FontBase.cpp": "NonMatching",
             "system/rndobj/Fur.cpp": "NonMatching",

@@ -134,6 +134,7 @@ public:
 
     const DataNode *GetDefaultPropVal(Symbol);
     BaseMaterial *NextPass() const { return mNextPass; }
+    RndTex *GetDiffuseTex() const { return mDiffuseTex; }
     bool IsNextPass(BaseMaterial *m);
 
 protected:

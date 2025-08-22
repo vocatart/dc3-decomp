@@ -10,7 +10,7 @@ float RndFontBase::Kerning(unsigned short us1, unsigned short us2) const {
         return DataOwner()->Kerning(us1, us2);
     } else if (us1 == 0 || us2 == 0)
         return 0;
-    else if (!unk38 && mKerningTable) {
+    else if (!mMonospace && mKerningTable) {
         return mBaseKerning + mKerningTable->Kerning(us1, us2);
     } else
         return mBaseKerning;
@@ -59,7 +59,7 @@ void RndFontBase::Save(BinStream &bs) {
     bs << 0;
     SAVE_SUPERCLASS(Hmx::Object)
     bs << mChars;
-    bs << unk38;
+    bs << mMonospace;
     bs << mBaseKerning;
     bs << (mKerningTable != nullptr);
     if (mKerningTable) {
@@ -79,7 +79,7 @@ bool RndFontBase::HasChar(unsigned short us) const {
     }
 }
 
-RndFontBase::RndFontBase() : unk38(0), mBaseKerning(0), mKerningTable(nullptr) {}
+RndFontBase::RndFontBase() : mMonospace(0), mBaseKerning(0), mKerningTable(nullptr) {}
 
 BEGIN_HANDLERS(RndFontBase)
     HANDLE_SUPERCLASS(Hmx::Object)
@@ -106,7 +106,7 @@ BEGIN_COPYS(RndFontBase)
     CREATE_COPY_AS(RndFontBase, f)
     MILO_ASSERT(f, 0x42);
     COPY_MEMBER_FROM(f, mChars)
-    COPY_MEMBER_FROM(f, unk38)
+    COPY_MEMBER_FROM(f, mMonospace)
     if (ty != kCopyShallow) {
         if (ty != kCopyFromMax || DataOwner() == f) {
             mBaseKerning = DataOwner()->mBaseKerning;

@@ -6,7 +6,8 @@ class RndFontBase : public Hmx::Object {
 public:
     class KernInfo {
     public:
-        int unk0, unk4;
+        unsigned short unk0, unk2;
+        float kerning; // 0x4
     };
 
     OBJ_CLASSNAME(FontBase);
@@ -43,7 +44,7 @@ protected:
     void SetASCIIChars(String);
 
     std::vector<unsigned short> mChars; // 0x2c
-    bool unk38; // 0x38
+    bool mMonospace; // 0x38
     float mBaseKerning; // 0x3c
     class KerningTable *mKerningTable; // 0x40
 };

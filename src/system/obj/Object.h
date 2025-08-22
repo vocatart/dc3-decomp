@@ -264,6 +264,10 @@ public:
     iterator erase(iterator);
     iterator insert(const_iterator, T1 *);
     const_iterator find(const Hmx::Object *) const;
+    int size() const { return mNodes.size(); }
+    T1 *front() const { return mNodes.front(); }
+    T1 *operator[](int idx) { return mNodes[idx].Obj(); }
+    const T1 *operator[](int idx) const { return mNodes[idx].Obj(); }
 
     template <class S>
     void sort(const S &);
