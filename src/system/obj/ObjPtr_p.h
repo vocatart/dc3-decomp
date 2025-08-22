@@ -146,6 +146,17 @@ BinStream &operator>>(BinStream &bs, ObjOwnerPtr<T1> &ptr) {
 // ------------------------------------------------
 
 template <class T1, class T2>
+ObjPtrVec<T1, T2>::ObjPtrVec(Hmx::Object *owner, EraseMode e, ObjListMode o)
+    : mOwner(owner), mEraseMode(e), mListMode(o) {
+    MILO_ASSERT(owner, 0x321);
+}
+
+template <class T1, class T2>
+ObjPtrVec<T1, T2>::~ObjPtrVec() {
+    mNodes.clear();
+}
+
+template <class T1, class T2>
 void ObjPtrVec<T1, T2>::Set(iterator it, T1 *obj) {
     if (!obj && mListMode == 0) {
         erase(it);
@@ -164,6 +175,50 @@ void ObjPtrVec<T1, T2>::operator=(const ObjPtrVec &other) {
         mNodes.push_back(Node(this));
         Set(end(), *it);
     }
+}
+
+template <class T1, class T2>
+void ObjPtrVec<T1, T2>::push_back(T1 *obj) {
+    insert(!mNodes.empty() ? mNodes.end() : mNodes.begin() + size(), obj);
+}
+
+template <class T1, class T2>
+bool ObjPtrVec<T1, T2>::Load(BinStream &bs, bool print, ObjectDir *dir) {
+    bool ret = true;
+    mNodes.clear();
+    int count;
+    bs >> count;
+    mNodes.reserve(count);
+    if (!dir && mOwner) {
+        dir = mOwner->Dir();
+    }
+    if (print) {
+        MILO_ASSERT(dir, 0x488);
+    }
+    while (count != 0U) {
+        char buf[0x80];
+        bs.ReadString(buf, 0x80);
+        if (dir) {
+            T1 *casted = dynamic_cast<T1 *>(dir->FindObject(buf, false, true));
+            if (!casted && buf[0] != '\0') {
+                if (print)
+                    MILO_NOTIFY(
+                        "%s couldn't find %s in %s", PathName(mOwner), buf, PathName(dir)
+                    );
+                ret = false;
+            } else if (casted || mListMode != kObjListNoNull) {
+                push_back(casted);
+            }
+        }
+        count--;
+    }
+    return ret;
+}
+
+template <class T1>
+BinStream &operator>>(BinStream &bs, ObjPtrVec<T1, ObjectDir> &vec) {
+    vec.Load(bs, true, nullptr);
+    return bs;
 }
 
 // ------------------------------------------------

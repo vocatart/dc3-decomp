@@ -88,7 +88,7 @@ void RndFont::Save(BinStream &bs) {
     bs << mMats;
     bs << mCellSize << mDeprecatedSize;
     bs << mTextureOwner;
-    bs << unka4;
+    bs << mPacked;
     RndTex *validTex = ValidTexture(0);
     if (validTex) {
         bs << validTex->Width() << validTex->Height();
@@ -130,4 +130,32 @@ void RndFont::Print() const {
 
 RndFont::RndFont()
     : mMats(this, (EraseMode)0, kObjListNoNull), mTextureOwner(this, this),
-      mCellSize(1, 1), mDeprecatedSize(0), unka4(0) {}
+      mCellSize(1, 1), mDeprecatedSize(0), mPacked(0) {}
+
+void RndFont::SetASCIIChars(String str) {
+    RndFontBase::SetASCIIChars(str);
+    UpdateChars();
+}
+
+BEGIN_LOADS(RndFont)
+    LOAD_REVS(bs)
+    ASSERT_REVS(0x11, 2)
+    bs >> mMats;
+END_LOADS
+
+void RndFont::SetCellSize(float x, float y) {
+    mCellSize.Set(x, y);
+    UpdateChars();
+}
+
+BEGIN_PROPSYNCS(RndFont)
+    SYNC_PROP_MODIFY(texture_owner, mTextureOwner, UpdateChars())
+    SYNC_PROP_MODIFY(mats, mMats, UpdateChars())
+    SYNC_PROP_MODIFY(monospace, mMonospace, UpdateChars())
+    SYNC_PROP_MODIFY(packed, mPacked, UpdateChars())
+    SYNC_PROP_SET(cell_width, (int)mCellSize.x, SetCellSize(_val.Int(), mCellSize.y))
+    SYNC_PROP_SET(cell_height, (int)mCellSize.y, SetCellSize(mCellSize.x, _val.Int()))
+    SYNC_PROP_SET(chars_in_map, GetASCIIChars(), SetASCIIChars(_val.Str()))
+    SYNC_PROP_MODIFY(base_kerning, mBaseKerning, UpdateChars())
+    SYNC_SUPERCLASS(RndFontBase)
+END_PROPSYNCS

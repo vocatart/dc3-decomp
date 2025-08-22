@@ -70,11 +70,14 @@ public:
 
     RndMat *Mat(int) const;
     RndTex *ValidTexture(int) const;
+    void SetCellSize(float, float);
 
 protected:
     RndFont();
     virtual bool HasChar(unsigned short) const;
     virtual void SetASCIIChars(String);
+
+    void UpdateChars();
 
     ObjPtrVec<RndMat> mMats; // 0x44
     ObjOwnerPtr<RndFont> mTextureOwner; // 0x60
@@ -82,5 +85,5 @@ protected:
     Vector2 mCellSize; // 0x8c
     float mDeprecatedSize; // 0x94
     std::vector<Vector2> unk98;
-    bool unka4;
+    bool mPacked; // 0xa4
 };
