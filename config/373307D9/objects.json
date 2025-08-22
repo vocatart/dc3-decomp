@@ -724,7 +724,7 @@
             "system/rndobj/Flare.cpp": "MISSING",
             "system/rndobj/Font.cpp": "MISSING",
             "system/rndobj/Font3d.cpp": "MISSING",
-            "system/rndobj/FontBase.cpp": "MISSING",
+            "system/rndobj/FontBase.cpp": "NonMatching",
             "system/rndobj/Fur.cpp": "NonMatching",
             "system/rndobj/Fur_NG.cpp": "MISSING",
             "system/rndobj/Gen.cpp": "MISSING",
