@@ -1,4 +1,5 @@
 #pragma once
+#include "math/Geo.h"
 #include "obj/Object.h"
 #include "rndobj/FontBase.h"
 #include "utl/BinStream.h"
@@ -86,4 +87,49 @@ protected:
     float mDeprecatedSize; // 0x94
     std::vector<Vector2> unk98;
     bool mPacked; // 0xa4
+};
+
+class RndFont3d : public RndFontBase {
+public:
+    struct CharInfo {
+        ~CharInfo() {}
+
+        Box unk0;
+        int unk20;
+        // ObjPtr<RndMesh> unk24;
+        bool unk38;
+
+        MEM_OVERLOAD(CharInfo, 0x12A);
+    };
+    virtual ~RndFont3d() { Clear(); }
+    OBJ_CLASSNAME(Font3d);
+    OBJ_SET_TYPE(Font3d);
+    virtual DataNode Handle(DataArray *, bool);
+    virtual bool SyncProperty(DataNode &, DataArray *, int, PropOp);
+    virtual void Save(BinStream &);
+    virtual void Copy(const Hmx::Object *, Hmx::Object::CopyType);
+    virtual void Load(BinStream &);
+    virtual float CharWidth(unsigned short) const;
+    virtual bool CharAdvance(unsigned short, unsigned short, float &) const;
+    virtual float CharAdvance(unsigned short) const;
+    virtual float Kerning(unsigned short, unsigned short) const;
+    virtual float AspectRatio() const;
+    virtual RndMat *Mat() const;
+    virtual const RndFontBase *DataOwner() const;
+    virtual float FontUnit() const { return mTextureOwner->unk6c.x; }
+    virtual float FontUnitInverse() const { return mTextureOwner->unk7c.x; }
+
+protected:
+    RndFont3d();
+
+    virtual bool HasChar(unsigned short) const;
+
+    void Clear();
+
+    ObjPtr<RndMat> unk44; // 0x44
+    ObjOwnerPtr<RndFont3d> mTextureOwner; // 0x58
+    Vector3 unk6c; // 0x6c
+    Vector3 unk7c; // 0x7c
+    Vector3 unk8c; // 0x8c
+    std::map<unsigned short, CharInfo *> mCharInfoMap; // 0x9c
 };

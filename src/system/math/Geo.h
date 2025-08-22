@@ -33,3 +33,28 @@ namespace Hmx {
         Vector2 base, dir;
     };
 }
+
+class Box {
+public:
+    Box() {}
+    Box(const Vector3 &min, const Vector3 &max) : mMin(min), mMax(max) {}
+
+    void Set(const Vector3 &min, const Vector3 &max) {
+        mMin = min;
+        mMax = max;
+    }
+
+    // fn_802D7468
+    void GrowToContain(const Vector3 &vec, bool b);
+
+    // // fn_802D757C
+    // bool Clamp(Vector3 &vec) {
+    //     bool clamp_z = ClampEq(vec.z, mMin.z, mMax.z);
+    //     bool clamp_x = ClampEq(vec.x, mMin.x, mMax.x);
+    //     bool clamp_y = ClampEq(vec.y, mMin.y, mMax.y);
+    //     return clamp_x | clamp_y | clamp_z;
+    // }
+
+    Vector3 mMin;
+    Vector3 mMax;
+};
