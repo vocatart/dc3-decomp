@@ -9,7 +9,7 @@ class Vector2 {
 public:
     Vector2() {}
     Vector2(float xx, float yy) : x(xx), y(yy) {}
-    Vector2(const Vector2 &vec) : x(vec.x), y(vec.y) {}
+    // Vector2(const Vector2 &vec) : x(vec.x), y(vec.y) {}
 
     void Set(float xx, float yy) {
         x = xx;

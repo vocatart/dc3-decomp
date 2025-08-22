@@ -728,7 +728,7 @@
             "system/rndobj/Fur.cpp": "NonMatching",
             "system/rndobj/Fur_NG.cpp": "MISSING",
             "system/rndobj/Gen.cpp": "MISSING",
-            "system/rndobj/Graph.cpp": "MISSING",
+            "system/rndobj/Graph.cpp": "NonMatching",
             "system/rndobj/Group.cpp": "NonMatching",
             "system/rndobj/HiResScreen.cpp": "MISSING",
             "system/rndobj/Line.cpp": "MISSING",

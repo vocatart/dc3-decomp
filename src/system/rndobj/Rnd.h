@@ -105,6 +105,8 @@ public:
     virtual void PopClipPlanesInternal(ObjPtrVec<RndTransformable> &) {}
 
     bool TimersShowing() { return mTimersOverlay->Showing(); }
+    int Width() const { return mWidth; }
+    int Height() const { return mHeight; }
     void ShowConsole(bool);
     bool ConsoleShowing();
     void EndWorld();

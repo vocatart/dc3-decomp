@@ -19,7 +19,7 @@ public:
     virtual void Copy(const Hmx::Object *, Hmx::Object::CopyType);
     virtual void Load(BinStream &);
     virtual void UpdatedWorldXfm();
-    virtual void Select(int);
+    virtual void Select();
 
     float NearPlane() const { return mNearPlane; }
     float FarPlane() const { return mFarPlane; }
