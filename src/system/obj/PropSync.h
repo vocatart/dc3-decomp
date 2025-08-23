@@ -1,4 +1,5 @@
 #pragma once
+#include <list>
 
 namespace Hmx {
     class Matrix3;
@@ -37,6 +38,9 @@ bool PropSync(int &iref, DataNode &node, DataArray *prop, int i, PropOp op);
 bool PropSync(short &s, DataNode &node, DataArray *prop, int i, PropOp op);
 bool PropSync(bool &b, DataNode &node, DataArray *prop, int i, PropOp op);
 bool PropSync(class Symbol &sym, DataNode &node, DataArray *prop, int i, PropOp op);
+
+template <class T>
+bool PropSync(std::list<T> &pList, DataNode &node, DataArray *prop, int i, PropOp op);
 
 template <class T>
 class Key;

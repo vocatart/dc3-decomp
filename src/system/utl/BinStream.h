@@ -6,6 +6,7 @@
 #include "utl/Symbol.h"
 #include "utl/Str.h"
 #include <vector>
+#include <list>
 
 namespace Hmx {
     class Object;
@@ -249,6 +250,17 @@ BinStreamRev &operator>>(BinStreamRev &bs, std::vector<E, Allocator> &vec) {
     for (typename std::vector<E, Allocator>::iterator it = vec.begin(); it != vec.end();
          it++) {
         bs >> (int &)*it;
+    }
+    return bs;
+}
+
+template <class T, class Allocator>
+BinStream &operator<<(BinStream &bs, const std::list<T, Allocator> &list) {
+    bs << list.size();
+    for (typename std::list<T, Allocator>::const_iterator it = list.begin();
+         it != list.end();
+         it++) {
+        bs << *it;
     }
     return bs;
 }

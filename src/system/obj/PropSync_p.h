@@ -3,6 +3,7 @@
 #include "obj/Data.h"
 #include "obj/Object.h"
 #include "obj/PropSync.h"
+#include "utl/Std.h"
 
 // DO NOT try to include this header directly!
 // include obj/PropSync.h instead
@@ -201,12 +202,11 @@ bool PropSync(ObjList<T> &objList, DataNode &node, DataArray *prop, int i, PropO
     if (op == kPropUnknown0x40)
         return false;
     else if (i == prop->Size()) {
-        MILO_ASSERT(op == kPropSize, 0x1A6);
-        node = objList.size();
+        MILO_ASSERT(op == kPropSize || op == kPropInsert, 0x1B2);
+        node = (int)objList.size();
         return true;
     } else {
-        int count = prop->Int(i++);
-        typename std::list<T>::iterator it = NextItr(objList.begin(), count);
+        typename std::list<T>::iterator it = NextItr(objList.begin(), prop->Int(i++));
         if (i < prop->Size() || op & (kPropGet | kPropSet | kPropSize)) {
             return PropSync(*it, node, prop, i, op);
         } else if (op == kPropRemove) {
