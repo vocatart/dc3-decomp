@@ -34,6 +34,11 @@ namespace Hmx {
     };
 }
 
+inline BinStream &operator<<(BinStream &bs, const Hmx::Rect &rect) {
+    bs << rect.x << rect.y << rect.w << rect.h;
+    return bs;
+}
+
 class Box {
 public:
     Box() {}
