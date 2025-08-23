@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <list>
 
 namespace Hmx {
@@ -40,6 +41,9 @@ bool PropSync(bool &b, DataNode &node, DataArray *prop, int i, PropOp op);
 bool PropSync(class Symbol &sym, DataNode &node, DataArray *prop, int i, PropOp op);
 
 template <class T>
+bool PropSync(std::vector<T> &vec, DataNode &node, DataArray *prop, int i, PropOp op);
+
+template <class T>
 bool PropSync(std::list<T> &pList, DataNode &node, DataArray *prop, int i, PropOp op);
 
 template <class T>
@@ -77,6 +81,12 @@ class ObjPtrVec;
 
 template <class T>
 bool PropSync(ObjPtrVec<T, ObjectDir> &, DataNode &, DataArray *, int, PropOp);
+
+template <class T>
+class ObjVector;
+
+template <class T>
+bool PropSync(ObjVector<T> &objVec, DataNode &node, DataArray *prop, int i, PropOp op);
 
 template <class T>
 class ObjList;
