@@ -922,6 +922,17 @@ inline TextStream &operator<<(TextStream &ts, const Hmx::Object *obj) {
     return ts;
 }
 
+// ObjVector
+template <class T>
+class ObjVector : public std::vector<T> {
+private:
+    typedef typename std::vector<T> Base;
+    Hmx::Object *mOwner;
+
+public:
+    ObjVector(Hmx::Object *o) : mOwner(o) {}
+};
+
 // ObjList
 template <class T>
 class ObjList : public std::list<T> {

@@ -192,6 +192,10 @@ public:
     }
 };
 
+inline BinStream &operator<<(BinStream &bs, const Vector4 &vec) {
+    bs << vec.x << vec.y << vec.z << vec.w;
+    return bs;
+}
 inline BinStream &operator>>(BinStream &bs, Vector4 &vec) {
     bs >> vec.x >> vec.y >> vec.z >> vec.w;
     return bs;

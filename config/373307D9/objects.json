@@ -738,7 +738,7 @@
             "system/rndobj/Mat.cpp": "NonMatching",
             "system/rndobj/MatAnim.cpp": "MISSING",
             "system/rndobj/Mat_NG.cpp": "NonMatching",
-            "system/rndobj/Mesh.cpp": "MISSING",
+            "system/rndobj/Mesh.cpp": "NonMatching",
             "system/rndobj/MeshAnim.cpp": "MISSING",
             "system/rndobj/MeshDeform.cpp": "MISSING",
             "system/rndobj/MetaMaterial.cpp": "NonMatching",
