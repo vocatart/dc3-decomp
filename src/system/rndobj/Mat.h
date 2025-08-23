@@ -38,6 +38,26 @@ public:
 
     float GetRefractStrength() { return mRefractStrength; }
     RndTex *GetRefractNormalMap() { return mRefractNormalMap; }
+    void SetZMode(ZMode mode) {
+        mZMode = mode;
+        mDirty |= 2;
+    }
+    void SetTexWrap(TexWrap wrap) {
+        mTexWrap = wrap;
+        mDirty |= 2;
+    }
+    void SetBlend(Blend blend) {
+        mBlend = blend;
+        mDirty |= 2;
+    }
+    void SetAlphaWrite(bool write) {
+        mAlphaWrite = write;
+        mDirty |= 2;
+    }
+    void SetAlphaCut(bool cut) {
+        mAlphaCut = cut;
+        mDirty |= 2;
+    }
     void SetColorMod(const Hmx::Color &, int);
     void SetSpecularMap(RndTex *);
     void SetMetaMat(MetaMaterial *, bool);

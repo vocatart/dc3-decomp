@@ -776,7 +776,7 @@
             "system/rndobj/Tex.cpp": "NonMatching",
             "system/rndobj/TexBlendController.cpp": "MISSING",
             "system/rndobj/TexBlender.cpp": "MISSING",
-            "system/rndobj/TexProc.cpp": "MISSING",
+            "system/rndobj/TexProc.cpp": "NonMatching",
             "system/rndobj/TexRenderer.cpp": "MISSING",
             "system/rndobj/Text.cpp": "MISSING",
             "system/rndobj/Trans.cpp": "NonMatching",

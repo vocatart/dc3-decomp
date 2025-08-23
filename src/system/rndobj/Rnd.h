@@ -127,6 +127,7 @@ public:
     void UnregisterPostProcessor(PostProcessor *);
     void SetPostProcOverride(RndPostProc *);
     void SetPostProcBlacklightOverride(RndPostProc *);
+    void PreClearDrawAddOrRemove(RndDrawable *, bool, bool);
 
     static int sPostProcPanelCount;
 
