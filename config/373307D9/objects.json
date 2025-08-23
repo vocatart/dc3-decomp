@@ -769,7 +769,7 @@
             "system/rndobj/ShaderOptions.cpp": "NonMatching",
             "system/rndobj/ShaderProgram.cpp": "NonMatching",
             "system/rndobj/ShadowMap.cpp": "NonMatching",
-            "system/rndobj/Shockwave.cpp": "MISSING",
+            "system/rndobj/Shockwave.cpp": "NonMatching",
             "system/rndobj/SoftParticleBuffer.cpp": "MISSING",
             "system/rndobj/SoftParticles.cpp": "MISSING",
             "system/rndobj/Spline.cpp": "MISSING",
