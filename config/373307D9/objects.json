@@ -772,7 +772,7 @@
             "system/rndobj/Shockwave.cpp": "NonMatching",
             "system/rndobj/SoftParticleBuffer.cpp": "NonMatching",
             "system/rndobj/SoftParticles.cpp": "NonMatching",
-            "system/rndobj/Spline.cpp": "MISSING",
+            "system/rndobj/Spline.cpp": "NonMatching",
             "system/rndobj/Tex.cpp": "NonMatching",
             "system/rndobj/TexBlendController.cpp": "NonMatching",
             "system/rndobj/TexBlender.cpp": "NonMatching",

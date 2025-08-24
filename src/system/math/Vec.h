@@ -185,6 +185,7 @@ public:
     }
 
     // Vector4(const Vector4 &);
+    static const Vector4 &ZeroVec() { return sZero; }
 
     const float &operator[](int i) const {
         MILO_ASSERT((0) <= (i) && (i) < (4), 0x1AC);
