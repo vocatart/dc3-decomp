@@ -447,6 +447,14 @@ extern DataArray *SystemConfig(Symbol, Symbol, Symbol);
             (MessageTimer::Active()) ? static_cast<Hmx::Object *>(this) : 0, sym         \
         );
 
+// for handlers of objects that aren't directly Hmx::Objects (i.e. UIListProvider)
+#define BEGIN_CUSTOM_HANDLERS(objType)                                                   \
+    DataNode objType::Handle(DataArray *_msg, bool _warn) {                              \
+        Symbol sym = _msg->Sym(1);                                                       \
+        MessageTimer timer(                                                              \
+            (MessageTimer::Active()) ? dynamic_cast<Hmx::Object *>(this) : 0, sym        \
+        );
+
 #define _NEW_STATIC_SYMBOL(str) static Symbol _s(#str);
 
 #define _HANDLE_CHECKED(expr)                                                            \
@@ -513,6 +521,15 @@ extern DataArray *SystemConfig(Symbol, Symbol, Symbol);
 #define END_HANDLERS                                                                     \
     if (_warn)                                                                           \
         MILO_NOTIFY("%s unhandled msg: %s", PathName(this), sym);                        \
+    return DataNode(kDataUnhandled, 0);                                                  \
+    }
+
+// for handlers of objects that aren't directly Hmx::Objects (i.e. UIListProvider)
+#define END_CUSTOM_HANDLERS                                                              \
+    if (_warn)                                                                           \
+        MILO_NOTIFY(                                                                     \
+            "%s unhandled msg: %s", PathName(dynamic_cast<Hmx::Object *>(this)), sym     \
+        );                                                                               \
     return DataNode(kDataUnhandled, 0);                                                  \
     }
 // END HANDLE MACROS ---------------------------------------------------------------------

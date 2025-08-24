@@ -10,6 +10,14 @@
 #include "utl/MemMgr.h"
 #include "utl/Symbol.h"
 
+class TextHolder {
+public:
+    TextHolder() {}
+    virtual ~TextHolder() {}
+    virtual void SetTextToken(Symbol) = 0;
+    virtual void SetInt(int, bool) = 0;
+};
+
 class RndText : public virtual RndDrawable, public virtual RndTransformable {
 public:
     enum Alignment {
