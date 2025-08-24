@@ -63,3 +63,9 @@ public:
     Vector3 mMin;
     Vector3 mMax;
 };
+
+class Triangle {
+public:
+    Vector3 unk0;
+    // there's more
+};

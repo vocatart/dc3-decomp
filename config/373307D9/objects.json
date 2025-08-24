@@ -702,7 +702,7 @@
             "system/rnddx9/TexMgr.cpp": "MISSING",
             "system/rnddx9/Utl.cpp": "MISSING",
 
-            "system/rndobj/AmbientOcclusion.cpp": "MISSING",
+            "system/rndobj/AmbientOcclusion.cpp": "NonMatching",
             "system/rndobj/Anim.cpp": "NonMatching",
             "system/rndobj/AnimFilter.cpp": "NonMatching",
             "system/rndobj/BaseMaterial.cpp": "NonMatching",
@@ -777,7 +777,7 @@
             "system/rndobj/TexBlendController.cpp": "NonMatching",
             "system/rndobj/TexBlender.cpp": "NonMatching",
             "system/rndobj/TexProc.cpp": "NonMatching",
-            "system/rndobj/TexRenderer.cpp": "MISSING",
+            "system/rndobj/TexRenderer.cpp": "NonMatching",
             "system/rndobj/Text.cpp": "NonMatching",
             "system/rndobj/Trans.cpp": "NonMatching",
             "system/rndobj/TransAnim.cpp": "MISSING",
