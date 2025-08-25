@@ -34,7 +34,6 @@ enum DrawCommand {
 class UIListWidget : public Hmx::Object {
 public:
     // Hmx::Object
-    virtual ~UIListWidget() {}
     OBJ_CLASSNAME(UIListWidget)
     OBJ_SET_TYPE(UIListWidget)
     virtual DataNode Handle(DataArray *, bool);
