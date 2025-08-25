@@ -910,7 +910,7 @@
             "system/ui/LabelShrinkWrapper.cpp": "MISSING",
             "system/ui/LocalePanel.cpp": "MISSING",
             "system/ui/PanelDir.cpp": "MISSING",
-            "system/ui/ResourceDirPtr.cpp": "MISSING",
+            "system/ui/ResourceDirPtr.cpp": "NonMatching",
             "system/ui/Screenshot.cpp": "MISSING",
             "system/ui/ScrollSelect.cpp": "MISSING",
             "system/ui/UI.cpp": "MISSING",
