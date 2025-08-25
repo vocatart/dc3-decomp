@@ -1,6 +1,7 @@
 #pragma once
 #include "obj/Data.h"
 #include "obj/Dir.h"
+#include "obj/Object.h"
 #include "utl/FilePath.h"
 #include "utl/Symbol.h"
 
@@ -16,8 +17,11 @@ protected:
 template <class T>
 class ResourceDirPtr : public ObjDirPtr<T>, public ResourceDirBase {
 public:
+    // i have no idea if this is right
+    ResourceDirPtr(Hmx::Object *owner) : unk14(owner) {}
+
     void SetName(const char *, bool);
     const char *GetName() const;
 
-    // member at unk14
+    Hmx::Object *unk14; // 0x14
 };
