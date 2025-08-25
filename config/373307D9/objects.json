@@ -911,7 +911,7 @@
             "system/ui/LocalePanel.cpp": "MISSING",
             "system/ui/PanelDir.cpp": "MISSING",
             "system/ui/ResourceDirPtr.cpp": "NonMatching",
-            "system/ui/Screenshot.cpp": "MISSING",
+            "system/ui/Screenshot.cpp": "NonMatching",
             "system/ui/ScrollSelect.cpp": "NonMatching",
             "system/ui/UI.cpp": "MISSING",
             "system/ui/UIButton.cpp": "NonMatching",
@@ -938,7 +938,7 @@
             "system/ui/UIScreen.cpp": "NonMatching",
             "system/ui/UISlider.cpp": "NonMatching",
             "system/ui/UITransitionHandler.cpp": "NonMatching",
-            "system/ui/UITrigger.cpp": "MISSING",
+            "system/ui/UITrigger.cpp": "NonMatching",
             "system/ui/Utl.cpp": "MISSING",
 
             "system/utl/AllocInfo.cpp": "NonMatching",
