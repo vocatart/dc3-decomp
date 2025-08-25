@@ -45,6 +45,7 @@ public:
     virtual void UpdateSphere() { mSphere.Zero(); }
     virtual float GetDistanceToPlane(const Plane &, Vector3 &) { return 0.0f; }
     virtual bool MakeWorldSphere(Sphere &, bool) { return 0; }
+    /** Get the current camera to use. */
     virtual RndCam *CamOverride() { return 0; }
     virtual void Mats(std::list<class RndMat *> &, bool) {}
     virtual void Draw();
