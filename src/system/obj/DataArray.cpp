@@ -513,7 +513,7 @@ DataArray *DataArray::Clone(bool deep, bool eval, int extra) {
         if (deep) {
             if (da->mNodes[i].Type() == kDataArray) {
                 DataArray *cloned = da->mNodes[i].LiteralArray()->Clone(true, eval, 0);
-                da->mNodes[i] = DataNode(cloned, kDataArray);
+                da->mNodes[i] = cloned;
                 cloned->Release();
             }
         }

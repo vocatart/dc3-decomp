@@ -72,7 +72,7 @@ void DataMergeTags(DataArray *dest, DataArray *src) {
                     DataArray *found = dest->FindArray(arr->UncheckedInt(0), false);
                     if (!found) {
                         dest->Resize(dest->Size() + 1);
-                        const DataNode &destNode = DataNode(arr, kDataArray);
+                        const DataNode &destNode = arr;
                         dest->Node(dest->Size() - 1) = destNode;
                     } else
                         DataMergeTags(found, arr);
@@ -98,7 +98,7 @@ void DataReplaceTags(DataArray *dest, DataArray *src) {
                             found->Node(j) = arr->Node(j);
                         }
                         found->SetFileLine(arr->File(), arr->Line());
-                        const DataNode &destNode = DataNode(arr, kDataArray);
+                        const DataNode &destNode = arr;
                         node = destNode;
                     }
                 }

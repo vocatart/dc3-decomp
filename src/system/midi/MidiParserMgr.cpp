@@ -255,7 +255,7 @@ void MidiParserMgr::OnText(int tick, const char *text, unsigned char type) {
             DataArray *parsed = ParseText(text, tick);
             if (!parsed)
                 return;
-            vocEv.mTextContent = DataNode(parsed, kDataArray);
+            vocEv.mTextContent = parsed;
             parsed->Release();
         } else
             vocEv.mTextContent = text;

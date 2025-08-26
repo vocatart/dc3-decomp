@@ -311,8 +311,8 @@ DataNode Hmx::Object::OnGetTypeList(const DataArray *a) {
             if (helpArr) {
                 DataArray *newArr = new DataArray(2);
                 newArr->Node(0) = curArr->Sym(0);
-                newArr->Node(1) = DataNode(helpArr, kDataArray);
-                ptr->Insert(ptr->Size(), DataNode(newArr, kDataArray));
+                newArr->Node(1) = helpArr;
+                ptr->Insert(ptr->Size(), newArr);
                 newArr->Release();
             } else {
                 ptr->Insert(ptr->Size(), curArr->Sym(0));
@@ -409,7 +409,7 @@ const DataNode *Hmx::Object::Property(Symbol prop, bool fail) const {
 }
 
 DataNode Hmx::Object::HandleProperty(DataArray *prop, DataArray *a2, bool fail) {
-    static DataNode n(a2, kDataArray);
+    static DataNode n(a2);
     if (SyncProperty(n, prop, 0, kPropHandle)) {
         return n;
     }
@@ -426,7 +426,7 @@ void Hmx::Object::ExportPropertyChange(DataArray *a, Symbol s) {
         MILO_ASSERT(mSinks, 0x17F);
         static Message msg("blah", 0);
         msg.SetType(s);
-        msg[0] = DataNode(a, kDataArray);
+        msg[0] = a;
         Export(msg, true);
     }
 }
@@ -442,7 +442,7 @@ DataNode Hmx::Object::PropertyArray(Symbol sym) {
         path->Node(1) = i;
         newArr->Node(i) = *Property(path, true);
     }
-    DataNode ret = DataNode(newArr, kDataArray);
+    DataNode ret = newArr;
     newArr->Release();
     return ret;
 }

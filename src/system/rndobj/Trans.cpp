@@ -234,7 +234,7 @@ DataNode RndTransformable::OnGetChildren(const DataArray *da) {
          ++it) {
         arr->Node(idx++) = *it;
     }
-    DataNode ret(arr, kDataArray);
+    DataNode ret(arr);
     arr->Release();
     return ret;
 }

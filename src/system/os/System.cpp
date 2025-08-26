@@ -246,9 +246,7 @@ DataNode OnSystemLanguage(DataArray *) { return gSystemLanguage; }
 DataNode OnSystemLocale(DataArray *) { return gSystemLocale; }
 DataNode OnSystemExec(DataArray *a) { return SystemExec(a->Str(1)); }
 DataNode OnUsingCD(DataArray *) { return UsingCD(); }
-DataNode OnSupportedLanguages(DataArray *) {
-    return DataNode(SupportedLanguages(false), kDataArray);
-}
+DataNode OnSupportedLanguages(DataArray *) { return SupportedLanguages(false); }
 DataNode OnSystemMs(DataArray *) { return SystemMs(); }
 
 DataNode OnSwitchSystemLanguage(DataArray *a) {

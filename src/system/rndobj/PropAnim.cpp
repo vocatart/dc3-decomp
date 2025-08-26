@@ -60,13 +60,13 @@ DataNode RndPropAnim::OnListFlowLabels(DataArray *arr) {
              ++it, ++i) {
             flowArr->Node(i) = Symbol(it->c_str());
         }
-        DataNode ret = DataNode(flowArr, kDataArray);
+        DataNode ret = flowArr;
         flowArr->Release();
         return ret;
     } else {
         DataArray *flowArr = new DataArray(1);
         flowArr->Node(0) = Symbol();
-        DataNode ret = DataNode(flowArr, kDataArray);
+        DataNode ret = flowArr;
         flowArr->Release();
         return ret;
     }

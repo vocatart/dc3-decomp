@@ -172,7 +172,7 @@ DataArray *TypeProps::GetArray(Symbol key) {
         MILO_ASSERT(typeDef, 0x18);
         DataArray *keyArray = typeDef->FindArray(key);
         DataArray *cloned = keyArray->Array(1)->Clone(true, false, 0);
-        SetKeyValue(key, DataNode(cloned, kDataArray), true);
+        SetKeyValue(key, cloned, true);
         ret = cloned;
         cloned->Release();
     } else {

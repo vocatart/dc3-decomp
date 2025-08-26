@@ -227,7 +227,7 @@ void MidiParser::PushIdle(float start, float end, int at, Symbol idleMessage) {
             arr->Node(idx++) = mMessageType;
         }
         arr->Node(idx++) = idleMessage;
-        node = DataNode(arr, kDataArray);
+        node = arr;
         arr->Release();
     }
     MemTemp tmp;
@@ -346,7 +346,7 @@ bool MidiParser::AddMessage(float start, float end, DataArray *msg, int firstArg
         if (mAppendLength) {
             new_arr->Node(i3 + i4) = 0.0f;
         }
-        node = DataNode(new_arr, kDataArray);
+        node = new_arr;
         new_arr->Release();
     }
     InsertDataEvent(start, end, node);

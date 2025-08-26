@@ -16,8 +16,7 @@ void Watcher::SaveWatches() {
                  mWatches.begin();
              it != mWatches.end();
              ++it, ++i) {
-            DataNode n(it->first, kDataArray);
-            ptr->Node(i) = n;
+            ptr->Node(i) = it->first;
         }
         DataWriteFile("watches.dta", ptr, 0);
     }

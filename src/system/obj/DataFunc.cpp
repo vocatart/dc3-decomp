@@ -1033,7 +1033,7 @@ DEF_DATA_FUNC(OnReadFile) {
     if (read == 0) {
         return 0;
     } else {
-        DataNode dn(read, kDataArray);
+        DataNode dn(read);
         read->Release();
         return dn;
     }
@@ -1101,7 +1101,7 @@ DataNode DataFindExists(DataArray *array, bool fail) {
             );
         }
     }
-    return DataNode(arr, kDataArray);
+    return arr;
 }
 
 DEF_DATA_FUNC(DataFindExists) { return DataFindExists(array, false); }
