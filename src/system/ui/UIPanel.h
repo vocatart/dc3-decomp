@@ -1,7 +1,10 @@
 #pragma once
+#include "obj/Data.h"
 #include "obj/Object.h"
 #include "ui/UIComponent.h"
 #include "utl/Str.h"
+
+class PanelDir;
 
 class UIPanel : public virtual Hmx::Object {
 public:
@@ -38,8 +41,15 @@ public:
     virtual void FocusOut() {}
     virtual bool IsLoaded() const;
 
+    bool Showing() const { return mShowing; }
+    void SetShowing(bool b) { mShowing = b; }
+    bool IsReferenced() const { return mLoadRefs != 0; }
     void CheckLoad();
     bool CheckIsLoaded();
+    void SetFocusComponent(UIComponent *);
+    void SetLoadedDir(PanelDir *, bool);
+    void UnsetLoadedDir();
+    void CheckUnload();
 
 protected:
     virtual void Unload();
@@ -50,8 +60,10 @@ private:
     static int sMaxPanelId;
     static bool sIsFinalDrawPass;
 
+    DataNode OnLoad(DataArray *);
+
 protected:
-    class PanelDir *mDir; // 0x8
+    PanelDir *mDir; // 0x8
     DirLoader *mLoader; // 0xc
     String mFocusName; // 0x10
     bool mLoaded; // 0x18

@@ -37,6 +37,8 @@ public:
 
     OBJ_MEM_OVERLOAD(0x19);
 
+    void SetOwnerPanel(UIPanel *panel) { mOwnerPanel = panel; }
+
 private:
     UIComponent *GetFirstFocusableComponent();
 

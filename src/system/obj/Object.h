@@ -516,6 +516,12 @@ extern DataArray *SystemConfig(Symbol, Symbol, Symbol);
 
 #define HANDLE_FORWARD(func) _HANDLE_CHECKED(func(_msg, false))
 
+#define HANDLE_MEMBER(member) HANDLE_FORWARD(member.Handle)
+
+#define HANDLE_MEMBER_PTR(member)                                                        \
+    if (member)                                                                          \
+    HANDLE_FORWARD(member->Handle)
+
 #define HANDLE_SUPERCLASS(parent) HANDLE_FORWARD(parent::Handle)
 
 #define END_HANDLERS                                                                     \

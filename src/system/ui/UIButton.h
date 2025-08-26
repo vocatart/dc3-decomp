@@ -1,4 +1,5 @@
 #pragma once
+#include "obj/Object.h"
 #include "ui/UILabel.h"
 #include "os/JoypadMsgs.h"
 #include "utl/MemMgr.h"
@@ -22,6 +23,9 @@ public:
     virtual void PostLoad(BinStream &);
 
     OBJ_MEM_OVERLOAD(0x15);
+    NEW_OBJ(UIButton)
+
+    static void Init();
 
 private:
     DataNode OnMsg(const ButtonDownMsg &);

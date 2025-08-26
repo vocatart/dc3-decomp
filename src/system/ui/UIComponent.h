@@ -50,6 +50,9 @@ public:
 
     OBJ_MEM_OVERLOAD(0x19);
 
+    State GetState() { return mState; }
+    void SendSelect(LocalUser *);
+
 protected:
     UIComponent();
 
