@@ -8,6 +8,10 @@ class UIListState {
 public:
     UIListState(UIListProvider *, UIListStateCallback *);
 
+    void SetNumDisplay(int, bool);
+    void SetGridSpan(int, bool);
+    void SetSelected(int, int, bool);
+
 private:
     /** "Does the list scrolling wrap?" */
     bool mCircular; // 0x0
