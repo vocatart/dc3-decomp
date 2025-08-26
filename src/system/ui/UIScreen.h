@@ -1,6 +1,8 @@
 #pragma once
 #include "obj/Object.h"
 
+class UIPanel;
+
 struct PanelRef {};
 
 class UIScreen : public Hmx::Object {
@@ -24,11 +26,13 @@ public:
     virtual void Print(TextStream &);
     virtual bool Unloading() const;
 
+    UIPanel *FocusPanel() const { return mFocusPanel; }
+
 protected:
     static int sMaxScreenId;
 
     std::list<PanelRef> mPanelList; // 0x2c
-    class UIPanel *mFocusPanel; // 0x34
+    UIPanel *mFocusPanel; // 0x34
     DataArray *mBack; // 0x38
     bool mClearVram; // 0x3c
     bool mShowing; // 0x3d

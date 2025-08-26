@@ -115,7 +115,7 @@ public:
     DataNode(const class String &string);
     // DataNode(const void *glob, int size); // goes unused
     DataNode(const DataArrayPtr &);
-    DataNode(DataArray *array, DataType type);
+    DataNode(DataArray *array, DataType type = kDataArray);
 
     DataNode(DataNode *var) {
         mValue.var = var;
