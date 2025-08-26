@@ -37,6 +37,11 @@ public:
 
     OBJ_MEM_OVERLOAD(0x19);
 
+private:
+    UIComponent *GetFirstFocusableComponent();
+
+    static bool sAlwaysNeedFocus;
+
 protected:
     /** The currently focused-on component. */
     UIComponent *mFocusComponent; // 0x1fc

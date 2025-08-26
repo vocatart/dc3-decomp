@@ -249,7 +249,7 @@ private:
                     return;
                 mEntry = mSubDirs.front()->HashTable().Next(mEntry);
             } else {
-                if (mSubDirs.empty()) {
+                if (mSubDirs.size() == 0) {
                     mObj = nullptr;
                     return;
                 }
@@ -261,7 +261,21 @@ private:
             }
         }
     }
-    void RecurseSubdirs(ObjectDir *);
+    void RecurseSubdirs(ObjectDir *dir) {
+        if (dir) {
+            std::list<ObjectDir *>::iterator it = mSubDirs.begin();
+            if (it != mSubDirs.end()) {
+                for (; it != mSubDirs.end() && *it != dir; ++it)
+                    ;
+                if (it != mSubDirs.end())
+                    return;
+            }
+            mSubDirs.push_back(dir);
+            for (int i = 0; i < dir->SubDirs().size(); i++) {
+                RecurseSubdirs(dir->SubDirs()[i]);
+            }
+        }
+    }
 
     ObjectDir::Entry *mEntry; // 0x0
     T *mObj; // 0x4
