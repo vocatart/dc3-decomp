@@ -2,13 +2,14 @@
 
 #include <string.h>
 #include <stdio.h>
-// #include <vector>
+#include <vector>
 #include "types.h"
 #include "obj/Data.h"
 #include "obj/DataFunc.h"
 #include "utl/Str.h"
-// #include "os/Debug.h"
-// #include "synth/tomcrypt/mycrypt.h"
+#include "os/Debug.h"
+#include "os/System.h"
+#include "synth/tomcrypt/mycrypt.h"
 
 static unsigned char gHvKeyGreen[64] = {
     0x01, 0x22, 0x00, 0x38, 0xd2, 0x01, 0x78, 0x8b, 0xdd, 0xcd, 0xd0, 0xf0, 0xfe,
@@ -18,7 +19,6 @@ static unsigned char gHvKeyGreen[64] = {
     0x97, 0xe9, 0xd4, 0xb8, 0x06, 0x74, 0x14, 0x6b, 0x30, 0x4c, 0x00, 0x91
 };
 
-/*
 namespace {
     int GetEncMethod(int ver) {
         int ret = 0;
@@ -44,9 +44,11 @@ namespace {
     }
 }
 
-void ByteGrinder::HvDecrypt(unsigned char *inBlock, unsigned char *outBlock, int moggVer)
-{ symmetric_key key; int enc_method = GetEncMethod(moggVer); void *placeholder = operator
-new(0x20C); rijndael_setup(&gHvKeyGreen[enc_method * 0x10], 0x10, 0, &key);
+void ByteGrinder::HvDecrypt(unsigned char *inBlock, unsigned char *outBlock, int moggVer) {
+    symmetric_key key;
+    int enc_method = GetEncMethod(moggVer);
+    void *placeholder = operator new(0x20C);
+    rijndael_setup(&gHvKeyGreen[enc_method * 0x10], 0x10, 0, &key);
     rijndael_ecb_decrypt(inBlock, outBlock, &key);
     delete placeholder;
 }
@@ -58,7 +60,7 @@ DataNode hashTo5Bits(DataArray *da) {
 
     if (da->Size() > 2) {
         seed = da->Int(1);
-        int max = ARRAY_LENGTH(hashMapping);
+        int max = DIM(hashMapping);
         for (int idx = 0; idx < max; idx++) {
             hashMapping[idx] = (seed >> 3) & 0x1F;
             seed = (seed * 0x19660D) + 0x3C6EF35F;
@@ -75,7 +77,7 @@ DataNode hashTo6Bits(DataArray *da) {
 
     if (da->Size() > 2) {
         seed = da->Int(1);
-        int max = ARRAY_LENGTH(hashMapping);
+        int max = DIM(hashMapping);
         for (int idx = 0; idx < max; idx++) {
             hashMapping[idx] = (seed >> 2) & 0x3F;
             seed = (seed * 0x19660D) + 0x3C6EF35F;
@@ -84,7 +86,6 @@ DataNode hashTo6Bits(DataArray *da) {
     }
     return DataNode(kDataInt, ret);
 }
-*/
 
 DataNode getRandomSequence32A(DataArray *da) {
     static unsigned long s_seed = 0x521;
@@ -759,7 +760,8 @@ unsigned long ByteGrinder::pickOneOf32B(bool b, long l) {
 
 DataNode getRandomLong(DataArray *da) {
     static u32 s_seed = 0x521;
-    if (da->Size() & 1) {
+    bool hasOne = da->Size() > 1;
+    if (hasOne) {
         s_seed = s_seed * 0x19660D + 0x3C6EF35F;
     }
     return (s32)s_seed;
@@ -778,7 +780,6 @@ DataNode magicNumberGenerator(DataArray *da) {
     return DataNode(kDataInt, v);
 }
 
-/*
 void ByteGrinder::GrindArray(
     long seedA, long seedB, unsigned char *arrayToGrind, int arrayLen, int moggVersion
 ) {
@@ -828,11 +829,11 @@ void ByteGrinder::GrindArray(
         char itoaBuffer[32];
         unsigned char w = arrayToGrind[i];
         String stringArgs("");
-        snprintf(itoaBuffer, sizeof(itoaBuffer), "%d", w);
+        Hx_snprintf(itoaBuffer, sizeof(itoaBuffer), "%d", w);
         stringArgs += itoaBuffer;
         stringArgs += " (";
         for (int j = 0; j < 0x10; j++) {
-            snprintf(itoaBuffer, sizeof(itoaBuffer), "%d", arrayToGrind[j]);
+            Hx_snprintf(itoaBuffer, sizeof(itoaBuffer), "%d", arrayToGrind[j]);
             stringArgs += itoaBuffer;
             stringArgs += " ";
         }
@@ -844,13 +845,12 @@ void ByteGrinder::GrindArray(
     mainScriptArray->Release();
 }
 
-#pragma dont_inline on
 void ByteGrinder::Init() {
     char functionName[0x100];
     // This *must* be written out in reverse to match
-    functionName[2] = '\0';
     functionName[1] = 'a';
     functionName[0] = 'N';
+    functionName[2] = '\0';
     DataRegisterFunc(functionName, getRandomLong);
     functionName[0] = 'h';
     DataRegisterFunc(functionName, magicNumberGenerator);
@@ -939,5 +939,3 @@ void ByteGrinder::Init() {
         DataRegisterFunc(functionName, funPtrs[i]);
     }
 }
-#pragma dont_inline reset
-*/

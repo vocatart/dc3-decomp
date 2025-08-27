@@ -2,6 +2,8 @@
 #include <cmath>
 
 #define kHugeFloat 1.0e30f
+// idk where else to put this one
+#define kDbSilence -96.0f
 
 inline float ScaleUShortToFloat01(unsigned short u) { return u / 65535.0f; }
 
