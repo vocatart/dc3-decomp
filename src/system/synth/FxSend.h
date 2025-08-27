@@ -34,6 +34,7 @@ public:
     int Stage() const { return mStage; }
     void SetChannels(SendChannels);
     void EnableUpdates(bool);
+    /** "Attach microphone to this send, for testing" */
     void TestWithMic();
     void SetStage(int);
 
@@ -66,14 +67,3 @@ protected:
     /** "Which channels the FX applies to" */
     SendChannels mChannels; // 0x5c
 };
-
-//   ObjOwnerPtr<>::ObjOwnerPtr<>(this + 0x2c,this,0x0);
-//   *(this + 0x40) = 0;
-//   this[0x44] = 0x0;
-//   this[0x58] = 0x0;
-//   *(this + 0x48) = -96.0;
-//   this[0x59] = 0x1;
-//   *(this + 0x4c) = 0.0;
-//   *(this + 0x5c) = 0;
-//   *(this + 0x50) = 0.0;
-//   *(this + 0x54) = -96.0;

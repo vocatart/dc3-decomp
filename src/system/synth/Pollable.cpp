@@ -2,11 +2,11 @@
 
 std::list<SynthPollable *> SynthPollable::sPollables;
 
-SynthPollable::SynthPollable() : mItr(sPollables.begin()), mIsActive(false) {}
+SynthPollable::SynthPollable() : mItr(sPollables.end()), mIsActive(false) {}
 SynthPollable::~SynthPollable() { CancelPolling(); }
 
 void SynthPollable::StartPolling() {
-    if (mItr == sPollables.begin()) {
+    if (mItr == sPollables.end()) {
         sPollables.push_front(this);
         mItr = sPollables.begin();
         mIsActive = true;
@@ -15,10 +15,10 @@ void SynthPollable::StartPolling() {
 
 void SynthPollable::CancelPolling() {
     if (mIsActive) {
-        std::list<SynthPollable *>::iterator beginning = sPollables.begin();
-        if (mItr != beginning) {
+        std::list<SynthPollable *>::iterator pollEnd = sPollables.end();
+        if (mItr != pollEnd) {
             sPollables.erase(mItr);
-            mItr = beginning;
+            mItr = pollEnd;
             mIsActive = false;
         }
     }
