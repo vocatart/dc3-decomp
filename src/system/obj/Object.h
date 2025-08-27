@@ -372,6 +372,8 @@ public:
             pop_back();
     }
 
+    T1 *front() const;
+    void pop_front();
     void pop_back();
     void push_back(T1 *obj);
     iterator find(const Hmx::Object *target) const;

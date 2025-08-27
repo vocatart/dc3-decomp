@@ -56,7 +56,8 @@ public:
         unsigned long long cycles = 0;
 
         if (--mRunning == 0) {
-            cycles = __mftb() - mStart;
+            unsigned int mftb = __mftb();
+            cycles = mftb - mStart;
             mCycles += cycles;
         }
 

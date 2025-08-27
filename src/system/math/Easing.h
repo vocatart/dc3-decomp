@@ -1,5 +1,6 @@
 #pragma once
 
+#include "os/Debug.h"
 enum EaseType {
     kEaseLinear = 0,
     kEasePolyIn = 1,
@@ -39,5 +40,15 @@ enum EaseType {
 };
 
 float EaseLinear(float, float, float);
+float EasePolyIn(float, float, float);
+float EasePolyOut(float, float, float);
+// todo: the rest
 
 typedef float EaseFunc(float, float, float);
+
+EaseFunc *gEaseFuncs[35] = { EaseLinear, EasePolyIn, EasePolyOut };
+
+EaseFunc *GetEaseFunction(EaseType e) {
+    MILO_ASSERT(e >= kEaseLinear && e <= kEaseQuarterHalfStairstep, 0x16B);
+    return gEaseFuncs[e];
+}
