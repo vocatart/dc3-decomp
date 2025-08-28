@@ -3,6 +3,7 @@
 #include "synth/Faders.h"
 #include "synth/FxSend.h"
 #include "synth/PlayableSample.h"
+#include "synth/StandardStream.h"
 #include "utl/MemMgr.h"
 
 /** "Allows dynamic playback of Mogg-based audio clips, most notably crowd audio loops."
@@ -48,6 +49,12 @@ public:
 
     OBJ_MEM_OVERLOAD(0x18);
 
+    bool IsStreaming() const;
+    void FadeOut(float);
+
+private:
+    void ApplyLoop(bool, int, int);
+
 protected:
     MoggClip();
 
@@ -56,7 +63,7 @@ protected:
     /** "Volume in dB (0 is full volume, -96 is silence)." */
     float mVolume; // 0x40
     float unk44;
-    int mStream; // 0x48 - Stream*
+    StandardStream *mStream; // 0x48
     float unk4c;
     void *mData; // 0x50
     int unk54;
