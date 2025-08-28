@@ -6,8 +6,7 @@
 class MidiChannel {
 public:
     // got this from DC1
-    class DummySample {
-    public:
+    struct DummySample {
         int unk0;
     };
 
