@@ -10,7 +10,7 @@ void SampleData::Reset() {
     mSizeBytes = 0;
     mSampleRate = 0;
     mNumSamples = 0;
-    unkc = 1;
+    mNumChannels = 1;
     mMarkers.clear();
 }
 

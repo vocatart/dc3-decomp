@@ -1,4 +1,6 @@
 #pragma once
+#include "obj/Data.h"
+#include "obj/PropSync.h"
 #include "utl/CRC.h"
 #include "utl/Str.h"
 #include "utl/BinStream.h"
@@ -6,6 +8,8 @@
 #include <vector>
 
 class SampleMarker {
+    friend bool PropSync(SampleMarker &, DataNode &, DataArray *, int, PropOp);
+
 public:
     SampleMarker() : name(""), sample(-1) {}
     SampleMarker(const String &str, int i) : name(str), sample(i) {}
@@ -38,14 +42,17 @@ public:
     SampleData();
     ~SampleData();
     void Reset();
+    void Save(BinStream &) const;
     void Load(BinStream &, const FilePath &);
-    void LoadWAV(BinStream &, const FilePath &);
+    void LoadWAV(BinStream &, const FilePath &, bool);
     int SizeAs(Format) const;
     int NumMarkers() const;
     const SampleMarker &GetMarker(int) const;
     void Dealloc();
+    int NumChannels() const { return mNumChannels; }
     int GetSampleRate() const { return mSampleRate; }
     Format GetFormat() const { return mFormat; }
+    std::vector<SampleMarker> &AccessMarkers() { return mMarkers; }
 
     static void SetAllocator(SampleDataAllocFunc, SampleDataFreeFunc);
 
@@ -56,7 +63,7 @@ private:
     Hmx::CRC mCRC; // 0x0
     int mNumSamples; // 0x4
     int mSampleRate; // 0x8
-    int unkc;
+    int mNumChannels; // 0xc
     int mSizeBytes; // 0x10
     Format mFormat; // 0x14
     void *mData; // 0x18

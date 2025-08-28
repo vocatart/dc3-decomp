@@ -64,6 +64,32 @@ inline bool PropSync(Symbol &sym, DataNode &node, DataArray *prop, int i, PropOp
 }
 
 template <class T>
+bool PropSync(std::vector<T> &vec, DataNode &node, DataArray *prop, int i, PropOp op) {
+    if (op == kPropUnknown0x40)
+        return false;
+    else if (i == prop->Size()) {
+        MILO_ASSERT(op == kPropSize || op == kPropInsert, 0xC9);
+        node = (int)vec.size();
+        return true;
+    } else {
+        typename std::vector<T>::iterator it = vec.begin() + prop->Int(i++);
+        if (i < prop->Size() || op & (kPropGet | kPropSet | kPropSize)) {
+            return PropSync(*it, node, prop, i, op);
+        } else if (op == kPropRemove) {
+            vec.erase(it);
+            return true;
+        } else if (op == kPropInsert) {
+            T item;
+            if (PropSync(item, node, prop, i, op)) {
+                vec.insert(it, item);
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+template <class T>
 bool PropSync(Key<T> &key, DataNode &node, DataArray *prop, int i, PropOp op) {
     if (op == kPropUnknown0x40)
         return false;
