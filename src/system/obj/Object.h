@@ -665,7 +665,10 @@ extern DataArray *SystemConfig(Symbol, Symbol, Symbol);
 // END SYNCPROPERTY MACROS ---------------------------------------------------------------
 
 // BEGIN SAVE MACROS ---------------------------------------------------------------------
+#define BEGIN_SAVES(objType) void objType::Save(BinStream &bs) {
+#define SAVE_REVS(rev, alt) bs << packRevs(alt, rev);
 #define SAVE_SUPERCLASS(parent) parent::Save(bs);
+#define END_SAVES }
 // END SAVE MACRO ------------------------------------------------------------------------
 
 // BEGIN COPY MACROS ---------------------------------------------------------------------
@@ -745,7 +748,8 @@ extern DataArray *SystemConfig(Symbol, Symbol, Symbol);
     }
 
 #define END_LOADS }
-// END LOAD MACROS -----------------------------------------------------------------------
+// END LOAD MACROS
+// -----------------------------------------------------------------------
 
 #define NEW_OBJ(objType)                                                                 \
     static Hmx::Object *NewObject() { return new objType; }
@@ -833,13 +837,13 @@ namespace Hmx {
         };
 
         enum SinkMode {
-            /** "does a Handle to the sink, this gets all c handlers, type handling, and
-             * exporting." */
+            /** "does a Handle to the sink, this gets all c handlers, type handling,
+             * and exporting." */
             kHandle = 0,
             /** "just Exports to the sink, so no c or type handling" */
             kExport = 1,
-            /** "just calls HandleType, good if know that particular thing is only ever
-             * type handled." */
+            /** "just calls HandleType, good if know that particular thing is only
+             * ever type handled." */
             kType = 2,
             /** "do type handling and exporting using Export, no C handling" */
             kExportType = 3,

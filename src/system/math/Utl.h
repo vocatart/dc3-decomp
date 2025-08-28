@@ -81,9 +81,8 @@ inline T Clamp(T min, T max, T value) {
 
 template <class T>
 inline bool ClampEq(T &value, const T &min, const T &max) {
-    T temp = min;
     if (value < min) {
-        value = temp;
+        value = min;
         return true;
     } else if (value > max) {
         value = max;

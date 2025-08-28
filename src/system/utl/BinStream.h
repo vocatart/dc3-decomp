@@ -264,3 +264,9 @@ BinStream &operator<<(BinStream &bs, const std::list<T, Allocator> &list) {
     }
     return bs;
 }
+
+template <class T1, class T2>
+BinStream &operator>>(BinStream &bs, std::pair<T1, T2> &p) {
+    bs >> p.first >> p.second;
+    return bs;
+}

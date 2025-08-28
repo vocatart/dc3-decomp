@@ -4113,7 +4113,7 @@ system/synth/tomcrypt/crypt.c:
 	.data       start:0x82F17F08 end:0x82F17F0C
 	.data       start:0x830E3290 end:0x830E3EA4 rename:.bss
 
-system/synth/TomCryptLicense.cpp:
+system/synth/tomcrypt/TomCryptLicense.cpp:
 	.rdata      start:0x820C53A8 end:0x820C53C4
 	.text       start:0x82EDD3C8 end:0x82EDD3E0 rename:.text$yc
 

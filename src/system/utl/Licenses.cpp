@@ -6,7 +6,7 @@ int Licenses::sInited = 0;
 
 Licenses::Licenses(const char *cc, Licenses::Requirement req) {
     mName = cc;
-    unk_0x0 = req;
+    mRequirement = req;
     Licenses *next;
     int magic = 0xFEEDBACC;
     if (sInited != magic) {
@@ -26,7 +26,8 @@ void Licenses::PrintAll(void) {
         MILO_LOG(
             "   %s requirement: %s\n",
             head->mName,
-            head->unk_0x0 == 0 ? "Notification" : "Do Not Distribute"
+            head->mRequirement == kRequirementNotification ? "Notification"
+                                                           : "Do Not Distribute"
         );
         head = head->mNext;
     }
