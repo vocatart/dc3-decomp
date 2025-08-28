@@ -789,7 +789,7 @@
             "system/rndobj/wordwrap.cpp": "MISSING",
 
             "system/synth/ADSR.cpp": "NonMatching",
-            "system/synth/AudioDucker.cpp": "MISSING",
+            "system/synth/AudioDucker.cpp": "NonMatching",
             "system/synth/BinkReader.cpp": "MISSING",
             "system/synth/BitCrushEffect.cpp": "MISSING",
             "system/synth/ByteGrinder.cpp": "NonMatching",

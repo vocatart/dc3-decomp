@@ -960,7 +960,22 @@ private:
 
 public:
     ObjVector(Hmx::Object *o) : mOwner(o) {}
+
+    void resize(unsigned int);
+    void operator=(const ObjVector &);
 };
+
+template <class T>
+BinStream &operator>>(BinStream &bs, ObjVector<T> &vec) {
+    unsigned int length;
+    bs >> length;
+    vec.resize(length);
+
+    for (ObjVector<T>::iterator it = vec.begin(); it != vec.end(); it++) {
+        bs >> *it;
+    }
+    return bs;
+}
 
 // ObjList
 template <class T>
