@@ -32,8 +32,6 @@ inline TextStream &operator<<(TextStream &ts, FilePath &fp) {
 inline BinStream &operator<<(BinStream &bs, const FilePath &fp) {
     bs << FileRelativePath(FilePath::Root().c_str(), fp.c_str());
     return bs;
-    //       pcVar1 = FileRelativePath(FilePath::sRoot.c_str(),*(this + 0x68));
-    //   this_00 = BinStream::operator<<(param_1,pcVar1);
 }
 
 BinStream &operator>>(BinStream &, FilePath &);

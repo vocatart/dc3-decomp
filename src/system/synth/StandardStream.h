@@ -1,11 +1,13 @@
 #pragma once
+#include "synth/Pollable.h"
 #include "synth/Stream.h"
 
 class StreamReceiver;
 
-class StandardStream : public Stream {
+class StandardStream : public Stream, public SynthPollable {
 public:
     StandardStream(File *, float, float, Symbol, bool, bool, bool);
+    // Stream
     virtual ~StandardStream() {}
     virtual bool Fail();
     virtual bool IsReady() const;
@@ -63,4 +65,7 @@ public:
     virtual void SetADSR(int, const ADSRImpl &);
     virtual void SetJumpSamples(int, int, const char *);
     virtual int GetSampleRate();
+    // SynthPollable
+    virtual const char *GetSoundDisplayName();
+    virtual void SynthPoll();
 };

@@ -100,6 +100,8 @@ public:
     void DoneLoading();
     void LoadStream();
 
+    static void SaveData(BinStream &, void *, int);
+
     File *mFile; // 0x18
     BinStream *mStream; // 0x1c
     const char *mBuffer; // 0x20

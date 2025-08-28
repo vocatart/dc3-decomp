@@ -66,6 +66,8 @@ public:
 
     void SetVolume(float);
 
+    FaderGroup *Faders() const { return mFaders; }
+
 protected:
     Stream();
 

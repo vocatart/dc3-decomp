@@ -4,6 +4,7 @@
 #include "synth/FxSend.h"
 #include "synth/PlayableSample.h"
 #include "synth/StandardStream.h"
+#include "utl/BinStream.h"
 #include "utl/MemMgr.h"
 
 /** "Allows dynamic playback of Mogg-based audio clips, most notably crowd audio loops."
@@ -51,15 +52,26 @@ public:
 
     bool IsStreaming() const;
     void FadeOut(float);
+    void UnloadWhenFinishedPlaying(bool);
+    bool IsReadyToPlay() const;
+    void SetLoop(bool, int, int);
+    void SetFile(const char *);
 
 private:
     void ApplyLoop(bool, int, int);
+    void KillStream();
+    void UnloadData();
+    bool EnsureLoaded();
+    void UpdateFaders();
+    void UpdatePanInfo();
+    void LoadNumChannels();
+    void LoadFile(BinStream *);
 
 protected:
     MoggClip();
 
     /** "The mogg audio file to be played." */
-    FilePath mFilePath; // 0x38
+    FilePath mMoggFile; // 0x38
     /** "Volume in dB (0 is full volume, -96 is silence)." */
     float mVolume; // 0x40
     float unk44;
@@ -68,13 +80,13 @@ protected:
     void *mData; // 0x50
     int unk54;
     int unk58;
-    FileLoader *mFileLoader; // 0x5c
+    FileLoader *mLoader; // 0x5c
     std::vector<Fader *> mFaders; // 0x60
     std::vector<PanInfo> mPanInfos; // 0x6c
     ObjPtr<FxSend> unk78; // 0x78
     Fader *unk8c;
     bool unk90;
-    bool unk91;
+    bool mUnloadWhenFinished; // 0x91
     bool mPlaying; // 0x92
     bool mLoop; // 0x93
     int unk94; // 0x94
