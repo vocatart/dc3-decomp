@@ -840,7 +840,7 @@
             "system/synth/StreamReceiverFile.cpp": "NonMatching",
             "system/synth/Synth.cpp": "NonMatching",
             "system/synth/SynthSample.cpp": "NonMatching",
-            "system/synth/ThreeDSound.cpp": "MISSING",
+            "system/synth/ThreeDSound.cpp": "NonMatching",
             "system/synth/Utl.cpp": "MISSING",
             "system/synth/VorbisReader.cpp": "MISSING",
             "system/synth/WahEffect.cpp": "MISSING",

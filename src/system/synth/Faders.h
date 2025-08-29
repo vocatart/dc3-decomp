@@ -39,6 +39,8 @@ public:
     void AddDuckedVolume(float);
     void RemoveDuckedVolume(float);
 
+    NEW_OBJ(Fader)
+
 private:
     void UpdateValue(float, float, float);
     float GetDuckedVolume() const;
