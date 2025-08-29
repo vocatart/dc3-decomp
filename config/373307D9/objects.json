@@ -838,7 +838,7 @@
             "system/synth/StreamNull.cpp": "MISSING",
             "system/synth/StreamReceiver.cpp": "NonMatching",
             "system/synth/StreamReceiverFile.cpp": "NonMatching",
-            "system/synth/Synth.cpp": "MISSING",
+            "system/synth/Synth.cpp": "NonMatching",
             "system/synth/SynthSample.cpp": "NonMatching",
             "system/synth/ThreeDSound.cpp": "MISSING",
             "system/synth/Utl.cpp": "MISSING",

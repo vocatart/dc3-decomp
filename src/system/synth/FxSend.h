@@ -2,6 +2,15 @@
 #include "obj/Object.h"
 #include "utl/MemMgr.h"
 
+// courtesy of RB2
+struct LevelData {
+    float mRMS; // offset 0x0, size 0x4
+    float mPeak; // offset 0x4, size 0x4
+    float mPeakHold; // offset 0x8, size 0x4
+    int mPeakAge; // offset 0xC, size 0x4
+    class String mName; // offset 0x10, size 0x8
+};
+
 enum SendChannels {
     kSendAll = 0,
     kSendCenter = 1,

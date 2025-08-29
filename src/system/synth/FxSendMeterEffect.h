@@ -3,15 +3,6 @@
 #include "utl/Str.h"
 #include <vector>
 
-// courtesy of RB2
-struct LevelData {
-    float mRMS; // offset 0x0, size 0x4
-    float mPeak; // offset 0x4, size 0x4
-    float mPeakHold; // offset 0x8, size 0x4
-    int mPeakAge; // offset 0xC, size 0x4
-    class String mName; // offset 0x10, size 0xC
-};
-
 /** "meter effect" */
 class FxSendMeterEffect : public FxSend {
 public:
