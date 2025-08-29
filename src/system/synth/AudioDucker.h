@@ -36,7 +36,7 @@ class AudioDuckerGroup {
     PropSync(AudioDuckerGroup &o, DataNode &_val, DataArray *_prop, int _i, PropOp _op);
 
 public:
-    AudioDuckerGroup(Hmx::Object *owner) : mDuckers(owner) {}
+    AudioDuckerGroup(Hmx::Object *owner);
     ~AudioDuckerGroup() {}
     void Duck();
     void Unduck();

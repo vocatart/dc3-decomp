@@ -94,3 +94,5 @@ private:
     ObjPtrList<Fader> mFaders; // 0x0
     bool mDirty; // 0x14
 };
+
+bool PropSync(FaderGroup &, DataNode &, DataArray *, int, PropOp);

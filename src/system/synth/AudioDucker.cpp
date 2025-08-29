@@ -52,6 +52,8 @@ BEGIN_SAVES(AudioDuckerTrigger)
     mDuckerGroup.Save(bs);
 END_SAVES
 
+AudioDuckerGroup::AudioDuckerGroup(Hmx::Object *owner) : mDuckers(owner) {}
+
 AudioDuckerTrigger::AudioDuckerTrigger() : mDuckerGroup(this) {}
 
 bool PropSync(AudioDuckerGroup &o, DataNode &_val, DataArray *_prop, int _i, PropOp _op) {

@@ -23,7 +23,7 @@ END_LOADS
 float FxSendMeterEffect::ChannelData(int idx) {
     if (mChannels.size() == 0)
         return 0.0f;
-    return mChannels[Min<int>(idx, mChannels.size() - 1)].unk4;
+    return mChannels[Min<int>(idx, mChannels.size() - 1)].mPeak;
 }
 
 BEGIN_HANDLERS(FxSendMeterEffect)

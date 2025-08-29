@@ -832,7 +832,7 @@
             "system/synth/Sequence.cpp": "MISSING",
             "system/synth/Sfx.cpp": "MISSING",
             "system/synth/SfxMap.cpp": "MISSING",
-            "system/synth/Sound.cpp": "MISSING",
+            "system/synth/Sound.cpp": "NonMatching",
             "system/synth/StandardStream.cpp": "MISSING",
             "system/synth/Stream.cpp": "NonMatching",
             "system/synth/StreamNull.cpp": "MISSING",
