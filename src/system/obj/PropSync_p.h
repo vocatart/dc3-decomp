@@ -90,6 +90,35 @@ bool PropSync(std::vector<T> &vec, DataNode &node, DataArray *prop, int i, PropO
 }
 
 template <class T>
+bool PropSync(std::list<T> &pList, DataNode &node, DataArray *prop, int i, PropOp op) {
+    if (op == kPropUnknown0x40)
+        return false;
+    else if (i == prop->Size()) {
+        MILO_ASSERT(op == kPropSize || op == kPropInsert, 0x9E);
+        node = (int)pList.size();
+        return true;
+    } else {
+        int idx = prop->Int(i++);
+        typename std::list<T>::iterator it = pList.begin();
+        while (idx-- > 0)
+            it++;
+        if (i < prop->Size() || op & (kPropGet | kPropSet | kPropSize)) {
+            return PropSync(*it, node, prop, i, op);
+        } else if (op == kPropRemove) {
+            pList.erase(it);
+            return true;
+        } else if (op == kPropInsert) {
+            T item;
+            if (PropSync(item, node, prop, i, op)) {
+                pList.insert(it, item);
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+template <class T>
 bool PropSync(Key<T> &key, DataNode &node, DataArray *prop, int i, PropOp op) {
     if (op == kPropUnknown0x40)
         return false;

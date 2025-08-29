@@ -186,7 +186,7 @@
         "objects": {
             "system/char/Char.cpp": "MISSING",
             "system/char/CharBlendBone.cpp": "MISSING",
-            "system/char/CharBone.cpp": "MISSING",
+            "system/char/CharBone.cpp": "NonMatching",
             "system/char/CharBoneDir.cpp": "MISSING",
             "system/char/CharBoneOffset.cpp": "MISSING",
             "system/char/CharBoneTwist.cpp": "MISSING",
