@@ -829,7 +829,7 @@
             "system/synth/SampleData.cpp": "NonMatching",
             "system/synth/SampleInst.cpp": "MISSING",
             "system/synth/SampleZone.cpp": "MISSING",
-            "system/synth/Sequence.cpp": "MISSING",
+            "system/synth/Sequence.cpp": "NonMatching",
             "system/synth/Sfx.cpp": "MISSING",
             "system/synth/SfxMap.cpp": "MISSING",
             "system/synth/Sound.cpp": "NonMatching",

@@ -147,3 +147,9 @@ protected:
     bool mPreserveScale; // 0xbc
     bool mDirty; // 0xbd
 };
+
+class RndTransformableRemover : public RndTransformable {
+public:
+    RndTransformableRemover() {}
+    virtual Symbol ClassName() const { return ""; }
+};
