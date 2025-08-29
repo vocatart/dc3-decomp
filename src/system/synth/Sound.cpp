@@ -3,6 +3,7 @@
 #include "math/Utl.h"
 #include "obj/Object.h"
 #include "synth/MoggClip.h"
+#include "synth/Synth.h"
 #include "synth/Utl.h"
 
 BEGIN_PROPSYNCS(Sound)
@@ -34,4 +35,6 @@ Sound::Sound()
     : mVolume(0), mSpeed(1), mPan(0), mSend(this), mReverbMixDb(kDbSilence),
       mReverbEnable(0), unk3d(1), mSynthSample(this), mMoggClip(this), mEnvelope(this),
       mFaders(this), mDuckers(this), mLoop(0), mLoopStart(0), mLoopEnd(-1),
-      mMaxPolyphony(0), unkb4(0), unkb8(this) {}
+      mMaxPolyphony(0), unkb4(0), unkb8(this) {
+    mFaders.Add(TheSynth->MasterFader());
+}

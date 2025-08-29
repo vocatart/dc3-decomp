@@ -8,6 +8,8 @@ StreamReceiver::StreamReceiver(int numBuffers, bool slip)
     MILO_ASSERT(numBuffers > 0, 0x33);
 }
 
+StreamReceiver::~StreamReceiver() {}
+
 int StreamReceiver::BytesWriteable() { return kStreamRcvrBufSize - mRingFreeSpace; }
 bool StreamReceiver::Ready() { return mState != kInit; }
 

@@ -8,6 +8,7 @@ class DataArray;
 class Mic {
 public:
     enum Type {
+        kMicNull = 2
     };
     Mic() : mInUse(0), unk8(1.0f) {}
     virtual ~Mic() {}
@@ -39,14 +40,14 @@ public:
     virtual void SetCompressorParam(float) = 0;
     virtual float GetCompressorParam() const = 0;
     virtual void ClearBuffers() = 0;
-    virtual char *GetRecentBuf(int &) = 0;
-    virtual char *GetContinuousBuf(int &) = 0;
+    virtual short *GetRecentBuf(int &) = 0;
+    virtual short *GetContinuousBuf(int &) = 0;
     virtual int GetDroppedSamples() { return 0; }
     virtual int GetSampleRate() const = 0;
     virtual float PercentTalking() { return 0.0f; }
     virtual void MarkAsInUse(bool b) { mInUse = b; }
     virtual bool IsInUse() { return mInUse; }
-    virtual Symbol GetName() const {
+    virtual const Symbol &GetName() const {
         static Symbol generic_usb("generic_usb");
         return generic_usb;
     }

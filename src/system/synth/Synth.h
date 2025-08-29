@@ -89,6 +89,8 @@ public:
     // RndOverlay::Callback
     virtual float UpdateOverlay(RndOverlay *, float);
 
+    Fader *MasterFader() const { return mMasterFader; }
+
 protected:
     virtual ~Synth() {}
 

@@ -16,7 +16,7 @@ public:
         kStopped = 3,
     };
     StreamReceiver(int, bool);
-    virtual ~StreamReceiver() {}
+    virtual ~StreamReceiver();
     virtual void SetVolume(float) = 0;
     virtual void SetPan(float) = 0;
     virtual void SetSpeed(float) = 0;
