@@ -3,28 +3,35 @@
 #include "cstddef"
 #include "exception"
 
-namespace std {
+/* Size=0x8 */
+struct __type_info_node {
+    void *_MemPtr; // 0x0
+    __type_info_node *_Next; // 0x4
+};
 
+namespace std {
+    /* Size=0xc */
     class type_info {
     public:
         virtual ~type_info();
-        size_t hash_code() const;
+        //   public: virtual void* __vecDelDtor(uint32_t);
+
+        unsigned int hash_code() const;
         bool operator==(const type_info &rhs) const;
         bool operator!=(const type_info &rhs) const;
         int before(const type_info &rhs) const;
-        // size_t hash_code() const noexcept;
-        const char *name() const { return m_Name; }
+        const char *name(__type_info_node *) const;
         const char *raw_name() const;
 
     private:
-        // These constructors are normally deleted, but our C++ version
-        // doesn't support that, so they're privated as a workaround
-        type_info();
-        type_info(const type_info &rhs); // cannot be copied
-        type_info &operator=(const type_info &rhs); // cannot be copied
+        type_info(const type_info &);
+        type_info &operator=(const type_info &);
 
-        const char *m_Name;
-        size_t m_HashCode;
+        static const char *_Name_base(const type_info *, __type_info_node *);
+        static void _Type_info_dtor(type_info *);
+
+        void *_M_data; // 0x4
+        char _M_d_name[1]; // 0x8
     };
 
     class bad_cast : public exception {

@@ -152,6 +152,10 @@ ObjPtrVec<T1, T2>::ObjPtrVec(Hmx::Object *owner, EraseMode e, ObjListMode o)
 }
 
 template <class T1, class T2>
+ObjPtrVec<T1, T2>::Node::Node(const Node &n)
+    : ObjRefConcrete<T1, T2>(n.mObject), mOwner(n.mOwner) {}
+
+template <class T1, class T2>
 ObjPtrVec<T1, T2>::~ObjPtrVec() {
     mNodes.clear();
 }

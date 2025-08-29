@@ -1,12 +1,24 @@
 #pragma once
+#include "stdlib.h"
 
 namespace std {
 
     class exception {
     public:
-        exception() {}
-        virtual ~exception() {}
-        virtual const char *what() const { return "exception"; }
+        exception() : str(0), unk8(0) {}
+        exception(const exception &e) : str(0), unk8(0) { *this = e; }
+        virtual ~exception() {
+            if (unk8)
+                free((void *)str);
+            str = nullptr;
+            unk8 = false;
+        }
+        virtual const char *what() const { return str ? str : "Unknown exception"; }
+
+        exception &operator=(const exception &e);
+
+        const char *str; // 0x4
+        bool unk8; // 0x8
     };
 
     class bad_exception : public exception {

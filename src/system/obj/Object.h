@@ -204,6 +204,7 @@ private:
     // Node size: 0x14
     struct Node : public ObjRefConcrete<T1, T2> {
         Node(ObjRefOwner *owner) : ObjRefConcrete<T1>(nullptr), mOwner(owner) {}
+        Node(const Node &n);
         virtual ~Node() {}
         virtual Hmx::Object *RefOwner() const;
         virtual void Replace(Hmx::Object *obj);
@@ -276,6 +277,8 @@ public:
     void push_back(T1 *);
     void swap(int, int);
     bool Load(BinStream &, bool, ObjectDir *);
+    void clear() { mNodes.clear(); }
+    void reserve(unsigned int n) { mNodes.reserve(n); }
 
     void Set(iterator it, T1 *obj);
 

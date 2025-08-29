@@ -192,7 +192,7 @@
             "system/char/CharBoneTwist.cpp": "MISSING",
             "system/char/CharBones.cpp": "NonMatching",
             "system/char/CharBonesBlender.cpp": "NonMatching",
-            "system/char/CharBonesMeshes.cpp": "MISSING",
+            "system/char/CharBonesMeshes.cpp": "NonMatching",
             "system/char/CharBonesSamples.cpp": "MISSING",
             "system/char/CharClip.cpp": "MISSING",
             "system/char/CharClipDisplay.cpp": "MISSING",

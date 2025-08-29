@@ -1,5 +1,6 @@
 #pragma once
 #include "obj/Object.h"
+#include "utl/MemMgr.h"
 #include "utl/Symbol.h"
 #include <vector>
 #include <list>
@@ -91,6 +92,8 @@ public:
 class CharBonesAlloc : public CharBonesObject {
 public:
     virtual ~CharBonesAlloc();
+
+    MEM_OVERLOAD(CharBonesAlloc, 0x172);
 
 protected:
     virtual void ReallocateInternal();
