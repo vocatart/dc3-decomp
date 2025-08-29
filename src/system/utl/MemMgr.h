@@ -1,5 +1,8 @@
 #pragma once
 
+extern const char *gStlAllocName;
+extern bool gStlAllocNameLookup;
+
 void PhysDelta(const char *);
 bool MemUseLowestMip();
 int _GetFreePhysicalMemory();

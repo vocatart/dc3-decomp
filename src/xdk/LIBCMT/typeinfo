@@ -20,7 +20,7 @@ namespace std {
         bool operator==(const type_info &rhs) const;
         bool operator!=(const type_info &rhs) const;
         int before(const type_info &rhs) const;
-        const char *name(__type_info_node *) const;
+        const char *name(__type_info_node *n) const { return _Name_base(this, n); }
         const char *raw_name() const;
 
     private:
