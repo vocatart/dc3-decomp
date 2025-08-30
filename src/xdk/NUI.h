@@ -1,6 +1,7 @@
 #pragma once
 #include "nuiapi/nuidetroit.h"
 #include "nuiapi/nuifitnesslib.h"
+#include "nuiapi/nuiwave.h"
 #include "nuispeech/mmio.h"
 
 // this is where you'd include every last .h file that you need that comes from NUI

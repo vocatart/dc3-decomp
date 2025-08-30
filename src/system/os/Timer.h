@@ -71,7 +71,8 @@ public:
 
         mRunning = -mRunning;
 
-        mCycles += __mftb() - mStart;
+        unsigned int mftb = __mftb();
+        mCycles += mftb - mStart;
     }
 
     void Resume() {
