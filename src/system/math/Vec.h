@@ -218,3 +218,11 @@ inline void Add(const Vector3 &v1, const Vector3 &v2, Vector3 &dst) {
 inline void Subtract(const Vector3 &v1, const Vector3 &v2, Vector3 &dst) {
     dst.Set(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
 }
+
+inline float LengthSquared(const Vector3 &v) { return v.x * v.x + v.y * v.y + v.z * v.z; }
+
+inline float Length(const Vector3 &v) {
+    return std::sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+void __cdecl Normalize(const Vector3 &, Vector3 &);

@@ -277,7 +277,7 @@
 
             "system/gesture/ArcDetector.cpp": "MISSING",
             "system/gesture/ArchiveSkeleton.cpp": "MISSING",
-            "system/gesture/BaseSkeleton.cpp": "MISSING",
+            "system/gesture/BaseSkeleton.cpp": "NonMatching",
             "system/gesture/CameraInput.cpp": "MISSING",
             "system/gesture/CameraTilt.cpp": "MISSING",
             "system/gesture/DepthBuffer3D.cpp": "MISSING",
