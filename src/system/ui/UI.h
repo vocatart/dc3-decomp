@@ -114,3 +114,9 @@ private:
     bool mSkipNextQuickCheat; // 0x58
     std::list<Symbol> mCustomMsgs; // 0x5c
 };
+
+// #define UI_CHANGED_MSG (ui_changed ($showing))
+DECLARE_MESSAGE(UIChangedMsg, "ui_changed")
+UIChangedMsg(bool showing) : Message(Type(), showing) {}
+bool Showing() const { return mData->Int(2); }
+END_MESSAGE

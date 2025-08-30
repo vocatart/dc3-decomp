@@ -1,4 +1,5 @@
 #pragma once
+#include "nuiapi/nuidetroit.h"
 #include "nuiapi/nuifitnesslib.h"
 #include "nuispeech/mmio.h"
 

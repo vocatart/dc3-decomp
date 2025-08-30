@@ -279,7 +279,7 @@
             "system/gesture/ArchiveSkeleton.cpp": "MISSING",
             "system/gesture/BaseSkeleton.cpp": "NonMatching",
             "system/gesture/CameraInput.cpp": "MISSING",
-            "system/gesture/CameraTilt.cpp": "MISSING",
+            "system/gesture/CameraTilt.cpp": "NonMatching",
             "system/gesture/DepthBuffer3D.cpp": "MISSING",
             "system/gesture/DirectionGestureFilter.cpp": "MISSING",
             "system/gesture/DrawUtl.cpp": "MISSING",

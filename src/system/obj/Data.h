@@ -468,6 +468,16 @@ public:
     Symbol FindSym(Symbol tag) const { return FindArray(tag)->Sym(1); }
     const char *FindStr(Symbol tag) const { return FindArray(tag)->Str(1); }
 
+    int FindInt(Symbol tag, int i) const {
+        DataArray *a = FindArray(tag, false);
+        return a ? a->Int(1) : i;
+    }
+
+    float FindFloat(Symbol tag, float f) const {
+        DataArray *a = FindArray(tag, false);
+        return a ? a->Float(1) : f;
+    }
+
     /** Clone this DataArray.
      * @param [in] deep If true, perform a deep copy on this DataArray.
      * @param [in] eval If true, evaluate each DataNode before cloning it.
