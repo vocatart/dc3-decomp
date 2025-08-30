@@ -1,8 +1,30 @@
 #include "gesture/Skeleton.h"
 #include "BaseSkeleton.h"
+#include "gesture/GestureMgr.h"
 #include "gesture/BaseSkeleton.h"
 #include "gesture/JointUtl.h"
 #include "os/Debug.h"
+
+bool Skeleton::IsValid() const {
+    if (mSkeletonIdx >= 0) {
+        return TheGestureMgr->IsSkeletonValid(mSkeletonIdx);
+    } else
+        return false;
+}
+
+bool Skeleton::IsSitting() const {
+    if (mSkeletonIdx >= 0) {
+        return TheGestureMgr->IsSkeletonSitting(mSkeletonIdx);
+    } else
+        return false;
+}
+
+bool Skeleton::IsSideways() const {
+    if (mSkeletonIdx >= 0) {
+        return TheGestureMgr->IsSkeletonSideways(mSkeletonIdx);
+    } else
+        return false;
+}
 
 const TrackedJoint &Skeleton::HandJoint(SkeletonSide side) const {
     return mTrackedJoints[side == kSkeletonLeft ? kJointHandLeft : kJointHandRight];

@@ -75,3 +75,12 @@ protected:
     float unkac4;
     std::vector<CameraDisplacement> mCamDisplacements; // 0xac8
 };
+
+class SkeletonCallback {
+public:
+    virtual ~SkeletonCallback() {}
+    virtual void Clear() = 0;
+    virtual void Update(const struct SkeletonUpdateData &) = 0;
+    virtual void PostUpdate(const struct SkeletonUpdateData *) = 0;
+    virtual void Draw(const BaseSkeleton &, class SkeletonViz &) = 0;
+};
