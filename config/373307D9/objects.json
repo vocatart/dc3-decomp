@@ -278,7 +278,7 @@
             "system/gesture/ArcDetector.cpp": "MISSING",
             "system/gesture/ArchiveSkeleton.cpp": "NonMatching",
             "system/gesture/BaseSkeleton.cpp": "NonMatching",
-            "system/gesture/CameraInput.cpp": "MISSING",
+            "system/gesture/CameraInput.cpp": "NonMatching",
             "system/gesture/CameraTilt.cpp": "NonMatching",
             "system/gesture/DepthBuffer3D.cpp": "MISSING",
             "system/gesture/DirectionGestureFilter.cpp": "MISSING",
@@ -418,7 +418,7 @@
 
             "system/math/Color.cpp": "NonMatching",
             "system/math/Decibels.cpp": "NonMatching",
-            "system/math/DoubleExponentialSmoother.cpp": "MISSING",
+            "system/math/DoubleExponentialSmoother.cpp": "NonMatching",
             "system/math/Easing.cpp": "MISSING",
             "system/math/FileChecksum.cpp": "MISSING",
             "system/math/Geo.cpp": "MISSING",

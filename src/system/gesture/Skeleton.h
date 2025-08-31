@@ -1,5 +1,7 @@
 #pragma once
 #include "gesture/BaseSkeleton.h"
+#include "math/DoubleExponentialSmoother.h"
+#include "xdk/NUI.h"
 
 // TrackedJoint size: 0x74
 struct TrackedJoint {
@@ -7,6 +9,9 @@ struct TrackedJoint {
     Vector3 unk60;
     JointConfidence mJointConf; // 0x70
 };
+
+struct SkeletonFrame;
+class ArchiveSkeleton;
 
 // size: 0xAD4
 class Skeleton : public BaseSkeleton {
@@ -51,9 +56,10 @@ public:
     bool RequestIdentity();
     bool EnrollIdentity(int);
     void Init();
-    // void Poll(int, const SkeletonFrame&);
+    void Poll(int, const SkeletonFrame &);
 
     // static int IdentityCallback(void*, _NUI_IDENTITY_MESSAGE*);
+
 protected:
     // size 0x148
     struct CameraDisplacement {
@@ -62,8 +68,8 @@ protected:
         Vector3 unk8[kNumJoints];
     };
 
-    // bool PrevTrackedSkeleton(const SkeletonHistory*, int, int&, ArchiveSkeleton&)
-    // const;
+    bool
+    PrevTrackedSkeleton(const SkeletonHistory *, int, int &, ArchiveSkeleton &) const;
 
     TrackedJoint mTrackedJoints[kNumJoints]; // 0x4
     float mCamBoneLengths[kNumBones]; // 0x914
@@ -85,4 +91,21 @@ public:
     virtual void Update(const struct SkeletonUpdateData &) = 0;
     virtual void PostUpdate(const struct SkeletonUpdateData *) = 0;
     virtual void Draw(const BaseSkeleton &, class SkeletonViz &) = 0;
+};
+
+// size 0x11c8
+struct SkeletonFrame {
+    SkeletonFrame();
+
+    void Create(const NUI_SKELETON_FRAME &, int);
+    float TiltAngle() const;
+    static void Init();
+
+    static Vector3DESmoother sUpVectorSmoother;
+
+    int unk0;
+    int unk4;
+    Vector3 unk8;
+    XMVECTOR unk18;
+    char unk[0x11a0];
 };

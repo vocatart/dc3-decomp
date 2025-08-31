@@ -15,6 +15,7 @@ struct __vector4 { /* Size=0x10 */
         /* 0x0000 */ DWORD u[4];
     };
 };
+typedef __vector4 XMVECTOR;
 
 struct XMVECTORF32 { /* Size=0x10 */
     union {

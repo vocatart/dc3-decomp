@@ -1,6 +1,7 @@
 #pragma once
 #include "nuiapi/nuidetroit.h"
 #include "nuiapi/nuifitnesslib.h"
+#include "nuiapi/nuiskeleton.h"
 #include "nuiapi/nuiwave.h"
 #include "nuispeech/mmio.h"
 
