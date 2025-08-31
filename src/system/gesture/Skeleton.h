@@ -29,6 +29,8 @@ public:
     virtual void CamBoneLengths(float *) const; // 0x2c
     virtual float BoneLength(SkeletonBone, SkeletonCoordSys) const; // 0x30
 
+    const TrackedJoint *TrackedJoints() const { return mTrackedJoints; }
+    int SkeletonIndex() const { return mSkeletonIdx; }
     Skeleton &operator=(const Skeleton &);
     void PostUpdate() {}
     bool IsValid() const;

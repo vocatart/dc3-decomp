@@ -276,7 +276,7 @@
             "system/flow/PropertyEventProvider.cpp": "MISSING",
 
             "system/gesture/ArcDetector.cpp": "MISSING",
-            "system/gesture/ArchiveSkeleton.cpp": "MISSING",
+            "system/gesture/ArchiveSkeleton.cpp": "NonMatching",
             "system/gesture/BaseSkeleton.cpp": "NonMatching",
             "system/gesture/CameraInput.cpp": "MISSING",
             "system/gesture/CameraTilt.cpp": "NonMatching",
@@ -300,7 +300,7 @@
             "system/gesture/SkeletonClip.cpp": "MISSING",
             "system/gesture/SkeletonDir.cpp": "MISSING",
             "system/gesture/SkeletonExtentTracker.cpp": "MISSING",
-            "system/gesture/SkeletonHistory.cpp": "MISSING",
+            "system/gesture/SkeletonHistory.cpp": "NonMatching",
             "system/gesture/SkeletonQualityFilter.cpp": "MISSING",
             "system/gesture/SkeletonRecoverer.cpp": "MISSING",
             "system/gesture/SkeletonUpdate.cpp": "MISSING",
