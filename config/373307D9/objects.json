@@ -304,7 +304,7 @@
             "system/gesture/SkeletonQualityFilter.cpp": "MISSING",
             "system/gesture/SkeletonRecoverer.cpp": "MISSING",
             "system/gesture/SkeletonUpdate.cpp": "MISSING",
-            "system/gesture/SkeletonViz.cpp": "MISSING",
+            "system/gesture/SkeletonViz.cpp": "NonMatching",
             "system/gesture/SpeechMgr.cpp": "MISSING",
             "system/gesture/StandingStillGestureFilter.cpp": "MISSING",
             "system/gesture/StreamRecorder.cpp": "MISSING",
