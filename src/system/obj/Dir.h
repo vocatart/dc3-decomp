@@ -40,6 +40,7 @@ public:
         MILO_ASSERT(ObjRefConcrete<C>::mObject, 0x5F);
         return mObject;
     }
+    void PostLoad(Loader *);
     void LoadFile(const FilePath &, bool, bool, LoaderPos, bool);
 
     void LoadInlinedFile(const FilePath &fp, BinStream &bs) {

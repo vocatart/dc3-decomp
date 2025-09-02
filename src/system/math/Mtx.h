@@ -257,6 +257,7 @@ public:
 };
 
 void Normalize(const Hmx::Matrix3 &, Hmx::Matrix3 &);
+void Multiply(const Hmx::Matrix3 &, const Hmx::Matrix3 &, Hmx::Matrix3 &);
 void MultiplyInverse(const Transform &, const Transform &, Transform &);
 void Multiply(const Transform &, const Transform &, Transform &);
 void MultiplyTranspose(const Vector3 &, const Transform &, Vector3 &);
