@@ -14,6 +14,7 @@ int MemNumHeaps();
 int MemFindHeap(const char *);
 void MemPushHeap(int);
 void MemPopHeap();
+void MemForceNewOperatorAlign(int);
 
 #define kNoHeap -3
 #define kSystemHeap -1
