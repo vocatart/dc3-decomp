@@ -275,7 +275,7 @@
             "system/flow/PropertyEventListener.cpp": "MISSING",
             "system/flow/PropertyEventProvider.cpp": "MISSING",
 
-            "system/gesture/ArcDetector.cpp": "MISSING",
+            "system/gesture/ArcDetector.cpp": "NonMatching",
             "system/gesture/ArchiveSkeleton.cpp": "NonMatching",
             "system/gesture/BaseSkeleton.cpp": "NonMatching",
             "system/gesture/CameraInput.cpp": "NonMatching",
@@ -287,7 +287,7 @@
             "system/gesture/FreestyleMotionFilter.cpp": "MISSING",
             "system/gesture/Gesture.cpp": "MISSING",
             "system/gesture/GestureMgr.cpp": "MISSING",
-            "system/gesture/HandHeightGestureFilter.cpp": "MISSING",
+            "system/gesture/HandHeightGestureFilter.cpp": "NonMatching",
             "system/gesture/HandInvokeGestureFilter.cpp": "MISSING",
             "system/gesture/HandRaisedGestureFilter.cpp": "MISSING",
             "system/gesture/HandsUpGestureFilter.cpp": "MISSING",
