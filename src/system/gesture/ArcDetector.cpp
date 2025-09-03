@@ -5,6 +5,7 @@ float ArcDetector::_swipeRetentionFactor = 0.5;
 float ArcDetector::_acceptablePathErrorRatio = 0.89999998;
 
 ArcDetector::ArcDetector() : unk18(0, 0, 0) { Clear(); }
+ArcDetector::~ArcDetector() {}
 
 Vector3 ArcDetector::GetCurveStart() const {
     MILO_ASSERT(!mJointPath.empty(), 0xE9);

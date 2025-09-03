@@ -25,6 +25,8 @@ public:
         mShowing = show;
         mTimer.Restart();
     }
+    void SetCallback(Callback *cb) { mCallback = cb; }
+    Callback *GetCallback() const { return mCallback; }
     void Clear();
     void SetLines(int);
     void SetTimeout(float);

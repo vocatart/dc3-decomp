@@ -281,7 +281,7 @@
             "system/gesture/CameraInput.cpp": "NonMatching",
             "system/gesture/CameraTilt.cpp": "NonMatching",
             "system/gesture/DepthBuffer3D.cpp": "MISSING",
-            "system/gesture/DirectionGestureFilter.cpp": "MISSING",
+            "system/gesture/DirectionGestureFilter.cpp": "NonMatching",
             "system/gesture/DrawUtl.cpp": "MISSING",
             "system/gesture/FitnessFilter.cpp": "MISSING",
             "system/gesture/FreestyleMotionFilter.cpp": "MISSING",

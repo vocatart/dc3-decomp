@@ -2,16 +2,20 @@
 #include "gesture/BaseSkeleton.h"
 #include "gesture/Skeleton.h"
 #include "math/Vec.h"
+#include "rndobj/Overlay.h"
 
 class ArcDetector {
 public:
     ArcDetector();
-    virtual ~ArcDetector() {}
+    virtual ~ArcDetector();
 
     void Clear();
     void Initialize(SkeletonSide, SkeletonJoint, SkeletonJoint, float);
     void PrintJointPath() const;
     float GetSwipeAmount() const;
+    void ResetHoverTimer();
+    bool IsLockedIn() const;
+    float UpdateOverlay(RndOverlay *, float);
 
 private:
     Vector3 GetCurveStart() const;
