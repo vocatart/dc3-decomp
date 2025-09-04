@@ -69,7 +69,7 @@ bool FlowNode::Activate() {
 
 FlowNode::FlowNode()
     : mVec1(this, (EraseMode)0, kObjListNoNull), mChildren(this, kObjListNoNull),
-      mOwner(nullptr) {
+      mParent(nullptr) {
     mDebugOutput = false;
 }
 
@@ -81,11 +81,11 @@ void FlowNode::Save(BinStream &bs) {
 }
 
 void FlowNode::SetParent(class FlowNode *new_parent, bool b) {
-    if (mOwner != new_parent) {
-        if (mOwner != nullptr) {
-            mOwner->mVec1.remove(this);
+    if (mParent != new_parent) {
+        if (mParent != nullptr) {
+            mParent->mVec1.remove(this);
         }
-        mOwner = new_parent;
+        mParent = new_parent;
         if (new_parent != nullptr && b) {
             new_parent->mVec1.push_back(this);
         }

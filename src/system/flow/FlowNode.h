@@ -1,40 +1,55 @@
 #pragma once
+#include "obj/Object.h"
 
-#include "obj/Object.h"
-#include "obj/Object.h"
+class Flow;
 
 class FlowNode : public virtual Hmx::Object {
-private:
+public:
+    enum QueueState {
+    };
+    enum StopMode {
+    };
+    // Hmx::Object
+    virtual ~FlowNode();
+    OBJ_CLASSNAME(FlowNode)
+    OBJ_SET_TYPE(FlowNode)
+    virtual DataNode Handle(DataArray *, bool);
+    virtual bool SyncProperty(DataNode &, DataArray *, int, PropOp);
+    virtual void Save(BinStream &);
+    virtual void Copy(const Hmx::Object *, CopyType);
+    virtual void Load(BinStream &);
+    virtual const char *FindPathName();
+    // FlowNode
+    virtual void SetParent(FlowNode *, bool);
+    virtual FlowNode *GetParent() { return mParent; }
+    virtual bool Activate();
+    virtual void Deactivate(bool);
+    virtual void ChildFinished(FlowNode *);
+    virtual void RequestStop();
+    virtual void RequestStopCancel();
+    virtual void Execute(QueueState) {}
+    virtual bool IsRunning();
+    virtual Flow *GetOwnerFlow();
+    virtual void MiloPreRun();
+    virtual void MoveIntoDir(ObjectDir *, ObjectDir *);
+    virtual void UpdateIntensity();
+
+    static FlowNode *DuplicateChild(FlowNode *);
+
+protected:
+    FlowNode();
+
+    static bool sPushDrivenProperties;
+    static float sIntensity;
+
+    void ActivateChild(FlowNode *);
+    void PushDrivenProperties(void);
+
     bool mDebugOutput; // 0x8
     String mDebugComment; // 0xc
     ObjPtrVec<FlowNode> mVec1; // 0x14
     ObjPtrList<FlowNode> mChildren; // 0x30
-    FlowNode *mOwner; // 0x44; ?
-
-protected:
-    FlowNode();
-    static bool sPushDrivenProperties;
-    static float sIntensity;
-    void ActivateChild(FlowNode *);
-    void PushDrivenProperties(void);
-
-public:
-    virtual ~FlowNode();
-    OBJ_CLASSNAME(FlowNode)
-    OBJ_SET_TYPE(FlowNode)
-    virtual void MiloPreRun(void);
-    virtual void ChildFinished(FlowNode *);
-    virtual bool Activate();
-    virtual void Deactivate(bool);
-    virtual void MoveIntoDir(ObjectDir *, ObjectDir *);
-    virtual bool IsRunning();
-    virtual void SetParent(FlowNode *, bool);
-
-    virtual DataNode Handle(DataArray *, bool);
-    virtual bool SyncProperty(DataNode &, DataArray *, int, PropOp);
-    virtual void Save(BinStream &);
-    virtual void Load(BinStream &);
-    virtual void Copy(const Hmx::Object *, CopyType);
-
-    static FlowNode *DuplicateChild(FlowNode *);
+    FlowNode *mParent; // 0x44
+    // ObjVector<DrivenPropertyEntry> unk48; // 0x48
+    // bool unk58; // 0x58
 };
