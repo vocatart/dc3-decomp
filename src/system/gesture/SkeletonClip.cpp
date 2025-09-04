@@ -52,7 +52,7 @@ BEGIN_HANDLERS(SkeletonClip)
     HANDLE_ACTION(apply_override_diff, 0) // ditto
     HANDLE_SUPERCLASS(RndAnimatable)
     HANDLE_SUPERCLASS(RndPollable)
-    HANDLE_SUPERCLASS(Hmx::Object)
+    HANDLE_SUPERCLASS(CameraInput)
 END_HANDLERS
 
 BEGIN_SAVES(SkeletonClip)
@@ -101,7 +101,7 @@ BEGIN_PROPSYNCS(SkeletonClip)
     SYNC_PROP_SET(override_diff, mOverrideDiff, mOverrideDiff = _val.Int())
     SYNC_SUPERCLASS(RndAnimatable)
     SYNC_SUPERCLASS(RndPollable)
-    SYNC_SUPERCLASS(Hmx::Object)
+    SYNC_SUPERCLASS(CameraInput)
 END_PROPSYNCS
 
 bool SkeletonClip::IsRecording() const { return unk1231 && !unk1230; }

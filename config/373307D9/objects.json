@@ -298,7 +298,7 @@
             "system/gesture/NavigationSkeletonDir.cpp": "MISSING",
             "system/gesture/Skeleton.cpp": "NonMatching",
             "system/gesture/SkeletonClip.cpp": "NonMatching",
-            "system/gesture/SkeletonDir.cpp": "MISSING",
+            "system/gesture/SkeletonDir.cpp": "NonMatching",
             "system/gesture/SkeletonExtentTracker.cpp": "MISSING",
             "system/gesture/SkeletonHistory.cpp": "NonMatching",
             "system/gesture/SkeletonQualityFilter.cpp": "NonMatching",

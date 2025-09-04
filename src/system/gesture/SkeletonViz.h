@@ -1,5 +1,7 @@
 #pragma once
 #include "gesture/BaseSkeleton.h"
+#include "gesture/CameraInput.h"
+#include "gesture/Skeleton.h"
 #include "math/Mtx.h"
 #include "obj/Dir.h"
 #include "rndobj/Cam.h"
@@ -39,6 +41,9 @@ public:
     void SetPhysicalCamRotation(float);
     void Rotate(float);
     void SetAxesCoordSys(SkeletonCoordSys);
+    void Visualize(
+        const CameraInput &, const BaseSkeleton &, std::vector<SkeletonCallback *> *, bool
+    );
 
 private:
     void LoadResource(bool);
