@@ -30,7 +30,7 @@ void ReserveFrames() {
 }
 
 SkeletonClip::SkeletonClip()
-    : unk11f0(sFrames), unk11f4(sCamFrame), unk11f8(sLoadedFile), unk11fc(-1),
+    : mRecordedFrames(sFrames), unk11f4(sCamFrame), unk11f8(sLoadedFile), unk11fc(-1),
       mDifficulty(kNumDifficulties), mWeighted(0), unk1230(0), unk1231(0),
       mFileStream(nullptr), unk1240(0), mAutoplay(false) {
     mRate = k30_fps;
@@ -41,6 +41,19 @@ SkeletonClip::~SkeletonClip() {
         *unk11f8 = gNullStr;
     RELEASE(mFileStream);
 }
+
+BEGIN_HANDLERS(SkeletonClip)
+    HANDLE_ACTION(xbox_load_frames, LoadClip(false))
+    HANDLE_ACTION(xbox_start_record, StartXboxRecording(_msg->Str(2)))
+    HANDLE_ACTION(start_recording, 0) // i guess this was stubbed out or something
+    HANDLE_ACTION(stop_recording, StopRecording())
+    HANDLE_EXPR(is_recording, IsRecording())
+    HANDLE_ACTION(fill_move_ratings, FillMoveRatings())
+    HANDLE_ACTION(apply_override_diff, 0) // ditto
+    HANDLE_SUPERCLASS(RndAnimatable)
+    HANDLE_SUPERCLASS(RndPollable)
+    HANDLE_SUPERCLASS(Hmx::Object)
+END_HANDLERS
 
 BEGIN_SAVES(SkeletonClip)
     SAVE_REVS(9, 1)
@@ -72,6 +85,24 @@ BEGIN_COPYS(SkeletonClip)
         COPY_MEMBER(mWeighted)
     END_COPYING_MEMBERS
 END_COPYS
+
+BEGIN_PROPSYNCS(SkeletonClip)
+    SYNC_PROP(file, mFile)
+    SYNC_PROP_SET(autoplay, mAutoplay, SetAutoplay(_val.Int()))
+    SYNC_PROP_SET(time_recorded, DateTimeStr(), )
+    SYNC_PROP_SET(build, mBuild, )
+    SYNC_PROP_SET(song, !mFile.empty() && unk1208.Null() ? "N/A" : unk1208.Str(), )
+    SYNC_PROP_SET(difficulty, DifficultyStr(), )
+    SYNC_PROP(default_rating, mDefaultRating)
+    SYNC_PROP_SET(weighted, mWeighted, mWeighted = _val.Int())
+    SYNC_PROP(move_ratings, mMoveRatings)
+    SYNC_PROP_SET(song_start_seconds, SongStartSeconds(), )
+    SYNC_PROP_SET(song_end_seconds, SongEndSeconds(), )
+    SYNC_PROP_SET(override_diff, mOverrideDiff, mOverrideDiff = _val.Int())
+    SYNC_SUPERCLASS(RndAnimatable)
+    SYNC_SUPERCLASS(RndPollable)
+    SYNC_SUPERCLASS(Hmx::Object)
+END_PROPSYNCS
 
 bool SkeletonClip::IsRecording() const { return unk1231 && !unk1230; }
 const String &SkeletonClip::Path() const { return mFile; }
@@ -105,7 +136,7 @@ void SkeletonClip::SetPath(const char *path) { mFile = path; }
 void SkeletonClip::EnableAlternateRecord(int recordingBuffer) {
     MILO_ASSERT(mFile.empty(), 0x7F);
     MILO_ASSERT((0) <= (recordingBuffer) && (recordingBuffer) < (4), 0x80);
-    unk11f0 = &sFrames[recordingBuffer];
+    mRecordedFrames = &sFrames[recordingBuffer];
     unk11f4 = &sCamFrame[recordingBuffer];
     unk11f8 = &sLoadedFile[recordingBuffer];
 }
@@ -149,7 +180,7 @@ void SkeletonClip::WriteClipHeader(FileStream &stream) {
     DataArray *arr = SystemConfig()->FindArray("version", false);
     const char *str = arr ? arr->Str(1) : "milo";
     stream << str;
-    stream << (int)unk11f0->size();
+    stream << (int)mRecordedFrames->size();
 }
 
 void SkeletonClip::WriteClipFrame(FileStream &stream, const RecordedFrame &recordedFrame) {
@@ -171,8 +202,8 @@ void SkeletonClip::WriteClipFrame(FileStream &stream, const RecordedFrame &recor
 
 void SkeletonClip::WriteClip(FileStream &stream) {
     WriteClipHeader(stream);
-    for (int i = 0; i < unk11f0->size(); i++) {
-        WriteClipFrame(stream, (*unk11f0)[i]);
+    for (int i = 0; i < mRecordedFrames->size(); i++) {
+        WriteClipFrame(stream, (*mRecordedFrames)[i]);
     }
 }
 
@@ -194,7 +225,7 @@ void SkeletonClip::StopRecordingNoClear() {
 }
 
 void SkeletonClip::FlushMoveRecord(const char *name) {
-    if (!unk11f0->empty()) {
+    if (!mRecordedFrames->empty()) {
         StopRecordingNoClear();
         String clipStr(name);
         const char *clipPath = MakeString("devkit:\\%s.clp", clipStr);
@@ -211,7 +242,8 @@ END_CUSTOM_PROPSYNC
 
 bool SkeletonClip::SkeletonFrameAt(float f1, SkeletonFrame &frame) const {
     int idk1, idk2;
-    const RecordedFrame *recordedFrame = RecordedFrameAt(*unk11f0, f1, idk1, idk2);
+    const RecordedFrame *recordedFrame =
+        RecordedFrameAt(*mRecordedFrames, f1, idk1, idk2);
     if (recordedFrame) {
         recordedFrame->MakeSkeletonFrame(frame, 0);
         return true;
@@ -224,7 +256,7 @@ void SkeletonClip::StopRecording() {
         MILO_NOTIFY("You must start recording first");
     } else {
         StopRecordingNoClear();
-        unk11f0->clear();
+        mRecordedFrames->clear();
     }
 }
 
@@ -298,22 +330,22 @@ void SkeletonClip::LoadClipFromFile(String str, SkeletonClip *clip) {
             if (version > 4) {
                 int numFrames;
                 fs >> numFrames;
-                if (numFrames > unk11f0->capacity()) {
+                if (numFrames > mRecordedFrames->capacity()) {
                     MILO_NOTIFY(
                         "%i recorded frames greater than capacity %i",
                         numFrames,
-                        unk11f0->capacity()
+                        mRecordedFrames->capacity()
                     );
                 }
-                unk11f0->resize(numFrames);
+                mRecordedFrames->resize(numFrames);
                 for (int i = 0; i < numFrames; i++) {
-                    LoadFrame(fs, (*unk11f0)[i], version);
+                    LoadFrame(fs, (*mRecordedFrames)[i], version);
                     if (fs.Fail()) {
                         MILO_NOTIFY(
                             "Bad clip data, truncating from %d frames to %d", numFrames, i
                         );
                         numFrames = i;
-                        unk11f0->resize(numFrames);
+                        mRecordedFrames->resize(numFrames);
                         break;
                     }
                 }
@@ -321,9 +353,22 @@ void SkeletonClip::LoadClipFromFile(String str, SkeletonClip *clip) {
                 while (fs.Eof() == NotEof) {
                     RecordedFrame frame;
                     LoadFrame(fs, frame, version);
-                    unk11f0->push_back(frame);
+                    mRecordedFrames->push_back(frame);
                 }
             }
+        }
+    }
+}
+
+void SkeletonClip::LoadClip(bool tool_sync) {
+    MILO_ASSERT(!tool_sync || TheLoadMgr.EditMode(), 0x3EC);
+    if (IsRecording()) {
+        MILO_NOTIFY("Cannot open file while still recording");
+    } else {
+        mRecordedFrames->clear();
+        if (unk11f8) { // fix this condition
+            LoadClipFromFile(mFile, this);
+            *unk11f8 = mFile;
         }
     }
 }

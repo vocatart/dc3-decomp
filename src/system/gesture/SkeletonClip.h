@@ -88,6 +88,10 @@ public:
     bool SkeletonFrameAt(float, SkeletonFrame &) const;
     void StopRecording();
     void LoadClipFromFile(String, SkeletonClip *);
+    float SongStartSeconds() const;
+    float SongEndSeconds() const;
+    void LoadClip(bool);
+    void FillMoveRatings();
 
     static void Init();
     static const RecordedFrame *
@@ -103,7 +107,7 @@ protected:
 
     static void LoadFrame(BinStream &, RecordedFrame &, int);
 
-    std::vector<RecordedFrame> *unk11f0; // 0x11f0
+    std::vector<RecordedFrame> *mRecordedFrames; // 0x11f0
     SkeletonFrame *unk11f4; // 0x11f4
     String *unk11f8; // 0x11f8
     int unk11fc; // 0x11fc
