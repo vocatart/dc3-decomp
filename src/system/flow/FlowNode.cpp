@@ -7,15 +7,15 @@ float FlowNode::sIntensity = 1.0f;
 bool FlowNode::sPushDrivenProperties = false;
 
 BEGIN_HANDLERS(FlowNode)
-    HANDLE_ACTION("activate", Activate());
-    HANDLE_ACTION("deactivate", Deactivate(false));
+    HANDLE_ACTION(activate, Activate());
+    HANDLE_ACTION(deactivate, Deactivate(false));
     HANDLE_SUPERCLASS(Hmx::Object)
 END_HANDLERS
 
 BEGIN_PROPSYNCS(FlowNode)
-    SYNC_PROP_SET("comment", Note(), SetNote(_val.Str()))
-    SYNC_PROP("debug_output", mDebugOutput)
-    SYNC_PROP("debug_comment", mDebugComment)
+    SYNC_PROP_SET(comment, Note(), SetNote(_val.Str()))
+    SYNC_PROP(debug_output, mDebugOutput)
+    SYNC_PROP(debug_comment, mDebugComment)
     SYNC_SUPERCLASS(Hmx::Object)
 END_PROPSYNCS
 
@@ -68,8 +68,8 @@ bool FlowNode::Activate() {
 }
 
 FlowNode::FlowNode()
-    : mVec1(this, (EraseMode)0, kObjListNoNull), mChildren(this, kObjListNoNull),
-      mParent(nullptr) {
+    : mVec1(this, (EraseMode)0, kObjListNoNull), mChildren(this), mParent(nullptr),
+      unk48(this), unk58(0) {
     mDebugOutput = false;
 }
 

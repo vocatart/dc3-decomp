@@ -244,7 +244,7 @@
             "system/char/FileMergerOrganizer.cpp": "MISSING",
             "system/char/Waypoint.cpp": "MISSING",
 
-            "system/flow/DrivenPropertyEntry.cpp": "MISSING",
+            "system/flow/DrivenPropertyEntry.cpp": "NonMatching",
             "system/flow/DrivenPropertyMathOps.cpp": "NonMatching",
             "system/flow/Flow.cpp": "MISSING",
             "system/flow/FlowAnimate.cpp": "MISSING",

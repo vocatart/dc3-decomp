@@ -1,8 +1,10 @@
 #pragma once
 #include "obj/Object.h"
+#include "flow/DrivenPropertyEntry.h"
 
 class Flow;
 
+/** "A flow node" */
 class FlowNode : public virtual Hmx::Object {
 public:
     enum QueueState {
@@ -50,6 +52,6 @@ protected:
     ObjPtrVec<FlowNode> mVec1; // 0x14
     ObjPtrList<FlowNode> mChildren; // 0x30
     FlowNode *mParent; // 0x44
-    // ObjVector<DrivenPropertyEntry> unk48; // 0x48
-    // bool unk58; // 0x58
+    ObjVector<DrivenPropertyEntry> unk48; // 0x48
+    bool unk58; // 0x58
 };
