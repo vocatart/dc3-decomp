@@ -69,6 +69,7 @@ public:
     void SetBitmap(const RndBitmap &bmap, const char *path, bool b);
     void SetBitmap(FileLoader *);
     void SetBitmap(const FilePath &);
+    void SetBitmap(const RndBitmap &, const char *, bool, Type);
     /** Unused. Presumably saves the bitmap of this texture to a supplied filename. */
     void SaveBitmap(const char *);
     /** Determine whether this texture's dimensions are both powers of 2. */
