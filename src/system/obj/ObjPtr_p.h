@@ -250,7 +250,7 @@ void ObjPtrList<T1, T2>::Node::operator delete(void *v) {
 template <class T1, class T2>
 void ObjPtrList<T1, T2>::ReplaceNode(struct ObjPtrList::Node *node, Hmx::Object *obj) {
     if (mListMode == kObjListOwnerControl) {
-        Replace(node, obj);
+        mOwner->Replace(node, obj);
     } else {
         Hmx::Object *old = node->SetObj(obj);
         if (!old && mListMode == kObjListNoNull) {

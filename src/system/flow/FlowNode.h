@@ -38,6 +38,10 @@ public:
 
     static FlowNode *DuplicateChild(FlowNode *);
 
+    bool HasRunningNode(FlowNode *);
+    DrivenPropertyEntry *GetDrivenEntry(Symbol);
+    DrivenPropertyEntry *GetDrivenEntry(DataArray *);
+
 protected:
     FlowNode();
 

@@ -233,6 +233,13 @@ public:
 
         Node &operator*() const { return *it; }
         Node *operator->() const { return &(*it); }
+
+        iterator &operator++() {
+            ++it;
+            return *this;
+        }
+
+        bool operator!=(const iterator &other) const { return it != other.it; }
     };
     // ditto
     class const_iterator {
@@ -373,6 +380,14 @@ public:
     void clear() {
         while (mSize != 0)
             pop_back();
+    }
+
+    void DeleteAll() {
+        while (!empty()) {
+            T1 *cur = front();
+            pop_front();
+            delete cur;
+        }
     }
 
     T1 *front() const;
@@ -884,7 +899,7 @@ namespace Hmx {
         }
         // ObjRef *Refs() const { return (ObjRef *)&mRefs; }
         const ObjRef &Refs() const { return mRefs; }
-        void SetNote(const char *note) { mNote = note; }
+        void SetNote(const char *note);
         DataArray *TypeDef() const { return mTypeDef; }
         ObjectDir *Dir() const { return mDir; }
         const char *Name() const { return mName; }
@@ -963,6 +978,8 @@ private:
 
 public:
     ObjVector(Hmx::Object *o) : mOwner(o) {}
+
+    Hmx::Object *Owner() { return mOwner; }
 
     void resize(unsigned int);
     void operator=(const ObjVector &);
