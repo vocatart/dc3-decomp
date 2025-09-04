@@ -302,7 +302,7 @@
             "system/gesture/SkeletonExtentTracker.cpp": "MISSING",
             "system/gesture/SkeletonHistory.cpp": "NonMatching",
             "system/gesture/SkeletonQualityFilter.cpp": "NonMatching",
-            "system/gesture/SkeletonRecoverer.cpp": "MISSING",
+            "system/gesture/SkeletonRecoverer.cpp": "NonMatching",
             "system/gesture/SkeletonUpdate.cpp": "NonMatching",
             "system/gesture/SkeletonViz.cpp": "NonMatching",
             "system/gesture/SpeechMgr.cpp": "NonMatching",
