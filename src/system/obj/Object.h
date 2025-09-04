@@ -981,8 +981,21 @@ public:
 
     Hmx::Object *Owner() { return mOwner; }
 
-    void resize(unsigned int);
-    void operator=(const ObjVector &);
+    void push_back() { resize(size() + 1); }
+
+    void push_back(const T &t) {
+        push_back();
+        back() = t;
+    }
+
+    void resize(unsigned int size) { Base::resize(size, T(mOwner)); }
+
+    void operator=(const ObjVector &vec) {
+        if (this != &vec) {
+            resize(vec.size());
+            Base::operator=((Base &)vec);
+        }
+    }
 };
 
 template <class T>

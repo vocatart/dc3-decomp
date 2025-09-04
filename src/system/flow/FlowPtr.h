@@ -1,5 +1,6 @@
 #pragma once
 #include "obj/Object.h"
+#include "os/Debug.h"
 #include "utl/BinStream.h"
 #include "utl/Symbol.h"
 
@@ -16,7 +17,7 @@ protected:
 
     Symbol mObjName; // 0x0
     FlowNode *unk4; // 0x4
-    int unk8; // 0x8
+    int unk8; // 0x8 - state
 };
 
 ObjectDir *FlowPtrGetLoadingDir(ObjectDir *);
@@ -28,11 +29,22 @@ public:
     FlowPtr(const FlowPtr &);
     ~FlowPtr();
     void operator=(T *);
-    T *operator->();
+
+    T *operator->() {
+        T *o = Get();
+        MILO_ASSERT(o, 0xB2);
+        return o;
+    }
+
     T *LoadFromMainOrDir(BinStream &);
 
 private:
-    T *Get();
+    T *Get() {
+        if (unk8 > -2 && RefreshParamObject()) {
+            unkc = GetObject();
+        }
+        return unkc;
+    }
 
     ObjPtr<T> unkc; // 0xc
 };

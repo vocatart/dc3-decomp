@@ -6,6 +6,7 @@
 
 class FlowMathOp {
 public:
+    FlowMathOp(Hmx::Object *);
     void Save(BinStream &);
 
 protected:

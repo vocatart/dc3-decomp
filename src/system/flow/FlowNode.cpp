@@ -35,25 +35,41 @@ BEGIN_PROPSYNCS(FlowNode)
     SYNC_SUPERCLASS(Hmx::Object)
 END_PROPSYNCS
 
-void FlowNode::Save(BinStream &bs) {
-    bs << 2;
-    Hmx::Object::Save(bs);
-}
+BEGIN_SAVES(FlowNode)
+    SAVE_REVS(2, 0)
+    SAVE_SUPERCLASS(Hmx::Object)
+END_SAVES
 
-void FlowNode::Load(BinStream &bs) {}
+BEGIN_COPYS(FlowNode)
+    COPY_SUPERCLASS(Hmx::Object)
+    CREATE_COPY(FlowNode)
+    BEGIN_COPYING_MEMBERS
+        COPY_MEMBER(unk48)
+    END_COPYING_MEMBERS
+END_COPYS
+
+BEGIN_LOADS(FlowNode)
+    LOAD_REVS(bs)
+    ASSERT_REVS(2, 0)
+    LOAD_SUPERCLASS(Hmx::Object)
+    bs >> mVec1;
+
+    int numEntries;
+    bs >> numEntries;
+    unk48.clear();
+    unk48.reserve(numEntries);
+    for (int i = 0; i < numEntries; i++) {
+        DrivenPropertyEntry entry(this);
+        entry.Load(bs, this);
+        unk48.push_back(entry);
+    }
+END_LOADS
 
 void FlowNode::MiloPreRun(void) {}
 
 FlowNode *FlowNode::DuplicateChild(FlowNode *) { return nullptr; }
 
-void FlowNode::Deactivate(bool) {
-    if (mDebugOutput) {
-        MILO_LOG("%s%s", ClassName(), MakeString("Deactivated\n"));
-        if (!mDebugComment.empty()) {
-            MILO_LOG("Debug comment: %s\n", mDebugComment.c_str());
-        }
-    }
-}
+void FlowNode::Deactivate(bool) { FLOW_LOG("Deactivated\n"); }
 
 void FlowNode::PushDrivenProperties(void) { sPushDrivenProperties = true; }
 
@@ -62,30 +78,15 @@ void FlowNode::MoveIntoDir(ObjectDir *, ObjectDir *) {}
 void FlowNode::ActivateChild(FlowNode *child) {
     mChildren.push_back(child);
     if (!child->Activate()) {
-        if (mDebugOutput) {
-            MILO_LOG(
-                "%s: %s",
-                ClassName(),
-                MakeString(
-                    "Activated Child %s, which ran in full immediately.\n",
-                    child->ClassName()
-                )
-            );
-            if (!mDebugComment.empty()) {
-                MILO_LOG("Debug comment: %s\n", mDebugComment.c_str());
-            }
-        }
+        FLOW_LOG(
+            "Activated Child %s, which ran in full immediately.\n", child->ClassName()
+        );
         mChildren.remove(child);
     }
 }
 
 bool FlowNode::Activate() {
-    if (mDebugOutput) {
-        MILO_LOG("%s: %s", ClassName(), MakeString("Activating Children\n"));
-        if (!mDebugComment.empty()) {
-            MILO_LOG("Debug comment: %s\n", mDebugComment.c_str());
-        }
-    }
+    FLOW_LOG("Activating Children\n");
     return false;
 }
 
@@ -113,12 +114,7 @@ void FlowNode::UpdateIntensity() {
 }
 
 void FlowNode::RequestStop() {
-    if (mDebugOutput) {
-        MILO_LOG("%s: %s", ClassName(), MakeString("RequestStop\n"));
-        if (!mDebugComment.empty()) {
-            MILO_LOG("Debug comment: %s\n", mDebugComment.c_str());
-        }
-    }
+    FLOW_LOG("RequestStop\n");
     unk58 = true;
     for (ObjPtrList<FlowNode>::iterator it = mChildren.begin(); it != mChildren.end();
          ++it) {
@@ -127,12 +123,7 @@ void FlowNode::RequestStop() {
 }
 
 void FlowNode::RequestStopCancel() {
-    if (mDebugOutput) {
-        MILO_LOG("%s: %s", ClassName(), MakeString("RequestStopCancel\n"));
-        if (!mDebugComment.empty()) {
-            MILO_LOG("Debug comment: %s\n", mDebugComment.c_str());
-        }
-    }
+    FLOW_LOG("RequestStopCancel\n");
     unk58 = false;
     for (ObjPtrList<FlowNode>::iterator it = mChildren.begin(); it != mChildren.end();
          ++it) {
@@ -147,24 +138,10 @@ DrivenPropertyEntry *FlowNode::GetDrivenEntry(Symbol s) {
 }
 
 void FlowNode::ChildFinished(FlowNode *node) {
-    if (mDebugOutput) {
-        MILO_LOG(
-            "%s: %s",
-            ClassName(),
-            MakeString("Child Finished of class:%s\n", node->ClassName())
-        );
-        if (!mDebugComment.empty()) {
-            MILO_LOG("Debug comment: %s\n", mDebugComment.c_str());
-        }
-    }
+    FLOW_LOG("Child Finished of class:%s\n", node->ClassName());
     mChildren.remove(node);
     if (mChildren.empty()) {
-        if (mDebugOutput) {
-            MILO_LOG("%s: %s", ClassName(), MakeString("Releasing\n"));
-            if (!mDebugComment.empty()) {
-                MILO_LOG("Debug comment: %s\n", mDebugComment.c_str());
-            }
-        }
+        FLOW_LOG("Releasing\n");
         if (mParent)
             mParent->ChildFinished(this);
     }

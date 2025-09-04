@@ -1,6 +1,7 @@
 #pragma once
 #include "obj/Object.h"
 #include "flow/DrivenPropertyEntry.h"
+#include "utl/MemMgr.h"
 
 class Flow;
 
@@ -36,6 +37,9 @@ public:
     virtual void MoveIntoDir(ObjectDir *, ObjectDir *);
     virtual void UpdateIntensity();
 
+    OBJ_MEM_OVERLOAD(0x9F)
+    NEW_OBJ(FlowNode)
+
     static FlowNode *DuplicateChild(FlowNode *);
 
     bool HasRunningNode(FlowNode *);
@@ -59,3 +63,11 @@ protected:
     ObjVector<DrivenPropertyEntry> unk48; // 0x48
     bool unk58; // 0x58
 };
+
+#define FLOW_LOG(...)                                                                    \
+    if (mDebugOutput) {                                                                  \
+        MILO_LOG("%s: %s", ClassName(), MakeString(__VA_ARGS__));                        \
+        if (!mDebugComment.empty()) {                                                    \
+            MILO_LOG("Debug comment: %s\n", mDebugComment.c_str());                      \
+        }                                                                                \
+    }
