@@ -8,3 +8,5 @@ void CameraInput::PollTracking() {
 }
 
 CameraInput::CameraInput() : unk8(nullptr) { memset(&unkc, 0, sizeof(unkc)); }
+
+CameraInput::~CameraInput() {}

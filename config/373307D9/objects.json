@@ -297,7 +297,7 @@
             "system/gesture/LiveCameraInput.cpp": "MISSING",
             "system/gesture/NavigationSkeletonDir.cpp": "MISSING",
             "system/gesture/Skeleton.cpp": "NonMatching",
-            "system/gesture/SkeletonClip.cpp": "MISSING",
+            "system/gesture/SkeletonClip.cpp": "NonMatching",
             "system/gesture/SkeletonDir.cpp": "MISSING",
             "system/gesture/SkeletonExtentTracker.cpp": "MISSING",
             "system/gesture/SkeletonHistory.cpp": "NonMatching",
