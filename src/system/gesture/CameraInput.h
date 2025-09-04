@@ -7,19 +7,19 @@ class CameraInput : public virtual Hmx::Object {
 public:
     CameraInput();
     // Hmx::Object
-    virtual ~CameraInput() {}
+    virtual ~CameraInput();
     // CameraInput
     virtual float DrawScale() const { return 1; }
     virtual bool NatalToWorld(Transform &) const { return false; }
     virtual bool IsConnected() const { return true; }
     virtual bool IsOverride() const { return true; }
     virtual void PollTracking();
-    virtual SkeletonFrame *PollNewFrame() = 0;
+    virtual const SkeletonFrame *PollNewFrame() = 0;
 
     const SkeletonFrame &CachedFrame() const; // returns 0xc
     const SkeletonFrame *NewFrame() const;
 
 protected:
-    SkeletonFrame *unk8; // 0x8
+    const SkeletonFrame *unk8; // 0x8
     SkeletonFrame unkc; // 0xc - size 0x11c8
 };

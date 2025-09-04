@@ -14,6 +14,7 @@ public:
     bool IsSkeletonValid(int) const;
     bool IsSkeletonSitting(int) const;
     bool IsSkeletonSideways(int) const;
+    Skeleton *GetActiveSkeleton();
 };
 
 extern GestureMgr *TheGestureMgr;
