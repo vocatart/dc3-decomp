@@ -7,6 +7,7 @@
 class UILabel : public RndText, public UIComponent, public TextHolder {
 public:
     struct LabelStyle {
+        LabelStyle(Hmx::Object *);
         int unk0;
         int unk4;
         int unk8;

@@ -1,95 +1,148 @@
 #include "flow/FlowNode.h"
-
+#include "flow/DrivenPropertyEntry.h"
+#include "obj/Data.h"
 #include "obj/Object.h"
 #include "os/Debug.h"
 
 float FlowNode::sIntensity = 1.0f;
 bool FlowNode::sPushDrivenProperties = false;
 
+FlowNode::FlowNode()
+    : mVec1(this, (EraseMode)0, kObjListNoNull), mChildren(this), mParent(nullptr),
+      unk48(this), unk58(0) {
+    mDebugOutput = false;
+}
+
+FlowNode::~FlowNode() {
+    if (!mChildren.empty()) {
+        Deactivate(true);
+    }
+    for (ObjPtrVec<FlowNode>::iterator it = mVec1.begin(); it != mVec1.end(); ++it) {
+        delete *it;
+    }
+}
+
 BEGIN_HANDLERS(FlowNode)
-    HANDLE_ACTION("activate", Activate());
-    HANDLE_ACTION("deactivate", Deactivate(false));
+    HANDLE_ACTION(activate, Activate());
+    HANDLE_ACTION(deactivate, Deactivate(false));
     HANDLE_SUPERCLASS(Hmx::Object)
 END_HANDLERS
 
 BEGIN_PROPSYNCS(FlowNode)
-    SYNC_PROP_SET("comment", Note(), SetNote(_val.Str()))
-    SYNC_PROP("debug_output", mDebugOutput)
-    SYNC_PROP("debug_comment", mDebugComment)
+    SYNC_PROP_SET(comment, Note(), SetNote(_val.Str()))
+    SYNC_PROP(debug_output, mDebugOutput)
+    SYNC_PROP(debug_comment, mDebugComment)
     SYNC_SUPERCLASS(Hmx::Object)
 END_PROPSYNCS
+
+BEGIN_SAVES(FlowNode)
+    SAVE_REVS(2, 0)
+    SAVE_SUPERCLASS(Hmx::Object)
+END_SAVES
+
+BEGIN_COPYS(FlowNode)
+    COPY_SUPERCLASS(Hmx::Object)
+    CREATE_COPY(FlowNode)
+    BEGIN_COPYING_MEMBERS
+        COPY_MEMBER(unk48)
+    END_COPYING_MEMBERS
+END_COPYS
+
+BEGIN_LOADS(FlowNode)
+    LOAD_REVS(bs)
+    ASSERT_REVS(2, 0)
+    LOAD_SUPERCLASS(Hmx::Object)
+    bs >> mVec1;
+
+    int numEntries;
+    bs >> numEntries;
+    unk48.clear();
+    unk48.reserve(numEntries);
+    for (int i = 0; i < numEntries; i++) {
+        DrivenPropertyEntry entry(this);
+        entry.Load(bs, this);
+        unk48.push_back(entry);
+    }
+END_LOADS
 
 void FlowNode::MiloPreRun(void) {}
 
 FlowNode *FlowNode::DuplicateChild(FlowNode *) { return nullptr; }
 
-void FlowNode::Deactivate(bool) {
-    if (mDebugOutput) {
-        MILO_LOG("%s%s", ClassName(), MakeString("Deactivated\n"));
-        if (!mDebugComment.empty()) {
-            MILO_LOG("Debug comment: %s\n", mDebugComment.c_str());
-        }
-    }
-}
-
-void FlowNode::ChildFinished(FlowNode *) {}
+void FlowNode::Deactivate(bool) { FLOW_LOG("Deactivated\n"); }
 
 void FlowNode::PushDrivenProperties(void) { sPushDrivenProperties = true; }
 
 void FlowNode::MoveIntoDir(ObjectDir *, ObjectDir *) {}
 
 void FlowNode::ActivateChild(FlowNode *child) {
-    mChildren.insert(mChildren.end(), child);
-    if (child->Activate()) {
-        return;
-    }
-    if (mDebugOutput) {
-        MILO_LOG(
-            "%s: %s",
-            ClassName(),
-            MakeString(
-                "Activated Child %s, which ran in full immediately.\n", child->ClassName()
-            )
+    mChildren.push_back(child);
+    if (!child->Activate()) {
+        FLOW_LOG(
+            "Activated Child %s, which ran in full immediately.\n", child->ClassName()
         );
-        if (!mDebugComment.empty()) {
-            MILO_LOG("Debug comment: %s\n", mDebugComment.c_str());
-        }
+        mChildren.remove(child);
     }
 }
 
 bool FlowNode::Activate() {
-    if (mDebugOutput) {
-        MILO_LOG("%s: %s", ClassName(), MakeString("Activating Children\n"));
-        if (!mDebugComment.empty()) {
-            MILO_LOG("Debug comment: %s\n", mDebugComment.c_str());
-        }
-    }
+    FLOW_LOG("Activating Children\n");
     return false;
 }
 
-FlowNode::FlowNode()
-    : mVec1(this, (EraseMode)0, kObjListNoNull), mChildren(this, kObjListNoNull),
-      mOwner(nullptr) {
-    mDebugOutput = false;
-}
-
-FlowNode::~FlowNode() {}
-
-void FlowNode::Save(BinStream &bs) {
-    bs << 2;
-    Hmx::Object::Save(bs);
-}
-
 void FlowNode::SetParent(class FlowNode *new_parent, bool b) {
-    if (mOwner != new_parent) {
-        if (mOwner != nullptr) {
-            mOwner->mVec1.remove(this);
+    if (mParent != new_parent) {
+        if (mParent != nullptr) {
+            mParent->mVec1.remove(this);
         }
-        mOwner = new_parent;
+        mParent = new_parent;
         if (new_parent != nullptr && b) {
             new_parent->mVec1.push_back(this);
         }
     }
 }
 
-void FlowNode::Load(BinStream &bs) {}
+bool FlowNode::HasRunningNode(FlowNode *node) {
+    return mChildren.find(node) != mChildren.end();
+}
+
+void FlowNode::UpdateIntensity() {
+    for (ObjPtrList<FlowNode>::iterator it = mChildren.begin(); it != mChildren.end();
+         ++it) {
+        (*it)->UpdateIntensity();
+    }
+}
+
+void FlowNode::RequestStop() {
+    FLOW_LOG("RequestStop\n");
+    unk58 = true;
+    for (ObjPtrList<FlowNode>::iterator it = mChildren.begin(); it != mChildren.end();
+         ++it) {
+        (*it)->RequestStop();
+    }
+}
+
+void FlowNode::RequestStopCancel() {
+    FLOW_LOG("RequestStopCancel\n");
+    unk58 = false;
+    for (ObjPtrList<FlowNode>::iterator it = mChildren.begin(); it != mChildren.end();
+         ++it) {
+        (*it)->RequestStopCancel();
+    }
+}
+
+DrivenPropertyEntry *FlowNode::GetDrivenEntry(Symbol s) {
+    DataArrayPtr ptr(new DataArray(1));
+    ptr->Node(0) = s;
+    return GetDrivenEntry(ptr);
+}
+
+void FlowNode::ChildFinished(FlowNode *node) {
+    FLOW_LOG("Child Finished of class:%s\n", node->ClassName());
+    mChildren.remove(node);
+    if (mChildren.empty()) {
+        FLOW_LOG("Releasing\n");
+        if (mParent)
+            mParent->ChildFinished(this);
+    }
+}

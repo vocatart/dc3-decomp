@@ -23,6 +23,8 @@ DataArrayPtr gPropPaths[8] = {
 };
 MsgSinks gSinks(nullptr);
 
+void Hmx::Object::SetNote(const char *note) { mNote = note; }
+
 bool Hmx::Object::Replace(ObjRef *ref, Hmx::Object *obj) {
     if (mSinks)
         return mSinks->Replace(ref, obj);
