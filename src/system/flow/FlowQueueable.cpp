@@ -3,7 +3,7 @@
 #include "obj/Msg.h"
 #include "obj/Object.h"
 
-FlowQueueable::FlowQueueable() : mInterrupt(3) {}
+FlowQueueable::FlowQueueable() : mInterrupt(kImmediate) {}
 FlowQueueable::~FlowQueueable() {}
 
 BEGIN_HANDLERS(FlowQueueable)
@@ -11,7 +11,7 @@ BEGIN_HANDLERS(FlowQueueable)
 END_HANDLERS
 
 BEGIN_PROPSYNCS(FlowQueueable)
-    SYNC_PROP(interrupt, mInterrupt)
+    SYNC_PROP(interrupt, (int &)mInterrupt)
     SYNC_SUPERCLASS(FlowNode)
 END_PROPSYNCS
 
@@ -33,7 +33,7 @@ BEGIN_LOADS(FlowQueueable)
     LOAD_REVS(bs)
     ASSERT_REVS(0, 0)
     LOAD_SUPERCLASS(FlowNode)
-    bs >> mInterrupt;
+    bs >> (int &)mInterrupt;
 END_LOADS
 
 void FlowQueueable::ReleaseListener(Hmx::Object *obj) {
